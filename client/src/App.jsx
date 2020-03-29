@@ -2,13 +2,15 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, NavLink } from "react-router-dom";
 import axios from "axios";
 
-import Login from "./components/login";
+import Login from "./components/login/login";
 import Dashboard from "./components/dashboard";
 import Home from "./components/HomePage";
 
 import PrivateRoute from "./Utils/PrivateRoute";
 import PublicRoute from "./Utils/PublicRoute";
 import { getToken, removeUserSession, setUserSession } from "./Utils/Common";
+
+import LoginGoR from "./components/login/loginGoF";
 
 function App() {
   const [authLoading, setAuthLoading] = useState(true);
@@ -34,10 +36,13 @@ function App() {
   if (authLoading && getToken()) {
     return <div className="content">Checking Authentication...</div>;
   }
-
+  const onSelectTab = tab => {
+    this.loginModalRef.changeTab(tab);
+  };
   return (
     <div className="App">
       <BrowserRouter>
+        <LoginGoR />
         <div>
           <div className="header">
             <NavLink exact activeClassName="active" to="/">
