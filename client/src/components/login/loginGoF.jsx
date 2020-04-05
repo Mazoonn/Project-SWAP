@@ -59,7 +59,7 @@ class LoginGoR extends React.Component {
   render() {
     return (
       <div>
-        <button onClick={() => this.openModal()}>Open Modal</button>
+        <header onClick={() => this.openModal()}>Login</header>
 
         <ReactModalLogin
           visible={this.state.showModal}
