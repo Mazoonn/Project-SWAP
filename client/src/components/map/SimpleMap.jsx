@@ -1,27 +1,28 @@
 import React, { Component } from "react";
 import GoogleMapReact from "google-map-react";
 // import { geolocated } from "react-geolocated";
+import { googleKey } from "../../config.json";
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
 class SimpleMap extends Component {
   static defaultProps = {
-    zoom: 13
+    zoom: 13,
   };
   state = {
     currentLatLng: {
       lat: 0,
-      lng: 0
-    }
+      lng: 0,
+    },
   };
 
   getLocation = () => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(position => {
+      navigator.geolocation.getCurrentPosition((position) => {
         this.setState({
           currentLatLng: {
             lat: position.coords.latitude,
-            lng: position.coords.longitude
-          }
+            lng: position.coords.longitude,
+          },
         });
       });
     }
@@ -34,7 +35,7 @@ class SimpleMap extends Component {
       // Important! Always set the container height explicitly
       <div style={{ height: "100vh", width: "100%" }}>
         <GoogleMapReact
-          bootstrapURLKeys={{ key: "AIzaSyAG2xOBvCbK31Ztsidj_jbcxB9_GBhZLX4" }}
+          bootstrapURLKeys={{ key: googleKey }}
           center={this.state.currentLatLng}
           defaultZoom={this.props.zoom}
         >
