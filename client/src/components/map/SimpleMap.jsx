@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import GoogleMapReact from "google-map-react";
 // import { geolocated } from "react-geolocated";
 import { googleKey } from "../../config.json";
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
+//const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
 class SimpleMap extends Component {
   static defaultProps = {
@@ -26,6 +26,7 @@ class SimpleMap extends Component {
         });
       });
     }
+    //else
   };
   componentDidMount() {
     this.getLocation();

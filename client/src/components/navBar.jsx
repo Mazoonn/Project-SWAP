@@ -7,6 +7,8 @@ import LoginGoR from "./login/loginGoF";
 import PrivateRoute from "../Utils/PrivateRoute";
 import PublicRoute from "../Utils/PublicRoute";
 import { BrowserRouter, Switch, Route, NavLink } from "react-router-dom";
+import Category from "./quest/category";
+
 class NavBar extends Component {
   render() {
     return (
@@ -26,12 +28,16 @@ class NavBar extends Component {
                 Dashboard
               </NavLink>
               <small>(Access with token only)</small>
+              <NavLink activeClassName="active" to="/quest">
+                Quest
+              </NavLink>
             </div>
             <div className="content">
               <Switch>
                 <Route exact path="/" component={Home} />
                 <PublicRoute path="/login" component={Login} />
                 <PrivateRoute path="/dashboard" component={Dashboard} />
+                <Route path="/quest" component={Category} />
               </Switch>
             </div>
           </div>
