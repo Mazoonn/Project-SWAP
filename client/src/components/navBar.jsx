@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import Login from "./login/login";
 import Dashboard from "../routes/dashboard";
 import Home from "../routes/HomePage";
-import LoginGoR from "./login/loginGoF";
 
 import PrivateRoute from "../Utils/PrivateRoute";
 import PublicRoute from "../Utils/PublicRoute";
@@ -61,7 +60,6 @@ class NavBar extends Component {
             </i>
           )}
         </h3>
-        <LoginGoR />
       </nav>
     );
   }

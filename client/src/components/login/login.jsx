@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { setUserSession } from "../../Utils/Common";
 
+import LoginGoF from "./loginGoF";
+
 function Login(props) {
   const [loading, setLoading] = useState(false);
   const username = useFormInput("");
@@ -13,16 +15,16 @@ function Login(props) {
     setError(null);
     setLoading(true);
     axios
-      .post("http://localhost:4000/users/signin", {
+      .post("http://localhost:4000/Admin/login", {
         username: username.value,
-        password: password.value
+        password: password.value,
       })
-      .then(response => {
+      .then((response) => {
         setLoading(false);
         setUserSession(response.data.token, response.data.user);
         props.history.push("/dashboard");
       })
-      .catch(error => {
+      .catch((error) => {
         setLoading(false);
         if (error.response.status === 401)
           setError(error.response.data.message);
@@ -35,6 +37,7 @@ function Login(props) {
       Login
       <br />
       <br />
+      <LoginGoF />
       <div>
         Username
         <br />
@@ -63,15 +66,15 @@ function Login(props) {
   );
 }
 
-const useFormInput = initialValue => {
+const useFormInput = (initialValue) => {
   const [value, setValue] = useState(initialValue);
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     setValue(e.target.value);
   };
   return {
     value,
-    onChange: handleChange
+    onChange: handleChange,
   };
 };
 
