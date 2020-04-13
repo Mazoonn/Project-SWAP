@@ -6,7 +6,7 @@ import Home from "../routes/HomePage";
 import PrivateRoute from "../Utils/PrivateRoute";
 import PublicRoute from "../Utils/PublicRoute";
 import { BrowserRouter, Switch, Route, NavLink } from "react-router-dom";
-import Category from "./quest/category";
+import Quest from "./quest/quest";
 
 class NavBar extends Component {
   render() {
@@ -36,7 +36,7 @@ class NavBar extends Component {
                 <Route exact path="/" component={Home} />
                 <PublicRoute path="/login" component={Login} />
                 <PrivateRoute path="/dashboard" component={Dashboard} />
-                <Route path="/quest" component={Category} />
+                <Route path="/quest" component={Quest} />
               </Switch>
             </div>
           </div>
