@@ -8,7 +8,7 @@ class Category extends Component {
           return (
             <button
               type="button"
-              className="list-group-item list-group-item-action"
+              className="list-group-item list-group-item-action text-center"
               onClick={(button) => {
                 this.props.handleOnClickCategory(button.target);
               }}
@@ -19,11 +19,6 @@ class Category extends Component {
             </button>
           );
         })}
-        <button
-          disabled={this.props.selectedCategory.length === 0 ? true : false}
-        >
-          Next
-        </button>
       </div>
     );
   }

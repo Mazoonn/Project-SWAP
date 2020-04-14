@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import Category from "./category";
+import SubCategory from "./subCategory";
 
 class Quest extends Component {
-  categoryList = ["Restaurants", "Bars"];
+  categoryList = ["Restaurants", "Bars", "Museums"];
   state = { selectedCategory: [] };
 
   handleOnClickCategory = (button) => {
@@ -25,13 +26,18 @@ class Quest extends Component {
 
   render() {
     return (
-      <React.Fragment>
-        <Category
-          handleOnClickCategory={this.handleOnClickCategory}
-          categoryList={this.categoryList}
-          selectedCategory={this.state.selectedCategory}
-        />
-      </React.Fragment>
+      <div className="row">
+        <div className="col-sm-2">
+          <Category
+            handleOnClickCategory={this.handleOnClickCategory}
+            categoryList={this.categoryList}
+            selectedCategory={this.state.selectedCategory}
+          />
+        </div>
+        <div className="col">
+          <SubCategory></SubCategory>
+        </div>
+      </div>
     );
   }
 }
