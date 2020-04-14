@@ -41,25 +41,6 @@ class NavBar extends Component {
             </div>
           </div>
         </BrowserRouter>
-        <h3
-          tabIndex="0"
-          className="transition menu-text"
-          title={this.props.menuText + " Sidebar"}
-          onClick={() => {
-            this.props.toggleSideBar();
-          }}
-          onKeyPress={this.props.menuKeyEnter}
-        >
-          {this.props.sidebarOpen ? (
-            <i className="material-icons" style={{ lineHeight: "inherit" }}>
-              clear
-            </i>
-          ) : (
-            <i className="material-icons" style={{ lineHeight: "inherit" }}>
-              menu
-            </i>
-          )}
-        </h3>
       </nav>
     );
   }
