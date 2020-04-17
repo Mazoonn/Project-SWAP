@@ -1,28 +1,42 @@
 import React, { Component } from "react";
 
 class SubCategory extends Component {
-  category = ["Cafe", "Meat", "Bakery", "1", "2", "3", "4"];
-
   handleDivide = () => {
-    let size = Math.ceil(this.category.length / this.props.rows);
+    let size = Math.ceil(
+      this.props.category.subCategory.length / this.props.columns
+    );
     let rows = [];
 
     for (var i = 0; i < size; i++) {
-      let slice = this.category.slice(i * this.props.rows, (i + 1) * this.props.rows);
+      let slice = this.props.category.subCategory.slice(
+        i * this.props.columns,
+        (i + 1) * this.props.columns
+      );
 
       rows[i] = (
         <tr>
           {slice.map((sub) => {
+            let className = "btn btn-outline-info btn-sm";
+            if (sub.isSelected) className = className + " active";
             return (
               <td className="text-center">
-                <button type="button" className="btn btn-outline-info btn-sm">
-                  {sub}
+                <button
+                  onClick={() => {
+                    this.props.clickSubCategory(
+                      this.props.category.id,
+                      sub.id2
+                    );
+                  }}
+                  type="button"
+                  className={className}
+                >
+                  {sub.name}
                 </button>
               </td>
             );
           })}
-          {slice.length !== this.props.rows && (
-            <td colSpan={this.props.rows - slice.length}></td>
+          {slice.length !== this.props.columns && (
+            <td colSpan={this.props.columns - slice.length}></td>
           )}
         </tr>
       );
@@ -34,8 +48,8 @@ class SubCategory extends Component {
       <table className="table-sm table-bordered">
         <thead>
           <tr>
-            <th colSpan={this.props.rows} className="text-center">
-              Restaurant
+            <th colSpan={this.props.columns} className="text-center">
+              {this.props.category.name}
             </th>
           </tr>
         </thead>
