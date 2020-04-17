@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="afd1ca61b42f46bb83038f2a06a47ddc" Name="Diagram1">
+        <EntityTypeShape EntityType="SwapDbModel.admin" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapDbModel.business" Width="1.5" PointX="8" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapDbModel.client" Width="1.5" PointX="3" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapDbModel.genu" Width="1.5" PointX="0.75" PointY="3.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapDbModel.google_place_value" Width="1.5" PointX="6.5" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapDbModel.relationship_type_subType" Width="1.5" PointX="11" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapDbModel.sube_type_categoriy" Width="1.5" PointX="8.75" PointY="8" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapDbModel.sysdiagram" Width="1.5" PointX="0.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapDbModel.type_category" Width="1.5" PointX="5.75" PointY="3" IsExpanded="true" />
+        <AssociationConnector Association="SwapDbModel.FK_admin_genus1" ManuallyRouted="false" />
+        <AssociationConnector Association="SwapDbModel.FK_business_type_category1" ManuallyRouted="false" />
+        <AssociationConnector Association="SwapDbModel.FK_client_genus" ManuallyRouted="false" />
+        <AssociationConnector Association="SwapDbModel.FK_genus_genus1" ManuallyRouted="false" />
+        <AssociationConnector Association="SwapDbModel.FK__sube_type__googl__5165187F" ManuallyRouted="false" />
+        <AssociationConnector Association="SwapDbModel.FK_relationship_type_subType_sube_type_categoriy" ManuallyRouted="false" />
+        <AssociationConnector Association="SwapDbModel.FK_relationship_type_subType_type_category" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
