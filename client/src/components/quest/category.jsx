@@ -10,12 +10,11 @@ class Category extends Component {
               type="button"
               className="list-group-item list-group-item-action text-center"
               onClick={(button) => {
-                this.props.handleOnClickCategory(button.target);
+                this.props.handleOnClickCategory(button.target, category.id);
               }}
-              selected={false}
-              name={category}
+              key={category.id}
             >
-              {category}
+              {category.name}
             </button>
           );
         })}
