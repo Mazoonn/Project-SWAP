@@ -1,0 +1,509 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="admin">
+          <Key>
+            <PropertyRef Name="admin_id" />
+          </Key>
+          <Property Name="admin_id" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="first_name" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="last_name" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="email" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="password" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="phone" Type="numeric" Precision="13" Scale="0" />
+          <Property Name="id_genus" Type="bit" Nullable="false" />
+          <Property Name="date_register" Type="date" Nullable="false" />
+          <Property Name="last_login" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="business">
+          <Key>
+            <PropertyRef Name="business_id" />
+          </Key>
+          <Property Name="business_id" Type="nvarchar" MaxLength="41" Nullable="false" />
+          <Property Name="id_type" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="phone" Type="nvarchar" MaxLength="13" Nullable="false" />
+          <Property Name="opening_time" Type="time" Precision="7" />
+          <Property Name="closing_time" Type="time" Precision="7" />
+          <Property Name="location_lat" Type="decimal" Precision="15" Scale="13" />
+          <Property Name="location_lng" Type="decimal" Precision="15" Scale="13" />
+          <Property Name="rating" Type="numeric" Precision="1" Scale="0" />
+        </EntityType>
+        <EntityType Name="client">
+          <Key>
+            <PropertyRef Name="client_id" />
+          </Key>
+          <Property Name="client_id" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="first_name" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="last_name" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="date_birthday" Type="date" Nullable="false" />
+          <Property Name="email" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="genus_id" Type="bit" Nullable="false" />
+          <Property Name="date_register" Type="date" Nullable="false" />
+          <Property Name="last_login" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="genus">
+          <Key>
+            <PropertyRef Name="genus_id" />
+          </Key>
+          <Property Name="genus_id" Type="bit" Nullable="false" />
+          <Property Name="genus" Type="nvarchar" MaxLength="7" />
+        </EntityType>
+        <EntityType Name="google_place_value">
+          <Key>
+            <PropertyRef Name="google_value_id" />
+          </Key>
+          <Property Name="google_value_id" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="relationship_type_subType">
+          <Key>
+            <PropertyRef Name="sub_type_id" />
+            <PropertyRef Name="id_type" />
+          </Key>
+          <Property Name="sub_type_id" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="id_type" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="clicked" Type="numeric" Precision="9" Scale="0" />
+        </EntityType>
+        <EntityType Name="sube_type_categoriy">
+          <Key>
+            <PropertyRef Name="sub_type_id" />
+          </Key>
+          <Property Name="sub_type_id" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="client_value" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="google_value_id" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="type_category">
+          <Key>
+            <PropertyRef Name="id_type" />
+          </Key>
+          <Property Name="id_type" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__sube_type__googl__5165187F">
+          <End Role="google_place_value" Type="Self.google_place_value" Multiplicity="0..1" />
+          <End Role="sube_type_categoriy" Type="Self.sube_type_categoriy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="google_place_value">
+              <PropertyRef Name="google_value_id" />
+            </Principal>
+            <Dependent Role="sube_type_categoriy">
+              <PropertyRef Name="google_value_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_admin_genus1">
+          <End Role="genus" Type="Self.genus" Multiplicity="1" />
+          <End Role="admin" Type="Self.admin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="genus">
+              <PropertyRef Name="genus_id" />
+            </Principal>
+            <Dependent Role="admin">
+              <PropertyRef Name="id_genus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_client_genus">
+          <End Role="genus" Type="Self.genus" Multiplicity="1" />
+          <End Role="client" Type="Self.client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="genus">
+              <PropertyRef Name="genus_id" />
+            </Principal>
+            <Dependent Role="client">
+              <PropertyRef Name="genus_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_relationship_type_subType_sube_type_categoriy">
+          <End Role="sube_type_categoriy" Type="Self.sube_type_categoriy" Multiplicity="1" />
+          <End Role="relationship_type_subType" Type="Self.relationship_type_subType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sube_type_categoriy">
+              <PropertyRef Name="sub_type_id" />
+            </Principal>
+            <Dependent Role="relationship_type_subType">
+              <PropertyRef Name="sub_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_relationship_type_subType_type_category">
+          <End Role="type_category" Type="Self.type_category" Multiplicity="1" />
+          <End Role="relationship_type_subType" Type="Self.relationship_type_subType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="type_category">
+              <PropertyRef Name="id_type" />
+            </Principal>
+            <Dependent Role="relationship_type_subType">
+              <PropertyRef Name="id_type" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ModelStoreContainer">
+          <EntitySet Name="admin" EntityType="Self.admin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="business" EntityType="Self.business" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="client" EntityType="Self.client" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="genus" EntityType="Self.genus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="google_place_value" EntityType="Self.google_place_value" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="relationship_type_subType" EntityType="Self.relationship_type_subType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sube_type_categoriy" EntityType="Self.sube_type_categoriy" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="type_category" EntityType="Self.type_category" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__sube_type__googl__5165187F" Association="Self.FK__sube_type__googl__5165187F">
+            <End Role="google_place_value" EntitySet="google_place_value" />
+            <End Role="sube_type_categoriy" EntitySet="sube_type_categoriy" />
+          </AssociationSet>
+          <AssociationSet Name="FK_admin_genus1" Association="Self.FK_admin_genus1">
+            <End Role="genus" EntitySet="genus" />
+            <End Role="admin" EntitySet="admin" />
+          </AssociationSet>
+          <AssociationSet Name="FK_client_genus" Association="Self.FK_client_genus">
+            <End Role="genus" EntitySet="genus" />
+            <End Role="client" EntitySet="client" />
+          </AssociationSet>
+          <AssociationSet Name="FK_relationship_type_subType_sube_type_categoriy" Association="Self.FK_relationship_type_subType_sube_type_categoriy">
+            <End Role="sube_type_categoriy" EntitySet="sube_type_categoriy" />
+            <End Role="relationship_type_subType" EntitySet="relationship_type_subType" />
+          </AssociationSet>
+          <AssociationSet Name="FK_relationship_type_subType_type_category" Association="Self.FK_relationship_type_subType_type_category">
+            <End Role="type_category" EntitySet="type_category" />
+            <End Role="relationship_type_subType" EntitySet="relationship_type_subType" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="admin">
+          <Key>
+            <PropertyRef Name="admin_id" />
+          </Key>
+          <Property Name="admin_id" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="first_name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="last_name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="phone" Type="Decimal" Precision="13" Scale="0" />
+          <Property Name="id_genus" Type="Boolean" Nullable="false" />
+          <Property Name="date_register" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="last_login" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="genu" Relationship="Self.FK_admin_genus1" FromRole="admin" ToRole="genus" />
+        </EntityType>
+        <EntityType Name="business">
+          <Key>
+            <PropertyRef Name="business_id" />
+          </Key>
+          <Property Name="business_id" Type="String" MaxLength="41" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="id_type" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="phone" Type="String" MaxLength="13" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="opening_time" Type="Time" Precision="7" />
+          <Property Name="closing_time" Type="Time" Precision="7" />
+          <Property Name="location_lat" Type="Decimal" Precision="15" Scale="13" />
+          <Property Name="location_lng" Type="Decimal" Precision="15" Scale="13" />
+          <Property Name="rating" Type="Decimal" Precision="1" Scale="0" />
+        </EntityType>
+        <EntityType Name="client">
+          <Key>
+            <PropertyRef Name="client_id" />
+          </Key>
+          <Property Name="client_id" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="first_name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="last_name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="date_birthday" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="email" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="genus_id" Type="Boolean" Nullable="false" />
+          <Property Name="date_register" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="last_login" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="genu" Relationship="Self.FK_client_genus" FromRole="client" ToRole="genus" />
+        </EntityType>
+        <EntityType Name="genu">
+          <Key>
+            <PropertyRef Name="genus_id" />
+          </Key>
+          <Property Name="genus_id" Type="Boolean" Nullable="false" />
+          <Property Name="genus" Type="String" MaxLength="7" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="admins" Relationship="Self.FK_admin_genus1" FromRole="genus" ToRole="admin" />
+          <NavigationProperty Name="clients" Relationship="Self.FK_client_genus" FromRole="genus" ToRole="client" />
+        </EntityType>
+        <EntityType Name="google_place_value">
+          <Key>
+            <PropertyRef Name="google_value_id" />
+          </Key>
+          <Property Name="google_value_id" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="sube_type_categoriy" Relationship="Self.FK__sube_type__googl__5165187F" FromRole="google_place_value" ToRole="sube_type_categoriy" />
+        </EntityType>
+        <EntityType Name="relationship_type_subType">
+          <Key>
+            <PropertyRef Name="sub_type_id" />
+            <PropertyRef Name="id_type" />
+          </Key>
+          <Property Name="sub_type_id" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="id_type" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="clicked" Type="Decimal" Precision="9" Scale="0" />
+          <NavigationProperty Name="sube_type_categoriy" Relationship="Self.FK_relationship_type_subType_sube_type_categoriy" FromRole="relationship_type_subType" ToRole="sube_type_categoriy" />
+          <NavigationProperty Name="type_category" Relationship="Self.FK_relationship_type_subType_type_category" FromRole="relationship_type_subType" ToRole="type_category" />
+        </EntityType>
+        <EntityType Name="sube_type_categoriy">
+          <Key>
+            <PropertyRef Name="sub_type_id" />
+          </Key>
+          <Property Name="sub_type_id" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="client_value" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="google_value_id" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="google_place_value" Relationship="Self.FK__sube_type__googl__5165187F" FromRole="sube_type_categoriy" ToRole="google_place_value" />
+          <NavigationProperty Name="relationship_type_subType" Relationship="Self.FK_relationship_type_subType_sube_type_categoriy" FromRole="sube_type_categoriy" ToRole="relationship_type_subType" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="type_category">
+          <Key>
+            <PropertyRef Name="id_type" />
+          </Key>
+          <Property Name="id_type" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="relationship_type_subType" Relationship="Self.FK_relationship_type_subType_type_category" FromRole="type_category" ToRole="relationship_type_subType" />
+        </EntityType>
+        <Association Name="FK_admin_genus1">
+          <End Role="genus" Type="Self.genu" Multiplicity="1" />
+          <End Role="admin" Type="Self.admin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="genus">
+              <PropertyRef Name="genus_id" />
+            </Principal>
+            <Dependent Role="admin">
+              <PropertyRef Name="id_genus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_client_genus">
+          <End Role="genus" Type="Self.genu" Multiplicity="1" />
+          <End Role="client" Type="Self.client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="genus">
+              <PropertyRef Name="genus_id" />
+            </Principal>
+            <Dependent Role="client">
+              <PropertyRef Name="genus_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__sube_type__googl__5165187F">
+          <End Role="google_place_value" Type="Self.google_place_value" Multiplicity="0..1" />
+          <End Role="sube_type_categoriy" Type="Self.sube_type_categoriy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="google_place_value">
+              <PropertyRef Name="google_value_id" />
+            </Principal>
+            <Dependent Role="sube_type_categoriy">
+              <PropertyRef Name="google_value_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_relationship_type_subType_sube_type_categoriy">
+          <End Role="sube_type_categoriy" Type="Self.sube_type_categoriy" Multiplicity="1" />
+          <End Role="relationship_type_subType" Type="Self.relationship_type_subType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sube_type_categoriy">
+              <PropertyRef Name="sub_type_id" />
+            </Principal>
+            <Dependent Role="relationship_type_subType">
+              <PropertyRef Name="sub_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_relationship_type_subType_type_category">
+          <End Role="type_category" Type="Self.type_category" Multiplicity="1" />
+          <End Role="relationship_type_subType" Type="Self.relationship_type_subType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="type_category">
+              <PropertyRef Name="id_type" />
+            </Principal>
+            <Dependent Role="relationship_type_subType">
+              <PropertyRef Name="id_type" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SwapDbConnection" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="admins" EntityType="Self.admin" />
+          <EntitySet Name="businesses" EntityType="Self.business" />
+          <EntitySet Name="clients" EntityType="Self.client" />
+          <EntitySet Name="genus" EntityType="Self.genu" />
+          <EntitySet Name="google_place_value" EntityType="Self.google_place_value" />
+          <EntitySet Name="relationship_type_subType" EntityType="Self.relationship_type_subType" />
+          <EntitySet Name="sube_type_categoriy" EntityType="Self.sube_type_categoriy" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+          <EntitySet Name="type_category" EntityType="Self.type_category" />
+          <AssociationSet Name="FK_admin_genus1" Association="Self.FK_admin_genus1">
+            <End Role="genus" EntitySet="genus" />
+            <End Role="admin" EntitySet="admins" />
+          </AssociationSet>
+          <AssociationSet Name="FK_client_genus" Association="Self.FK_client_genus">
+            <End Role="genus" EntitySet="genus" />
+            <End Role="client" EntitySet="clients" />
+          </AssociationSet>
+          <AssociationSet Name="FK__sube_type__googl__5165187F" Association="Self.FK__sube_type__googl__5165187F">
+            <End Role="google_place_value" EntitySet="google_place_value" />
+            <End Role="sube_type_categoriy" EntitySet="sube_type_categoriy" />
+          </AssociationSet>
+          <AssociationSet Name="FK_relationship_type_subType_sube_type_categoriy" Association="Self.FK_relationship_type_subType_sube_type_categoriy">
+            <End Role="sube_type_categoriy" EntitySet="sube_type_categoriy" />
+            <End Role="relationship_type_subType" EntitySet="relationship_type_subType" />
+          </AssociationSet>
+          <AssociationSet Name="FK_relationship_type_subType_type_category" Association="Self.FK_relationship_type_subType_type_category">
+            <End Role="type_category" EntitySet="type_category" />
+            <End Role="relationship_type_subType" EntitySet="relationship_type_subType" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="SwapDbConnection">
+          <EntitySetMapping Name="admins">
+            <EntityTypeMapping TypeName="Model.admin">
+              <MappingFragment StoreEntitySet="admin">
+                <ScalarProperty Name="admin_id" ColumnName="admin_id" />
+                <ScalarProperty Name="first_name" ColumnName="first_name" />
+                <ScalarProperty Name="last_name" ColumnName="last_name" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="id_genus" ColumnName="id_genus" />
+                <ScalarProperty Name="date_register" ColumnName="date_register" />
+                <ScalarProperty Name="last_login" ColumnName="last_login" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="businesses">
+            <EntityTypeMapping TypeName="Model.business">
+              <MappingFragment StoreEntitySet="business">
+                <ScalarProperty Name="business_id" ColumnName="business_id" />
+                <ScalarProperty Name="id_type" ColumnName="id_type" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="opening_time" ColumnName="opening_time" />
+                <ScalarProperty Name="closing_time" ColumnName="closing_time" />
+                <ScalarProperty Name="location_lat" ColumnName="location_lat" />
+                <ScalarProperty Name="location_lng" ColumnName="location_lng" />
+                <ScalarProperty Name="rating" ColumnName="rating" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="clients">
+            <EntityTypeMapping TypeName="Model.client">
+              <MappingFragment StoreEntitySet="client">
+                <ScalarProperty Name="client_id" ColumnName="client_id" />
+                <ScalarProperty Name="first_name" ColumnName="first_name" />
+                <ScalarProperty Name="last_name" ColumnName="last_name" />
+                <ScalarProperty Name="date_birthday" ColumnName="date_birthday" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="genus_id" ColumnName="genus_id" />
+                <ScalarProperty Name="date_register" ColumnName="date_register" />
+                <ScalarProperty Name="last_login" ColumnName="last_login" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="genus">
+            <EntityTypeMapping TypeName="Model.genu">
+              <MappingFragment StoreEntitySet="genus">
+                <ScalarProperty Name="genus_id" ColumnName="genus_id" />
+                <ScalarProperty Name="genus" ColumnName="genus" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="google_place_value">
+            <EntityTypeMapping TypeName="Model.google_place_value">
+              <MappingFragment StoreEntitySet="google_place_value">
+                <ScalarProperty Name="google_value_id" ColumnName="google_value_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="relationship_type_subType">
+            <EntityTypeMapping TypeName="Model.relationship_type_subType">
+              <MappingFragment StoreEntitySet="relationship_type_subType">
+                <ScalarProperty Name="sub_type_id" ColumnName="sub_type_id" />
+                <ScalarProperty Name="id_type" ColumnName="id_type" />
+                <ScalarProperty Name="clicked" ColumnName="clicked" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sube_type_categoriy">
+            <EntityTypeMapping TypeName="Model.sube_type_categoriy">
+              <MappingFragment StoreEntitySet="sube_type_categoriy">
+                <ScalarProperty Name="sub_type_id" ColumnName="sub_type_id" />
+                <ScalarProperty Name="client_value" ColumnName="client_value" />
+                <ScalarProperty Name="google_value_id" ColumnName="google_value_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="Model.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="type_category">
+            <EntityTypeMapping TypeName="Model.type_category">
+              <MappingFragment StoreEntitySet="type_category">
+                <ScalarProperty Name="id_type" ColumnName="id_type" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
