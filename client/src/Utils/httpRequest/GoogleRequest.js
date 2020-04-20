@@ -3,6 +3,22 @@ import { googleKey, nearBySearchUrl, textSearchUrl } from "../../config.json";
 import http from "./httpRequest";
 import Logger from "../loggerServices";
 
+getPlaces = (places) => {
+  const types = Object.keys(places);
+  const respones = [];
+
+  types.forEach((type) => {
+    let keywords = "";
+
+    places[type].forEach((keyword) => {
+      keywords += keyword + ",";
+    });
+
+    //request push to respones
+  });
+  //return respones
+};
+
 export const getNearbyPlaces = async (
   location,
   radius,

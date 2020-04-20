@@ -31,12 +31,13 @@ class SimpleMap extends Component {
   componentDidMount() {
     this.getLocation();
   }
+
   render() {
     return (
       // Important! Always set the container height explicitly
       <div style={{ height: "100vh", width: "100%" }}>
         <GoogleMapReact
-          bootstrapURLKeys={{ key: googleKey }}
+          bootstrapURLKeys={{ key: googleKey, language: "en" }}
           center={this.state.currentLatLng}
           defaultZoom={this.props.zoom}
         >

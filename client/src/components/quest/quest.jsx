@@ -10,6 +10,29 @@ class Quest extends Component {
     columnsInSubCategoires: 3,
     columnsOfSubcategories: 2,
   };
+  getPlaces = () => {
+    const places = {};
+    const categories = this.state.categoryList;
+    categories.forEach((category) => {
+      if (category.isCurrentlySelected) {
+        const subCategory = [];
+        category.subCategory.forEach((sub) => {
+          if (sub.isSelected) subCategory.push(sub.name);
+        });
+        places[category.name] = subCategory;
+      }
+    });
+
+    //get places from google places api
+
+    // {[restarauns],[bars]}
+
+    //Has array with places
+
+    //redirect component maps with props array
+
+    console.log(places);
+  };
 
   handleGetCategories = () => {
     const categories = getCategories();
@@ -49,7 +72,7 @@ class Quest extends Component {
     );
     const indexSubCategory = categoryList[indexCategory].subCategory.findIndex(
       (subCategory) => subCategory.id2 === keySubCategory
-    ); //O(n^2) can improve to O(1)
+    ); //O(n) can improve to O(1)
     const flag =
       categoryList[indexCategory].subCategory[indexSubCategory].isSelected;
     categoryList[indexCategory].subCategory[
@@ -111,6 +134,7 @@ class Quest extends Component {
           />
           <div className="text-center p-3">
             <button
+              onClick={this.getPlaces}
               hidden={
                 !this.state.categoryList.some(
                   (category) => category.isCurrentlySelected
