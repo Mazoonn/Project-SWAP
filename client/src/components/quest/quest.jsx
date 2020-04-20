@@ -8,7 +8,7 @@ class Quest extends Component {
   state = {
     categoryList: [],
     columnsInSubCategoires: 3,
-    columnsOfSubcategories: 4,
+    columnsOfSubcategories: 2,
   };
 
   handleGetCategories = () => {
@@ -103,15 +103,29 @@ class Quest extends Component {
   }
   render() {
     return (
-      <div className="row">
-        <div className="col-sm-2">
+      <React.Fragment>
+        <div className="float-left">
           <Category
             handleOnClickCategory={this.handleOnClickCategory}
             categoryList={this.state.categoryList}
           />
+          <div className="text-center p-3">
+            <button
+              hidden={
+                !this.state.categoryList.some(
+                  (category) => category.isCurrentlySelected
+                )
+              }
+              type="button"
+              className="btn btn-primary btn-md"
+            >
+              Next
+            </button>
+          </div>
         </div>
-        {this.handleDivideSubCategories()}
-      </div>
+
+        <div className="container">{this.handleDivideSubCategories()}</div>
+      </React.Fragment>
     );
   }
 }
