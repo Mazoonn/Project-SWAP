@@ -1,5 +1,6 @@
 import axios from "axios";
-import logger from "./logService";
+import logger from "../loggerServices";
+
 //import { toast } from "react-toastify"; // This is for future log option in prod
 
 axios.interceptors.response.use(null, (error) => {

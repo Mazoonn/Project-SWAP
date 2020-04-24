@@ -1,36 +1,47 @@
 //nearby Search request
-import { googleKey, nearBySearchUrl, textSearchUrl } from "../../config.json";
+import {
+  googleKey,
+  nearBySearchUrl,
+  textSearchUrl,
+  radius,
+} from "../../config.json";
 import http from "./httpRequest";
 import Logger from "../loggerServices";
 
-getPlaces = (places) => {
+export const getPlaces = function (places) {
   const types = Object.keys(places);
   const respones = [];
+  const request = {};
 
   types.forEach((type) => {
-    let keywords = "";
-
-    places[type].forEach((keyword) => {
-      keywords += keyword + ",";
-    });
-
-    //request push to respones
+    request["type"] = type;
+    request["keyword"] = places[type].toString();
+    request["location"] = "32.3071532,34.8830647";
+    request["radius"] = radius;
+    request["key"] = googleKey;
+    getNearbyPlaces(request);
   });
   //return respones
 };
+export const getLocation = function () {
+  let location = {};
+  if (navigator.geolocation)
+    navigator.geolocation.getCurrentPosition((position) => {
+      location["latitude"] = position.coords.latitude;
+      location["longitude"] = position.coords.longitude;
+    });
+  else alert("Geolocation is not supported by this browser.");
+  return location;
+};
 
-export const getNearbyPlaces = async (
-  location,
-  radius,
-  type,
-  keyword,
-  pagetoken = null
-) => {
+const getNearbyPlaces = async (request) => {
   try {
+    console.log(request);
     const list_of_places = await http.get(
-      `${nearBySearchUrl}?location=${location}&radius=${radius}&key=${googleKey}&${
-        pagetoken == null ? "" : `pagetoken=${pagetoken}`
-      }&keyword=${keyword}&type=${type}`
+      "https://cors-anywhere.herokuapp.com/" + nearBySearchUrl,
+      {
+        params: request,
+      }
     );
     // if (pagetoken) {
     //   const next_page_request = getNearbyPlaces(
@@ -42,7 +53,8 @@ export const getNearbyPlaces = async (
     //   );
     //   list_of_places = { ...list_of_places, ...next_page_request };
     // }
-    return list_of_places;
+    console.log(list_of_places.data);
+    // return list_of_places;
   } catch (err) {
     Logger.log(err);
   }

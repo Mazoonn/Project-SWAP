@@ -3,6 +3,7 @@ import { getCategories } from "../../services/Categories";
 import Category from "./category";
 import { getSubCategoriesId } from "../../services/CategSubCateg";
 import SubCategory from "./subCategory";
+import { getPlaces } from "./../../Utils/httpRequest/GoogleRequest";
 
 class Quest extends Component {
   state = {
@@ -31,7 +32,7 @@ class Quest extends Component {
 
     //redirect component maps with props array
 
-    console.log(places);
+    getPlaces(places);
   };
 
   handleGetCategories = () => {
