@@ -8,23 +8,27 @@ import {
 import http from "./httpRequest";
 import Logger from "../loggerServices";
 
+let googleMaps;
+
 export const getPlaces = function (places) {
   const types = Object.keys(places);
-  const respones = [];
-  const request = {};
+  const location = JSON.stringify(getLocation());
+  const requests = [];
 
-  types.forEach((type) => {
+  for (const type of types) {
+    const request = {};
     request["type"] = type;
     request["keyword"] = places[type].toString();
-    request["location"] = "32.3071532,34.8830647";
+    request["location"] = location;
     request["radius"] = radius;
     request["key"] = googleKey;
-    getNearbyPlaces(request);
-  });
-  //return respones
+    requests.push(request);
+  }
+  return Promise.all(requests.map((request) => getNearbyPlaces(request)));
 };
+
 export const getLocation = function () {
-  let location = {};
+  const location = {};
   if (navigator.geolocation)
     navigator.geolocation.getCurrentPosition((position) => {
       location["latitude"] = position.coords.latitude;
@@ -34,29 +38,22 @@ export const getLocation = function () {
   return location;
 };
 
+export const googleObjects = (map, maps) => {
+  googleMaps = maps;
+};
+
 const getNearbyPlaces = async (request) => {
   try {
-    console.log(request);
     const list_of_places = await http.get(
       "https://cors-anywhere.herokuapp.com/" + nearBySearchUrl,
       {
         params: request,
       }
     );
-    // if (pagetoken) {
-    //   const next_page_request = getNearbyPlaces(
-    //     location,
-    //     radius,
-    //     type,
-    //     keyword,
-    //     pagetoken
-    //   );
-    //   list_of_places = { ...list_of_places, ...next_page_request };
-    // }
-    console.log(list_of_places.data);
+    return list_of_places.data.results;
     // return list_of_places;
   } catch (err) {
-    Logger.log(err);
+    console.log(err);
   }
 };
 

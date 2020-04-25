@@ -3,6 +3,7 @@ import GoogleMapReact from "google-map-react";
 // import { geolocated } from "react-geolocated";
 import { googleKey } from "../../config.json";
 //const AnyReactComponent = ({ text }) => <div>{text}</div>;
+import { googleObjects } from "../../Utils/httpRequest/GoogleRequest";
 
 class SimpleMap extends Component {
   static defaultProps = {
@@ -40,6 +41,8 @@ class SimpleMap extends Component {
           bootstrapURLKeys={{ key: googleKey, language: "en" }}
           center={this.state.currentLatLng}
           defaultZoom={this.props.zoom}
+          yesIWantToUseGoogleMapApiInternals
+          onGoogleApiLoaded={({ map, maps }) => googleObjects(map, maps)}
         >
           {/* <AnyReactComponent lat= lng={0} text="My Marker" /> */}
         </GoogleMapReact>

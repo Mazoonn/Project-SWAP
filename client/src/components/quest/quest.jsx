@@ -3,7 +3,12 @@ import { getCategories } from "../../services/Categories";
 import Category from "./category";
 import { getSubCategoriesId } from "../../services/CategSubCateg";
 import SubCategory from "./subCategory";
-import { getPlaces } from "./../../Utils/httpRequest/GoogleRequest";
+import {
+  getPlaces,
+  getLocation,
+} from "./../../Utils/httpRequest/GoogleRequest";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLocationArrow } from "@fortawesome/free-solid-svg-icons";
 
 class Quest extends Component {
   state = {
@@ -11,7 +16,11 @@ class Quest extends Component {
     columnsInSubCategoires: 3,
     columnsOfSubcategories: 2,
   };
-  getPlaces = () => {
+  handleGetCurrentLocation = () => {
+    let location = getLocation();
+    localStorage.setItem("location", JSON.stringify(location));
+  };
+  getPlaces = async () => {
     const places = {};
     const categories = this.state.categoryList;
     categories.forEach((category) => {
@@ -31,8 +40,11 @@ class Quest extends Component {
     //Has array with places
 
     //redirect component maps with props array
-
-    getPlaces(places);
+    let respones = await getPlaces(places);
+    this.props.history.push({
+      pathname: "/questcomplete",
+      state: { respones: respones },
+    });
   };
 
   handleGetCategories = () => {
@@ -129,6 +141,15 @@ class Quest extends Component {
     return (
       <React.Fragment>
         <div className="float-left">
+          <div className="p-3">
+            <button
+              onClick={this.handleGetCurrentLocation}
+              className="btn-md btn btn-light"
+              type="button"
+            >
+              <FontAwesomeIcon icon={faLocationArrow} />
+            </button>
+          </div>
           <Category
             handleOnClickCategory={this.handleOnClickCategory}
             categoryList={this.state.categoryList}
