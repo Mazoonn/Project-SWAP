@@ -8,18 +8,16 @@ import {
 import http from "./httpRequest";
 import Logger from "../loggerServices";
 
-let googleMaps;
-
-export const getPlaces = function (places) {
+export const getPlaces = async function (places) {
   const types = Object.keys(places);
-  const location = JSON.stringify(getLocation());
+  const location = await fetchCoordinates();
   const requests = [];
 
   for (const type of types) {
     const request = {};
     request["type"] = type;
     request["keyword"] = places[type].toString();
-    request["location"] = location;
+    request["location"] = `${location.latitude},${location.longitude}`;
     request["radius"] = radius;
     request["key"] = googleKey;
     requests.push(request);
@@ -27,19 +25,21 @@ export const getPlaces = function (places) {
   return Promise.all(requests.map((request) => getNearbyPlaces(request)));
 };
 
-export const getLocation = function () {
-  const location = {};
-  if (navigator.geolocation)
-    navigator.geolocation.getCurrentPosition((position) => {
-      location["latitude"] = position.coords.latitude;
-      location["longitude"] = position.coords.longitude;
-    });
-  else alert("Geolocation is not supported by this browser.");
-  return location;
-};
+function getCurrentPosition(options = {}) {
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(resolve, reject, options);
+  });
+}
+export const fetchCoordinates = async () => {
+  try {
+    const { coords } = await getCurrentPosition();
+    return coords;
 
-export const googleObjects = (map, maps) => {
-  googleMaps = maps;
+    // Handle coordinates
+  } catch (error) {
+    // Handle error
+    console.error(error);
+  }
 };
 
 const getNearbyPlaces = async (request) => {

@@ -3,12 +3,7 @@ import { getCategories } from "../../services/Categories";
 import Category from "./category";
 import { getSubCategoriesId } from "../../services/CategSubCateg";
 import SubCategory from "./subCategory";
-import {
-  getPlaces,
-  getLocation,
-} from "./../../Utils/httpRequest/GoogleRequest";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLocationArrow } from "@fortawesome/free-solid-svg-icons";
+import { getPlaces } from "./../../Utils/httpRequest/GoogleRequest";
 
 class Quest extends Component {
   state = {
@@ -16,10 +11,7 @@ class Quest extends Component {
     columnsInSubCategoires: 3,
     columnsOfSubcategories: 2,
   };
-  handleGetCurrentLocation = () => {
-    let location = getLocation();
-    localStorage.setItem("location", JSON.stringify(location));
-  };
+
   getPlaces = async () => {
     const places = {};
     const categories = this.state.categoryList;
@@ -32,18 +24,10 @@ class Quest extends Component {
         places[category.name] = subCategory;
       }
     });
-
-    //get places from google places api
-
-    // {[restarauns],[bars]}
-
-    //Has array with places
-
-    //redirect component maps with props array
     let respones = await getPlaces(places);
     this.props.history.push({
-      pathname: "/questcomplete",
-      state: { respones: respones },
+      pathname: "/",
+      state: { respones },
     });
   };
 
@@ -141,15 +125,6 @@ class Quest extends Component {
     return (
       <React.Fragment>
         <div className="float-left">
-          <div className="p-3">
-            <button
-              onClick={this.handleGetCurrentLocation}
-              className="btn-md btn btn-light"
-              type="button"
-            >
-              <FontAwesomeIcon icon={faLocationArrow} />
-            </button>
-          </div>
           <Category
             handleOnClickCategory={this.handleOnClickCategory}
             categoryList={this.state.categoryList}
@@ -169,7 +144,6 @@ class Quest extends Component {
             </button>
           </div>
         </div>
-
         <div className="container">{this.handleDivideSubCategories()}</div>
       </React.Fragment>
     );
