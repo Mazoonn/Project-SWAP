@@ -9,9 +9,10 @@ class HomePage extends Component {
         <div>Welcome to the Home Page!</div>
         <SimpleMap
           places={
-            this.props.location.state &&
-            this.props.location.state["respones"] &&
-            this.props.location.state["respones"]
+            (this.props.location.state &&
+              this.props.location.state["respones"] &&
+              this.props.location.state["respones"]) ||
+            []
           }
         ></SimpleMap>
       </React.Fragment>

@@ -10,7 +10,7 @@ import Logger from "../loggerServices";
 
 export const getPlaces = async function (places) {
   const types = Object.keys(places);
-  const location = await fetchCoordinates();
+  const location = (await fetchCoordinates()) || { latitude: 0, longitude: 0 };
   const requests = [];
 
   for (const type of types) {

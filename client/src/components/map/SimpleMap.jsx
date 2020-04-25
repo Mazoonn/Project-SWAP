@@ -4,7 +4,7 @@ import { googleKey } from "../../config.json";
 import { fetchCoordinates } from "../../Utils/httpRequest/GoogleRequest";
 
 const Marker = () => (
-  <img style={{ width: 40 }} src="\img\marker.png" alt="marker"></img>
+  <img style={{ width: 40 }} src="/img/marker.png" alt="marker"></img>
 );
 
 class SimpleMap extends Component {
@@ -19,7 +19,10 @@ class SimpleMap extends Component {
   };
 
   getLocation = async () => {
-    const location = await fetchCoordinates();
+    const location = (await fetchCoordinates()) || {
+      latitude: 0,
+      longitude: 0,
+    };
     const currentLatLng = {
       lat: location.latitude,
       lng: location.longitude,
@@ -33,16 +36,17 @@ class SimpleMap extends Component {
   getMarkers = () => {
     let markers = [];
     if (this.props.places !== undefined)
-      this.props.places.forEach((places) => {
-        places.forEach((place) => {
-          markers.push(
-            <Marker
-              lat={place.geometry.location.lat}
-              lng={place.geometry.location.lng}
-            ></Marker>
-          );
+      if (this.props.places.length !== 0)
+        this.props.places.forEach((places) => {
+          places.forEach((place) => {
+            markers.push(
+              <Marker
+                lat={place.geometry.location.lat}
+                lng={place.geometry.location.lng}
+              ></Marker>
+            );
+          });
         });
-      });
     return markers;
   };
 
