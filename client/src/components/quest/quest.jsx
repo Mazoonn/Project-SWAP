@@ -10,9 +10,11 @@ class Quest extends Component {
     categoryList: [],
     columnsInSubCategoires: 3,
     columnsOfSubcategories: 2,
+    isLoading: false,
   };
 
   getPlaces = async () => {
+    this.setState({ isLoading: true });
     const places = {};
     const categories = this.state.categoryList;
     categories.forEach((category) => {
@@ -130,18 +132,29 @@ class Quest extends Component {
             categoryList={this.state.categoryList}
           />
           <div className="text-center p-3">
-            <button
-              onClick={this.getPlaces}
-              hidden={
-                !this.state.categoryList.some(
-                  (category) => category.isCurrentlySelected
-                )
-              }
-              type="button"
-              className="btn btn-primary btn-md"
-            >
-              Next
-            </button>
+            {(!this.state.isLoading && (
+              <button
+                onClick={this.getPlaces}
+                hidden={
+                  !this.state.categoryList.some(
+                    (category) => category.isCurrentlySelected
+                  )
+                }
+                type="button"
+                className="btn btn-primary btn-md"
+              >
+                Next
+              </button>
+            )) || (
+              <button class="btn btn-primary btn-md" type="button" disabled>
+                <span
+                  className="spinner-grow spinner-grow-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                Loading...
+              </button>
+            )}
           </div>
         </div>
         <div className="container">{this.handleDivideSubCategories()}</div>
