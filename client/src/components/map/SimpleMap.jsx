@@ -19,10 +19,7 @@ class SimpleMap extends Component {
   };
 
   getLocation = async () => {
-    const location = (await fetchCoordinates()) || {
-      latitude: 0,
-      longitude: 0,
-    };
+    const location = await fetchCoordinates();
     const currentLatLng = {
       lat: location.latitude,
       lng: location.longitude,
