@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace api
+namespace SwapClassLibrary.EF
 {
     using System;
     using System.Data.Entity;
@@ -25,14 +25,19 @@ namespace api
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<address> addresses { get; set; }
         public virtual DbSet<admin> admins { get; set; }
         public virtual DbSet<business> businesses { get; set; }
         public virtual DbSet<client> clients { get; set; }
-        public virtual DbSet<genu> genus { get; set; }
-        public virtual DbSet<google_place_value> google_place_value { get; set; }
-        public virtual DbSet<relationship_type_subType> relationship_type_subType { get; set; }
-        public virtual DbSet<sube_type_categoriy> sube_type_categoriy { get; set; }
-        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
-        public virtual DbSet<type_category> type_category { get; set; }
+        public virtual DbSet<google_value> google_value { get; set; }
+        public virtual DbSet<main_category> main_category { get; set; }
+        public virtual DbSet<place> places { get; set; }
+        public virtual DbSet<quest> quests { get; set; }
+        public virtual DbSet<r_business_place> r_business_place { get; set; }
+        public virtual DbSet<r_place_quest> r_place_quest { get; set; }
+        public virtual DbSet<r_place_sub_and_main_category> r_place_sub_and_main_category { get; set; }
+        public virtual DbSet<r_sub_and_main_category> r_sub_and_main_category { get; set; }
+        public virtual DbSet<r_user_quest> r_user_quest { get; set; }
+        public virtual DbSet<sub_category> sub_category { get; set; }
     }
 }

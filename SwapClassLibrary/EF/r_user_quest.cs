@@ -7,18 +7,18 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace api
+namespace SwapClassLibrary.EF
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class relationship_type_subType
+    public partial class r_user_quest
     {
-        public string sub_type_id { get; set; }
-        public string id_type { get; set; }
-        public Nullable<decimal> clicked { get; set; }
+        public string quest_id { get; set; }
+        public string client_id { get; set; }
+        public System.DateTime creation_date { get; set; }
     
-        public virtual sube_type_categoriy sube_type_categoriy { get; set; }
-        public virtual type_category type_category { get; set; }
+        public virtual client client { get; set; }
+        public virtual quest quest { get; set; }
     }
 }

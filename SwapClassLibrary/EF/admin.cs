@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace api
+namespace SwapClassLibrary.EF
 {
     using System;
     using System.Collections.Generic;
@@ -15,15 +15,14 @@ namespace api
     public partial class admin
     {
         public string admin_id { get; set; }
+        public System.DateTime creation_date { get; set; }
         public string first_name { get; set; }
         public string last_name { get; set; }
+        public System.DateTime birthday_date { get; set; }
         public string email { get; set; }
-        public string password { get; set; }
-        public Nullable<decimal> phone { get; set; }
-        public bool id_genus { get; set; }
-        public System.DateTime date_register { get; set; }
+        public string sex { get; set; }
         public System.DateTime last_login { get; set; }
-    
-        public virtual genu genu { get; set; }
+        public string password { get; set; }
+        public string phone { get; set; }
     }
 }

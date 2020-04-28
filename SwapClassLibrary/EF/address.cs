@@ -7,23 +7,27 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace api
+namespace SwapClassLibrary.EF
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class google_place_value
+    public partial class address
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public google_place_value()
+        public address()
         {
-            this.sube_type_categoriy = new HashSet<sube_type_categoriy>();
+            this.places = new HashSet<place>();
         }
     
-        public string google_value_id { get; set; }
-        public string name { get; set; }
+        public string address_id { get; set; }
+        public System.DateTime creation_date { get; set; }
+        public string country { get; set; }
+        public string street { get; set; }
+        public string street_number { get; set; }
+        public string post_code { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<sube_type_categoriy> sube_type_categoriy { get; set; }
+        public virtual ICollection<place> places { get; set; }
     }
 }

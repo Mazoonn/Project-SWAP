@@ -7,23 +7,27 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace api
+namespace SwapClassLibrary.EF
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class type_category
+    public partial class main_category
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public type_category()
+        public main_category()
         {
-            this.relationship_type_subType = new HashSet<relationship_type_subType>();
+            this.r_sub_and_main_category = new HashSet<r_sub_and_main_category>();
         }
     
-        public string id_type { get; set; }
+        public string main_id { get; set; }
+        public System.DateTime creation_date { get; set; }
         public string name { get; set; }
+        public string google_value_id { get; set; }
+        public bool is_active { get; set; }
     
+        public virtual google_value google_value { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<relationship_type_subType> relationship_type_subType { get; set; }
+        public virtual ICollection<r_sub_and_main_category> r_sub_and_main_category { get; set; }
     }
 }

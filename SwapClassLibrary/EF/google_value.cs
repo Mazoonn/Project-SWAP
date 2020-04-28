@@ -7,25 +7,26 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace api
+namespace SwapClassLibrary.EF
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class sube_type_categoriy
+    public partial class google_value
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public sube_type_categoriy()
+        public google_value()
         {
-            this.relationship_type_subType = new HashSet<relationship_type_subType>();
+            this.main_category = new HashSet<main_category>();
+            this.sub_category = new HashSet<sub_category>();
         }
     
-        public string sub_type_id { get; set; }
-        public string client_value { get; set; }
         public string google_value_id { get; set; }
+        public string value { get; set; }
     
-        public virtual google_place_value google_place_value { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<relationship_type_subType> relationship_type_subType { get; set; }
+        public virtual ICollection<main_category> main_category { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<sub_category> sub_category { get; set; }
     }
 }

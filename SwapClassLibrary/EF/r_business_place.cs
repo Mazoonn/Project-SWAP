@@ -7,21 +7,22 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace api
+namespace SwapClassLibrary.EF
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class business
+    public partial class r_business_place
     {
         public string business_id { get; set; }
-        public string id_type { get; set; }
-        public string name { get; set; }
+        public string place_id { get; set; }
         public string phone { get; set; }
-        public Nullable<System.TimeSpan> opening_time { get; set; }
-        public Nullable<System.TimeSpan> closing_time { get; set; }
-        public Nullable<decimal> location_lat { get; set; }
-        public Nullable<decimal> location_lng { get; set; }
-        public Nullable<decimal> rating { get; set; }
+        public string name { get; set; }
+        public string descrition { get; set; }
+        public System.DateTime creation_date { get; set; }
+        public bool is_active { get; set; }
+    
+        public virtual business business { get; set; }
+        public virtual place place { get; set; }
     }
 }

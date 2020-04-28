@@ -7,17 +7,20 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace api
+namespace SwapClassLibrary.EF
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class sysdiagram
+    public partial class r_place_quest
     {
+        public string place_id { get; set; }
+        public string quest_id { get; set; }
+        public System.DateTime creation_date { get; set; }
         public string name { get; set; }
-        public int principal_id { get; set; }
-        public int diagram_id { get; set; }
-        public Nullable<int> version { get; set; }
-        public byte[] definition { get; set; }
+        public Nullable<decimal> Rating { get; set; }
+    
+        public virtual place place { get; set; }
+        public virtual quest quest { get; set; }
     }
 }

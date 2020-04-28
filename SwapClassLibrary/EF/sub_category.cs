@@ -7,26 +7,27 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace api
+namespace SwapClassLibrary.EF
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class genu
+    public partial class sub_category
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public genu()
+        public sub_category()
         {
-            this.admins = new HashSet<admin>();
-            this.clients = new HashSet<client>();
+            this.r_sub_and_main_category = new HashSet<r_sub_and_main_category>();
         }
     
-        public bool genus_id { get; set; }
-        public string genus { get; set; }
+        public string sub_id { get; set; }
+        public System.DateTime creation_date { get; set; }
+        public string name { get; set; }
+        public string google_value_id { get; set; }
+        public bool is_active { get; set; }
     
+        public virtual google_value google_value { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<admin> admins { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<client> clients { get; set; }
+        public virtual ICollection<r_sub_and_main_category> r_sub_and_main_category { get; set; }
     }
 }

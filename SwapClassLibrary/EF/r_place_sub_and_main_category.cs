@@ -7,22 +7,19 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace api
+namespace SwapClassLibrary.EF
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class client
+    public partial class r_place_sub_and_main_category
     {
-        public string client_id { get; set; }
-        public string first_name { get; set; }
-        public string last_name { get; set; }
-        public System.DateTime date_birthday { get; set; }
-        public string email { get; set; }
-        public bool genus_id { get; set; }
-        public System.DateTime date_register { get; set; }
-        public System.DateTime last_login { get; set; }
+        public string sub_id { get; set; }
+        public string main_id { get; set; }
+        public string place_id { get; set; }
+        public System.DateTime creation_date { get; set; }
     
-        public virtual genu genu { get; set; }
+        public virtual place place { get; set; }
+        public virtual r_sub_and_main_category r_sub_and_main_category { get; set; }
     }
 }
