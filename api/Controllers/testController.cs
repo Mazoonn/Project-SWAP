@@ -12,7 +12,7 @@ namespace api.Controllers
 {
 
 
-    public class tmpController : ApiController
+    public class testController : ApiController
     {
      
         // GET: api/tmp

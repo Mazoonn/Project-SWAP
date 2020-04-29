@@ -9,10 +9,9 @@ namespace SwapClassLibrary.DTO
     public class mainCategoryDTO
     {
         public string main_id;
-        public System.DateTime creation_date;
+        public System.DateTime creation_date = DateTime.Now;
         public string name;
-        public string google_value_id;
-        public bool is_active;
+        public bool is_active = false;
         public googleValueDto google_value;
     }
 }

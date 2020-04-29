@@ -8,52 +8,24 @@ using SwapClassLibrary.DTO;
 using SwapClassLibrary.EF;
 using SwapClassLibrary.Service;
 
-
 namespace api.Controllers
 {
-    [RoutePrefix("api/Category")]
-    public class CategoryController : ApiController
+    [RoutePrefix("api/GoogleValue")]
+    public class GoogleValueController : ApiController
     {
-        //GET: api/Category
-        //public List<string> Get()
-        //{
 
-
-        // return CategoryService.GetAllMainCategorys().OrderByDescending(x => x.name).Where(x => x.is_active).ToList();
-
-        //}
-
-        //HttpResponseMessage
-
-        // POST: api/Category
-        public void Post([FromBody]string value)
-        {
-
-        }
-
-        // PUT: api/mainCategory/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE: api/mainCategory/5
-        public void Delete(int id)
-        {
-        }
-
-
-        // api/Category
-        /*********************************************************************************************/
-
-        //GET: api/Category
-
+        // GET: api/googleValue/GetAllGoogleValue
         [Route("GetAllGoogleValue")]
         [HttpGet]
         public HttpResponseMessage GetAllGoogleValue()
         {
-            return Request.CreateResponse(HttpStatusCode.OK, CategoryService.GetAllGoogleValue());
+            List<googleValueDto> list = CategoryService.GetAllGoogleValue();
+            if(list.Count == 0)
+                return Request.CreateResponse(HttpStatusCode.NotFound, "There is no google value in the db");
+            return Request.CreateResponse(HttpStatusCode.OK, list);
         }
 
+        // GET: api/googleValue/GetGoogleValue/{type}/{value}
         [Route("GetGoogleValue/{type}/{value}")]
         [HttpGet]
         public HttpResponseMessage GetGoogleValue(string type, string value)
@@ -78,7 +50,7 @@ namespace api.Controllers
             //
         }
 
-        // POST: api/Category/AddGoogleValue
+        // POST:api/googleValue/AddGoogleValue
         [Route("AddGoogleValue")]
         [HttpPost]
         public HttpResponseMessage AddGoogleValue([FromBody]googleValueDto value)
@@ -88,7 +60,7 @@ namespace api.Controllers
             return Request.CreateResponse(HttpStatusCode.BadRequest, "there is no value in the body");
         }
 
-
+        // Delete:api/googleValue/DeleteGoogleValue/{type}/{value}
         [Route("DeleteGoogleValue/{type}/{value}")]
         [HttpDelete]
         public HttpResponseMessage DeleteGoogleValue(string type, string value)
