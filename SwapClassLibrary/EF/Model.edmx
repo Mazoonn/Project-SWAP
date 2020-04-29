@@ -736,7 +736,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="SwapDbConnection" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="SwapDbConnection" annotation:LazyLoadingEnabled="false">
           <EntitySet Name="addresses" EntityType="Self.address" />
           <EntitySet Name="admins" EntityType="Self.admin" />
           <EntitySet Name="businesses" EntityType="Self.business" />

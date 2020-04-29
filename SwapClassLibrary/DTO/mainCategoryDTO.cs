@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+ 
 
-namespace api.DTO
+namespace SwapClassLibrary.DTO
 {
     public class mainCategoryDTO
     {
@@ -12,6 +13,6 @@ namespace api.DTO
         public string name;
         public string google_value_id;
         public bool is_active;
-        //public googleValueDto google_value;
+        public googleValueDto google_value;
     }
 }

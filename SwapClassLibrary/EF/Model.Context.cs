@@ -18,6 +18,7 @@ namespace SwapClassLibrary.EF
         public SwapDbConnection()
             : base("name=SwapDbConnection")
         {
+            this.Configuration.LazyLoadingEnabled = false;
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
