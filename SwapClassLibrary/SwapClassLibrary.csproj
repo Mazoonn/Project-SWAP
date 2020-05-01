@@ -43,6 +43,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
@@ -53,8 +54,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DTO\googleValueDto.cs" />
-    <Compile Include="DTO\mainCategoryDTO.cs" />
+    <Compile Include="DTO\categoryDTO\categoryAddGoogleResponseDTO.cs" />
+    <Compile Include="DTO\categoryDTO\categoryDTO.cs" />
+    <Compile Include="DTO\categoryDTO\googleValueDto.cs" />
+    <Compile Include="DTO\categoryDTO\categoryAddGoogleRequestDTO.cs" />
+    <Compile Include="DTO\categoryDTO\requestValueDTO.cs" />
     <Compile Include="EF\address.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -97,6 +101,12 @@
     <Compile Include="EF\r_business_place.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="EF\r_google_main_category.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\r_google_sub_category.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="EF\r_place_quest.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -113,7 +123,10 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service\CategoryService.cs" />
+    <Compile Include="Service\category\CategoryService.cs" />
+    <Compile Include="Service\category\MainCategoryService.cs" />
+    <Compile Include="Service\category\GoogleValueService.cs" />
+    <Compile Include="Service\category\SubCategoryService.cs" />
     <Compile Include="Service\IdService.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -128,6 +141,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="EF\Model.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Model.edmx</DependentUpon>
@@ -139,10 +155,6 @@
       <LastGenOutput>Model.cs</LastGenOutput>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

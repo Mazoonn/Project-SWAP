@@ -17,16 +17,16 @@ namespace SwapClassLibrary.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public google_value()
         {
-            this.main_category = new HashSet<main_category>();
-            this.sub_category = new HashSet<sub_category>();
+            this.r_google_main_category = new HashSet<r_google_main_category>();
+            this.r_google_sub_category = new HashSet<r_google_sub_category>();
         }
     
         public string google_value_id { get; set; }
         public string value { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<main_category> main_category { get; set; }
+        public virtual ICollection<r_google_main_category> r_google_main_category { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<sub_category> sub_category { get; set; }
+        public virtual ICollection<r_google_sub_category> r_google_sub_category { get; set; }
     }
 }

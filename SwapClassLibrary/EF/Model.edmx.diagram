@@ -4,32 +4,36 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="03d58e0d3f834e468b4bbbc0aa0d73b7" Name="Diagram1">
+      <Diagram DiagramId="834a094f64c145f6997211f529ddf626" Name="Diagram1" ZoomLevel="74">
         <EntityTypeShape EntityType="SwapModel.address" Width="1.5" PointX="0.75" PointY="6.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SwapModel.admin" Width="1.5" PointX="8.75" PointY="9.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapModel.admin" Width="1.5" PointX="0.75" PointY="10.875" IsExpanded="true" />
         <EntityTypeShape EntityType="SwapModel.business" Width="1.5" PointX="3" PointY="2.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SwapModel.client" Width="1.5" PointX="6" PointY="15.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="SwapModel.google_value" Width="1.5" PointX="1.5" PointY="11.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="SwapModel.main_category" Width="1.5" PointX="3.75" PointY="11" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapModel.client" Width="1.5" PointX="11.625" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapModel.google_value" Width="1.5" PointX="14.125" PointY="13.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapModel.main_category" Width="1.5" PointX="7.5" PointY="10" IsExpanded="true" />
         <EntityTypeShape EntityType="SwapModel.place" Width="1.5" PointX="3" PointY="6" IsExpanded="true" />
         <EntityTypeShape EntityType="SwapModel.quest" Width="1.5" PointX="6" PointY="2.5" IsExpanded="true" />
         <EntityTypeShape EntityType="SwapModel.r_business_place" Width="1.5" PointX="5.25" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapModel.r_google_main_category" Width="1.5" PointX="11" PointY="11.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapModel.r_google_sub_category" Width="1.5" PointX="11" PointY="14.875" IsExpanded="true" />
         <EntityTypeShape EntityType="SwapModel.r_place_quest" Width="1.5" PointX="8.25" PointY="6.5" IsExpanded="true" />
         <EntityTypeShape EntityType="SwapModel.r_place_sub_and_main_category" Width="1.5" PointX="8.25" PointY="3.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="SwapModel.r_sub_and_main_category" Width="1.5" PointX="6" PointY="12.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapModel.r_sub_and_main_category" Width="1.5" PointX="4.25" PointY="11.75" IsExpanded="true" />
         <EntityTypeShape EntityType="SwapModel.r_user_quest" Width="1.5" PointX="8.25" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="SwapModel.sub_category" Width="1.5" PointX="3.75" PointY="14.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapModel.sub_category" Width="1.5" PointX="7.25" PointY="14.875" IsExpanded="true" />
         <AssociationConnector Association="SwapModel.FK_place_address" ManuallyRouted="false" />
         <AssociationConnector Association="SwapModel.FK_r_business_place_business" ManuallyRouted="false" />
         <AssociationConnector Association="SwapModel.FK_r_user_quest_client" ManuallyRouted="false" />
-        <AssociationConnector Association="SwapModel.FK_main_category_google_value" ManuallyRouted="false" />
-        <AssociationConnector Association="SwapModel.FK_sub_category_google_value" ManuallyRouted="false" />
+        <AssociationConnector Association="SwapModel.FK_r_google_main_category_google_value" ManuallyRouted="false" />
+        <AssociationConnector Association="SwapModel.FK_r_google_sub_category_google_value" ManuallyRouted="false" />
+        <AssociationConnector Association="SwapModel.FK_r_google_main_category_main_category" ManuallyRouted="false" />
         <AssociationConnector Association="SwapModel.FK_r_sub_and_main_category_main_category" ManuallyRouted="false" />
         <AssociationConnector Association="SwapModel.FK_r_business_place_place" ManuallyRouted="false" />
         <AssociationConnector Association="SwapModel.FK_r_place_quest_place" ManuallyRouted="false" />
         <AssociationConnector Association="SwapModel.FK_r_place_sub_and_main_category_place" ManuallyRouted="false" />
         <AssociationConnector Association="SwapModel.FK_r_place_quest_quest" ManuallyRouted="false" />
         <AssociationConnector Association="SwapModel.FK_r_user_quest_quest" ManuallyRouted="false" />
+        <AssociationConnector Association="SwapModel.FK_r_google_sub_category_sub_category" ManuallyRouted="false" />
         <AssociationConnector Association="SwapModel.FK_r_place_sub_and_main_category_r_sub_and_main_category" ManuallyRouted="false" />
         <AssociationConnector Association="SwapModel.FK_r_sub_and_main_category_sub_category" ManuallyRouted="false" />
       </Diagram>

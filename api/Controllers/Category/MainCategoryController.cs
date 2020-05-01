@@ -18,51 +18,53 @@ namespace api.Controllers.Category
        [HttpGet]
         public HttpResponseMessage GetAllMainCategory()
         {
-            List<mainCategoryDTO> list = CategoryService.GetAllMainCategorys();
-            if (list.Count == 0)
+            List<categoryDTO> list = MainCategoryService.GetAllMainCategorys();
+            if (list == null)
                 return Request.CreateResponse(HttpStatusCode.NotFound, "There is no Main Categoy value in the db");
             return Request.CreateResponse(HttpStatusCode.OK, list);
-        }
-
-        // GET: api/MainCategory/GetMainCategory/{type}/{value}
-        [Route("GetMainCategory/{type}/{value}")]
-        [HttpGet]
-        public HttpResponseMessage GetMainCategory(string type, string value)
-          {
-            mainCategoryDTO db_value;
-            switch (type)
-            {
-                case ("id"):
-                    db_value = CategoryService.GetMainCategoryByid(value);
-                    if (db_value == null)
-                        return Request.CreateResponse(HttpStatusCode.NotFound, "There is not google value with id - " + value);
-                    return Request.CreateResponse(HttpStatusCode.OK, db_value);
-                case ("value"):
-                    db_value = CategoryService.GetMainCategoryByValue(value);
-                    if (db_value == null)
-                        return Request.CreateResponse(HttpStatusCode.NotFound, "There is not google value with value of - " + value);
-                    return Request.CreateResponse(HttpStatusCode.OK, db_value);
-                default:
-                    return Request.CreateResponse(HttpStatusCode.BadRequest, "The URL GetGoogleValue/type/: can be only id or value ");
-            }
         }
 
         // POST: api/MainCategory/AddMainCategory
         [Route("AddMainCategory")]
         [HttpPost]
-        public void AddMainCategory([FromBody]mainCategoryDTO value)
+        public HttpResponseMessage AddMainCategory([FromBody]requestValueDTO req)
         {
-
+            if (req.value != null)
+                return Request.CreateResponse(HttpStatusCode.OK, MainCategoryService.AddMainCategory(req.value));
+            return Request.CreateResponse(HttpStatusCode.BadRequest, "there is no 'value':'' in the body");
         }
 
-        // PUT: api/MainCategory/5
-        public void Put(int id, [FromBody]string value)
+        [Route("ChangeActiveMainCategory/{id}")]
+        [HttpPut]
+        // PUT: api/MainCategory/ChangeActiveMainCategory/id
+        //body : "is_active":true
+        public HttpResponseMessage ChangeActiveMainCategory([FromUri]string id, [FromBody]bool req)
         {
-        }
+            main_category slected_main_category;
+            SwapDbConnection db = new SwapDbConnection();
+            slected_main_category = db.main_category.Select(x => x)
+                .FirstOrDefault(x => x.main_id == id); ;
+            if (slected_main_category == null)
+                return Request.CreateResponse(HttpStatusCode.NotFound, "There is not main category value with id - " + id);
+            slected_main_category.is_active = req;
+            db.SaveChanges();
+            return Request.CreateResponse(HttpStatusCode.OK, slected_main_category);
 
-        // DELETE: api/MainCategory/5
-        public void Delete(int id)
+        }
+         
+
+        // Delete:api/googleValue/DeleteGoogleValue/{type}/{req}
+        [Route("DeleteMainCategory/{id}")]
+        [HttpDelete]
+        public HttpResponseMessage DeleteMainCategory(string id)
         {
+            bool is_deleted;
+            is_deleted = MainCategoryService.deleteMainCategory(id);
+            if (!is_deleted)
+                return Request.CreateResponse(HttpStatusCode.NotFound, "There is not main category with id - " + id);
+            return Request.CreateResponse(HttpStatusCode.OK, "the object had been deleted ");
+
         }
     }
+   
 }

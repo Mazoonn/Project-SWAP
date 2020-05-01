@@ -36,7 +36,7 @@ namespace api.Controllers
         public HttpResponseMessage Post([FromBody]googleValueDto value)
         {
             if(value != null)
-                return Request.CreateResponse(HttpStatusCode.OK, CategoryService.AddGoogleValue(value.value));
+                return Request.CreateResponse(HttpStatusCode.OK, GoogleValueService.AddGoogleValue(value.value));
             return Request.CreateResponse(HttpStatusCode.BadRequest, "there is no value in the body");
         }
 
