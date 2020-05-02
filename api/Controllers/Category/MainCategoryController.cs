@@ -8,7 +8,7 @@ using SwapClassLibrary.DTO;
 using SwapClassLibrary.EF;
 using SwapClassLibrary.Service;
 
-namespace api.Controllers.Category
+namespace api.Controllers
 {
     [RoutePrefix("api/MainCategory")]
     public class MainCategoryController : ApiController

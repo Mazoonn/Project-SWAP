@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "api", "api.csproj", "{0EB89
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwapClassLibrary", "..\SwapClassLibrary\SwapClassLibrary.csproj", "{09D531AD-FA69-4FCE-8EBF-EBFD94D5D2CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "apiTests", "..\apiTests1\apiTests.csproj", "{9CF2D1A9-F82B-43A1-8047-51D6EB529F29}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "apiTests", "..\apiTests\apiTests.csproj", "{9CF2D1A9-F82B-43A1-8047-51D6EB529F29}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

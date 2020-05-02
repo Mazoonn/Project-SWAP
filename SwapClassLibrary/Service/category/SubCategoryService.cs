@@ -12,7 +12,7 @@ namespace SwapClassLibrary.Service
 
     public class SubCategoryService
     {
-        public static List<categoryDTO> GetAllSubCategorys()//matan - need to enter sub categorys values 
+        public static List<categoryDTO> GetAllSubCategorys()//GetAllSubcategoies
         {
             SwapDbConnection db = new SwapDbConnection();
             int count = db.sub_category.Count();

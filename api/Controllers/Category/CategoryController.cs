@@ -8,23 +8,26 @@ using SwapClassLibrary.DTO;
 using SwapClassLibrary.EF;
 using SwapClassLibrary.Service;
 
-namespace api.Controllers.Category
+namespace api.Controllers
 {
-    [RoutePrefix("api/CategoryController")]
+    [RoutePrefix("api/Category")]
     public class CategoryController : ApiController
     {
         //google_value and category relationship
         /******************************************************************************************/
-        [Route("GetAllCategorytoGoogleValue/{id}/{google_id}")]
+
+        // GET: api/Category/GetAllCategorytoGoogleValue
+        [Route("GetAllCategorytoGoogleValue")]
         [HttpGet]
-        public HttpResponseMessage GetAllCategorytoGoogleValue(string id, string google_id)
+        public HttpResponseMessage GetAllCategorytoGoogleValue()
         {
-            List<categoryAddGoogleResponseDTO> r_category_google_list = CategoryService.GetAllCategorytoGoogleValue(id,google_id);
+            List<categoryAddGoogleResponseDTO> r_category_google_list = CategoryService.GetAllCategorytoGoogleValue();
             if (r_category_google_list == null)
-                return Request.CreateResponse(HttpStatusCode.NotFound, "There is no Main Categoy value in the db");
+                return Request.CreateResponse(HttpStatusCode.NotFound, "There is no Categoy value in the db");//fix status cood
             return Request.CreateResponse(HttpStatusCode.OK, r_category_google_list);
         }
 
+        // GET: api/Category/GetCategorytoGoogleValue/{id}/{google_id}
         [Route("GetCategorytoGoogleValue/{id}/{google_id}")]
         [HttpGet]
         public HttpResponseMessage GetCategorytoGoogleValue(string id, string google_id)
@@ -35,39 +38,34 @@ namespace api.Controllers.Category
             return Request.CreateResponse(HttpStatusCode.OK, r_category_google_Obj);
         }
 
-        //לא עשיתי עדין
-        //[Route("ChangeActiveMainCategory/{id}")]
-        //[HttpPut]
-        //// PUT: api/MainCategory/ChangeActiveMainCategory/id
-        ////body : "is_active":true
-        //public HttpResponseMessage ChangeActiveMainCategory([FromUri]string id, [FromBody]bool req)
-        //{
-        //    main_category slected_main_category;
-        //    SwapDbConnection db = new SwapDbConnection();
-        //    slected_main_category = db.main_category.Select(x => x)
-        //        .FirstOrDefault(x => x.main_id == id); ;
-        //    if (slected_main_category == null)
-        //        return Request.CreateResponse(HttpStatusCode.NotFound, "There is not main category value with id - " + id);
-        //    slected_main_category.is_active = req;
-        //    db.SaveChanges();
-        //    return Request.CreateResponse(HttpStatusCode.OK, slected_main_category);
+        // PUT: api/Category/ChangeActiveCategorytoGoogleValue/id
+        [Route("ChangeActiveCategorytoGoogleValue/{id}/{google_id}")]
+        [HttpPut]
+        public HttpResponseMessage ChangeActiveCategorytoGoogleValue(string id, string google_id, [FromBody]bool req)
+        {
+            if (id == null || google_id == null)
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "The id is missing :" + google_id + " " + id);
+            categoryAddGoogleDTO object_add = CategoryService.ChangeActiveCategorytoGoogleValue(id, google_id,req);
+            if (object_add != null)
+                return Request.CreateResponse(HttpStatusCode.OK, object_add);
+            return Request.CreateResponse(HttpStatusCode.BadRequest, "There category id is not as used in this API");
 
-        //}
+        }
 
-        // POST: api/MainCategory/AddMainCategory
-        [Route("AddCategorytoGoogleValue/{id}/{google_id}")]
+        // POST: api/Category/AddMainCategory
+        [Route("AddCategorytoGoogleValue")]
         [HttpPost]
         public HttpResponseMessage AddCategorytoGoogleValue([FromBody]categoryAddGoogleRequestDTO req)
         {
-            if (req.google_id != null && req.id != null)//matan -change
+            if (req.google_id == null || req.id == null)//matan -change
                return Request.CreateResponse(HttpStatusCode.BadRequest, "The id is missing :"+ req.google_id+" "+ req.id);
-            categoryAddGoogleResponseDTO object_add = CategoryService.AddCategorytoGoogleValue(req.id, req.google_id);
+            categoryAddGoogleDTO object_add = CategoryService.AddCategorytoGoogleValue(req.id, req.google_id);
                if(object_add != null)
                 return Request.CreateResponse(HttpStatusCode.OK, object_add);
             return Request.CreateResponse(HttpStatusCode.BadRequest, "There category id is not as used in this API");
         }
 
-        // Delete:api/googleValue/DeleteGoogleValue/{type}/{req}
+        // Delete:api/Category/DeleteGoogleValue/{type}/{req}
         [Route("RemoveCategorytoGoogleValue/{id}/{google_id}")]
         [HttpDelete]
         public HttpResponseMessage RemoveCategorytoGoogleValue(string id, string google_id)
@@ -79,21 +77,23 @@ namespace api.Controllers.Category
             return Request.CreateResponse(HttpStatusCode.OK, "the object had been deleted ");
 
         }
+
+
         //main and sub category relationship
         /******************************************************************************************/
-        
-          //matan - need to test  
-        // GET: api/MainCategory
-        [Route("GetAllMainAndSubRelationship/{main_id}/{sub_id}")]
+
+        // GET: api/Category/GetAllMainAndSubRelationship/{main_id}/{sub_id}
+        [Route("GetAllMainAndSubRelationship")]
        [HttpGet]
-        public HttpResponseMessage GetAllMainAndSubRelationship(string main_id, string sub_id)
+        public HttpResponseMessage GetAllMainAndSubRelationship()
         {
-            List<r_sub_and_main_category> r_main_sub_category_list = CategoryService.GetAllMainAndSubRelationship( main_id,  sub_id);
-            if (r_main_sub_category_list == null)
+            List<r_sub_and_main_category> r_main_sub_category_list = CategoryService.GetAllMainAndSubRelationship();
+            if (r_main_sub_category_list.Count == 0)
                 return Request.CreateResponse(HttpStatusCode.NotFound, "There is no Main Categoy value in the db");
             return Request.CreateResponse(HttpStatusCode.OK, r_main_sub_category_list);
         }
 
+        // GET: api/Category/GetMainAndSubRelationship/{main_id}/{sub_id}
         [Route("GetMainAndSubRelationship/{main_id}/{sub_id}")]
         [HttpGet]
         public HttpResponseMessage GetMainAndSubRelationship(string main_id, string sub_id)
@@ -104,40 +104,21 @@ namespace api.Controllers.Category
             return Request.CreateResponse(HttpStatusCode.OK, r_main_sub_category_obj);
         }
 
-        // POST: api/MainCategory/AddMainCategory
-        //[Route("AddMainAndSubRelationship/{main_id}/{sub_id}")]
-        //[HttpPost]
-        //public HttpResponseMessage AddMainAndSubRelationship([FromBody]requestValueDTO req)
-        //{
-        //    //  if (req. != null && req.id != null)//matan -change
-        //    //     return Request.CreateResponse(HttpStatusCode.BadRequest, "The id is missing :" + req.google_id + " " + req.id);
-        //    r_sub_and_main_category object_add = CategoryService.AddMainAndSubRelationship(req.id, req.google_id);
-        //    if (object_add != null)
-        //        return Request.CreateResponse(HttpStatusCode.OK, object_add);
-        //    return Request.CreateResponse(HttpStatusCode.BadRequest, "There category id is not as used in this API");
-        //}
-
-        //[Route("ChangeActiveMainCategory/{id}")]
-        //[HttpPut]
-        //// PUT: api/MainCategory/ChangeActiveMainCategory/id
-        ////body : "is_active":true
-        //public HttpResponseMessage ChangeActiveMainCategory([FromUri]string id, [FromBody]bool req)
-        //{
-        //    main_category slected_main_category;
-        //    SwapDbConnection db = new SwapDbConnection();
-        //    slected_main_category = db.main_category.Select(x => x)
-        //        .FirstOrDefault(x => x.main_id == id); ;
-        //    if (slected_main_category == null)
-        //        return Request.CreateResponse(HttpStatusCode.NotFound, "There is not main category value with id - " + id);
-        //    slected_main_category.is_active = req;
-        //    db.SaveChanges();
-        //    return Request.CreateResponse(HttpStatusCode.OK, slected_main_category);
-
-        //}
-
+        //POST: api/MainCategory/AddMainAndSubRelationship
+        [Route("AddMainAndSubRelationship")]
+       [HttpPost]
+        public HttpResponseMessage AddMainAndSubRelationship([FromBody]MainAndSubRelationshipDTO req)
+        {
+             if (req.main_id == null || req.sub_id == null)//matan -change
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "The id is missing :" + req.sub_id + " " + req.main_id);
+            r_sub_and_main_category object_add = CategoryService.AddMainAndSubRelationship(req.main_id, req.sub_id,req.descrition);
+            if (object_add != null)
+                return Request.CreateResponse(HttpStatusCode.OK, object_add);
+            return Request.CreateResponse(HttpStatusCode.BadRequest, "There category id is not as used in this API");
+        }
 
         // Delete:api/googleValue/DeleteGoogleValue/{type}/{req}
-        [Route("DeleteMainCategory/{main_id}/{sub_id}")]
+        [Route("RemoveMainAndSubRelationship/{main_id}/{sub_id}")]
         [HttpDelete]
         public HttpResponseMessage RemoveMainAndSubRelationship(string main_id, string sub_id)
         {
