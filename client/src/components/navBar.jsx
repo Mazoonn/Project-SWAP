@@ -7,6 +7,7 @@ import PrivateRoute from "../Utils/PrivateRoute";
 import PublicRoute from "../Utils/PublicRoute";
 import { BrowserRouter, Switch, Route, NavLink } from "react-router-dom";
 import Quest from "./quest/quest";
+import Map from "./map/map";
 
 class NavBar extends Component {
   render() {
@@ -30,6 +31,9 @@ class NavBar extends Component {
               <NavLink activeClassName="active" to="/quest">
                 Quest
               </NavLink>
+              <NavLink activeClassName="active" to="/Map">
+                Map2
+              </NavLink>
             </div>
             <div className="content">
               <Switch>
@@ -37,6 +41,7 @@ class NavBar extends Component {
                 <PublicRoute path="/login" component={Login} />
                 <PrivateRoute path="/dashboard" component={Dashboard} />
                 <Route path="/quest" component={Quest} />
+                <Route path="/map" component={Map} />
               </Switch>
             </div>
           </div>
