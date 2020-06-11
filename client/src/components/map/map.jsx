@@ -23,7 +23,7 @@ class Map extends Component {
   render() {
     return (
       <MapWithAMarker
-        googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${googleKey}&libraries=geometry,drawing,places`}
+        googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${googleKey}&libraries=geometry,drawing,places&language=en`}
         loadingElement={<div style={{ height: "100%" }} />}
         containerElement={<div style={{ height: `700px` }} />}
         mapElement={<div style={{ height: "100%" }} />}
@@ -37,6 +37,10 @@ export default Map;
 
 const MapWithAMarker = withScriptjs(
   withGoogleMap((props) => (
-    <GoogleMap defaultZoom={11} defaultCenter={props.center}></GoogleMap>
+    <GoogleMap
+      defaultZoom={11}
+      defaultCenter={props.center}
+      options={{ streetViewControl: false }}
+    ></GoogleMap>
   ))
 );
