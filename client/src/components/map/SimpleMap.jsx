@@ -4,7 +4,7 @@ import { googleKey } from "../../config.json";
 import { fetchCoordinates } from "../../Utils/httpRequest/GoogleRequest";
 
 const Marker = () => (
-  <img style={{ width: 40 }} src="/img/marker.png" alt="marker"></img>
+  <img style={{ width: 42 }} src="/img/marker.png" alt="marker"></img>
 );
 
 class SimpleMap extends Component {
