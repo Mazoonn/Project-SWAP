@@ -21,7 +21,7 @@ namespace api.Controllers
         [HttpGet]
         public HttpResponseMessage GetAllCategorytoGoogleValue()
         {
-            List<categoryAddGoogleResponseDTO> r_category_google_list = CategoryService.GetAllCategorytoGoogleValue();
+            List<categoryAddGoogleResponseDTO> r_category_google_list = CategoryService.GetAllSubCategorytoGoogleValue();
             if (r_category_google_list == null)
                 return Request.CreateResponse(HttpStatusCode.NotFound, "There is no Categoy value in the db");//fix status cood
             return Request.CreateResponse(HttpStatusCode.OK, r_category_google_list);
@@ -32,7 +32,7 @@ namespace api.Controllers
         [HttpGet]
         public HttpResponseMessage GetCategorytoGoogleValue(string id, string google_id)
         {
-            IEnumerable<categoryAddGoogleResponseDTO> r_category_google_Obj = CategoryService.GetCategorytoGoogleValue(id,google_id);
+            IEnumerable<categoryAddGoogleResponseDTO> r_category_google_Obj = CategoryService.GetSubCategorytoGoogleValue(id,google_id);
             if (r_category_google_Obj == null)
                 return Request.CreateResponse(HttpStatusCode.NotFound, "There is no Main Categoy value in the db");
             return Request.CreateResponse(HttpStatusCode.OK, r_category_google_Obj);
@@ -59,7 +59,7 @@ namespace api.Controllers
         {
             if (req.google_id == null || req.id == null)//matan -change
                return Request.CreateResponse(HttpStatusCode.BadRequest, "The id is missing :"+ req.google_id+" "+ req.id);
-            categoryAddGoogleDTO object_add = CategoryService.AddCategorytoGoogleValue(req.id, req.google_id);
+            categoryAddGoogleDTO object_add = CategoryService.AddSubCategorytoGoogleValue(req.id, req.google_id);
                if(object_add != null)
                 return Request.CreateResponse(HttpStatusCode.OK, object_add);
             return Request.CreateResponse(HttpStatusCode.BadRequest, "There category id is not as used in this API");
@@ -71,7 +71,7 @@ namespace api.Controllers
         public HttpResponseMessage RemoveCategorytoGoogleValue(string id, string google_id)
         {
             bool is_deleted;
-            is_deleted = CategoryService.RemoveCategorytoGoogleValue(  id,   google_id);
+            is_deleted = CategoryService.RemoveSubCategorytoGoogleValue(  id,   google_id);
             if (!is_deleted)
                 return Request.CreateResponse(HttpStatusCode.NotFound, "There is not main category with id - " + id);
             return Request.CreateResponse(HttpStatusCode.OK, "the object had been deleted ");

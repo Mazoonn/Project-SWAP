@@ -14,61 +14,32 @@ namespace SwapClassLibrary.Service
     {
         //google_value and category relationship
         /******************************************************************************************/
-
-        public static List<categoryAddGoogleResponseDTO> GetAllCategorytoGoogleValue()
+        public static List<categoryAddGoogleResponseDTO> GetAllSubCategorytoGoogleValue()
         {
             SwapDbConnection db = new SwapDbConnection();
 
-                List<categoryAddGoogleResponseDTO> r_main_google_object = db.r_google_main_category
-                .Include(x => x.main_category).Include(x => x.google_value)
-                .Select(x => new categoryAddGoogleResponseDTO()
-                {
-                    google_id = x.google_value_id,
-                    id = x.main_id,
-                    creation_date = x.creation_date,
-                    google_name = x.google_value.value,
-                    is_active = x.is_active,
-                    name = x.main_category.name
-
-                }).ToList();
-
-                List<categoryAddGoogleResponseDTO> r_sub_google_object = db.r_google_sub_category
-                .Include(x => x.sub_category).Include(x => x.google_value)
-                .Select(x => new categoryAddGoogleResponseDTO()
-                {
-                    google_id = x.google_value_id,
-                    id = x.sub_id,
-                    creation_date = x.creation_date,
-                    google_name = x.google_value.value,
-                    is_active = x.is_active,
-                    name = x.sub_category.name
-
-                }).ToList();
-            r_main_google_object.AddRange(r_sub_google_object);
-            return r_main_google_object;
-        }
-        //get relationship between google value and category
-        public static IEnumerable<categoryAddGoogleResponseDTO> GetCategorytoGoogleValue(string id, string google_id)
-        {
-            SwapDbConnection db = new SwapDbConnection();
-            if (id.IndexOf("main") == 0)
+           
+            List<categoryAddGoogleResponseDTO> r_sub_google_object = db.r_google_sub_category
+            .Include(x => x.sub_category).Include(x => x.google_value)
+            .Select(x => new categoryAddGoogleResponseDTO()
             {
-                var r_main_google_object = db.r_google_main_category
-                .Include(x => x.main_category).Include(x => x.google_value)
-                .Where(x => x.google_value_id == google_id && x.main_id == id)
-                .Select(x => new categoryAddGoogleResponseDTO()
-                {
-                    google_id = x.google_value_id,
-                    id = x.main_id,
-                    creation_date = x.creation_date,
-                    google_name = x.google_value.value,
-                    is_active = x.is_active,
-                    name = x.main_category.name
+                google_id = x.google_value_id,
+                id = x.sub_id,
+                creation_date = x.creation_date,
+                google_name = x.google_value.value,
+                is_active = x.is_active,
+                name = x.sub_category.name
 
-                });
-                return r_main_google_object;
-            }
-            if (id.IndexOf("sub") == 0)
+            }).ToList();
+            return r_sub_google_object;
+        }
+
+        //get relationship between google value and category
+
+        public static IEnumerable<categoryAddGoogleResponseDTO> GetSubCategorytoGoogleValue(string id, string google_id)
+        {
+            SwapDbConnection db = new SwapDbConnection();
+            if (id.IndexOf("sub") == 0 && db.r_google_sub_category.Where(x => x.sub_id == id).Count() == 0)
             {
                 var r_sub_google_object = db.r_google_sub_category
                 .Include(x => x.sub_category).Include(x => x.google_value)
@@ -88,32 +59,10 @@ namespace SwapClassLibrary.Service
             return null;
         }
         //add relationship between google value and category
-        public static categoryAddGoogleDTO AddCategorytoGoogleValue(string id, string google_id)
+        public static categoryAddGoogleDTO AddSubCategorytoGoogleValue(string id, string google_id)
         {
             SwapDbConnection db = new SwapDbConnection();
-            if (id.IndexOf("main") == 0  && db.r_google_main_category.Where(x => x.main_id == id).Count()==0)
-            {
-                r_google_main_category r_main_google_object = new r_google_main_category()
-                {
-                    main_id = id,
-                    creation_date = DateTime.Now,
-                    is_active = false,
-                    google_value_id = google_id
-                };
-                db.r_google_main_category.Add(r_main_google_object);
-                db.SaveChanges();
-                return new categoryAddGoogleDTO() {
-                    id = id,
-                    creation_date = r_main_google_object.creation_date,
-                    is_active = r_main_google_object.is_active,
-                    google_id = google_id,
-
-                };
-            }
-            //else
-            //{
-            //    throw Exception()
-            //}
+          
             if (id.IndexOf("sub") == 0 && db.r_google_sub_category.Where(x => x.sub_id == id).Count() == 0)
             {
                 r_google_sub_category r_sub_google_object = new r_google_sub_category()
@@ -133,38 +82,16 @@ namespace SwapClassLibrary.Service
                     google_id = google_id
                 };
             }
-            //else
-            //{
-            //    throw Exception()
-            //}
+
             return null ;
         }
 
-        public static categoryAddGoogleDTO ChangeActiveCategorytoGoogleValue(string id, string google_id ,bool req)
+        public static categoryAddGoogleDTO ChangeActiveCategorytoGoogleValue(string id, string google_id, bool req)
         {
             SwapDbConnection db = new SwapDbConnection();
-            if (id.IndexOf("main") == 0 && db.r_google_main_category.Where(x => x.main_id == id).Count() == 1)
+             if (id.IndexOf("sub") == 0 && db.r_google_sub_category.Where(x => x.sub_id == id).Count() == 1)
             {
-                r_google_main_category r_main_google_object = db.r_google_main_category.Select(x => x)
-                  .FirstOrDefault(x => x.main_id == id && x.google_value_id == google_id);
-                r_main_google_object.is_active = req;
-                db.SaveChanges();
-                return new categoryAddGoogleDTO()
-                {
-                    id = id,
-                    creation_date = r_main_google_object.creation_date,
-                    is_active = r_main_google_object.is_active,
-                    google_id = google_id,
-
-                };
-            }
-            //else
-            //{
-            //    throw Exception()
-            //}
-            if (id.IndexOf("sub") == 0 && db.r_google_sub_category.Where(x => x.sub_id == id).Count() == 1)
-            {
-                r_google_sub_category r_sub_google_object= db.r_google_sub_category.Select(x => x)
+                r_google_sub_category r_sub_google_object = db.r_google_sub_category.Select(x => x)
                   .FirstOrDefault(x => x.sub_id == id && x.google_value_id == google_id);
                 r_sub_google_object.is_active = req;
                 db.SaveChanges();
@@ -176,29 +103,15 @@ namespace SwapClassLibrary.Service
                     google_id = google_id
                 };
             }
-            //else
-            //{
-            //    throw Exception()
-            //}
+            
             return null;
         }
 
         //remove relationship between google value and category
-        public static bool RemoveCategorytoGoogleValue(string id, string google_id)
+        public static bool RemoveSubCategorytoGoogleValue(string id, string google_id)
         {
             SwapDbConnection db = new SwapDbConnection();
-            if (id.IndexOf("main") == 0 && db.r_google_main_category.Where(x => x.main_id == id).Count() == 1)
-            {
-                r_google_main_category r_main_google_object = db.r_google_main_category.Where(x => x.google_value_id == google_id && x.main_id == id).FirstOrDefault();
-                if (r_main_google_object == null)
-                    return false;
-                db.r_google_main_category.Remove(r_main_google_object);
-                db.SaveChanges();
-                return true;
-            }
-            else
-            {
-                if (id.IndexOf("sub") == 0 && db.r_google_sub_category.Where(x => x.sub_id == id).Count() == 1)
+                   if (id.IndexOf("sub") == 0 && db.r_google_sub_category.Where(x => x.sub_id == id).Count() == 1)
                 {
                     r_google_sub_category r_sub_google_object = db.r_google_sub_category.Where(x => x.google_value_id == google_id && x.sub_id == id).FirstOrDefault();
                     if (r_sub_google_object == null)
@@ -208,7 +121,7 @@ namespace SwapClassLibrary.Service
                     return true;
                 }
                 return false;
-            }
+            
         }
 
         //main and sub category relationship

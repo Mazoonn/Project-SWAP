@@ -29,9 +29,9 @@ namespace api.Controllers
         [HttpPost]
         public HttpResponseMessage AddMainCategory([FromBody]requestValueDTO req)
         {
-            if (req.value != null)
-                return Request.CreateResponse(HttpStatusCode.OK, MainCategoryService.AddMainCategory(req.value));
-            return Request.CreateResponse(HttpStatusCode.BadRequest, "there is no 'value':'' in the body");
+            if (req.name != null&& req.google_value != null)
+                return Request.CreateResponse(HttpStatusCode.OK, MainCategoryService.AddMainCategory(req.name, req.google_value));
+            return Request.CreateResponse(HttpStatusCode.BadRequest, "there is no name or google value in the body");
         }
 
         [Route("ChangeActiveMainCategory/{id}")]

@@ -14,8 +14,8 @@ namespace SwapClassLibrary.EF
     
     public partial class r_google_sub_category
     {
-        public string sub_id { get; set; }
         public string google_value_id { get; set; }
+        public string sub_id { get; set; }
         public System.DateTime creation_date { get; set; }
         public Nullable<bool> is_active { get; set; }
     
