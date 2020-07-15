@@ -5,12 +5,14 @@ class Category extends Component {
     return (
       <div className="list-group">
         {this.props.categoryList.map((category) => {
+          let className = "list-group-item list-group-item-action text-center";
+          if (category.isCurrentlySelected) className = className + " active";
           return (
             <button
               type="button"
-              className="list-group-item list-group-item-action text-center"
+              className={className}
               onClick={(button) => {
-                this.props.handleOnClickCategory(button.target, category.id);
+                this.props.handleOnClickCategory(category.id);
               }}
               key={category.id}
             >
