@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="e86a691614d045aba7976b0c72ec5fd4" Name="Diagram1">
+        <EntityTypeShape EntityType="SwapModel.address" Width="1.5" PointX="0.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapModel.admin" Width="1.5" PointX="2.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapModel.business" Width="1.5" PointX="9" PointY="16.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapModel.client" Width="1.5" PointX="8.75" PointY="12.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapModel.google_value" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapModel.main_category" Width="1.5" PointX="3.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapModel.place" Width="1.5" PointX="6" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapModel.quest" Width="1.5" PointX="10.125" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapModel.r_business_place" Width="1.5" PointX="11.25" PointY="12.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapModel.r_place_quest" Width="1.5" PointX="8.125" PointY="8.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapModel.r_place_sub_and_main_category" Width="1.5" PointX="8.25" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapModel.r_sub_and_main_category" Width="1.5" PointX="6" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapModel.r_user_quest" Width="1.5" PointX="11" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapModel.sub_category" Width="1.5" PointX="3.25" PointY="3.5" IsExpanded="true" />
+        <AssociationConnector Association="SwapModel.FK_r_business_place_business" ManuallyRouted="false" />
+        <AssociationConnector Association="SwapModel.FK_r_user_quest_client" ManuallyRouted="false" />
+        <AssociationConnector Association="SwapModel.FK_r_sub_and_main_category_main_category" ManuallyRouted="false" />
+        <AssociationConnector Association="SwapModel.FK_r_business_place_place" ManuallyRouted="false" />
+        <AssociationConnector Association="SwapModel.FK_r_place_quest_place" ManuallyRouted="false" />
+        <AssociationConnector Association="SwapModel.FK_r_place_sub_and_main_category_place" ManuallyRouted="false" />
+        <AssociationConnector Association="SwapModel.FK_r_place_quest_quest" ManuallyRouted="false" />
+        <AssociationConnector Association="SwapModel.FK_r_user_quest_quest" ManuallyRouted="false" />
+        <AssociationConnector Association="SwapModel.FK_r_place_sub_and_main_category_r_sub_and_main_category" ManuallyRouted="false" />
+        <AssociationConnector Association="SwapModel.FK_r_sub_and_main_category_sub_category" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

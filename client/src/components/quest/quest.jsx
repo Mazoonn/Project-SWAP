@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { getCategories } from "../../services/Categories";
+import { getAllMainCategories } from "../../services/Categories";
 import Category from "./category";
 import { getSubCategoriesId } from "../../services/CategSubCateg";
 import SubCategory from "./subCategory";
@@ -21,7 +21,7 @@ class Quest extends Component {
       if (category.isCurrentlySelected) {
         const subCategory = [];
         category.subCategory.forEach((sub) => {
-          if (sub.isSelected) subCategory.push(sub.name);
+          if (sub.isSelected) subCategory.push(sub.sub_name);
         });
         places[category.name] = subCategory;
       }
@@ -33,16 +33,15 @@ class Quest extends Component {
     });
   };
 
-  handleGetCategories = () => {
-    const categories = getCategories();
+  handleGetCategories = async () => {
+    const categories = await getAllMainCategories();
     categories.forEach((category) => {
       category.isFirstSelected = false;
       category.isCurrentlySelected = false;
     });
     this.setState({ categoryList: categories });
   };
-
-  handleOnClickCategory = (key) => {
+  handleOnClickCategory = async (key) => {
     const categories = [...this.state.categoryList];
     const indexCategories = categories.findIndex(
       (category) => category.id === key
@@ -50,9 +49,10 @@ class Quest extends Component {
     if (!categories[indexCategories].isFirstSelected) {
       categories[indexCategories].isFirstSelected = true;
       categories[indexCategories].isCurrentlySelected = true;
-      categories[indexCategories].subCategory = this.handleGetSubCategories(
-        key
-      );
+      categories[
+        indexCategories
+      ].subCategory = await this.handleGetSubCategories(key);
+
     } else
       categories[indexCategories].isCurrentlySelected = !categories[
         indexCategories
@@ -62,11 +62,12 @@ class Quest extends Component {
 
   handleOnClickSubCategory = (keyCategory, keySubCategory) => {
     const categoryList = [...this.state.categoryList];
+
     const indexCategory = categoryList.findIndex(
       (category) => category.id === keyCategory
     );
     const indexSubCategory = categoryList[indexCategory].subCategory.findIndex(
-      (subCategory) => subCategory.id2 === keySubCategory
+      (subCategory) => subCategory.sub_id === keySubCategory
     ); //O(n) can improve to O(1)
     const flag =
       categoryList[indexCategory].subCategory[indexSubCategory].isSelected;
@@ -76,8 +77,8 @@ class Quest extends Component {
     this.setState({ categoryList });
   };
 
-  handleGetSubCategories = (id) => {
-    const subCategory = getSubCategoriesId(id);
+  handleGetSubCategories = async (id) => {
+    const subCategory = await getSubCategoriesId(id);
     subCategory.forEach((category) => {
       category.isSelected = false;
     });
