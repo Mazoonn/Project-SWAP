@@ -23,8 +23,9 @@ namespace SwapClassLibrary.Service
             creation_date = x.creation_date,
             name = x.name,
             id = x.main_id,
+            google_value = x.google_value,
             is_active =x.is_active,
-            }).ToList();
+            }).Where(x=>x.is_active).ToList();
             return mainCategory;
            
         }
@@ -39,7 +40,7 @@ namespace SwapClassLibrary.Service
         }
 
         //add main category
-        public static main_category AddMainCategory(string value)
+        public static main_category AddMainCategory(string name, string google_value)
         {
             SwapDbConnection db = new SwapDbConnection();
             main_category main_object = new main_category()
@@ -47,7 +48,8 @@ namespace SwapClassLibrary.Service
                 main_id = IdService.generateID("main_id"),
                 creation_date = DateTime.Now,
                 is_active = false,
-                name = value,
+                google_value = google_value,
+                name = name
             };
             db.main_category.Add(main_object);
             db.SaveChanges();

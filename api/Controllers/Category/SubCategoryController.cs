@@ -30,8 +30,8 @@ namespace api.Controllers.Category
         [HttpPost]
         public HttpResponseMessage AddSubCategory([FromBody]requestValueDTO req)
         {
-            if (req.value != null)
-                return Request.CreateResponse(HttpStatusCode.OK, SubCategoryService.AddSubCategory(req.value));
+            if (req!=null && req.name != null )
+                return Request.CreateResponse(HttpStatusCode.OK, SubCategoryService.AddSubCategory(req.name));
             return Request.CreateResponse(HttpStatusCode.BadRequest, "there is no 'value':'' in the body");
         }
 

@@ -8,6 +8,8 @@ namespace SwapClassLibrary.DTO
 {
     public class requestValueDTO
     {
-        public string value;
+        public string name;
+        public string google_value;
+
     }
 }

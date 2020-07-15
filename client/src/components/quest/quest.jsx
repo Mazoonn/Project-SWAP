@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { getCategories } from "../../services/Categories";
+import { getAllMainCategories } from "../../services/Categories";
 import Category from "./category";
 import { getSubCategoriesId } from "../../services/CategSubCateg";
 import SubCategory from "./subCategory";
@@ -21,7 +21,7 @@ class Quest extends Component {
       if (category.isCurrentlySelected) {
         const subCategory = [];
         category.subCategory.forEach((sub) => {
-          if (sub.isSelected) subCategory.push(sub.name);
+          if (sub.isSelected) subCategory.push(sub.sub_name);
         });
         places[category.name] = subCategory;
       }
@@ -33,8 +33,8 @@ class Quest extends Component {
     });
   };
 
-  handleGetCategories = () => {
-    const categories = getCategories();
+  handleGetCategories = async () => {
+    const categories = await getAllMainCategories();
     categories.forEach((category) => {
       category.isFirstSelected = false;
       category.isCurrentlySelected = false;
@@ -42,35 +42,32 @@ class Quest extends Component {
     this.setState({ categoryList: categories });
   };
 
-  handleOnClickCategory = (button, key) => {
+  handleOnClickCategory = async (key) => {
     const categories = [...this.state.categoryList];
-    const category = categories.find((category) => {
-      return category.id === key;
-    });
-    if (!category.isFirstSelected) {
-      category.isFirstSelected = true;
-      category.isCurrentlySelected = true;
-      category.subCategory = this.handleGetSubCategories(key);
-      button.className = button.className + " active";
-    } else {
-      if (category.isCurrentlySelected)
-        button.className = button.className.replace("active", "");
-      else button.className = button.className + " active";
-      category.isCurrentlySelected = !category.isCurrentlySelected;
-    }
-    categories.forEach((cat) => {
-      if (cat.id === button.key) cat = category;
-    });
+    const indexCategories = categories.findIndex(
+      (category) => category.id === key
+    );
+    if (!categories[indexCategories].isFirstSelected) {
+      categories[indexCategories].isFirstSelected = true;
+      categories[indexCategories].isCurrentlySelected = true;
+      categories[
+        indexCategories
+      ].subCategory = await this.handleGetSubCategories(key);
+    } else
+      categories[indexCategories].isCurrentlySelected = !categories[
+        indexCategories
+      ].isCurrentlySelected;
     this.setState({ categoryList: categories });
-  }; //need to optimise and factorise
+  };
 
   handleOnClickSubCategory = (keyCategory, keySubCategory) => {
     const categoryList = [...this.state.categoryList];
+
     const indexCategory = categoryList.findIndex(
       (category) => category.id === keyCategory
     );
     const indexSubCategory = categoryList[indexCategory].subCategory.findIndex(
-      (subCategory) => subCategory.id2 === keySubCategory
+      (subCategory) => subCategory.sub_id === keySubCategory
     ); //O(n) can improve to O(1)
     const flag =
       categoryList[indexCategory].subCategory[indexSubCategory].isSelected;
@@ -78,10 +75,10 @@ class Quest extends Component {
       indexSubCategory
     ].isSelected = !flag;
     this.setState({ categoryList });
-  }; //neeed to optimise
+  };
 
-  handleGetSubCategories = (id) => {
-    const subCategory = getSubCategoriesId(id);
+  handleGetSubCategories = async (id) => {
+    const subCategory = await getSubCategoriesId(id);
     subCategory.forEach((category) => {
       category.isSelected = false;
     });
@@ -89,35 +86,33 @@ class Quest extends Component {
   };
 
   handleDivideSubCategories = () => {
-    const rows = [];
+    // const rows = [];
     const categories = this.state.categoryList.filter(
       (category) => category.isCurrentlySelected
     );
-    const size = Math.ceil(
-      categories.length / this.state.columnsOfSubcategories
+    // const size = Math.ceil(
+    //   categories.length / this.state.columnsOfSubcategories
+    // );
+    // for (var i = 0; i < size; i++) {
+    //   let slice = categories.slice(
+    //     i * this.state.columnsOfSubcategories,
+    //     (i + 1) * this.state.columnsOfSubcategories
+    //   );
+    return (
+      <div className={`row row-cols-${this.state.columnsOfSubcategories}`}>
+        {categories.map((category) => {
+          return (
+            <div className="col p-4">
+              <SubCategory
+                category={category}
+                columns={this.state.columnsInSubCategoires}
+                clickSubCategory={this.handleOnClickSubCategory}
+              ></SubCategory>
+            </div>
+          );
+        })}
+      </div>
     );
-    for (var i = 0; i < size; i++) {
-      let slice = categories.slice(
-        i * this.state.columnsOfSubcategories,
-        (i + 1) * this.state.columnsOfSubcategories
-      );
-      rows[i] = (
-        <div className="row">
-          {slice.map((category) => {
-            return (
-              <div className="col">
-                <SubCategory
-                  category={category}
-                  columns={this.state.columnsInSubCategoires}
-                  clickSubCategory={this.handleOnClickSubCategory}
-                ></SubCategory>
-              </div>
-            );
-          })}
-        </div>
-      );
-    }
-    return rows;
   };
 
   componentDidMount() {

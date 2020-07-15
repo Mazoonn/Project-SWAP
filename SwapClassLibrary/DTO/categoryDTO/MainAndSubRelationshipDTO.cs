@@ -10,7 +10,10 @@ namespace SwapClassLibrary.DTO
     {
         public string main_id;
         public string sub_id;
+        public string main_name;
+        public string sub_name;
         public string descrition;
-        public bool is_active;
+        public bool? is_active;
+        public decimal? clicked;
     }
 }

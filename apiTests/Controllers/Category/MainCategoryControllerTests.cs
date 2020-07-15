@@ -42,26 +42,26 @@ namespace api.Controllers.Tests
                 Request = request,
             };
             controller.Request.Properties[HttpPropertyKeys.HttpConfigurationKey] = config;
-            var test = new requestValueDTO() { value = "unit test" };
+            var test = new requestValueDTO() { name = "unit test", google_value= "unit test" };
             Assert.AreEqual(controller.AddMainCategory(test).StatusCode, HttpStatusCode.OK);
           
         }
 
-        [TestMethod()]
-        public void ChangeActiveMainCategoryTest()
-        {
-            var config = new HttpConfiguration();
-            var request = new HttpRequestMessage(HttpMethod.Post, "http://localhost/api/user/44300");
-            var route = config.Routes.MapHttpRoute("Default", "api/{controller}/ChangeActiveMainCategory/{id}");
-            var controller = new MainCategoryController
-            {
-                Request = request,
-            };
-            controller.Request.Properties[HttpPropertyKeys.HttpConfigurationKey] = config;
-            SwapDbConnection db = new SwapDbConnection();
-            main_category test = db.main_category.Where(x => x.name == "unit test").FirstOrDefault();
-            Assert.AreEqual(controller.ChangeActiveMainCategory(test.main_id,true).StatusCode, HttpStatusCode.OK);
-        }
+        //[TestMethod()]
+        //public void ChangeActiveMainCategoryTest()
+        //{
+        //    var config = new HttpConfiguration();
+        //    var request = new HttpRequestMessage(HttpMethod.Post, "http://localhost/api/user/44300");
+        //    var route = config.Routes.MapHttpRoute("Default", "api/{controller}/ChangeActiveMainCategory/{id}");
+        //    var controller = new MainCategoryController
+        //    {
+        //        Request = request,
+        //    };
+        //    controller.Request.Properties[HttpPropertyKeys.HttpConfigurationKey] = config;
+        //    SwapDbConnection db = new SwapDbConnection();
+        //    main_category test = db.main_category.Where(x => x.name == "unit test").FirstOrDefault();
+        //    Assert.AreEqual(controller.ChangeActiveMainCategory(test.main_id,true).StatusCode, HttpStatusCode.OK);
+        //}
 
         [TestMethod()]
         public void DeleteMainCategoryTest()

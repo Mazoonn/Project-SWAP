@@ -2,5 +2,6 @@
   "googleKey": "AIzaSyAG2xOBvCbK31Ztsidj_jbcxB9_GBhZLX4",
   "nearBySearchUrl": "https://maps.googleapis.com/maps/api/place/nearbysearch/json",
   "textSearchUrl": "https://maps.googleapis.com/maps/api/place/textsearch/json",
-  "radius": 1500
+  "radius": 1500,
+  "API_URL_Dev": "https://localhost:44300/api"
 }

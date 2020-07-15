@@ -42,7 +42,7 @@ namespace api.Controllers.Tests
                 Request = request,
             };
             controller.Request.Properties[HttpPropertyKeys.HttpConfigurationKey] = config;
-            var test = new requestValueDTO() { value = "unit test" };
+            var test = new requestValueDTO() { name = "unit test" };
             Assert.AreEqual(controller.AddSubCategory(test).StatusCode, HttpStatusCode.OK);
 
         }

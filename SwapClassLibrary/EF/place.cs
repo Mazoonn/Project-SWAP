@@ -30,9 +30,11 @@ namespace SwapClassLibrary.EF
         public string opening_houers { get; set; }
         public string Icon { get; set; }
         public Nullable<decimal> Rating { get; set; }
-        public string address_id { get; set; }
+        public string country { get; set; }
+        public string street { get; set; }
+        public string street_number { get; set; }
+        public string post_code { get; set; }
     
-        public virtual address address { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<r_business_place> r_business_place { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

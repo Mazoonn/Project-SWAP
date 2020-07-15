@@ -11,6 +11,7 @@ namespace SwapClassLibrary.DTO
         public string id;
         public System.DateTime creation_date;
         public string name;
+        public string google_value;
         public bool is_active;
 
     }
