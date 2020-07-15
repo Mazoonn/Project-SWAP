@@ -21,7 +21,7 @@ class Quest extends Component {
       if (category.isCurrentlySelected) {
         const subCategory = [];
         category.subCategory.forEach((sub) => {
-          if (sub.isSelected) subCategory.push(sub.name);
+          if (sub.isSelected) subCategory.push(sub.sub_name);
         });
         places[category.name] = subCategory;
       }
@@ -42,7 +42,7 @@ class Quest extends Component {
     this.setState({ categoryList: categories });
   };
 
-  handleOnClickCategory = (key) => {
+  handleOnClickCategory = async (key) => {
     const categories = [...this.state.categoryList];
     const indexCategories = categories.findIndex(
       (category) => category.id === key
@@ -50,9 +50,9 @@ class Quest extends Component {
     if (!categories[indexCategories].isFirstSelected) {
       categories[indexCategories].isFirstSelected = true;
       categories[indexCategories].isCurrentlySelected = true;
-      categories[indexCategories].subCategory = this.handleGetSubCategories(
-        key
-      );
+      categories[
+        indexCategories
+      ].subCategory = await this.handleGetSubCategories(key);
     } else
       categories[indexCategories].isCurrentlySelected = !categories[
         indexCategories

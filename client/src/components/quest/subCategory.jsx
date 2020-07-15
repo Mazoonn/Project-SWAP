@@ -24,13 +24,13 @@ class SubCategory extends Component {
                   onClick={() => {
                     this.props.clickSubCategory(
                       this.props.category.id,
-                      sub.id2
+                      sub.sub_id
                     );
                   }}
                   type="button"
                   className={className}
                 >
-                  {sub.name}
+                  {sub.sub_name}
                 </button>
               </td>
             );
@@ -54,6 +54,7 @@ class SubCategory extends Component {
             </table> */}
             <div className="container">
               <div className={`row row-cols-${this.props.columns}`}>
+                {console.log(this.props.category.subCategory)}
                 {this.props.category.subCategory.map((sub) => {
                   let className = "btn btn-outline-info btn-sm";
                   if (sub.isSelected) className = className + " active";
@@ -63,13 +64,13 @@ class SubCategory extends Component {
                         onClick={() => {
                           this.props.clickSubCategory(
                             this.props.category.id,
-                            sub.id2
+                            sub.sub_id
                           );
                         }}
                         type="button"
                         className={className}
                       >
-                        {sub.name}
+                        {sub.sub_name}
                       </button>
                     </div>
                   );

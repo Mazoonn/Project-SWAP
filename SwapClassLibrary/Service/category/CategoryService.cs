@@ -34,12 +34,11 @@ namespace SwapClassLibrary.Service
         {
             SwapDbConnection db = new SwapDbConnection();
 
-                var r_main_google_object = db.r_sub_and_main_category
-                .Include(x => x.main_category).Include(x => x.sub_category)
+            List<MainAndSubRelationshipDTO> r_main_google_object = db.r_sub_and_main_category
                 .Where(x => x.main_id == main_id)
                 .Select(x => new MainAndSubRelationshipDTO()
                 {
-                    clicked = x.clicked,
+                    clicked = x.clicked,//
                     is_active = x.is_active,
                     descrition = x.descrition,
                     main_name = x.main_category.name,
