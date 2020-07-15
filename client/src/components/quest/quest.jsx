@@ -41,7 +41,6 @@ class Quest extends Component {
     });
     this.setState({ categoryList: categories });
   };
-
   handleOnClickCategory = async (key) => {
     const categories = [...this.state.categoryList];
     const indexCategories = categories.findIndex(
@@ -53,6 +52,7 @@ class Quest extends Component {
       categories[
         indexCategories
       ].subCategory = await this.handleGetSubCategories(key);
+
     } else
       categories[indexCategories].isCurrentlySelected = !categories[
         indexCategories
