@@ -13,8 +13,9 @@ namespace api.Controllers
     [RoutePrefix("api/MainCategory")]
     public class MainCategoryController : ApiController
     {
-       // GET: api/MainCategory
-       [Route("GetAllMainCategory")]
+        // GET: api/MainCategory
+
+        [Route("GetAllMainCategory")]
        [HttpGet]
         public HttpResponseMessage GetAllMainCategory()
         {
@@ -29,9 +30,9 @@ namespace api.Controllers
         [HttpPost]
         public HttpResponseMessage AddMainCategory([FromBody]requestValueDTO req)
         {
-            if (req.name != null&& req.google_value != null)
+            if (req!=null &&req.name != null)
                 return Request.CreateResponse(HttpStatusCode.OK, MainCategoryService.AddMainCategory(req.name, req.google_value));
-            return Request.CreateResponse(HttpStatusCode.BadRequest, "there is no name or google value in the body");
+            return Request.CreateResponse(HttpStatusCode.BadRequest, "there is no name value in the body");
         }
 
         [Route("ChangeActiveMainCategory/{id}")]

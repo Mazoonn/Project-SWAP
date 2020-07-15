@@ -23,24 +23,21 @@ namespace api.Controllers.Tests
         static SubCategoryControllerTests SubCategoryC = new SubCategoryControllerTests();
 
         [TestMethod()]
-        public void AddCategorytoGoogleValueTest()
+        public void AddSubCategorytoGoogleValue()
         {
             var config = new HttpConfiguration();
             var request = new HttpRequestMessage(HttpMethod.Post, "http://localhost/api/user/44300");
-            var route = config.Routes.MapHttpRoute("Default", "api/{controller}/AddCategorytoGoogleValue");
+            var route = config.Routes.MapHttpRoute("Default", "api/{controller}/AddSubCategorytoGoogleValue");
             var controller = new CategoryController
             {
                 Request = request,
             };
             controller.Request.Properties[HttpPropertyKeys.HttpConfigurationKey] = config;
             GoogleValueC.AddGoogleValueTest();
-            MainCategoryC.AddMainCategoryTest();
             SubCategoryC.AddSubCategoryTest();
             SwapDbConnection db = new SwapDbConnection();
             google_value test_google = db.google_value.Where(x => x.value == "unit test").FirstOrDefault();
-            main_category test_main = db.main_category.Where(x => x.name == "unit test").FirstOrDefault();
             sub_category test_sub = db.sub_category.Where(x => x.name == "unit test").FirstOrDefault();
-            Assert.AreEqual(controller.AddCategorytoGoogleValue(new categoryAddGoogleRequestDTO() {id= test_main.main_id,google_id= test_google.google_value_id }).StatusCode, HttpStatusCode.OK);
             Assert.AreEqual(controller.AddCategorytoGoogleValue(new categoryAddGoogleRequestDTO() { id = test_sub.sub_id, google_id = test_google.google_value_id }).StatusCode, HttpStatusCode.OK);
         }
 
@@ -71,9 +68,7 @@ namespace api.Controllers.Tests
             controller.Request.Properties[HttpPropertyKeys.HttpConfigurationKey] = config;
             SwapDbConnection db = new SwapDbConnection();
             google_value test_google = db.google_value.Where(x => x.value == "unit test").FirstOrDefault();
-            main_category test_main = db.main_category.Where(x => x.name == "unit test").FirstOrDefault();
             sub_category test_sub = db.sub_category.Where(x => x.name == "unit test").FirstOrDefault();
-            Assert.AreEqual(controller.GetCategorytoGoogleValue(test_main.main_id, test_google.google_value_id).StatusCode, HttpStatusCode.OK);
             Assert.AreEqual(controller.GetCategorytoGoogleValue(test_sub.sub_id, test_google.google_value_id).StatusCode, HttpStatusCode.OK);
         }
 
@@ -90,20 +85,18 @@ namespace api.Controllers.Tests
             controller.Request.Properties[HttpPropertyKeys.HttpConfigurationKey] = config;
             SwapDbConnection db = new SwapDbConnection();
             google_value test_google = db.google_value.Where(x => x.value == "unit test").FirstOrDefault();
-            main_category test_main = db.main_category.Where(x => x.name == "unit test").FirstOrDefault();
             sub_category test_sub = db.sub_category.Where(x => x.name == "unit test").FirstOrDefault();
-            Assert.AreEqual(controller.ChangeActiveCategorytoGoogleValue(test_main.main_id, test_google.google_value_id,true).StatusCode, HttpStatusCode.OK);
             Assert.AreEqual(controller.ChangeActiveCategorytoGoogleValue(test_sub.sub_id, test_google.google_value_id,true).StatusCode, HttpStatusCode.OK);
         }
 
 
 
         [TestMethod()]
-        public void RemoveCategorytoGoogleValueTest()
+        public void RemoveSubCategorytoGoogleValueTest()
         {
             var config = new HttpConfiguration();
             var request = new HttpRequestMessage(HttpMethod.Post, "http://localhost/api/user/44300");
-            var route = config.Routes.MapHttpRoute("Default", "api/{controller}/RemoveCategorytoGoogleValue/{id}/{google_id}");
+            var route = config.Routes.MapHttpRoute("Default", "api/{controller}/RemoveSubCategorytoGoogleValue/{id}/{google_id}");
             var controller = new CategoryController
             {
                 Request = request,
@@ -111,12 +104,9 @@ namespace api.Controllers.Tests
             controller.Request.Properties[HttpPropertyKeys.HttpConfigurationKey] = config;
             SwapDbConnection db = new SwapDbConnection();
             google_value test_google = db.google_value.Where(x => x.value == "unit test").FirstOrDefault();
-            main_category test_main = db.main_category.Where(x => x.name == "unit test").FirstOrDefault();
             sub_category test_sub = db.sub_category.Where(x => x.name == "unit test").FirstOrDefault();
-            Assert.AreEqual(controller.RemoveCategorytoGoogleValue(test_main.main_id, test_google.google_value_id).StatusCode, HttpStatusCode.OK);
             Assert.AreEqual(controller.RemoveCategorytoGoogleValue(test_sub.sub_id, test_google.google_value_id).StatusCode, HttpStatusCode.OK);
             GoogleValueC.DeleteGoogleValueTest();
-            MainCategoryC.DeleteMainCategoryTest();
             SubCategoryC.DeleteSubCategoryTest();
         }
 

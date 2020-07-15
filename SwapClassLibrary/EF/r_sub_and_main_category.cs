@@ -25,6 +25,7 @@ namespace SwapClassLibrary.EF
         public System.DateTime creation_date { get; set; }
         public string descrition { get; set; }
         public Nullable<decimal> clicked { get; set; }
+        public bool is_active { get; set; }
     
         public virtual main_category main_category { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

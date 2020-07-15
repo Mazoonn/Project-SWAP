@@ -103,9 +103,6 @@
     <Compile Include="EF\r_business_place.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="EF\r_google_sub_category.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="EF\r_place_quest.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>

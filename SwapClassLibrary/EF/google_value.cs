@@ -14,16 +14,7 @@ namespace SwapClassLibrary.EF
     
     public partial class google_value
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public google_value()
-        {
-            this.r_google_sub_category = new HashSet<r_google_sub_category>();
-        }
-    
         public string google_value_id { get; set; }
         public string value { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<r_google_sub_category> r_google_sub_category { get; set; }
     }
 }

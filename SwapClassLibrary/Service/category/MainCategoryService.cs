@@ -25,7 +25,7 @@ namespace SwapClassLibrary.Service
             id = x.main_id,
             google_value = x.google_value,
             is_active =x.is_active,
-            }).ToList();
+            }).Where(x=>x.is_active).ToList();
             return mainCategory;
            
         }

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="SwapModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="SwapModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="address">
           <Key>
             <PropertyRef Name="address_id" />
@@ -114,16 +114,6 @@
           <Property Name="creation_date" Type="date" Nullable="false" />
           <Property Name="is_active" Type="bit" Nullable="false" />
         </EntityType>
-        <EntityType Name="r_google_sub_category">
-          <Key>
-            <PropertyRef Name="google_value_id" />
-            <PropertyRef Name="sub_id" />
-          </Key>
-          <Property Name="google_value_id" Type="nvarchar" MaxLength="20" Nullable="false" />
-          <Property Name="sub_id" Type="nvarchar" MaxLength="20" Nullable="false" />
-          <Property Name="creation_date" Type="date" Nullable="false" />
-          <Property Name="is_active" Type="bit" />
-        </EntityType>
         <EntityType Name="r_place_quest">
           <Key>
             <PropertyRef Name="place_id" />
@@ -154,8 +144,9 @@
           <Property Name="sub_id" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="main_id" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="creation_date" Type="date" Nullable="false" />
-          <Property Name="descrition" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="descrition" Type="nvarchar" MaxLength="20" />
           <Property Name="clicked" Type="decimal" Precision="5" Scale="0" />
+          <Property Name="is_active" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="r_user_quest">
           <Key>
@@ -174,6 +165,7 @@
           <Property Name="creation_date" Type="date" Nullable="false" />
           <Property Name="name" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="is_active" Type="bit" Nullable="false" />
+          <Property Name="google_value" Type="nvarchar" MaxLength="20" />
         </EntityType>
         <Association Name="FK_r_business_place_business">
           <End Role="business" Type="Self.business" Multiplicity="1" />
@@ -196,30 +188,6 @@
             </Principal>
             <Dependent Role="r_business_place">
               <PropertyRef Name="place_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_r_google_sub_category_google_value">
-          <End Role="google_value" Type="Self.google_value" Multiplicity="1" />
-          <End Role="r_google_sub_category" Type="Self.r_google_sub_category" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="google_value">
-              <PropertyRef Name="google_value_id" />
-            </Principal>
-            <Dependent Role="r_google_sub_category">
-              <PropertyRef Name="google_value_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_r_google_sub_category_sub_category">
-          <End Role="sub_category" Type="Self.sub_category" Multiplicity="1" />
-          <End Role="r_google_sub_category" Type="Self.r_google_sub_category" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="sub_category">
-              <PropertyRef Name="sub_id" />
-            </Principal>
-            <Dependent Role="r_google_sub_category">
-              <PropertyRef Name="sub_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -331,7 +299,6 @@
           <EntitySet Name="place" EntityType="Self.place" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="quest" EntityType="Self.quest" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="r_business_place" EntityType="Self.r_business_place" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="r_google_sub_category" EntityType="Self.r_google_sub_category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="r_place_quest" EntityType="Self.r_place_quest" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="r_place_sub_and_main_category" EntityType="Self.r_place_sub_and_main_category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="r_sub_and_main_category" EntityType="Self.r_sub_and_main_category" Schema="dbo" store:Type="Tables" />
@@ -344,14 +311,6 @@
           <AssociationSet Name="FK_r_business_place_place" Association="Self.FK_r_business_place_place">
             <End Role="place" EntitySet="place" />
             <End Role="r_business_place" EntitySet="r_business_place" />
-          </AssociationSet>
-          <AssociationSet Name="FK_r_google_sub_category_google_value" Association="Self.FK_r_google_sub_category_google_value">
-            <End Role="google_value" EntitySet="google_value" />
-            <End Role="r_google_sub_category" EntitySet="r_google_sub_category" />
-          </AssociationSet>
-          <AssociationSet Name="FK_r_google_sub_category_sub_category" Association="Self.FK_r_google_sub_category_sub_category">
-            <End Role="sub_category" EntitySet="sub_category" />
-            <End Role="r_google_sub_category" EntitySet="r_google_sub_category" />
           </AssociationSet>
           <AssociationSet Name="FK_r_place_quest_place" Association="Self.FK_r_place_quest_place">
             <End Role="place" EntitySet="place" />
@@ -386,8 +345,7 @@
             <End Role="r_user_quest" EntitySet="r_user_quest" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SwapModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -451,7 +409,6 @@
           </Key>
           <Property Name="google_value_id" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="value" Type="String" MaxLength="25" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="r_google_sub_category" Relationship="Self.FK_r_google_sub_category_google_value" FromRole="google_value" ToRole="r_google_sub_category" />
         </EntityType>
         <EntityType Name="main_category">
           <Key>
@@ -511,18 +468,6 @@
           <NavigationProperty Name="business" Relationship="Self.FK_r_business_place_business" FromRole="r_business_place" ToRole="business" />
           <NavigationProperty Name="place" Relationship="Self.FK_r_business_place_place" FromRole="r_business_place" ToRole="place" />
         </EntityType>
-        <EntityType Name="r_google_sub_category">
-          <Key>
-            <PropertyRef Name="google_value_id" />
-            <PropertyRef Name="sub_id" />
-          </Key>
-          <Property Name="google_value_id" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="sub_id" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="creation_date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="is_active" Type="Boolean" />
-          <NavigationProperty Name="google_value" Relationship="Self.FK_r_google_sub_category_google_value" FromRole="r_google_sub_category" ToRole="google_value" />
-          <NavigationProperty Name="sub_category" Relationship="Self.FK_r_google_sub_category_sub_category" FromRole="r_google_sub_category" ToRole="sub_category" />
-        </EntityType>
         <EntityType Name="r_place_quest">
           <Key>
             <PropertyRef Name="place_id" />
@@ -557,11 +502,12 @@
           <Property Name="sub_id" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="main_id" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="creation_date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="descrition" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="descrition" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="clicked" Type="Decimal" Precision="5" Scale="0" />
           <NavigationProperty Name="main_category" Relationship="Self.FK_r_sub_and_main_category_main_category" FromRole="r_sub_and_main_category" ToRole="main_category" />
           <NavigationProperty Name="r_place_sub_and_main_category" Relationship="Self.FK_r_place_sub_and_main_category_r_sub_and_main_category" FromRole="r_sub_and_main_category" ToRole="r_place_sub_and_main_category" />
           <NavigationProperty Name="sub_category" Relationship="Self.FK_r_sub_and_main_category_sub_category" FromRole="r_sub_and_main_category" ToRole="sub_category" />
+          <Property Name="is_active" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="r_user_quest">
           <Key>
@@ -582,8 +528,8 @@
           <Property Name="creation_date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="is_active" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="r_google_sub_category" Relationship="Self.FK_r_google_sub_category_sub_category" FromRole="sub_category" ToRole="r_google_sub_category" />
           <NavigationProperty Name="r_sub_and_main_category" Relationship="Self.FK_r_sub_and_main_category_sub_category" FromRole="sub_category" ToRole="r_sub_and_main_category" />
+          <Property Name="google_value" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_r_business_place_business">
           <End Role="business" Type="Self.business" Multiplicity="1" />
@@ -606,18 +552,6 @@
             </Principal>
             <Dependent Role="r_user_quest">
               <PropertyRef Name="client_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_r_google_sub_category_google_value">
-          <End Role="google_value" Type="Self.google_value" Multiplicity="1" />
-          <End Role="r_google_sub_category" Type="Self.r_google_sub_category" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="google_value">
-              <PropertyRef Name="google_value_id" />
-            </Principal>
-            <Dependent Role="r_google_sub_category">
-              <PropertyRef Name="google_value_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -693,18 +627,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_r_google_sub_category_sub_category">
-          <End Role="sub_category" Type="Self.sub_category" Multiplicity="1" />
-          <End Role="r_google_sub_category" Type="Self.r_google_sub_category" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="sub_category">
-              <PropertyRef Name="sub_id" />
-            </Principal>
-            <Dependent Role="r_google_sub_category">
-              <PropertyRef Name="sub_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_r_place_sub_and_main_category_r_sub_and_main_category">
           <End Role="r_sub_and_main_category" Type="Self.r_sub_and_main_category" Multiplicity="1" />
           <End Role="r_place_sub_and_main_category" Type="Self.r_place_sub_and_main_category" Multiplicity="*" />
@@ -741,7 +663,6 @@
           <EntitySet Name="places" EntityType="Self.place" />
           <EntitySet Name="quests" EntityType="Self.quest" />
           <EntitySet Name="r_business_place" EntityType="Self.r_business_place" />
-          <EntitySet Name="r_google_sub_category" EntityType="Self.r_google_sub_category" />
           <EntitySet Name="r_place_quest" EntityType="Self.r_place_quest" />
           <EntitySet Name="r_place_sub_and_main_category" EntityType="Self.r_place_sub_and_main_category" />
           <EntitySet Name="r_sub_and_main_category" EntityType="Self.r_sub_and_main_category" />
@@ -754,10 +675,6 @@
           <AssociationSet Name="FK_r_user_quest_client" Association="Self.FK_r_user_quest_client">
             <End Role="client" EntitySet="clients" />
             <End Role="r_user_quest" EntitySet="r_user_quest" />
-          </AssociationSet>
-          <AssociationSet Name="FK_r_google_sub_category_google_value" Association="Self.FK_r_google_sub_category_google_value">
-            <End Role="google_value" EntitySet="google_value" />
-            <End Role="r_google_sub_category" EntitySet="r_google_sub_category" />
           </AssociationSet>
           <AssociationSet Name="FK_r_sub_and_main_category_main_category" Association="Self.FK_r_sub_and_main_category_main_category">
             <End Role="main_category" EntitySet="main_category" />
@@ -782,10 +699,6 @@
           <AssociationSet Name="FK_r_user_quest_quest" Association="Self.FK_r_user_quest_quest">
             <End Role="quest" EntitySet="quests" />
             <End Role="r_user_quest" EntitySet="r_user_quest" />
-          </AssociationSet>
-          <AssociationSet Name="FK_r_google_sub_category_sub_category" Association="Self.FK_r_google_sub_category_sub_category">
-            <End Role="sub_category" EntitySet="sub_category" />
-            <End Role="r_google_sub_category" EntitySet="r_google_sub_category" />
           </AssociationSet>
           <AssociationSet Name="FK_r_place_sub_and_main_category_r_sub_and_main_category" Association="Self.FK_r_place_sub_and_main_category_r_sub_and_main_category">
             <End Role="r_sub_and_main_category" EntitySet="r_sub_and_main_category" />
@@ -919,16 +832,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="r_google_sub_category">
-            <EntityTypeMapping TypeName="SwapModel.r_google_sub_category">
-              <MappingFragment StoreEntitySet="r_google_sub_category">
-                <ScalarProperty Name="google_value_id" ColumnName="google_value_id" />
-                <ScalarProperty Name="sub_id" ColumnName="sub_id" />
-                <ScalarProperty Name="creation_date" ColumnName="creation_date" />
-                <ScalarProperty Name="is_active" ColumnName="is_active" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="r_place_quest">
             <EntityTypeMapping TypeName="SwapModel.r_place_quest">
               <MappingFragment StoreEntitySet="r_place_quest">
@@ -953,6 +856,7 @@
           <EntitySetMapping Name="r_sub_and_main_category">
             <EntityTypeMapping TypeName="SwapModel.r_sub_and_main_category">
               <MappingFragment StoreEntitySet="r_sub_and_main_category">
+                <ScalarProperty Name="is_active" ColumnName="is_active" />
                 <ScalarProperty Name="sub_id" ColumnName="sub_id" />
                 <ScalarProperty Name="main_id" ColumnName="main_id" />
                 <ScalarProperty Name="creation_date" ColumnName="creation_date" />
@@ -973,6 +877,7 @@
           <EntitySetMapping Name="sub_category">
             <EntityTypeMapping TypeName="SwapModel.sub_category">
               <MappingFragment StoreEntitySet="sub_category">
+                <ScalarProperty Name="google_value" ColumnName="google_value" />
                 <ScalarProperty Name="sub_id" ColumnName="sub_id" />
                 <ScalarProperty Name="creation_date" ColumnName="creation_date" />
                 <ScalarProperty Name="name" ColumnName="name" />
