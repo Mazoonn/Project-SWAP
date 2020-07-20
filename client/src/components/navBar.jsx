@@ -31,9 +31,6 @@ class NavBar extends Component {
               <NavLink activeClassName="active" to="/quest">
                 Quest
               </NavLink>
-              <NavLink activeClassName="active" to="/Map">
-                Map2
-              </NavLink>
             </div>
             <div className="content">
               <Switch>
@@ -41,7 +38,6 @@ class NavBar extends Component {
                 <PublicRoute path="/login" component={Login} />
                 <PrivateRoute path="/dashboard" component={Dashboard} />
                 <Route path="/quest" component={Quest} />
-                <Route path="/map" component={Map} />
               </Switch>
             </div>
           </div>

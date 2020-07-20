@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import SimpleMap from "../components/map/SimpleMap";
+import Map from "../components/map/map";
 // import Location from "./locationTest";
 class HomePage extends Component {
   state = {};
@@ -7,14 +7,14 @@ class HomePage extends Component {
     return (
       <React.Fragment>
         <div>Welcome to the Home Page!</div>
-        <SimpleMap
+        <Map
           places={
             (this.props.location.state &&
               this.props.location.state["respones"] &&
               this.props.location.state["respones"]) ||
             []
           }
-        ></SimpleMap>
+        ></Map>
       </React.Fragment>
     );
   }
