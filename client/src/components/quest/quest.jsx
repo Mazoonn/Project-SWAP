@@ -52,7 +52,6 @@ class Quest extends Component {
       categories[
         indexCategories
       ].subCategory = await this.handleGetSubCategories(key);
-
     } else
       categories[indexCategories].isCurrentlySelected = !categories[
         indexCategories
@@ -68,7 +67,7 @@ class Quest extends Component {
     );
     const indexSubCategory = categoryList[indexCategory].subCategory.findIndex(
       (subCategory) => subCategory.sub_id === keySubCategory
-    ); //O(n) can improve to O(1)
+    );
     const flag =
       categoryList[indexCategory].subCategory[indexSubCategory].isSelected;
     categoryList[indexCategory].subCategory[
@@ -86,23 +85,14 @@ class Quest extends Component {
   };
 
   handleDivideSubCategories = () => {
-    // const rows = [];
     const categories = this.state.categoryList.filter(
       (category) => category.isCurrentlySelected
     );
-    // const size = Math.ceil(
-    //   categories.length / this.state.columnsOfSubcategories
-    // );
-    // for (var i = 0; i < size; i++) {
-    //   let slice = categories.slice(
-    //     i * this.state.columnsOfSubcategories,
-    //     (i + 1) * this.state.columnsOfSubcategories
-    //   );
     return (
       <div className={`row row-cols-${this.state.columnsOfSubcategories}`}>
         {categories.map((category) => {
           return (
-            <div className="col p-4">
+            <div key={category.id} className="col p-4">
               <SubCategory
                 category={category}
                 columns={this.state.columnsInSubCategoires}
@@ -141,7 +131,7 @@ class Quest extends Component {
                 Next
               </button>
             )) || (
-              <button class="btn btn-primary btn-md" type="button" disabled>
+              <button className="btn btn-primary btn-md" type="button" disabled>
                 <span
                   className="spinner-grow spinner-grow-sm"
                   role="status"

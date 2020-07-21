@@ -1,48 +1,49 @@
 import React, { Component } from "react";
 
 class SubCategory extends Component {
-  handleDivide = () => {
-    let size = Math.ceil(
-      this.props.category.subCategory.length / this.props.columns
-    );
-    let rows = [];
+  // handleDivide = () => {
+  //   let size = Math.ceil(
+  //     this.props.category.subCategory.length / this.props.columns
+  //   );
+  //   let rows = [];
 
-    for (var i = 0; i < size; i++) {
-      let slice = this.props.category.subCategory.slice(
-        i * this.props.columns,
-        (i + 1) * this.props.columns
-      );
+  //   for (var i = 0; i < size; i++) {
+  //     let slice = this.props.category.subCategory.slice(
+  //       i * this.props.columns,
+  //       (i + 1) * this.props.columns
+  //     );
 
-      rows[i] = (
-        <tr>
-          {slice.map((sub) => {
-            let className = "btn btn-outline-info btn-sm";
-            if (sub.isSelected) className = className + " active";
-            return (
-              <td className="text-center">
-                <button
-                  onClick={() => {
-                    this.props.clickSubCategory(
-                      this.props.category.id,
-                      sub.sub_id
-                    );
-                  }}
-                  type="button"
-                  className={className}
-                >
-                  {sub.sub_name}
-                </button>
-              </td>
-            );
-          })}
-          {slice.length !== this.props.columns && (
-            <td colSpan={this.props.columns - slice.length}></td>
-          )}
-        </tr>
-      );
-    }
-    return rows;
-  };
+  //     rows[i] = (
+  //       <tr>
+  //         {slice.map((sub) => {
+  //           let className = "btn btn-outline-info btn-sm";
+  //           if (sub.isSelected) className = className + " active";
+  //           return (
+  //             <td className="text-center">
+  //               <button
+  //                 key={sub.sub_id}
+  //                 onClick={() => {
+  //                   this.props.clickSubCategory(
+  //                     this.props.category.id,
+  //                     sub.sub_id
+  //                   );
+  //                 }}
+  //                 type="button"
+  //                 className={className}
+  //               >
+  //                 {sub.sub_name}
+  //               </button>
+  //             </td>
+  //           );
+  //         })}
+  //         {slice.length !== this.props.columns && (
+  //           <td colSpan={this.props.columns - slice.length}></td>
+  //         )}
+  //       </tr>
+  //     );
+  //   }
+  //   return rows;
+  // };
   render() {
     return (
       <div className="card" style={{ width: "30rem" }}>
@@ -54,13 +55,13 @@ class SubCategory extends Component {
             </table> */}
             <div className="container">
               <div className={`row row-cols-${this.props.columns}`}>
-                {console.log(this.props.category.subCategory)}
                 {this.props.category.subCategory.map((sub) => {
                   let className = "btn btn-outline-info btn-sm";
                   if (sub.isSelected) className = className + " active";
                   return (
-                    <div className="col">
+                    <div key={sub.sub_id} className="col">
                       <button
+                        key={sub.sub_id}
                         onClick={() => {
                           this.props.clickSubCategory(
                             this.props.category.id,

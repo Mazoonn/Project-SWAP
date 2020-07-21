@@ -15,11 +15,11 @@ function App() {
 
     axios
       .get(`http://localhost:4000/verifyToken?token=${token}`)
-      .then(response => {
+      .then((response) => {
         setUserSession(response.data.token, response.data.user);
         setAuthLoading(false);
       })
-      .catch(error => {
+      .catch((error) => {
         removeUserSession();
         setAuthLoading(false);
       });
@@ -28,9 +28,6 @@ function App() {
   if (authLoading && getToken()) {
     return <div className="content">Checking Authentication...</div>;
   }
-  const onSelectTab = tab => {
-    this.loginModalRef.changeTab(tab);
-  };
 
   return (
     <div className="App">

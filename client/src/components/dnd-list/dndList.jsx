@@ -1,5 +1,5 @@
 import React from "react";
-import { List, arrayMove, arrayRemove } from "react-movable";
+import { List } from "react-movable";
 
 const RemovableIcon = () => (
   <svg
@@ -36,17 +36,7 @@ export default function Removable(props) {
   const removeFunction = props.removeItem;
 
   return (
-    <div
-      // style={{
-      //   maxWidth: "300px",
-      //   margin: "0px auto",
-      //   backgroundColor: "#F7F7F7",
-      //   padding: "3em",
-      //   textAlign: "center",
-      //   zIndex: 3,
-      // }}
-      className="border-top pt-2"
-    >
+    <div className="border-top pt-2">
       <List
         values={items}
         onChange={({ oldIndex, newIndex }) => {
@@ -55,12 +45,10 @@ export default function Removable(props) {
         renderList={({ children, props, isDragged }) => (
           <ul
             {...props}
-            // style={{
-            //   padding: "0em 0em 1em 0em",
-            //   cursor: isDragged ? "grabbing" : "inherit",
-            //   zIndex: 1000,
-            // }}
-            style={{ zIndex: 1000 }}
+            style={{
+              cursor: isDragged ? "grabbing" : "inherit",
+              zIndex: 1000,
+            }}
             className="list-group"
           >
             {children}
@@ -71,19 +59,10 @@ export default function Removable(props) {
             {...props}
             style={{
               ...props.style,
-              // padding: "1.5em",
-              // margin: "0.5em 0em",
-              // listStyleType: "none",
-              // border: "2px solid #CCC",
-              // boxShadow: "3px 3px #AAA",
-              // color: "#333",
-              // borderRadius: "5px",
-              // cursor: isDragged ? "grabbing" : "grab",
-              // fontFamily: 'Arial, "Helvetica Neue", Helvetica, sans-serif',
+              cursor: isDragged ? "grabbing" : "grab",
               backgroundColor: isDragged || isSelected ? "#EEE" : "#FFF",
               zIndex: 1000,
             }}
-            // style={{ zIndex: 1000 }}
             className="list-group-item"
           >
             <div
@@ -93,7 +72,7 @@ export default function Removable(props) {
                 justifyContent: "space-between",
               }}
             >
-              <div>{value.name}</div>{" "}
+              <div>{(index + 1).toString() + " " + value.name}</div>{" "}
               <button
                 onClick={() => {
                   removeFunction(index);

@@ -6,7 +6,6 @@ class HomePage extends Component {
   render() {
     return (
       <React.Fragment>
-        <div>Welcome to the Home Page!</div>
         <Map
           places={
             (this.props.location.state &&

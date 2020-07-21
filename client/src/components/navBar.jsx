@@ -7,7 +7,6 @@ import PrivateRoute from "../Utils/PrivateRoute";
 import PublicRoute from "../Utils/PublicRoute";
 import { BrowserRouter, Switch, Route, NavLink } from "react-router-dom";
 import Quest from "./quest/quest";
-import Map from "./map/map";
 
 class NavBar extends Component {
   render() {

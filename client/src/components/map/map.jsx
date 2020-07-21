@@ -78,6 +78,7 @@ export default function Map(props) {
         p.forEach((place, indexPlace) => {
           markers.push(
             <Marker
+              key={place.id}
               onClick={() => {
                 const allPlaces = [...places];
                 allPlaces[indexPlaces][indexPlace].isSelected = true;
@@ -115,13 +116,13 @@ export default function Map(props) {
   }, [places]);
 
   React.useEffect(() => {
-    const arrPlaces = [...places];
-    arrPlaces.forEach((p) => {
-      p.forEach((place) => {
-        place.isSelected = false;
-      });
-    });
-    setPlaces(arrPlaces);
+    // const arrPlaces = [...places];
+    // arrPlaces.forEach((p) => {
+    //   p.forEach((place) => {
+    //     place.isSelected = false;
+    //   });
+    // });
+    // setPlaces(arrPlaces);
     navigator.geolocation.getCurrentPosition((pos) => {
       setPosition({ lat: pos.coords.latitude, lng: pos.coords.longitude });
     });
@@ -135,8 +136,9 @@ export default function Map(props) {
     places.forEach((p, indexPlaces) => {
       p.forEach((place, indexPlace) => {
         arrInfoWindows.push(
-          place.isSelected && (
+          (place.isSelected !== undefined ? place.isSelected : false) && (
             <InfoWindow
+              key={place.id}
               onCloseClick={() => {
                 const allPlaces = [...places];
                 allPlaces[indexPlaces][indexPlace].isSelected = false;
@@ -238,7 +240,7 @@ export default function Map(props) {
                   Walk
                 </label>
               </div>
-              <label for="hours" className="border-top pt-2">
+              <label className="border-top pt-2">
                 <input
                   type="number"
                   step={0.5}
