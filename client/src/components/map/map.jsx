@@ -1,7 +1,6 @@
 import React from "react";
 import "../../css/compass.css";
 import { googleKey } from "../../config.json";
-import Dropdown from "react-bootstrap/Dropdown";
 import { arrayMove, arrayRemove } from "react-movable";
 import Removable from "../dnd-list/dndList";
 import DropDown from "./../dnd-list/drodDown";
@@ -10,6 +9,9 @@ import {
   useLoadScript,
   Marker,
   InfoWindow,
+  DirectionsRenderer,
+  BicyclingLayer,
+  TrafficLayer,
 } from "@react-google-maps/api";
 
 const libraries = ["places"];
@@ -40,11 +42,15 @@ export default function Map(props) {
     libraries,
   });
 
+  const [route, setRoute] = React.useState(undefined);
+
   const [chosenPlaces, setChosenPlaces] = React.useState([]);
 
   const [places, setPlaces] = React.useState([...props.places]);
 
   const [position, setPosition] = React.useState({ lat: 0, lng: 0 });
+
+  const [radioValue, setradioValue] = React.useState("walk");
 
   const mapRef = React.useRef();
 
@@ -52,26 +58,69 @@ export default function Map(props) {
     mapRef.current = map;
   }, []);
 
-  const draggPlace = React.useCallback(
-    (oldIndex, newIndex) => {
-      setChosenPlaces(setIndexes(arrayMove(chosenPlaces, oldIndex, newIndex)));
-    },
-    [chosenPlaces]
-  );
+  const handleRadioOnChange = (changeEvent) => {
+    if (chosenPlaces.length !== 0) getRoute(chosenPlaces);
+    setradioValue(changeEvent.target.value);
+  };
 
-  const removeChosenPlace = React.useCallback(
-    (index) => {
-      chosenPlaces[index].isChosen = false;
-      const cPlaces = setIndexes(
-        typeof index !== "undefined"
-          ? arrayRemove(chosenPlaces, index)
-          : chosenPlaces
-      );
+  const getRoute = (cplaces) => {
+    const DirectionsService = new window.google.maps.DirectionsService();
+    const waypoints = [];
+    let mode;
+    if (cplaces.length > 1) {
+      for (var i = 0; i < cplaces.length - 1; i++)
+        waypoints.push({
+          location: cplaces[i].geometry.location,
+          stopover: true,
+        });
+    }
+    switch (radioValue) {
+      case "walk":
+        mode = window.google.maps.TravelMode.WALKING;
+        break;
+      case "bicycle":
+        mode = window.google.maps.TravelMode.BICYCLING;
+        break;
+      case "car":
+        mode = window.google.maps.TravelMode.DRIVING;
+        break;
+      default:
+        break;
+    }
+    DirectionsService.route(
+      {
+        origin: position,
+        waypoints: waypoints,
+        destination: cplaces[cplaces.length - 1].geometry.location,
+        travelMode: mode,
+      },
+      (result, status) => {
+        if (status === window.google.maps.DirectionsStatus.OK) {
+          setRoute(result);
+        } else {
+          console.error(`error fetching directions ${result}`);
+        }
+      }
+    );
+  };
 
-      setChosenPlaces(cPlaces);
-    },
-    [chosenPlaces]
-  );
+  const draggPlace = (oldIndex, newIndex) => {
+    const newArr = setIndexes(arrayMove(chosenPlaces, oldIndex, newIndex));
+    setChosenPlaces(setIndexes(arrayMove(chosenPlaces, oldIndex, newIndex)));
+    getRoute(newArr);
+  };
+
+  const removeChosenPlace = (index) => {
+    chosenPlaces[index].isChosen = false;
+    const cPlaces = setIndexes(
+      typeof index !== "undefined"
+        ? arrayRemove(chosenPlaces, index)
+        : chosenPlaces
+    );
+    if (cPlaces.length > 0) getRoute(cPlaces);
+    else setRoute(undefined);
+    setChosenPlaces(cPlaces);
+  };
 
   const getMarkers = React.useCallback(() => {
     let markers = [];
@@ -176,6 +225,7 @@ export default function Map(props) {
                       arrChosenPlaces.push(arrPlaces[indexPlaces][indexPlace]);
                       setChosenPlaces(arrChosenPlaces);
                       setPlaces(arrPlaces);
+                      getRoute(arrChosenPlaces);
                     }}
                   >
                     Select
@@ -203,7 +253,7 @@ export default function Map(props) {
 
   return (
     <React.Fragment>
-      <DropDown>
+      <DropDown handleRadioChange={handleRadioOnChange} radioValue={radioValue}>
         <Removable
           list={chosenPlaces}
           dragg={draggPlace}
@@ -220,6 +270,16 @@ export default function Map(props) {
         zoom={16}
         onMapLoad={onMapLoad}
       >
+        {chosenPlaces.length !== 0 && (
+          <DirectionsRenderer
+            options={{ suppressMarkers: true, preserveViewport: true }}
+            directions={route}
+          ></DirectionsRenderer>
+        )}
+
+        {radioValue === "bicycle" && <BicyclingLayer />}
+        {radioValue === "car" && <TrafficLayer />}
+
         <Marker
           clickable={false}
           position={position}

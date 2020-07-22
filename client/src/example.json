@@ -1,0 +1,181 @@
+{
+  "geocoded_waypoints": [
+    {
+      "geocoder_status": "OK",
+      "place_id": "ChIJlVYbafA_HRURfDWd2AlIpl4",
+      "types": ["establishment", "point_of_interest", "school"]
+    },
+    {
+      "geocoder_status": "OK",
+      "place_id": "ChIJtVFkMt4_HRURpJXKwjkRjaI",
+      "types": ["street_address"]
+    }
+  ],
+  "routes": [
+    {
+      "bounds": {
+        "northeast": {
+          "lat": 32.3171673,
+          "lng": 34.88586910000001
+        },
+        "southwest": {
+          "lat": 32.3108968,
+          "lng": 34.8725787
+        }
+      },
+      "copyrights": "Map data ©2020 Mapa GISrael",
+      "legs": [
+        {
+          "distance": {
+            "text": "1.9 km",
+            "value": 1924
+          },
+          "duration": {
+            "text": "4 mins",
+            "value": 224
+          },
+          "end_address": "יוסף שפרינצק 24, נתניה, ישראל",
+          "end_location": {
+            "lat": 32.3145534,
+            "lng": 34.88526290000001
+          },
+          "start_address": "הרטום 32-34, נתניה, ישראל",
+          "start_location": {
+            "lat": 32.3115811,
+            "lng": 34.873695
+          },
+          "steps": [
+            {
+              "distance": {
+                "text": "0.1 km",
+                "value": 130
+              },
+              "duration": {
+                "text": "1 min",
+                "value": 32
+              },
+              "end_location": {
+                "lat": 32.3119648,
+                "lng": 34.8725831
+              },
+              "html_instructions": "התחל \u003cb\u003eצפון מערב\u003c/b\u003e לכיוון \u003cb\u003eהרב יהודה אונטרמן\u003c/b\u003e",
+              "polyline": {
+                "points": "kzedEsgzsEc@|AGRERAD?@?BA@?B?B?@@B?@Hb@?D@FABA@?@A?A@A?C?G?M?"
+              },
+              "start_location": {
+                "lat": 32.3115811,
+                "lng": 34.873695
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "0.3 km",
+                "value": 319
+              },
+              "duration": {
+                "text": "1 min",
+                "value": 45
+              },
+              "end_location": {
+                "lat": 32.3110352,
+                "lng": 34.875675
+              },
+              "html_instructions": "בכיכר, צא ביציאה ה\u003cb\u003eראשונה\u003c/b\u003e אל \u003cb\u003eהרב יהודה אונטרמן\u003c/b\u003e",
+              "maneuver": "roundabout-right",
+              "polyline": {
+                "points": "w|edEs`zsE?E?C?C?AAIAEAICIEGEGlA{DVaApAkFT}@"
+              },
+              "start_location": {
+                "lat": 32.3119648,
+                "lng": 34.8725831
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "0.9 km",
+                "value": 909
+              },
+              "duration": {
+                "text": "1 min",
+                "value": 85
+              },
+              "end_location": {
+                "lat": 32.3171152,
+                "lng": 34.8815704
+              },
+              "html_instructions": "פנה \u003cb\u003eשמאלה\u003c/b\u003e אל \u003cb\u003eדרך דגניה\u003c/b\u003e",
+              "maneuver": "turn-left",
+              "polyline": {
+                "points": "_wedE_tzsENq@Ji@MKc@Y}BqAA?uBmA_C}A_@Ui@_@yAiAuFuFeEgEsE{E"
+              },
+              "start_location": {
+                "lat": 32.3110352,
+                "lng": 34.875675
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "0.5 km",
+                "value": 470
+              },
+              "duration": {
+                "text": "1 min",
+                "value": 49
+              },
+              "end_location": {
+                "lat": 32.3152127,
+                "lng": 34.8858634
+              },
+              "html_instructions": "פנה \u003cb\u003eימינה\u003c/b\u003e",
+              "maneuver": "turn-right",
+              "polyline": {
+                "points": "_}fdEyx{sE?C?C?A?A?AAECE?AAA?AAK?A?A?A?A?A@A?G@A?A?GNWzAuCN]HODKJ[FUFUBO`@wBP{@Hc@Ty@Je@L[LWRWfAiA"
+              },
+              "start_location": {
+                "lat": 32.3171152,
+                "lng": 34.8815704
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "0.1 km",
+                "value": 96
+              },
+              "duration": {
+                "text": "1 min",
+                "value": 13
+              },
+              "end_location": {
+                "lat": 32.3145534,
+                "lng": 34.88526290000001
+              },
+              "html_instructions": "בכיכר, צא ביציאה ה\u003cb\u003eראשונה\u003c/b\u003e אל \u003cb\u003eיוסף שפרינצק\u003c/b\u003e",
+              "maneuver": "roundabout-right",
+              "polyline": {
+                "points": "aqfdEss|sE@?@?@?@??A@?@?VFd@f@x@hA"
+              },
+              "start_location": {
+                "lat": 32.3152127,
+                "lng": 34.8858634
+              },
+              "travel_mode": "DRIVING"
+            }
+          ],
+          "traffic_speed_entry": [],
+          "via_waypoint": []
+        }
+      ],
+      "overview_polyline": {
+        "points": "kzedEsgzsEs@jCAJ@JHt@GDK?M??E?GAKMa@EGlA{DhBmHd@oBJi@MKaDkBwBmA_DsBcCiB{L}LsE_F?IEMCW@K@CN_@zBoE^wAr@sD^}AXaA`@o@hAiAB?BAXF~ApB"
+      },
+      "summary": "דרך דגניה",
+      "warnings": [],
+      "waypoint_order": []
+    }
+  ],
+  "status": "OK"
+}

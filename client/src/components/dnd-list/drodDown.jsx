@@ -19,7 +19,7 @@ class DropDown extends Component {
           Route
         </button>
         <div
-          className={`p-2 border rounded ${
+          className={`p-3 border rounded ${
             this.state.toggle === false ? "d-none" : ""
           }`}
           style={{ background: "white" }}
@@ -28,17 +28,21 @@ class DropDown extends Component {
             <div className="radio">
               <label>
                 <input
+                  checked={this.props.radioValue === "walk"}
+                  onChange={this.props.handleRadioChange}
                   type="radio"
-                  value="car"
+                  value="walk"
                   name="transport"
                   className="mr-2"
                 />
-                Car
+                Walk
               </label>
             </div>
             <div className="radio">
               <label>
                 <input
+                  checked={this.props.radioValue === "bicycle"}
+                  onChange={this.props.handleRadioChange}
                   type="radio"
                   value="bicycle"
                   name="transport"
@@ -50,12 +54,14 @@ class DropDown extends Component {
             <div className="radio">
               <label>
                 <input
+                  checked={this.props.radioValue === "car"}
+                  onChange={this.props.handleRadioChange}
                   type="radio"
-                  value="walk"
+                  value="car"
                   name="transport"
                   className="mr-2"
                 />
-                Walk
+                Car
               </label>
             </div>
             <div className="border-top">
