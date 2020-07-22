@@ -1,0 +1,12 @@
+.locate {
+  position: absolute;
+  background: none;
+  border: none;
+  z-index: 10;
+  left: 92.7vw;
+}
+
+.locate img {
+  width: 44px;
+  cursor: pointer;
+}

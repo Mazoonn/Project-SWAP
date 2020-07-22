@@ -1,8 +1,10 @@
 import React from "react";
+import "../../css/compass.css";
 import { googleKey } from "../../config.json";
 import Dropdown from "react-bootstrap/Dropdown";
 import { arrayMove, arrayRemove } from "react-movable";
 import Removable from "../dnd-list/dndList";
+import DropDown from "./../dnd-list/drodDown";
 import {
   GoogleMap,
   useLoadScript,
@@ -115,17 +117,22 @@ export default function Map(props) {
     return markers;
   }, [places]);
 
-  React.useEffect(() => {
-    // const arrPlaces = [...places];
-    // arrPlaces.forEach((p) => {
-    //   p.forEach((place) => {
-    //     place.isSelected = false;
-    //   });
-    // });
-    // setPlaces(arrPlaces);
+  const getLocation = () => {
     navigator.geolocation.getCurrentPosition((pos) => {
       setPosition({ lat: pos.coords.latitude, lng: pos.coords.longitude });
     });
+  };
+
+  const Locate = () => {
+    return (
+      <button className="locate m-2" title="Current Location">
+        <img onClick={getLocation} src="/img/compass.png" alt="compass" />
+      </button>
+    );
+  };
+
+  React.useEffect(() => {
+    getLocation();
   }, []);
 
   if (loadError) return "Error";
@@ -196,70 +203,15 @@ export default function Map(props) {
 
   return (
     <React.Fragment>
-      <Dropdown>
-        <Dropdown.Toggle
-          id="dropdown-basic"
-          style={{ position: "absolute", zIndex: 1 }}
-          className="m-2"
-        >
-          Options
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-          <div className="m-2">
-            <form>
-              <div className="radio">
-                <label>
-                  <input
-                    type="radio"
-                    value="car"
-                    name="transport"
-                    className="mr-2"
-                  />
-                  Car
-                </label>
-              </div>
-              <div className="radio">
-                <label>
-                  <input
-                    type="radio"
-                    value="bicycle"
-                    name="transport"
-                    className="mr-2"
-                  />
-                  Bicycle
-                </label>
-              </div>
-              <div className="radio">
-                <label>
-                  <input
-                    type="radio"
-                    value="walk"
-                    name="transport"
-                    className="mr-2"
-                  />
-                  Walk
-                </label>
-              </div>
-              <label className="border-top pt-2">
-                <input
-                  type="number"
-                  step={0.5}
-                  name="hours"
-                  min="0"
-                  max="10"
-                  className="w-25 mr-2"
-                />
-                Hours of the trip
-              </label>
-            </form>
-            <Removable
-              list={chosenPlaces}
-              dragg={draggPlace}
-              removeItem={removeChosenPlace}
-            ></Removable>
-          </div>
-        </Dropdown.Menu>
-      </Dropdown>
+      <DropDown>
+        <Removable
+          list={chosenPlaces}
+          dragg={draggPlace}
+          removeItem={removeChosenPlace}
+        ></Removable>
+      </DropDown>
+
+      <Locate />
 
       <GoogleMap
         options={options}
@@ -268,6 +220,16 @@ export default function Map(props) {
         zoom={16}
         onMapLoad={onMapLoad}
       >
+        <Marker
+          clickable={false}
+          position={position}
+          icon={{
+            url: "/img/bluecircle.png",
+            origin: new window.google.maps.Point(0, 0),
+            anchor: new window.google.maps.Point(7, 7),
+            scaledSize: new window.google.maps.Size(14, 14),
+          }}
+        ></Marker>
         {getMarkers()}
         {getInfoWindows()}
       </GoogleMap>
