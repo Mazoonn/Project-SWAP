@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { setUserSession } from "../../Utils/Common";
+import { setUserSession } from "../Utils/Common";
 
 import LoginGoF from "./loginGoF";
 
@@ -15,14 +15,14 @@ function Login(props) {
     setError(null);
     setLoading(true);
     axios
-      .post("http://localhost:4000/Admin/login", {
+      .post("http://localhost:44300/Admin/login", {
         username: username.value,
         password: password.value,
       })
       .then((response) => {
         setLoading(false);
         setUserSession(response.data.token, response.data.user);
-        props.history.push("/dashboard");
+        props.history.push("/Map");
       })
       .catch((error) => {
         setLoading(false);
