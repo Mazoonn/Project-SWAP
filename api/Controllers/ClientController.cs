@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using SwapClassLibrary.DTO;
+using SwapClassLibrary.EF;
+using SwapClassLibrary.Service;
 
 namespace api.Controllers
 {
     //[Authorize]
     [RoutePrefix("api/client")]
-    public class ClientController : Controller
+    public class ClientController : ApiController
     {
         //צריך לבודק האם זה צריך לשמור את ה TOKEN KEY
         [Route("login")]
@@ -16,6 +20,16 @@ namespace api.Controllers
         public int login()
         {
             return 0;
+        }
+
+        [Route("register")]
+        [HttpPost]
+        public HttpResponseMessage register([FromBody]registerDTO body)
+        {
+           bool isrRegister = clientService.registerClient(body);
+            if (!isrRegister)
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "There was an error with the registr of the new client");
+            return Request.CreateResponse(HttpStatusCode.OK, isrRegister);
         }
         // לא מחייב רק אופציה
         [Route("collectingData")]

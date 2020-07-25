@@ -49,13 +49,14 @@
           </Key>
           <Property Name="client_id" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="creation_date" Type="date" Nullable="false" />
-          <Property Name="first_name" Type="nvarchar" MaxLength="20" />
-          <Property Name="last_name" Type="nvarchar" MaxLength="20" />
-          <Property Name="birthday_date" Type="date" />
+          <Property Name="first_name" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="last_name" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="birthday_date" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="email" Type="nvarchar" MaxLength="30" Nullable="false" />
-          <Property Name="sex" Type="nvarchar" MaxLength="8" />
+          <Property Name="sex" Type="nvarchar" MaxLength="8" Nullable="false" />
           <Property Name="last_login" Type="date" Nullable="false" />
           <Property Name="phone" Type="nvarchar" MaxLength="20" />
+          <Property Name="password" Type="nvarchar" MaxLength="20" Nullable="false" />
         </EntityType>
         <EntityType Name="google_value">
           <Key>
@@ -394,14 +395,15 @@
           </Key>
           <Property Name="client_id" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="creation_date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="first_name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="last_name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="birthday_date" Type="DateTime" Precision="0" />
+          <Property Name="first_name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="last_name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="birthday_date" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="email" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="sex" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="sex" Type="String" MaxLength="8" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="last_login" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="r_user_quest" Relationship="Self.FK_r_user_quest_client" FromRole="client" ToRole="r_user_quest" />
+          <Property Name="password" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="google_value">
           <Key>
@@ -504,10 +506,10 @@
           <Property Name="creation_date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="descrition" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="clicked" Type="Decimal" Precision="5" Scale="0" />
+          <Property Name="is_active" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="main_category" Relationship="Self.FK_r_sub_and_main_category_main_category" FromRole="r_sub_and_main_category" ToRole="main_category" />
           <NavigationProperty Name="r_place_sub_and_main_category" Relationship="Self.FK_r_place_sub_and_main_category_r_sub_and_main_category" FromRole="r_sub_and_main_category" ToRole="r_place_sub_and_main_category" />
           <NavigationProperty Name="sub_category" Relationship="Self.FK_r_sub_and_main_category_sub_category" FromRole="r_sub_and_main_category" ToRole="sub_category" />
-          <Property Name="is_active" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="r_user_quest">
           <Key>
@@ -528,8 +530,8 @@
           <Property Name="creation_date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="is_active" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="r_sub_and_main_category" Relationship="Self.FK_r_sub_and_main_category_sub_category" FromRole="sub_category" ToRole="r_sub_and_main_category" />
           <Property Name="google_value" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="r_sub_and_main_category" Relationship="Self.FK_r_sub_and_main_category_sub_category" FromRole="sub_category" ToRole="r_sub_and_main_category" />
         </EntityType>
         <Association Name="FK_r_business_place_business">
           <End Role="business" Type="Self.business" Multiplicity="1" />
@@ -759,6 +761,7 @@
           <EntitySetMapping Name="clients">
             <EntityTypeMapping TypeName="SwapModel.client">
               <MappingFragment StoreEntitySet="client">
+                <ScalarProperty Name="password" ColumnName="password" />
                 <ScalarProperty Name="client_id" ColumnName="client_id" />
                 <ScalarProperty Name="creation_date" ColumnName="creation_date" />
                 <ScalarProperty Name="first_name" ColumnName="first_name" />
@@ -856,12 +859,12 @@
           <EntitySetMapping Name="r_sub_and_main_category">
             <EntityTypeMapping TypeName="SwapModel.r_sub_and_main_category">
               <MappingFragment StoreEntitySet="r_sub_and_main_category">
-                <ScalarProperty Name="is_active" ColumnName="is_active" />
                 <ScalarProperty Name="sub_id" ColumnName="sub_id" />
                 <ScalarProperty Name="main_id" ColumnName="main_id" />
                 <ScalarProperty Name="creation_date" ColumnName="creation_date" />
                 <ScalarProperty Name="descrition" ColumnName="descrition" />
                 <ScalarProperty Name="clicked" ColumnName="clicked" />
+                <ScalarProperty Name="is_active" ColumnName="is_active" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -877,11 +880,11 @@
           <EntitySetMapping Name="sub_category">
             <EntityTypeMapping TypeName="SwapModel.sub_category">
               <MappingFragment StoreEntitySet="sub_category">
-                <ScalarProperty Name="google_value" ColumnName="google_value" />
                 <ScalarProperty Name="sub_id" ColumnName="sub_id" />
                 <ScalarProperty Name="creation_date" ColumnName="creation_date" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="is_active" ColumnName="is_active" />
+                <ScalarProperty Name="google_value" ColumnName="google_value" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

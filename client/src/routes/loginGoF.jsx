@@ -18,17 +18,20 @@ class LoginGoF extends Component {
     };
 
     return (
-      <div className="App">
+      <div className="App text-center">
         <FacebookLogin
+          cssClass="btn btn-primary btn-lg"
           appId={facebookConfig.appId}
           fields="name,email,picture"
+          buttonText="LOGIN WITH Facebock"
           callback={responseFacebook}
         />
         <br />
         <br />
         <GoogleLogin
+          style="btn-primary btn-lg"
           clientId={googleConfig.client_id}
-          buttonText="LOGIN WITH GOOGLE"
+          buttonText="LOGIN WITH Google"
           onSuccess={responseGoogle}
           onFailure={responseGoogle}
         />

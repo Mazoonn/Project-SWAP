@@ -61,6 +61,7 @@
     <Compile Include="DTO\categoryDTO\googleValueDto.cs" />
     <Compile Include="DTO\categoryDTO\categoryAddGoogleRequestDTO.cs" />
     <Compile Include="DTO\categoryDTO\requestValueDTO.cs" />
+    <Compile Include="DTO\clientDTO\registerDTO.cs" />
     <Compile Include="EF\address.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -123,6 +124,7 @@
     <Compile Include="Service\category\googleValueService.cs" />
     <Compile Include="Service\category\MainCategoryService.cs" />
     <Compile Include="Service\category\SubCategoryService.cs" />
+    <Compile Include="Service\client\clientService.cs" />
     <Compile Include="Service\IdService.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -139,7 +141,6 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="EF\Model1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
