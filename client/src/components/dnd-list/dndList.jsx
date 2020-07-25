@@ -36,55 +36,60 @@ export default function Removable(props) {
   const removeFunction = props.removeItem;
 
   return (
-    <div className="border-top pt-2">
-      <List
-        values={items}
-        onChange={({ oldIndex, newIndex }) => {
-          props.dragg(oldIndex, newIndex);
-        }}
-        renderList={({ children, props, isDragged }) => (
-          <ul
-            {...props}
-            style={{
-              cursor: isDragged ? "grabbing" : "inherit",
-              zIndex: 1000,
+    <div>
+      {items.length !== 0 && (
+        <div className="border-top pt-2">
+          <List
+            values={items}
+            onChange={({ oldIndex, newIndex }) => {
+              props.dragg(oldIndex, newIndex);
             }}
-            className="list-group"
-          >
-            {children}
-          </ul>
-        )}
-        renderItem={({ value, props, index, isDragged, isSelected }) => (
-          <li
-            {...props}
-            style={{
-              ...props.style,
-              cursor: isDragged ? "grabbing" : "grab",
-              backgroundColor: isDragged || isSelected ? "#EEE" : "#FFF",
-              zIndex: 1000,
-            }}
-            className="list-group-item"
-          >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <div>{(index + 1).toString() + " " + value.name}</div>{" "}
-              <button
-                onClick={() => {
-                  removeFunction(index);
+            renderList={({ children, props, isDragged }) => (
+              <ul
+                {...props}
+                style={{
+                  cursor: isDragged ? "grabbing" : "inherit",
+                  zIndex: 1000,
                 }}
-                style={buttonStyles}
+                className="list-group"
               >
-                <RemovableIcon />
-              </button>
-            </div>
-          </li>
-        )}
-      />
+                {children}
+              </ul>
+            )}
+            renderItem={({ value, props, index, isDragged, isSelected }) => (
+              <li
+                {...props}
+                style={{
+                  ...props.style,
+                  cursor: isDragged ? "grabbing" : "grab",
+                  backgroundColor: isDragged || isSelected ? "#EEE" : "#FFF",
+                  zIndex: 1000,
+                }}
+                className="list-group-item"
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <div>{(index + 1).toString() + " " + value.name}</div>{" "}
+                  <button
+                    onClick={() => {
+                      removeFunction(index);
+                    }}
+                    style={buttonStyles}
+                    className="ml-2"
+                  >
+                    <RemovableIcon />
+                  </button>
+                </div>
+              </li>
+            )}
+          />
+        </div>
+      )}
     </div>
   );
 }
