@@ -4,8 +4,8 @@ import React, { Component } from "react";
 import FacebookLogin from "react-facebook-login";
 import GoogleLogin from "react-google-login";
 
-import { setUserSession } from "../../Utils/Common";
-import { facebookConfig, googleConfig } from "./social-config";
+import { setUserSession } from "../Utils/Common";
+import { facebookConfig, googleConfig } from "../config.json";
 
 class LoginGoF extends Component {
   render() {
