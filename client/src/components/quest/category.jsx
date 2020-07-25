@@ -10,9 +10,12 @@ class Category extends Component {
           return (
             <button
               type="button"
-              className={className}
-              onClick={(button) => {
-                this.props.handleOnClickCategory(category.id);
+              className={
+                this.props.isLoading ? `${className} disabled` : className
+              }
+              onClick={() => {
+                if (!this.props.isLoading)
+                  this.props.handleOnClickCategory(category.id);
               }}
               key={category.id}
             >
