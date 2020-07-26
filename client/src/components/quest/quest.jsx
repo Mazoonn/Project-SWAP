@@ -97,14 +97,13 @@ class Quest extends Component {
       <div className={`row row-cols-${this.state.columnsOfSubcategories}`}>
         {categories.map((category) => {
           return (
-            <div key={category.id} className="col p-4">
-              <SubCategory
-                isLoading={this.state.isLoading}
-                category={category}
-                columns={this.state.columnsInSubCategoires}
-                clickSubCategory={this.handleOnClickSubCategory}
-              ></SubCategory>
-            </div>
+            <SubCategory
+              key={category.id}
+              isLoading={this.state.isLoading}
+              category={category}
+              columns={this.state.columnsInSubCategoires}
+              clickSubCategory={this.handleOnClickSubCategory}
+            ></SubCategory>
           );
         })}
       </div>

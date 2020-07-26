@@ -3,17 +3,19 @@ import React, { Component } from "react";
 class SubCategory extends Component {
   render() {
     return (
-      <div className="card" style={{ width: "30rem" }}>
-        <div className="card-body text-center">
-          <div className="card-title">{this.props.category.name}</div>
-          <div className="card-text">
-            <div className="container">
-              <div className={`row row-cols-${this.props.columns}`}>
-                {this.props.category.subCategory.map((sub) => {
-                  let className = "btn btn-outline-info btn-sm";
-                  if (sub.isSelected) className = className + " active";
-                  return (
-                    <div key={sub.sub_id} className="col">
+      <div className="col mb-4">
+        <div className="card h-100">
+          <div className="card-body text-center">
+            <div className="card-title">
+              <p className="font-weight-bold">{this.props.category.name}</p>
+            </div>
+            <div className="card-text">
+              <div className="container">
+                <div className={`row row-cols-${this.props.columns}`}>
+                  {this.props.category.subCategory.map((sub) => {
+                    let className = "btn btn-outline-info btn-sm";
+                    if (sub.isSelected) className = className + " active";
+                    return (
                       <button
                         key={sub.sub_id}
                         onClick={() => {
@@ -28,9 +30,9 @@ class SubCategory extends Component {
                       >
                         {sub.sub_name}
                       </button>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
             </div>
           </div>
