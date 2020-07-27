@@ -7,7 +7,8 @@ using System.Web.Http;
 using SwapClassLibrary.DTO;
 using SwapClassLibrary.EF;
 using SwapClassLibrary.Service;
-
+using System.Security.Claims;
+using SwapClassLibrary.Models;
 namespace api.Controllers
 {
     //[Authorize]
@@ -16,11 +17,41 @@ namespace api.Controllers
     {
         //צריך לבודק האם זה צריך לשמור את ה TOKEN KEY
         [Route("login")]
-        [HttpGet]
-        public int login()
+        [HttpPost]
+        public bool login([FromBody]loginDTO body)
         {
-            return 0;
+            bool isLogin = false;
+            if (body.password == null && body.email == null)
+                return isLogin;
+            IAuthModel model = GetJWTModel(body.password, body.email);
+            IAuthService authService = new JWTService(model.SecretKey);
+
+            string token = authService.GenerateToken(model);
+
+            if (!authService.IsTokenValid(token))
+                return isLogin;
+            else
+            {
+                List<Claim> claims = authService.GetTokenClaims(token).ToList();
+                Console.WriteLine(claims.FirstOrDefault(e => e.Type.Equals(ClaimTypes.Name)).Value);
+                Console.WriteLine(claims.FirstOrDefault(e => e.Type.Equals(ClaimTypes.Email)).Value);
+                isLogin = true;
+            }
+            return isLogin;
         }
+        private static JWTModel GetJWTModel(string name, string email)
+        {
+            return new JWTModel()
+            {
+                Claims = new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, name),
+                    new Claim(ClaimTypes.Email, email)
+                }
+            };
+        }
+
+
 
         [Route("register")]
         [HttpPost]

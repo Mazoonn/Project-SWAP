@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { setUserSession } from "../Utils/Common";
 import LoginGoF from "./loginGoF";
+import { clientLogin } from "../services/client";
 
 function Login(props) {
   const [loading, setLoading] = useState(false);
@@ -10,23 +10,21 @@ function Login(props) {
   const [error, setError] = useState(null);
 
   // handle button click of login form
-  const handleLogin = async () => {
+  const handleLogin = () => {
     setLoading(true);
     try {
-      const response = await axios.post(
-        "http://localhost:44300/api/client/login",
-        {
-          user_email: user_email.value,
-          password: password.value,
-        }
-      );
+      const response = clientLogin({
+        email: user_email.value,
+        password: password.value,
+      });
       setLoading(false);
       setUserSession(response.data.token, response.data.user);
       props.history.push("/Map");
     } catch (error) {
-      setLoading(false);
-      if (error.response.status === 401) setError(error.response.data.message);
-      else setError("Something went wrong. Please try again later.");
+      console.log(error);
+      // setLoading(false);
+      // if (error.response.status === 401) setError(error.response.data.message);
+      // else setError("Something went wrong. Please try again later.");
     }
   };
 

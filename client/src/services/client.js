@@ -14,6 +14,7 @@ export async function clientRegister(body) {
 export async function clientLogin(body) {
   try {
     const response = await http.post(`${API_URL_Dev}/client/login`, body);
+    alert("there was an error with the register of the new client");
     if (!response)
       alert("there was an error with the register of the new client");
   } catch (e) {

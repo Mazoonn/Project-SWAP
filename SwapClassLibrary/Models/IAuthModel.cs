@@ -7,12 +7,13 @@ using System.Security.Claims;
 
 namespace SwapClassLibrary.Models
 {
-    public class IAuthModel
+    public interface IAuthModel
     {
         #region Members
         string SecretKey { get; set; }
         string SecurityAlgorithm { get; set; }
-        int Expiremitnutes { get; set; }
+        int ExpireMinutes { get; set; }
+
         Claim[] Claims { get; set; }
         #endregion
     }
