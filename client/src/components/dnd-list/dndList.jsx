@@ -38,7 +38,7 @@ export default function Removable(props) {
   return (
     <div>
       {items.length !== 0 && (
-        <div className="border-top pt-2">
+        <div className="border-top pt-2 pb-2">
           <List
             values={items}
             onChange={({ oldIndex, newIndex }) => {

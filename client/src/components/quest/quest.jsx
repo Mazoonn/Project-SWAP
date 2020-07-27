@@ -15,6 +15,7 @@ class Quest extends Component {
 
   getPlaces = async () => {
     this.setState({ isLoading: true });
+    let keysToRemove = ["isFinished", "route", "radioValue", "places"];
     const places = {};
     const categories = this.state.categoryList;
     categories.forEach((category) => {
@@ -27,6 +28,10 @@ class Quest extends Component {
       }
     });
     let respones = await getPlaces(places);
+    keysToRemove.forEach((key) => {
+      window.localStorage.removeItem(key);
+    });
+
     this.props.history.push({
       pathname: "/",
       state: { respones },
@@ -92,13 +97,13 @@ class Quest extends Component {
       <div className={`row row-cols-${this.state.columnsOfSubcategories}`}>
         {categories.map((category) => {
           return (
-            <div key={category.id} className="col p-4">
-              <SubCategory
-                category={category}
-                columns={this.state.columnsInSubCategoires}
-                clickSubCategory={this.handleOnClickSubCategory}
-              ></SubCategory>
-            </div>
+            <SubCategory
+              key={category.id}
+              isLoading={this.state.isLoading}
+              category={category}
+              columns={this.state.columnsInSubCategoires}
+              clickSubCategory={this.handleOnClickSubCategory}
+            ></SubCategory>
           );
         })}
       </div>
@@ -113,6 +118,7 @@ class Quest extends Component {
       <React.Fragment>
         <div className="float-left">
           <Category
+            isLoading={this.state.isLoading}
             handleOnClickCategory={this.handleOnClickCategory}
             categoryList={this.state.categoryList}
           />

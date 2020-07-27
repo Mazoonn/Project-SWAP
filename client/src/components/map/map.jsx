@@ -14,6 +14,33 @@ import {
   TrafficLayer,
 } from "@react-google-maps/api";
 
+const removeDuplicates=(array)=>
+{
+  const arrayOfPlaces=[];
+  let obj={};
+  let withoutDuplicates=[];
+  
+  if(array.length!==0)
+  {
+    for(let places of array)
+  {
+    if(places!==undefined)
+    {
+      for(let place of places)
+      {
+        arrayOfPlaces.push(place);
+      }
+    }
+      }
+  for(const place of arrayOfPlaces)
+  {
+    obj[place.place_id]=place;
+  }
+  }
+  withoutDuplicates=[[...Object.values(obj)]];
+  return withoutDuplicates;
+};
+
 const libraries = ["places"];
 
 const mapContainerStyle = {
@@ -46,17 +73,40 @@ export default function Map(props) {
 
   const [chosenPlaces, setChosenPlaces] = React.useState([]);
 
-  const [places, setPlaces] = React.useState([...props.places]);
+  const [places, setPlaces] = React.useState(removeDuplicates([...props.places]));
 
   const [position, setPosition] = React.useState({ lat: 0, lng: 0 });
 
   const [radioValue, setradioValue] = React.useState("walk");
+
+  const [isFinished, setIsFinished] = React.useState(false);
+
+
+  let finished = window.localStorage.getItem("isFinished");
+  if (finished === null) finished = false;
+
+  if (finished && !isFinished) {
+    setradioValue(window.localStorage.getItem("radioValue"));
+    setRoute(JSON.parse(window.localStorage.getItem("route")));
+    setChosenPlaces(JSON.parse(window.localStorage.getItem("places")));
+    setIsFinished(true);
+    setPlaces([[...JSON.parse(window.localStorage.getItem("places"))]]);
+  }
 
   const mapRef = React.useRef();
 
   const onMapLoad = React.useCallback((map) => {
     mapRef.current = map;
   }, []);
+
+  const handleFinish = () => {
+    const storage = window.localStorage;
+    storage.setItem("radioValue", radioValue);
+    storage.setItem("isFinished", true);
+    storage.setItem("places", JSON.stringify(chosenPlaces));
+    storage.setItem("route", JSON.stringify(route));
+    setIsFinished(true);
+  };
 
   const handleRadioOnChange = (changeEvent) => {
     setradioValue(changeEvent.target.value);
@@ -97,7 +147,6 @@ export default function Map(props) {
       },
       (result, status) => {
         if (status === window.google.maps.DirectionsStatus.OK) {
-          console.log(result);
           setRoute(result);
         } else {
           console.error(`error fetching directions ${result}`);
@@ -126,12 +175,20 @@ export default function Map(props) {
 
   const getMarkers = React.useCallback(() => {
     let markers = [];
+
     if (places.length !== 0) {
       places.forEach((p, indexPlaces) => {
         p.forEach((place, indexPlace) => {
           markers.push(
             <Marker
-              key={place.id}
+              visible={
+                isFinished
+                  ? place.isChosen !== undefined
+                    ? place.isChosen
+                    : false
+                  : true
+              }
+              key={`${place.place_id}Marker`}
               onClick={() => {
                 const allPlaces = [...places];
                 allPlaces[indexPlaces][indexPlace].isSelected = true;
@@ -170,7 +227,7 @@ export default function Map(props) {
     }
 
     return markers;
-  }, [places]);
+  }, [places, isFinished]);
 
   const getLocation = () => {
     navigator.geolocation.getCurrentPosition((pos) => {
@@ -200,7 +257,7 @@ export default function Map(props) {
         arrInfoWindows.push(
           (place.isSelected !== undefined ? place.isSelected : false) && (
             <InfoWindow
-              key={place.id}
+              key={`${place.place_id}InfoWindow`}
               onCloseClick={() => {
                 const allPlaces = [...places];
                 allPlaces[indexPlaces][indexPlace].isSelected = false;
@@ -222,41 +279,42 @@ export default function Map(props) {
                 <br />
                 <br />
                 <div className="text-center">
-                  {(!(place.isChosen !== undefined
-                    ? place.isChosen
-                    : false) && (
-                    <button
-                      type="button"
-                      className="btn btn-success btn-sm"
-                      onClick={() => {
-                        const arrPlaces = [...places];
-                        const arrChosenPlaces = [...chosenPlaces];
-                        arrPlaces[indexPlaces][indexPlace].isChosen = true;
-                        arrPlaces[indexPlaces][indexPlace].chosenIndex =
-                          chosenPlaces.length;
-                        arrPlaces[indexPlaces][indexPlace].isSelected = false;
-                        arrChosenPlaces.push(
-                          arrPlaces[indexPlaces][indexPlace]
-                        );
-                        setChosenPlaces(arrChosenPlaces);
-                        setPlaces(arrPlaces);
-                        getRoute(arrChosenPlaces, radioValue);
-                      }}
-                    >
-                      Select
-                    </button>
-                  )) || (
-                    <button
-                      onClick={() => {
-                        place.isSelected = false;
-                        removeChosenPlace(place.chosenIndex);
-                      }}
-                      type="button"
-                      className="btn btn-danger btn-sm"
-                    >
-                      Remove
-                    </button>
-                  )}
+                  {!isFinished &&
+                    ((!(place.isChosen !== undefined
+                      ? place.isChosen
+                      : false) && (
+                      <button
+                        type="button"
+                        className="btn btn-success btn-sm"
+                        onClick={() => {
+                          const arrPlaces = [...places];
+                          const arrChosenPlaces = [...chosenPlaces];
+                          arrPlaces[indexPlaces][indexPlace].isChosen = true;
+                          arrPlaces[indexPlaces][indexPlace].chosenIndex =
+                            chosenPlaces.length;
+                          arrPlaces[indexPlaces][indexPlace].isSelected = false;
+                          arrChosenPlaces.push(
+                            arrPlaces[indexPlaces][indexPlace]
+                          );
+                          setChosenPlaces(arrChosenPlaces);
+                          setPlaces(arrPlaces);
+                          getRoute(arrChosenPlaces, radioValue);
+                        }}
+                      >
+                        Select
+                      </button>
+                    )) || (
+                      <button
+                        onClick={() => {
+                          place.isSelected = false;
+                          removeChosenPlace(place.chosenIndex);
+                        }}
+                        type="button"
+                        className="btn btn-danger btn-sm"
+                      >
+                        Remove
+                      </button>
+                    ))}
                 </div>
               </div>
             </InfoWindow>
@@ -269,17 +327,21 @@ export default function Map(props) {
 
   return (
     <React.Fragment>
-      <DropDown
-        handleRadioChange={handleRadioOnChange}
-        radioValue={radioValue}
-        timeDistance={route !== undefined ? route.routes[0].legs : route}
-      >
-        <Removable
-          list={chosenPlaces}
-          dragg={draggPlace}
-          removeItem={removeChosenPlace}
-        ></Removable>
-      </DropDown>
+      {places.length !== 0 && (
+        <DropDown
+          handleFinish={handleFinish}
+          handleRadioChange={handleRadioOnChange}
+          radioValue={radioValue}
+          timeDistance={route !== undefined ? route.routes[0].legs : route}
+          isFinished={isFinished}
+        >
+          <Removable
+            list={chosenPlaces}
+            dragg={draggPlace}
+            removeItem={removeChosenPlace}
+          ></Removable>
+        </DropDown>
+      )}
 
       <Locate />
 
