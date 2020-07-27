@@ -10,19 +10,24 @@ function Login(props) {
   const [error, setError] = useState(null);
 
   // handle button click of login form
-  const handleLogin = () => {
+  const handleLogin = async () => {
     setLoading(true);
     try {
-      const response = clientLogin({
+      const token = await clientLogin({
         email: user_email.value,
         password: password.value,
       });
       setLoading(false);
-      setUserSession(response.data.token, response.data.user);
-      props.history.push("/Map");
+      if (token !== "false") {
+        setUserSession(token.data, user_email.value);
+        props.history.push("/");
+      } else {
+        setLoading(false);
+        setError("invalided Email or password.");
+      }
     } catch (error) {
       console.log(error);
-      // setLoading(false);
+      //setLoading(false);
       // if (error.response.status === 401) setError(error.response.data.message);
       // else setError("Something went wrong. Please try again later.");
     }

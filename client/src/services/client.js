@@ -13,10 +13,10 @@ export async function clientRegister(body) {
 
 export async function clientLogin(body) {
   try {
-    const response = await http.post(`${API_URL_Dev}/client/login`, body);
-    alert("there was an error with the register of the new client");
-    if (!response)
+    const token = await http.post(`${API_URL_Dev}/client/login`, body);
+    if (token === "false")
       alert("there was an error with the register of the new client");
+    return token;
   } catch (e) {
     console.log("Check you connection , error:", e);
   }

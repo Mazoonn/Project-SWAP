@@ -18,26 +18,28 @@ namespace api.Controllers
         //צריך לבודק האם זה צריך לשמור את ה TOKEN KEY
         [Route("login")]
         [HttpPost]
-        public bool login([FromBody]loginDTO body)
+        public string login([FromBody]loginDTO body)
         {
-            bool isLogin = false;
+            string isLogin = "false";
             if (body.password == null && body.email == null)
                 return isLogin;
-            IAuthModel model = GetJWTModel(body.password, body.email);
+            if(clientService.checkUserLogin(body) == false)
+                 return isLogin; 
+            //Auth with JWT TODO - matan and slava
+            IAuthModel model = GetJWTModel(body.name, body.email);
             IAuthService authService = new JWTService(model.SecretKey);
 
             string token = authService.GenerateToken(model);
 
             if (!authService.IsTokenValid(token))
-                return isLogin;
+                return "false";
             else
             {
                 List<Claim> claims = authService.GetTokenClaims(token).ToList();
                 Console.WriteLine(claims.FirstOrDefault(e => e.Type.Equals(ClaimTypes.Name)).Value);
                 Console.WriteLine(claims.FirstOrDefault(e => e.Type.Equals(ClaimTypes.Email)).Value);
-                isLogin = true;
             }
-            return isLogin;
+            return token;
         }
         private static JWTModel GetJWTModel(string name, string email)
         {
@@ -59,7 +61,7 @@ namespace api.Controllers
         {
            bool isrRegister = clientService.registerClient(body);
             if (!isrRegister)
-                return Request.CreateResponse(HttpStatusCode.BadRequest, "There was an error with the registr of the new client");
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "This Email is in used.");
             return Request.CreateResponse(HttpStatusCode.OK, isrRegister);
         }
         // לא מחייב רק אופציה

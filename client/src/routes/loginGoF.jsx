@@ -10,11 +10,12 @@ import { facebookConfig, googleConfig } from "../config.json";
 class LoginGoF extends Component {
   render() {
     const responseFacebook = (response) => {
-      setUserSession(response.accessToken, response.email);
+      setUserSession(response.accessToken, response.profileObj.email);
     };
 
     const responseGoogle = (response) => {
-      setUserSession(response.accessToken, response.email);
+      console.log(response);
+      setUserSession(response.accessToken, response.profileObj.email);
     };
 
     return (

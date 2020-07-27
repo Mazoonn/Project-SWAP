@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-import { clientRegister } from "../services/client";
+import { clientRegister, clientLogin } from "../services/client";
 class RegisterForm extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = { sex: "male" };
-
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -16,17 +14,16 @@ class RegisterForm extends React.Component {
     });
   }
 
-  handleSubmit(event) {
+  async handleSubmit(event) {
     try {
-      const response = clientRegister(this.state);
-      //setUserSession(response.data.token, response.data.user);
+      const response = await clientRegister(this.state);
       this.setLoading(false);
       if (!response) throw ErrorEvent("There was an error with the server");
-      this.props.history.push("/login");
+      //TODO fix login automattic
     } catch (error) {
       throw error.response.data.message;
     }
-    event.preventDefault();
+    window.location.path("/login");
   }
 
   render() {
