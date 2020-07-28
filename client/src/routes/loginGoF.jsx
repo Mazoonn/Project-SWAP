@@ -3,7 +3,7 @@ import React, { Component } from "react";
 
 import FacebookLogin from "react-facebook-login";
 import GoogleLogin from "react-google-login";
-
+import { clientLogin } from "../services/client";
 import { setUserSession } from "../Utils/Common";
 import { facebookConfig, googleConfig } from "../config.json";
 
@@ -13,9 +13,17 @@ class LoginGoF extends Component {
       setUserSession(response.accessToken, response.profileObj.email);
     };
 
-    const responseGoogle = (response) => {
+    const responseGoogle = async (response) => {
+      const { email, givenName, familyName, googleId } = response.profileObj;
       console.log(response);
-      setUserSession(response.accessToken, response.profileObj.email);
+      const token = await clientLogin({
+        email: email,
+        platform: "google",
+        first_name: givenName,
+        last_name: familyName,
+        user_id: googleId,
+      });
+      setUserSession(token, email);
     };
 
     return (

@@ -4,11 +4,11 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="ce35f010ac044a9e8b2af733e0e1e637" Name="Diagram1">
+      <Diagram DiagramId="b75b8e08a7234629bd04d100fb260a2f" Name="Diagram1">
         <EntityTypeShape EntityType="SwapModel.address" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="SwapModel.admin" Width="1.5" PointX="9.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="SwapModel.business" Width="1.5" PointX="6" PointY="15.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="SwapModel.client" Width="1.5" PointX="5.75" PointY="11.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapModel.client" Width="1.5" PointX="5.75" PointY="10.75" IsExpanded="true" />
         <EntityTypeShape EntityType="SwapModel.google_value" Width="1.5" PointX="2.75" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="SwapModel.main_category" Width="1.5" PointX="0.75" PointY="1.25" IsExpanded="true" />
         <EntityTypeShape EntityType="SwapModel.place" Width="1.5" PointX="3" PointY="7" IsExpanded="true" />

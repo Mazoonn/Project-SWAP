@@ -20,46 +20,62 @@ namespace api.Controllers
         [HttpPost]
         public string login([FromBody]loginDTO body)
         {
+            string local_user_id="";
             string isLogin = "false";
-            if (body.password == null && body.email == null)
-                return isLogin;
-            if(clientService.checkUserLogin(body) == false)
-                 return isLogin; 
-            //Auth with JWT TODO - matan and slava
-            IAuthModel model = GetJWTModel(body.name, body.email);
+            switch (body.platform)
+            {
+                case "facebook":
+                    clientService.registerClientfacebook(body);
+                    break;
+                case "google":
+                    clientService.registerClientgoogle(body);
+                    break;
+                case "local":
+                    if (body.password == null || body.email == null)
+                        return isLogin;
+                     local_user_id = clientService.checkUserLogin(body);
+                    if (local_user_id==null)
+                        //User Not found or password illegal
+                        return isLogin;
+                    break;
+                default:
+                    return isLogin;
+            }
+
+            //Auth with JWT
+            IAuthModel model = GetJWTModel(body.user_id==null?local_user_id: body.user_id, body.email);
             IAuthService authService = new JWTService(model.SecretKey);
-
             string token = authService.GenerateToken(model);
-
             if (!authService.IsTokenValid(token))
                 return "false";
             else
             {
+                //Auth with JWT TODO - matan and slava
                 List<Claim> claims = authService.GetTokenClaims(token).ToList();
                 Console.WriteLine(claims.FirstOrDefault(e => e.Type.Equals(ClaimTypes.Name)).Value);
                 Console.WriteLine(claims.FirstOrDefault(e => e.Type.Equals(ClaimTypes.Email)).Value);
             }
             return token;
         }
-        private static JWTModel GetJWTModel(string name, string email)
+
+        private static JWTModel GetJWTModel(string user_id, string email)
         {
             return new JWTModel()
             {
                 Claims = new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, name),
+                    new Claim(ClaimTypes.Surname, user_id),
                     new Claim(ClaimTypes.Email, email)
                 }
             };
         }
 
 
-
         [Route("register")]
         [HttpPost]
         public HttpResponseMessage register([FromBody]registerDTO body)
         {
-           bool isrRegister = clientService.registerClient(body);
+           bool isrRegister = clientService.registerClientLocal(body);
             if (!isrRegister)
                 return Request.CreateResponse(HttpStatusCode.BadRequest, "This Email is in used.");
             return Request.CreateResponse(HttpStatusCode.OK, isrRegister);

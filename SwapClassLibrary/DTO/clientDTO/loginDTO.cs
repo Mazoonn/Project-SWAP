@@ -10,6 +10,9 @@ namespace SwapClassLibrary.DTO
     {
         public string email;
         public string password;
-        public string name = "defult";//TODO matan fix
+        public string user_id;
+        public string first_name;
+        public string last_name;
+        public string platform;
     }
 }

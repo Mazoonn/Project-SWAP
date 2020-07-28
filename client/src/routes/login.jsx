@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { setUserSession } from "../Utils/Common";
+import { setUserSession, getUser } from "../Utils/Common";
 import LoginGoF from "./loginGoF";
 import { clientLogin } from "../services/client";
 
@@ -11,16 +11,19 @@ function Login(props) {
 
   // handle button click of login form
   const handleLogin = async () => {
+    if (getUser()) {
+    }
     setLoading(true);
     try {
       const token = await clientLogin({
         email: user_email.value,
         password: password.value,
+        platform: "local",
       });
       setLoading(false);
       if (token !== "false") {
         setUserSession(token.data, user_email.value);
-        props.history.push("/");
+        window.location = "/";
       } else {
         setLoading(false);
         setError("invalided Email or password.");
@@ -32,7 +35,9 @@ function Login(props) {
       // else setError("Something went wrong. Please try again later.");
     }
   };
-
+  if (getUser()) {
+    window.location = "/";
+  }
   return (
     <div>
       <LoginGoF />

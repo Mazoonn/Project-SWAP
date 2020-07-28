@@ -23,7 +23,7 @@ class RegisterForm extends React.Component {
     } catch (error) {
       throw error.response.data.message;
     }
-    window.location.path("/login");
+    window.location = "/login";
   }
 
   render() {

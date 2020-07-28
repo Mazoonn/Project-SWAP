@@ -30,6 +30,9 @@ namespace SwapClassLibrary.EF
         public System.DateTime last_login { get; set; }
         public string phone { get; set; }
         public string password { get; set; }
+        public Nullable<bool> login_google { get; set; }
+        public Nullable<bool> login_facebock { get; set; }
+        public Nullable<bool> login_local { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<r_user_quest> r_user_quest { get; set; }
