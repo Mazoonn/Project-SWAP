@@ -22,7 +22,6 @@ function Login(props) {
       setUserSession(token.data, user_email.value);
       window.location = "/";
     } catch (error) {
-      console.log(error.response.data);
       setLoading(false);
       if (
         error.response &&

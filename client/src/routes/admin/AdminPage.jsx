@@ -1,46 +1,50 @@
 import React, { Component } from "react";
-import { ProSidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import "react-pro-sidebar/dist/css/styles.css";
+import "../../routes/admin/AdminPage.css";
 import PrivateRoute from "../../Utils/PrivateRoute";
 import { BrowserRouter, Switch, Route, NavLink } from "react-router-dom";
-import { Link } from "react-router-dom";
-import Settings from "./Setting";
+
+import AdminSettings from "./Setting";
 class AdminPage extends Component {
   state = {};
   render() {
     return (
       <BrowserRouter>
-        <ProSidebar>
-          <Menu iconShape="round">
-            <MenuItem>
-              Settings
-              <Link to="/admin/Settings" />
-            </MenuItem>
-            <MenuItem>
-              Handel Admin's
-              <Link to="/admin/AdminSettings" />
-            </MenuItem>
-            <MenuItem>
-              Handel Clients
-              <Link to="/admin/AdminClients" />
-            </MenuItem>
-            <MenuItem>
-              Handel Categories
-              <Link to="/admin/AdminClients" />
-            </MenuItem>
-            <MenuItem>
-              Handel Places
-              <Link to="/admin/AdminPlaces" />
-            </MenuItem>
-          </Menu>
-        </ProSidebar>
+        <div id="wrapper" class="toggled">
+          <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+              <li>
+                <NavLink exact activeClassName="active" to="/Category">
+                  Category
+                </NavLink>
+              </li>
+              <li>
+                <NavLink activeClassName="active" to="/Settings">
+                  Settings
+                </NavLink>
+              </li>
+              <li>
+                <NavLink activeClassName="active" to="/Clients">
+                  Clients
+                </NavLink>
+              </li>
+              <li>
+                <NavLink activeClassName="active" to="/Quest">
+                  Home
+                </NavLink>
+              </li>
+            </ul>
+          </div>
+        </div>
         <div className="content">
-          <Switch>
-            <PrivateRoute path="/admin/Settings" component={Settings} />
-            <PrivateRoute path="/admin/AdminSettings" component={Settings} />
-            <PrivateRoute path="/admin/AdminClients" component={Settings} />
-            <PrivateRoute path="/admin/AdminPlaces" component={Settings} />
-          </Switch>
+          <div className="c-div">
+            <Switch>
+              <PrivateRoute path="/Category" component={{}} />
+              <PrivateRoute path="/Settings" component={AdminSettings} />
+              <PrivateRoute path="/Clients" component={{}} />
+              <PrivateRoute path="/Quest" component={{}} />
+            </Switch>
+          </div>
         </div>
       </BrowserRouter>
     );
