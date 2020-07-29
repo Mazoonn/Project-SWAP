@@ -11,8 +11,7 @@ function Login(props) {
 
   // handle button click of login form
   const handleLogin = async () => {
-    if (getUser()) {
-    }
+    setError(null);
     setLoading(true);
     try {
       const token = await clientLogin({
@@ -20,18 +19,16 @@ function Login(props) {
         password: password.value,
         platform: "local",
       });
-      setLoading(false);
-      if (token !== "false") {
-        setUserSession(token.data, user_email.value);
-        window.location = "/";
-      } else {
-        setLoading(false);
-        setError("invalided Email or password.");
-      }
+      setUserSession(token.data, user_email.value);
+      window.location = "/";
     } catch (error) {
-      console.log(error);
-      //setLoading(false);
-      // if (error.response.status === 401) setError(error.response.data.message);
+      console.log(error.response.data);
+      setLoading(false);
+      if (
+        error.response &&
+        (error.response.status >= 400 || error.response.status <= 500)
+      )
+        setError(error.response.data);
       // else setError("Something went wrong. Please try again later.");
     }
   };
@@ -39,52 +36,50 @@ function Login(props) {
     window.location = "/";
   }
   return (
-    <div>
+    <div className="text-center pt-4">
       <LoginGoF />
       <br />
-      <div className="border-0">
-        <form className="text-center">
-          <div class="form-group">
-            <label for="exampleInputEmail1">
-              {" "}
+      <div className=" d-inline-block">
+        <form>
+          <div className="form-group">
+            <label htmlFor="exampleInputEmail1" className="text-left">
               Email address
               <input
                 {...user_email}
                 type="email"
-                class="form-control"
+                className="form-control"
                 id="exampleInputEmail1"
                 aria-describedby="emailHelp"
                 placeholder="Enter email"
               />
             </label>
           </div>
-          <div class="form-group">
-            <label for="exampleInputPassword1">
+          <div className="form-group">
+            <label htmlFor="exampleInputPassword1" className="text-left">
               Password
               <input
                 {...password}
                 type="password"
-                class="form-control"
+                className="form-control"
                 id="exampleInputPassword1"
                 placeholder="Password"
               />
             </label>
           </div>
+          {error && (
+            <div className="alert alert-danger">
+              <small>{error}</small>
+            </div>
+          )}
           <button
             type="submit"
             value={loading ? "Loading..." : "Login"}
             onClick={handleLogin}
             disabled={loading}
-            class="btn btn-primary"
+            className="btn btn-primary"
           >
             Login
           </button>
-          {error && (
-            <>
-              <small style={{ color: "red" }}>{error}</small>
-              <br />
-            </>
-          )}
         </form>
       </div>
     </div>

@@ -15,7 +15,7 @@ class LoginGoF extends Component {
 
     const responseGoogle = async (response) => {
       const { email, givenName, familyName, googleId } = response.profileObj;
-      console.log(response);
+      //spinner
       const token = await clientLogin({
         email: email,
         platform: "google",
@@ -23,7 +23,8 @@ class LoginGoF extends Component {
         last_name: familyName,
         user_id: googleId,
       });
-      setUserSession(token, email);
+      setUserSession(token.data, email);
+      window.location = "/";
     };
 
     return (
@@ -32,7 +33,7 @@ class LoginGoF extends Component {
           cssClass="btn btn-primary btn-lg"
           appId={facebookConfig.appId}
           fields="name,email,picture"
-          buttonText="LOGIN WITH Facebock"
+          buttonText="Login with Facebock"
           callback={responseFacebook}
         />
         <br />
@@ -40,7 +41,7 @@ class LoginGoF extends Component {
         <GoogleLogin
           style="btn-primary btn-lg"
           clientId={googleConfig.client_id}
-          buttonText="LOGIN WITH Google"
+          buttonText="Login with Google"
           onSuccess={responseGoogle}
           onFailure={responseGoogle}
         />

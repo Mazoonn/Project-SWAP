@@ -15,15 +15,14 @@ class RegisterForm extends React.Component {
   }
 
   async handleSubmit(event) {
+    event.preventDefault();
     try {
       const response = await clientRegister(this.state);
-      this.setLoading(false);
       if (!response) throw ErrorEvent("There was an error with the server");
       //TODO fix login automattic
     } catch (error) {
       throw error.response.data.message;
     }
-    window.location = "/login";
   }
 
   render() {
@@ -41,12 +40,12 @@ class RegisterForm extends React.Component {
             />
           </div>
           <div className="form-group col-md-6">
-            <label htmlFor="first_lest">Lest Name</label>
+            <label htmlFor="last_name">Last Name</label>
             <input
               type="text"
               className="form-control"
-              id="first_lest"
-              placeholder="Lest Name"
+              id="last_name"
+              placeholder="Last Name"
               onChange={this.handleChange}
             />
           </div>
@@ -110,7 +109,7 @@ class RegisterForm extends React.Component {
             className="btn btn-primary"
             value={this.loading ? "Loading..." : "Login"}
           >
-            Sign in
+            Sign up
           </button>
         </div>
       </form>
