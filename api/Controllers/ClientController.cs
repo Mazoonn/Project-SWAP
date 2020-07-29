@@ -7,8 +7,6 @@ using System.Web.Http;
 using SwapClassLibrary.DTO;
 using SwapClassLibrary.EF;
 using SwapClassLibrary.Service;
-using System.Security.Claims;
-using SwapClassLibrary.Models;
 namespace api.Controllers
 {
     //[Authorize]
@@ -18,10 +16,11 @@ namespace api.Controllers
         //צריך לבודק האם זה צריך לשמור את ה TOKEN KEY
         [Route("login")]
         [HttpPost]
-        public string login([FromBody]loginDTO body)
+        public HttpResponseMessage login([FromBody]loginDTO body)
         {
             string local_user_id="";
-            string isLogin = "false";
+            string token = "";
+
             switch (body.platform)
             {
                 case "facebook":
@@ -32,53 +31,30 @@ namespace api.Controllers
                     break;
                 case "local":
                     if (body.password == null || body.email == null)
-                        return isLogin;
-                     local_user_id = clientService.checkUserLogin(body);
+                        return Request.CreateResponse(HttpStatusCode.BadRequest, "Client params illigel");
+                    local_user_id = clientService.checkUserLogin(body);
                     if (local_user_id==null)
                         //User Not found or password illegal
-                        return isLogin;
+                        return Request.CreateResponse(HttpStatusCode.Unauthorized, "Email or password is incorrect");
                     break;
                 default:
-                    return isLogin;
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Client params illigel"); ;
             }
-
-            //Auth with JWT
-            IAuthModel model = GetJWTModel(body.user_id==null?local_user_id: body.user_id, body.email);
-            IAuthService authService = new JWTService(model.SecretKey);
-            string token = authService.GenerateToken(model);
-            if (!authService.IsTokenValid(token))
-                return "false";
-            else
-            {
-                //Auth with JWT TODO - matan and slava
-                List<Claim> claims = authService.GetTokenClaims(token).ToList();
-                Console.WriteLine(claims.FirstOrDefault(e => e.Type.Equals(ClaimTypes.Name)).Value);
-                Console.WriteLine(claims.FirstOrDefault(e => e.Type.Equals(ClaimTypes.Email)).Value);
-            }
-            return token;
+            token = JWTGetToken.getToken(local_user_id == "" ? body.user_id : local_user_id, body.email);
+            if(token!="flase") return Request.CreateResponse(HttpStatusCode.OK, token);
+            return Request.CreateResponse(HttpStatusCode.InternalServerError, "Unable to create token");
         }
 
-        private static JWTModel GetJWTModel(string user_id, string email)
-        {
-            return new JWTModel()
-            {
-                Claims = new Claim[]
-                {
-                    new Claim(ClaimTypes.Surname, user_id),
-                    new Claim(ClaimTypes.Email, email)
-                }
-            };
-        }
 
 
         [Route("register")]
         [HttpPost]
         public HttpResponseMessage register([FromBody]registerDTO body)
         {
-           bool isrRegister = clientService.registerClientLocal(body);
-            if (!isrRegister)
+           string id = clientService.registerClientLocal(body);
+            if (id == "")
                 return Request.CreateResponse(HttpStatusCode.BadRequest, "This Email is in used.");
-            return Request.CreateResponse(HttpStatusCode.OK, isrRegister);
+            return Request.CreateResponse(HttpStatusCode.OK, JWTGetToken.getToken(id,body.email));
         }
         // לא מחייב רק אופציה
         [Route("collectingData")]
