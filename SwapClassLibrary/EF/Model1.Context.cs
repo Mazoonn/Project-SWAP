@@ -39,5 +39,6 @@ namespace SwapClassLibrary.EF
         public virtual DbSet<r_sub_and_main_category> r_sub_and_main_category { get; set; }
         public virtual DbSet<r_user_quest> r_user_quest { get; set; }
         public virtual DbSet<sub_category> sub_category { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
     }
 }

@@ -132,6 +132,9 @@
     <Compile Include="EF\sub_category.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="EF\sysdiagram.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\JWTModel.cs" />
     <Compile Include="Models\IAuthModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -140,17 +143,18 @@
     <Compile Include="Service\category\MainCategoryService.cs" />
     <Compile Include="Service\category\SubCategoryService.cs" />
     <Compile Include="Service\Class1.cs" />
+    <Compile Include="Service\client\JWTGetToken.cs" />
     <Compile Include="Service\IAuthService.cs" />
     <Compile Include="Service\client\clientService.cs" />
     <Compile Include="Service\IdService.cs" />
     <Compile Include="Service\JWTService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <EntityDeploy Include="EF\Model1.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Model1.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <None Include="App.Config" />
     <None Include="EF\Model1.edmx.diagram">
       <DependentUpon>Model1.edmx</DependentUpon>
     </None>

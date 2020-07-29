@@ -9,7 +9,7 @@ namespace SwapClassLibrary.DTO
     public class registerDTO
     {
         public string first_name;
-        public string first_lest;
+        public string last_name;
         public string birthday;
         public string email;
         public string sex;

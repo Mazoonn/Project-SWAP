@@ -12,32 +12,37 @@ namespace SwapClassLibrary.Service
 {
     public class clientService
     {
-        public static bool registerClientLocal(registerDTO body)
+        public static string registerClientLocal(registerDTO body)
         {
             
             SwapDbConnection db = new SwapDbConnection();
-            if (db.clients.Where(x => x.email == body.email).Select(x => x.client_id) != null)
+            client client=db.clients.FirstOrDefault(c=>c.email==body.email);
+            string id = "";
+
+            if (client==null)
             {
+                id = IdService.generateID("client");
                 client new_client = new client()
                 {
-                    client_id = IdService.generateID("client"),
-                    email = body.email.ToString(),
-                    birthday_date = body.birthday.ToString(),
+                    client_id = id,
+                    email = body.email,
+                    birthday_date = body.birthday,
                     creation_date = DateTime.Now,
-                    first_name = body.first_lest.ToString(),
+                    first_name = body.first_name,
                     last_login = DateTime.Now,
-                    last_name = body.first_name.ToString(),
-                    phone = body.phone.ToString(),
-                    sex = body.sex.ToString(),
-                    password = body.password.ToString(),
-                    login_local = true,login_facebock=false,login_google=false
+                    last_name = body.last_name,
+                    phone = body.phone,
+                    sex = body.sex,
+                    password = body.password,
+                    login_local = true,
+                    login_facebock=false,
+                    login_google=false
                 };
 
                 db.clients.Add(new_client);
                 db.SaveChanges();
-                return true;
             }
-            return false;
+            return id;
         }
 
         public static bool registerClientfacebook(loginDTO body)
