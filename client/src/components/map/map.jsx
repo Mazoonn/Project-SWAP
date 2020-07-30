@@ -1,5 +1,6 @@
 import React from "react";
 import "../../css/compass.css";
+import "../../routes/admin/AdminPage.css";
 import { googleKey } from "../../config.json";
 import { arrayMove, arrayRemove } from "react-movable";
 import Removable from "../dnd-list/dndList";
@@ -14,30 +15,24 @@ import {
   TrafficLayer,
 } from "@react-google-maps/api";
 
-const removeDuplicates=(array)=>
-{
-  const arrayOfPlaces=[];
-  let obj={};
-  let withoutDuplicates=[];
-  
-  if(array.length!==0)
-  {
-    for(let places of array)
-  {
-    if(places!==undefined)
-    {
-      for(let place of places)
-      {
-        arrayOfPlaces.push(place);
+const removeDuplicates = (array) => {
+  const arrayOfPlaces = [];
+  let obj = {};
+  let withoutDuplicates = [];
+
+  if (array.length !== 0) {
+    for (let places of array) {
+      if (places !== undefined) {
+        for (let place of places) {
+          arrayOfPlaces.push(place);
+        }
       }
     }
-      }
-  for(const place of arrayOfPlaces)
-  {
-    obj[place.place_id]=place;
+    for (const place of arrayOfPlaces) {
+      obj[place.place_id] = place;
+    }
   }
-  }
-  withoutDuplicates=[[...Object.values(obj)]];
+  withoutDuplicates = [[...Object.values(obj)]];
   return withoutDuplicates;
 };
 
@@ -73,14 +68,15 @@ export default function Map(props) {
 
   const [chosenPlaces, setChosenPlaces] = React.useState([]);
 
-  const [places, setPlaces] = React.useState(removeDuplicates([...props.places]));
+  const [places, setPlaces] = React.useState(
+    removeDuplicates([...props.places])
+  );
 
   const [position, setPosition] = React.useState({ lat: 0, lng: 0 });
 
   const [radioValue, setradioValue] = React.useState("walk");
 
   const [isFinished, setIsFinished] = React.useState(false);
-
 
   let finished = window.localStorage.getItem("isFinished");
   if (finished === null) finished = false;
