@@ -1,9 +1,15 @@
 import React from "react";
 import NavBar from "./components/navBar";
+import getCurrentUser from "./services/authServie";
+
 function App() {
+  const [currentUser, setUser] = React.useState(null);
+  React.useEffect(() => {
+    setUser(getCurrentUser());
+  }, [setUser]);
   return (
     <div className="App">
-      <NavBar></NavBar>
+      <NavBar user={currentUser}></NavBar>
     </div>
   );
 }

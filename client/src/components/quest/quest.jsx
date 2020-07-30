@@ -31,20 +31,27 @@ class Quest extends Component {
     keysToRemove.forEach((key) => {
       window.localStorage.removeItem(key);
     });
+    localStorage.setItem("questPlaces", JSON.stringify(respones));
 
-    this.props.history.push({
-      pathname: "/",
-      state: { respones },
-    });
+    this.props.history.push("/");
+
+    // this.props.history.push({
+    //   pathname: "/",
+    //   state: { respones },
+    // });
   };
 
   handleGetCategories = async () => {
-    const categories = await getAllMainCategories();
-    categories.forEach((category) => {
-      category.isFirstSelected = false;
-      category.isCurrentlySelected = false;
-    });
-    this.setState({ categoryList: categories });
+    try {
+      const categories = await getAllMainCategories();
+      categories.forEach((category) => {
+        category.isFirstSelected = false;
+        category.isCurrentlySelected = false;
+      });
+      this.setState({ categoryList: categories });
+    } catch (e) {
+      console.log(e);
+    }
   };
   handleOnClickCategory = async (key) => {
     const categories = [...this.state.categoryList];

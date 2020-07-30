@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { setUserSession, getUser } from "../Utils/Common";
+import { setUserSession } from "../Utils/Common";
 import LoginGoF from "./loginGoF";
 import { clientLogin } from "../services/client";
 import Joi from "joi-browser";
+import { getCurrentUser } from "./../services/authServie";
 
 function Login(props) {
   const [loading, setLoading] = useState(false);
@@ -52,8 +53,9 @@ function Login(props) {
         setErrors({ server: error.response.data });
     }
   };
-  if (getUser()) {
-    this.props.history.push("/");
+  if (getCurrentUser()) {
+    props.history.push("/");
+    return null;
   }
   return (
     <div className="text-center">

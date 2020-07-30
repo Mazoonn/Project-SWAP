@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import "react-pro-sidebar/dist/css/styles.css";
-import "../../routes/admin/AdminPage.css";
-import PrivateRoute from "../../Utils/PrivateRoute";
+//import "../../routes/admin/AdminPage.css";
+
 import { BrowserRouter, Switch, Route, NavLink } from "react-router-dom";
 
 import AdminSettings from "./Setting";
+import PrivateRoute from "./../../Utils/PrivateRoute";
 class AdminPage extends Component {
   state = {};
   render() {

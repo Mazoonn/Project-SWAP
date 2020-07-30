@@ -1,6 +1,5 @@
 import React from "react";
 import "../../css/compass.css";
-import "../../routes/admin/AdminPage.css";
 import { googleKey } from "../../config.json";
 import { arrayMove, arrayRemove } from "react-movable";
 import Removable from "../dnd-list/dndList";

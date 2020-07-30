@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { clientRegister } from "../services/client";
-import { setUserSession, getUser } from "../Utils/Common";
+import { setUserSession } from "../Utils/Common";
 import Joi from "joi-browser";
+import { getCurrentUser } from "./../services/authServie";
 
 class RegisterForm extends Component {
   state = {
@@ -78,8 +79,9 @@ class RegisterForm extends Component {
   };
 
   render() {
-    if (getUser()) {
+    if (getCurrentUser()) {
       this.props.history.push("/");
+      return null;
     }
     return (
       <form>
