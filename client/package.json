@@ -20,6 +20,8 @@
     "axios": "^0.19.2",
     "bootstrap": "^4.5.0",
     "google-map-react": "^1.1.7",
+    "joi": "^17.1.1",
+    "joi-browser": "^13.4.0",
     "react": "^16.12.0",
     "react-bootstrap": "^1.2.2",
     "react-dom": "^16.12.0",
