@@ -15,9 +15,18 @@ namespace api.Controllers
     {
         // GET: api/MainCategory
 
-        [Route("GetAllMainCategory")]
+       [Route("GetAllMainCategory")]
        [HttpGet]
         public HttpResponseMessage GetAllMainCategory()
+        {
+            List<categoryDTO> list = MainCategoryService.GetAllMainCategorys().Where(x => x.is_active).ToList();
+            if (list == null)
+                return Request.CreateResponse(HttpStatusCode.NotFound, "There is no Main Categoy value in the db");
+            return Request.CreateResponse(HttpStatusCode.OK, list);
+        }
+        [Route("GetAllMainCategoryAdmin")]
+        [HttpGet]
+        public HttpResponseMessage GetAllMainCategoryAdmin()
         {
             List<categoryDTO> list = MainCategoryService.GetAllMainCategorys();
             if (list == null)
@@ -39,15 +48,15 @@ namespace api.Controllers
         [HttpPut]
         // PUT: api/MainCategory/ChangeActiveMainCategory/id
         //body : "is_active":true
-        public HttpResponseMessage ChangeActiveMainCategory([FromUri]string id, [FromBody]bool req)
+        public HttpResponseMessage ChangeActiveMainCategory([FromUri]string id, [FromBody]dynamic req)
         {
             main_category slected_main_category;
             SwapDbConnection db = new SwapDbConnection();
-            slected_main_category = db.main_category.Select(x => x)
-                .FirstOrDefault(x => x.main_id == id); ;
+            slected_main_category = db.main_category
+              .FirstOrDefault(x => x.main_id == id); ;
             if (slected_main_category == null)
                 return Request.CreateResponse(HttpStatusCode.NotFound, "There is not main category value with id - " + id);
-            slected_main_category.is_active = req;
+            slected_main_category.is_active = req.is_active;
             db.SaveChanges();
             return Request.CreateResponse(HttpStatusCode.OK, slected_main_category);
 

@@ -34,7 +34,6 @@ namespace api.Controllers
                         return Request.CreateResponse(HttpStatusCode.BadRequest, "Client params illigel");
                     local_user_id = clientService.checkUserLogin(body);
                     if (local_user_id==null)
-                        //User Not found or password illegal
                         return Request.CreateResponse(HttpStatusCode.Unauthorized, "Email or password is incorrect");
                     break;
                 default:
