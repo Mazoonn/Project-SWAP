@@ -13,6 +13,5 @@ namespace SwapClassLibrary.DTO
         public string name;
         public string google_value;
         public bool is_active;
-
     }
 }
