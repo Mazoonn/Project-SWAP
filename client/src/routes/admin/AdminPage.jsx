@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import {
   getAllMainCategoriesAdmin,
   putCategories,
+  postSubCategory,
+  deleteSubCategory,
 } from "../../services/Categories";
 import { getSubCategoriesId } from "../../services/CategSubCateg";
 import AdminCategories from "./adminCategories";
@@ -81,25 +83,103 @@ class AdminPage extends Component {
 
   handleOnChangeSelect = async (event) => {
     const index = event.target.value;
+    this.setState({ subCategory: undefined });
     if (index !== "default") {
       const category_id = this.state.categories[index].id;
       const subCategories = await getSubCategoriesId(category_id);
+      this.addNewValuesToSubCategories(subCategories);
       this.setState({ subCategories, isDefault: false, indexCategory: index });
     } else this.setState({ isDefault: true });
+  };
+
+  addNewValuesToSubCategories = (subCategories) => {
+    const values = ["descrition", "google_value", "sub_name"];
+    subCategories.forEach((subCategory) => {
+      !subCategory["descrition"] && (subCategory["descrition"] = "");
+      !subCategory["google_value"] && (subCategory["google_value"] = "");
+
+      values.forEach((value) => {
+        subCategory[`${value}_new`] = subCategory[value];
+      });
+    });
   };
 
   handleOnChangeSubCategory = (event, index) => {
     const value = event.target.value;
     const name = event.target.name;
-    const subCategories = [...this.state.subCategories];
-    const category = subCategories[index];
-    category[name] = value;
-    subCategories[index] = category;
-    this.setState({ subCategories });
+    if (index !== -1) {
+      const subCategories = [...this.state.subCategories];
+      const category = subCategories[index];
+      category[name] = value;
+      subCategories[index] = category;
+      this.setState({ subCategories });
+    } else {
+      const subCategory = { ...this.state.subCategory };
+      subCategory[name] = value;
+      this.setState({ subCategory });
+    }
+  };
+
+  isValidSubCategory = () => {
+    const { subCategory } = this.state;
+    return (
+      !subCategory ||
+      Object.keys(subCategory).length !== 3 ||
+      subCategory["sub_name"] === "" ||
+      subCategory["descrition"] === "" ||
+      subCategory["google_value"] === ""
+    );
+  };
+
+  handleAddNewSubCategory = async () => {
+    const index = this.state.indexCategory;
+    const main_id = this.state.categories[index].id;
+    const category = { ...this.state.subCategory };
+    this.setState({ subCategory: undefined });
+    delete category.google_value;
+    category.main_id = main_id;
+    await postSubCategory(category);
+
+    const subCategories = await getSubCategoriesId(main_id);
+    this.addNewValuesToSubCategories(subCategories);
+    this.setState({
+      subCategories,
+    });
+  };
+
+  handleDeleteSubCategory = async (indexSubCategory) => {
+    const main_id = this.state.categories[this.state.indexCategory].id;
+    const sub_id = this.state.subCategories[indexSubCategory].sub_id;
+    await deleteSubCategory(main_id, sub_id);
+    const subCategories = await getSubCategoriesId(main_id);
+    this.addNewValuesToSubCategories(subCategories);
+    this.setState({
+      subCategories,
+    });
+  };
+
+  handleOnClickSaveSubCategory = (index) => {
+    console.log(index);
+  };
+
+  isSubCategoryChange = (index) => {
+    let result = false;
+    const subCategory = this.state.subCategories[index];
+    const values = ["descrition", "sub_name", "google_value"];
+    values.forEach((value) => {
+      if (subCategory[value] !== subCategory[`${value}_new`]) result = true;
+    });
+    return result;
   };
 
   render() {
-    const { isCategories, loading, categories, isSubCategories } = this.state;
+    const {
+      isCategories,
+      loading,
+      categories,
+      isSubCategories,
+      subCategory,
+    } = this.state;
     return (
       <React.Fragment>
         <div className="row ml-2">
@@ -165,10 +245,10 @@ class AdminPage extends Component {
                                       index
                                     );
                                   }}
-                                  name="sub_name"
+                                  name="sub_name_new"
                                   type="text"
                                   className="form-control"
-                                  value={subCategory.sub_name}
+                                  value={subCategory.sub_name_new}
                                 />
                               </td>
                               <td>
@@ -179,10 +259,10 @@ class AdminPage extends Component {
                                       index
                                     );
                                   }}
-                                  name="descrition"
+                                  name="descrition_new"
                                   type="text"
                                   className="form-control"
-                                  value={subCategory.descrition || ""}
+                                  value={subCategory.descrition_new || ""}
                                 />
                               </td>
                               <td>
@@ -193,7 +273,7 @@ class AdminPage extends Component {
                                       index
                                     );
                                   }}
-                                  name="google_value"
+                                  name="google_value_new"
                                   type="text"
                                   className="form-control"
                                 />
@@ -202,12 +282,19 @@ class AdminPage extends Component {
                                 <button
                                   type="button"
                                   className="btn btn-success btn-sm"
+                                  onClick={() => {
+                                    this.handleOnClickSaveSubCategory(index);
+                                  }}
+                                  disabled={!this.isSubCategoryChange(index)}
                                 >
                                   Save
                                 </button>
                               </td>
                               <td className="text-center">
                                 <button
+                                  onClick={() => {
+                                    this.handleDeleteSubCategory(index);
+                                  }}
                                   type="button"
                                   className="btn btn-danger btn-sm"
                                 >
@@ -220,6 +307,12 @@ class AdminPage extends Component {
                         <tr>
                           <td>
                             <input
+                              value={
+                                (subCategory && subCategory.sub_name) || ""
+                              }
+                              onChange={(event) => {
+                                this.handleOnChangeSubCategory(event, -1);
+                              }}
                               name="sub_name"
                               type="text"
                               className="form-control"
@@ -227,6 +320,12 @@ class AdminPage extends Component {
                           </td>
                           <td>
                             <input
+                              value={
+                                (subCategory && subCategory.descrition) || ""
+                              }
+                              onChange={(event) => {
+                                this.handleOnChangeSubCategory(event, -1);
+                              }}
                               name="descrition"
                               type="text"
                               className="form-control"
@@ -234,6 +333,12 @@ class AdminPage extends Component {
                           </td>
                           <td>
                             <input
+                              value={
+                                (subCategory && subCategory.google_value) || ""
+                              }
+                              onChange={(event) => {
+                                this.handleOnChangeSubCategory(event, -1);
+                              }}
                               name="google_value"
                               type="text"
                               className="form-control"
@@ -241,6 +346,8 @@ class AdminPage extends Component {
                           </td>
                           <td colSpan={2} className="text-center">
                             <button
+                              disabled={this.isValidSubCategory()}
+                              onClick={this.handleAddNewSubCategory}
                               type="button"
                               className="btn btn-primary btn-sm"
                             >

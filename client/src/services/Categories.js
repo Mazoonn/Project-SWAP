@@ -12,6 +12,28 @@ export async function getAllMainCategories() {
   }
 }
 
+export async function postSubCategory(req) {
+  try {
+    const main_list = await http.post(
+      `${API_URL_Dev}/Category/AddMainAndSubRelationship`,
+      req
+    );
+    return main_list.data;
+  } catch (e) {
+    console.log("Check your connection , error:", e);
+  }
+}
+
+export async function deleteSubCategory(main_id, sub_id) {
+  try {
+    const main_list = await http.delete(
+      `${API_URL_Dev}/Category/RemoveMainAndSubRelationship/${main_id}/${sub_id}`
+    );
+    return main_list.data;
+  } catch (e) {
+    console.log("Check your connection , error:", e);
+  }
+}
 export async function getAllMainCategoriesAdmin() {
   try {
     const main_list = await http.get(
