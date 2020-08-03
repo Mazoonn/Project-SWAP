@@ -44,54 +44,78 @@ namespace SwapClassLibrary.Service
                     main_name = x.main_category.name,
                     sub_name = x.sub_category.name,
                     main_id = x.main_id,
-                    sub_id = x.sub_id
+                    sub_id = x.sub_id,
+                    google_value=x.sub_category.google_value,
                 }).ToList();
             return r_main_google_object;
         }
         //add relationship between google value and category- matan to fix the if check buth tables and check if there is on in the r
-        public static MainAndSubRelationshipDTO AddMainAndSubRelationship(string main_id, string sub_id , string descrition = null)
+        public static MainAndSubRelationshipDTO AddMainAndSubRelationship(string main_id ,string name ,string google_value, string descrition = null)
         {
             SwapDbConnection db = new SwapDbConnection();
-            if (main_id.IndexOf("main") == 0 && sub_id.IndexOf("sub") == 0 && db.r_sub_and_main_category.Where(x => x.sub_id == sub_id && x.main_id==main_id).Count() == 0)
+            sub_category subCategory = db.sub_category.FirstOrDefault(c => c.name == name);
+            main_category category = db.main_category.FirstOrDefault(c => c.main_id == main_id);
+            r_sub_and_main_category categoryOfMainCategory = db.r_sub_and_main_category.FirstOrDefault(c => c.main_id == main_id && c.sub_category.name == name);
+
+            if (category == null || categoryOfMainCategory!=null) return null;
+
+            if (subCategory == null)
             {
-                r_sub_and_main_category r_main_sub_object = new r_sub_and_main_category()
-                {
-                    sub_id = sub_id,
-                    main_id = main_id,
-                    creation_date = DateTime.Now,
-                    is_active = true,//TODO matan change it to false
-                    clicked = 0,
-                    descrition = descrition
-                };
-                db.r_sub_and_main_category.Add(r_main_sub_object);
-                db.SaveChanges();
-                return new MainAndSubRelationshipDTO() {
-                    main_id = main_id,
-                    sub_id = sub_id,
-                    descrition = descrition,
-                    is_active = true,//TODO matan change it to false
-                    clicked = 0
-                };
+                subCategory = Service.SubCategoryService.AddSubCategory(name, google_value);
+                if (subCategory == null) return null;
             }
-            return null;
+            else 
+            {  
+                if (google_value != subCategory.google_value)
+                {
+                    if (db.sub_category.FirstOrDefault(c => c.google_value == google_value) != null)
+                        return null;
+                        subCategory.google_value = google_value;
+                }
+            }
+
+
+            r_sub_and_main_category r_main_sub_object = new r_sub_and_main_category()
+            {
+                sub_id = subCategory.sub_id,
+                main_id = main_id,
+                creation_date = DateTime.Now,
+                is_active = true,//TODO matan change it to false
+                clicked = 0,
+                descrition = descrition
+            };
+            db.r_sub_and_main_category.Add(r_main_sub_object);
+            db.SaveChanges();
+            return new MainAndSubRelationshipDTO() 
+            {
+                  main_id = main_id,
+                  sub_id = subCategory.sub_id,
+                  descrition = descrition,
+                  is_active = true,//TODO matan change it to false
+                  clicked = 0,
+                  google_value= subCategory.google_value
+            };
         }
 
         //remove relationship between google value and category
         public static bool RemoveMainAndSubRelationship(string main_id, string sub_id)
         {
             SwapDbConnection db = new SwapDbConnection();
-            if (db.r_sub_and_main_category.Where(x => x.sub_id == sub_id && x.main_id == main_id).Count() == 1)
-            {
-                r_sub_and_main_category r_main_sub_object = db.r_sub_and_main_category
-                    .Where(x => x.sub_id == sub_id && x.main_id == main_id).FirstOrDefault();
-                if (r_main_sub_object == null)
-                    return false;
-                db.r_sub_and_main_category.Remove(r_main_sub_object);
-                db.SaveChanges();
-                return true;
+            r_sub_and_main_category subCategory = db.r_sub_and_main_category.FirstOrDefault(c => c.main_id == main_id && c.sub_id == sub_id);
+            if (subCategory==null) return false;
+            db.r_sub_and_main_category.Remove(subCategory);
+            db.SaveChanges();
+            return true;
+        }
 
-            }
-           return false;
+        public static bool UpdateDescription(string main_id, string sub_id, string description)
+        {
+            SwapDbConnection db = new SwapDbConnection();
+            r_sub_and_main_category subCategory = db.r_sub_and_main_category.FirstOrDefault(c => c.main_id == main_id && c.sub_id == sub_id);
+            if (subCategory == null) return false;
+            subCategory.descrition = description;
+            db.SaveChanges();
+            return true;
         }
 
     }
