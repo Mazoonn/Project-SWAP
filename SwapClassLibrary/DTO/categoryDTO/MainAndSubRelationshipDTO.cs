@@ -15,5 +15,6 @@ namespace SwapClassLibrary.DTO
         public string descrition;
         public bool? is_active;
         public decimal? clicked;
+        public string google_value;
     }
 }

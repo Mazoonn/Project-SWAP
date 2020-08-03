@@ -31,7 +31,7 @@ namespace api.Controllers.Category
         public HttpResponseMessage AddSubCategory([FromBody]requestValueDTO req)
         {
             if (req!=null && req.name != null )
-                return Request.CreateResponse(HttpStatusCode.OK, SubCategoryService.AddSubCategory(req.name));
+                return Request.CreateResponse(HttpStatusCode.OK, SubCategoryService.AddSubCategory(req.name,req.google_value));
             return Request.CreateResponse(HttpStatusCode.BadRequest, "there is no 'value':'' in the body");
         }
 

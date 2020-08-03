@@ -13,12 +13,12 @@ namespace api.Controllers
     [RoutePrefix("api/Category")]
     public class CategoryController : ApiController
     {
-             //main and sub category relationship
+        //main and sub category relationship
         /******************************************************************************************/
 
         // GET: api/Category/GetAllMainAndSubRelationship
         [Route("GetAllMainAndSubRelationship")]
-       [HttpGet]
+        [HttpGet]
         public HttpResponseMessage GetAllMainAndSubRelationship()
         {
             List<MainAndSubRelationshipDTO> r_main_sub_category_list = CategoryService.GetAllMainAndSubRelationship();
@@ -39,14 +39,14 @@ namespace api.Controllers
         }
 
         //POST: api/MainCategory/AddMainAndSubRelationship
-       [Route("AddMainAndSubRelationship")]
-       [HttpPost]
+        [Route("AddMainAndSubRelationship")]
+        [HttpPost]
         public HttpResponseMessage AddMainAndSubRelationship([FromBody]MainAndSubRelationshipDTO req)
         {
             MainAndSubRelationshipDTO object_add;
-                if (req.main_id == null)//matan -change
+            if (req.main_id == null)//matan -change
                 return Request.CreateResponse(HttpStatusCode.BadRequest, "The id is missing :" + req.main_id);
-            object_add = CategoryService.AddMainAndSubRelationship(req.main_id,req.sub_name,req.descrition);
+            object_add = CategoryService.AddMainAndSubRelationship(req.main_id, req.sub_name, req.google_value, req.descrition);
             if (object_add != null)//TODO matan change option that the reqhest was not completed there is a main\sub id like that in the db
                 return Request.CreateResponse(HttpStatusCode.OK, object_add);
             return Request.CreateResponse(HttpStatusCode.BadRequest, "There category id is not as used in this API");
@@ -58,11 +58,27 @@ namespace api.Controllers
         public HttpResponseMessage RemoveMainAndSubRelationship(string main_id, string sub_id)
         {
             bool is_deleted;
-            is_deleted = CategoryService.RemoveMainAndSubRelationship( main_id,  sub_id);
+            is_deleted = CategoryService.RemoveMainAndSubRelationship(main_id, sub_id);
             if (!is_deleted)
-                return Request.CreateResponse(HttpStatusCode.NotFound, "There is no main category with main_id - "+ main_id +" sub_id "+ sub_id);
+                return Request.CreateResponse(HttpStatusCode.NotFound, "There is no main category with main_id - " + main_id + " sub_id " + sub_id);
             return Request.CreateResponse(HttpStatusCode.OK, "the sub category had been deleted ");
         }
+        [Route("UpdateSubCategoryOfMainCategory")]
+        [HttpPut]
+        public HttpResponseMessage UpdateSubCategoryOfMainCategory([FromBody]MainAndSubRelationshipDTO req)
+        {
+            bool success;
+
+            if (req.main_id == null || req.sub_id == null || req.sub_name == null || req.google_value == null)
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "missing parameters");
+
+            success = SubCategoryService.updateSubCategory(req.sub_id, req.google_value, req.sub_name);
+            success &= CategoryService.UpdateDescription(req.main_id, req.sub_id, req.descrition);
+            if(success)    
+            return Request.CreateResponse(HttpStatusCode.OK,true);
+            return Request.CreateResponse(HttpStatusCode.BadRequest, "Bad request");
+        }
     }
-   
+
+
 }

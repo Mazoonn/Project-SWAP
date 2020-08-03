@@ -15,8 +15,8 @@ namespace api.Controllers
     {
         // GET: api/MainCategory
 
-       [Route("GetAllMainCategory")]
-       [HttpGet]
+        [Route("GetAllMainCategory")]
+        [HttpGet]
         public HttpResponseMessage GetAllMainCategory()
         {
             List<categoryDTO> list = MainCategoryService.GetAllMainCategorys().Where(x => x.is_active).ToList();
@@ -75,6 +75,7 @@ namespace api.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, "the object had been deleted ");
 
         }
+
     }
    
 }
