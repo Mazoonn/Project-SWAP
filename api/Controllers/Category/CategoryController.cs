@@ -39,13 +39,14 @@ namespace api.Controllers
         }
 
         //POST: api/MainCategory/AddMainAndSubRelationship
-        [Route("AddMainAndSubRelationship")]
+       [Route("AddMainAndSubRelationship")]
        [HttpPost]
         public HttpResponseMessage AddMainAndSubRelationship([FromBody]MainAndSubRelationshipDTO req)
         {
-             if (req.main_id == null || req.sub_id == null)//matan -change
-                return Request.CreateResponse(HttpStatusCode.BadRequest, "The id is missing :" + req.sub_id + " " + req.main_id);
-            MainAndSubRelationshipDTO object_add = CategoryService.AddMainAndSubRelationship(req.main_id, req.sub_id,req.descrition);
+            MainAndSubRelationshipDTO object_add;
+                if (req.main_id == null)//matan -change
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "The id is missing :" + req.main_id);
+            object_add = CategoryService.AddMainAndSubRelationship(req.main_id,req.sub_name,req.descrition);
             if (object_add != null)//TODO matan change option that the reqhest was not completed there is a main\sub id like that in the db
                 return Request.CreateResponse(HttpStatusCode.OK, object_add);
             return Request.CreateResponse(HttpStatusCode.BadRequest, "There category id is not as used in this API");
@@ -59,9 +60,8 @@ namespace api.Controllers
             bool is_deleted;
             is_deleted = CategoryService.RemoveMainAndSubRelationship( main_id,  sub_id);
             if (!is_deleted)
-                return Request.CreateResponse(HttpStatusCode.NotFound, "There is not main category with id - " + main_id +" "+ sub_id);
-            return Request.CreateResponse(HttpStatusCode.OK, "the object had been deleted ");
-
+                return Request.CreateResponse(HttpStatusCode.NotFound, "There is no main category with main_id - "+ main_id +" sub_id "+ sub_id);
+            return Request.CreateResponse(HttpStatusCode.OK, "the sub category had been deleted ");
         }
     }
    
