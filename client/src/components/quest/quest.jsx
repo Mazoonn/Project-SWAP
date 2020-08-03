@@ -22,11 +22,13 @@ class Quest extends Component {
       if (category.isCurrentlySelected) {
         const subCategory = [];
         category.subCategory.forEach((sub) => {
-          if (sub.isSelected) subCategory.push(sub.sub_name);
+          if (sub.isSelected)
+            subCategory.push(sub.google_value || sub.sub_name);
         });
-        places[category.name] = subCategory;
+        places[category.google_value || category.name] = subCategory;
       }
     });
+
     let respones = await getPlaces(places);
     keysToRemove.forEach((key) => {
       window.localStorage.removeItem(key);
@@ -35,10 +37,10 @@ class Quest extends Component {
 
     this.props.history.push("/");
 
-    // this.props.history.push({
-    //   pathname: "/",
-    //   state: { respones },
-    // });
+    this.props.history.push({
+      pathname: "/",
+      state: { respones },
+    });
   };
 
   handleGetCategories = async () => {

@@ -56,3 +56,15 @@ export async function putCategories(id, is_active) {
     console.log("Check your connection , error:", e);
   }
 }
+
+export async function updateSubCategoryOfMainCategory(req) {
+  try {
+    const main_list = await http.put(
+      `${API_URL_Dev}/Category/UpdateSubCategoryOfMainCategory`,
+      req
+    );
+    return main_list.data;
+  } catch (e) {
+    console.log("Check your connection , error:", e);
+  }
+}

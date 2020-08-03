@@ -4,6 +4,7 @@ import {
   putCategories,
   postSubCategory,
   deleteSubCategory,
+  updateSubCategoryOfMainCategory,
 } from "../../services/Categories";
 import { getSubCategoriesId } from "../../services/CategSubCateg";
 import AdminCategories from "./adminCategories";
@@ -136,7 +137,6 @@ class AdminPage extends Component {
     const main_id = this.state.categories[index].id;
     const category = { ...this.state.subCategory };
     this.setState({ subCategory: undefined });
-    delete category.google_value;
     category.main_id = main_id;
     await postSubCategory(category);
 
@@ -158,8 +158,27 @@ class AdminPage extends Component {
     });
   };
 
-  handleOnClickSaveSubCategory = (index) => {
-    console.log(index);
+  handleOnClickSaveSubCategory = async (index) => {
+    const {
+      main_id,
+      sub_id,
+      sub_name_new,
+      google_value_new,
+      descrition_new,
+    } = this.state.subCategories[index];
+    const req = {
+      main_id,
+      sub_id,
+      sub_name: sub_name_new,
+      descrition: descrition_new,
+      google_value: google_value_new,
+    };
+    await updateSubCategoryOfMainCategory(req);
+    const subCategories = await getSubCategoriesId(main_id);
+    this.addNewValuesToSubCategories(subCategories);
+    this.setState({
+      subCategories,
+    });
   };
 
   isSubCategoryChange = (index) => {
@@ -262,7 +281,7 @@ class AdminPage extends Component {
                                   name="descrition_new"
                                   type="text"
                                   className="form-control"
-                                  value={subCategory.descrition_new || ""}
+                                  value={subCategory.descrition_new}
                                 />
                               </td>
                               <td>
@@ -276,6 +295,7 @@ class AdminPage extends Component {
                                   name="google_value_new"
                                   type="text"
                                   className="form-control"
+                                  value={subCategory.google_value_new}
                                 />
                               </td>
                               <td className="text-center">
