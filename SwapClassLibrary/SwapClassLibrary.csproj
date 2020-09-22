@@ -147,7 +147,9 @@
     <Compile Include="Service\category\SubCategoryService.cs" />
     <Compile Include="Service\Authenticate service\JWTGetToken.cs" />
     <Compile Include="Service\Authenticate service\IAuthService.cs" />
-    <Compile Include="Service\client\clientService.cs" />
+    <Compile Include="Service\users\businessService.cs" />
+    <Compile Include="Service\users\adminService.cs" />
+    <Compile Include="Service\users\clientService.cs" />
     <Compile Include="Service\IdService.cs" />
     <Compile Include="Service\Authenticate service\JWTService.cs" />
   </ItemGroup>

@@ -1,51 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using SwapClassLibrary.DTO;
+using SwapClassLibrary.EF;
+using SwapClassLibrary.Service;
 
-namespace api.Controllers
+namespace api.Controllers.admin
 {
     [Authorize]
     [RoutePrefix("api/Admin")]
-    public class AdminController : Controller
+    public class AdminController : ApiController
     {
-        [Route("login")]
-        [HttpGet]
-        public int login()
-        {
-            return 0;
-        }
-
-
-
-        //admin add/change/delete
+        //Post: add/Admin/AddAdmin
         [Route("AddAdmin")]
         [HttpPost]
-        public int AddAdmin()
+        public HttpResponseMessage AddAdmin([FromBody]string client_id)
         {
-            return 0;
+            try
+            {
+                bool is_admin = AdminService.AddAdmin(client_id);
+                if (!is_admin)
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is no client id as this in db");
+                return Request.CreateResponse(HttpStatusCode.OK, "There is client id as this in db and he is admin now");
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
         }
-        [Route("EditAdmin")]
-        [HttpPut]
-        public int EditAdmin()
-        {
-            return 0;
-        }
+        //Delete add/Admin/AddAdmin
         [Route("DeleteAdmin")]
         [HttpDelete]
-        public int DeleteAdmin()
+        public HttpResponseMessage DeleteAdmin([FromBody]string client_id)
         {
-            return 0;
-        }
-        
-        [Route("ChangeActiveAdmin")] 
-        [HttpDelete]
-        public int ChangeActiveAdmin()
-        {
-            return 0;
-        }
+            try
+            {
+                bool is_admin = AdminService.DeleteAdmin(client_id);
+                if (!is_admin)
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is no client id as this in db");
+                return Request.CreateResponse(HttpStatusCode.OK, "There is client id as this in db and he is admin now");
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
 
+        }
 
 
         //approve / Edit / remove Business
@@ -64,74 +67,6 @@ namespace api.Controllers
         [Route("RemoveBusiness")]
         [HttpDelete]
         public int RemoveBusiness()
-        {
-            return 0;
-        }
-
-
-
-
-        //add / Edit / remove Catagory
-        [Route("AddCatagory")]
-        [HttpPut]
-        public int AddCatagory()
-        {
-            return 0;
-        }
-        [Route("EditCatagory")]
-        [HttpPut]
-        public int EditCatagory()
-        {
-            return 0;
-        }
-        [Route("RemoveCatagory")]
-        [HttpDelete]
-        public int RemoveCatagory()
-        {
-            return 0;
-        }
-
-
-
-
-        //add / Edit / remove Quest
-        [Route("AddQuest")]
-        [HttpPost]
-        public int AddQuest()
-        {
-            return 0;
-        }
-        [Route("EditQuest")]
-        [HttpPut]
-        public int EditQuest()
-        {
-            return 0;
-        }
-        [Route("RemoveQuest")]
-        [HttpDelete]
-        public int RemoveQuest()
-        {
-            return 0;
-        }
-
-
-
-        //add / Edit / remove Mission
-        [Route("AddMission")]
-        [HttpPost]
-        public int AddMission()
-        {
-            return 0;
-        }
-        [Route("EditMission")]
-        [HttpPut]
-        public int EditMission()
-        {
-            return 0;
-        }
-        [Route("RemoveQuest")]
-        [HttpDelete]
-        public int RemoveMission()
         {
             return 0;
         }

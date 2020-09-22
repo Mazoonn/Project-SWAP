@@ -71,6 +71,7 @@ namespace api.Controllers
             }
 
         }
+
         // לא מחייב רק אופציה
         [Route("collectingData")]
         [HttpPost]
