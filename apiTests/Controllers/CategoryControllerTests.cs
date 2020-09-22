@@ -24,9 +24,8 @@ namespace Test.Controllers.category
     public class AddMainAndSubRelationshipTest
     {
         static AddMainCategoryTest add_main_category = new AddMainCategoryTest();
-        static DeleteMainCategoryTest delete_main_category = new DeleteMainCategoryTest();
         static AddSubCategoryTest add_sub_category = new AddSubCategoryTest();
-        static DeleteSubCategoryTest delete_sub_category = new DeleteSubCategoryTest();
+
 
         [TestMethod()]
         public void AddMainAndSubRelationshipSuccess()
@@ -68,10 +67,7 @@ namespace Test.Controllers.category
     [TestClass()]
     public class GetAllMainAndSubRelationshipTest
     {
-        static AddMainCategoryTest add_main_category = new AddMainCategoryTest();
-        static DeleteMainCategoryTest delete_main_category = new DeleteMainCategoryTest();
-        static AddSubCategoryTest add_sub_category = new AddSubCategoryTest();
-        static DeleteSubCategoryTest delete_sub_category = new DeleteSubCategoryTest();
+    
         [TestMethod()]
         public void GetAllMainAndSubRelationshipSuccess()
         {

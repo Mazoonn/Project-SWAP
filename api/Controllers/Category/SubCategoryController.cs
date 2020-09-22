@@ -10,6 +10,7 @@ using SwapClassLibrary.Service;
 
 namespace api.Controllers.Category
 {
+    [Authorize(Roles = "admin")]
     [RoutePrefix("api/SubCategory")]
     public class SubCategoryController : ApiController
     {

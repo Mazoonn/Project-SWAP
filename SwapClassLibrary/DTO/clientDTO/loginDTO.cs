@@ -14,5 +14,6 @@ namespace SwapClassLibrary.DTO
         public string first_name;
         public string last_name;
         public string platform;
+        public string role;
     }
 }

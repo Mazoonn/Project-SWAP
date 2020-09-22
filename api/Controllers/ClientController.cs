@@ -18,30 +18,38 @@ namespace api.Controllers
         [HttpPost]
         public HttpResponseMessage login([FromBody]loginDTO body)
         {
-            string local_user_id="";
-            string token = "";
-
-            switch (body.platform)
+            try
             {
-                case "facebook":
-                    clientService.registerClientfacebook(body);
-                    break;
-                case "google":
-                    clientService.registerClientgoogle(body);
-                    break;
-                case "local":
-                    if (body.password == null || body.email == null)
-                        return Request.CreateResponse(HttpStatusCode.BadRequest, "Client params illigel");
-                    local_user_id = clientService.checkUserLogin(body);
-                    if (local_user_id==null)
-                        return Request.CreateResponse(HttpStatusCode.Unauthorized, "Email or password is incorrect");
-                    break;
-                default:
-                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Client params illigel"); ;
+                loginDTO local_user_id = new loginDTO();
+                string token = "";
+                bool admin_login = false;
+
+                switch (body.platform)
+                {
+                    case "facebook":
+                        clientService.registerClientfacebook(body);
+                        break;
+                    case "google":
+                        clientService.registerClientgoogle(body);
+                        break;
+                    case "local":
+                        if (body.password == null || body.email == null)
+                            return Request.CreateResponse(HttpStatusCode.BadRequest, "Client params illigel");
+                        local_user_id = clientService.checkUserLogin(body);
+                        if (local_user_id == null)
+                            return Request.CreateResponse(HttpStatusCode.Unauthorized, "Email or password is incorrect");
+                        break;
+                    default:
+                        return Request.CreateResponse(HttpStatusCode.BadRequest, "Client params illigel"); ;
+                }
+                token = JWTGetToken.getToken(local_user_id.user_id == null ? body.user_id : local_user_id.user_id, body.email, local_user_id.role);
+                if (token != "flase") return Request.CreateResponse(HttpStatusCode.OK, token);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "Unable to create token");
             }
-            token = JWTGetToken.getToken(local_user_id == "" ? body.user_id : local_user_id, body.email);
-            if(token!="flase") return Request.CreateResponse(HttpStatusCode.OK, token);
-            return Request.CreateResponse(HttpStatusCode.InternalServerError, "Unable to create token");
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
         }
 
 
@@ -50,10 +58,18 @@ namespace api.Controllers
         [HttpPost]
         public HttpResponseMessage register([FromBody]registerDTO body)
         {
-           string id = clientService.registerClientLocal(body);
-            if (id == "")
-                return Request.CreateResponse(HttpStatusCode.BadRequest, "This Email is in used.");
-            return Request.CreateResponse(HttpStatusCode.OK, JWTGetToken.getToken(id,body.email));
+            try
+            {
+                string id = clientService.registerClientLocal(body);
+                if (id == "")
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "This Email is in used.");
+                return Request.CreateResponse(HttpStatusCode.OK, JWTGetToken.getToken(id, body.email,"client"));
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
+
         }
         // לא מחייב רק אופציה
         [Route("collectingData")]

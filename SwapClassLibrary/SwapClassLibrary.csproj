@@ -145,12 +145,11 @@
     <Compile Include="Service\category\googleValueService.cs" />
     <Compile Include="Service\category\MainCategoryService.cs" />
     <Compile Include="Service\category\SubCategoryService.cs" />
-    <Compile Include="Service\Class1.cs" />
-    <Compile Include="Service\client\JWTGetToken.cs" />
-    <Compile Include="Service\IAuthService.cs" />
+    <Compile Include="Service\Authenticate service\JWTGetToken.cs" />
+    <Compile Include="Service\Authenticate service\IAuthService.cs" />
     <Compile Include="Service\client\clientService.cs" />
     <Compile Include="Service\IdService.cs" />
-    <Compile Include="Service\JWTService.cs" />
+    <Compile Include="Service\Authenticate service\JWTService.cs" />
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="EF\Model1.edmx">

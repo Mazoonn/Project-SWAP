@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="SwapModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="SwapModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="address">
           <Key>
             <PropertyRef Name="address_id" />
@@ -47,6 +47,7 @@
           <Property Name="login_google" Type="bit" />
           <Property Name="login_facebock" Type="bit" />
           <Property Name="login_local" Type="bit" />
+          <Property Name="actor" Type="nvarchar" MaxLength="20" Nullable="false" />
         </EntityType>
         <EntityType Name="Event">
           <Key>
@@ -399,8 +400,7 @@
             <End Role="r_sub_and_main_category" EntitySet="r_sub_and_main_category" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SwapModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -455,6 +455,7 @@
           <Property Name="login_local" Type="Boolean" />
           <NavigationProperty Name="BusinessOwner" Relationship="Self.FK_business_owner_id" FromRole="client" ToRole="BusinessOwner" />
           <NavigationProperty Name="quests" Relationship="Self.FK__quest__user_id__1A9EF37A" FromRole="client" ToRole="quest" />
+          <Property Name="actor" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Event">
           <Key>
@@ -862,6 +863,7 @@
           <EntitySetMapping Name="clients">
             <EntityTypeMapping TypeName="SwapModel.client">
               <MappingFragment StoreEntitySet="client">
+                <ScalarProperty Name="actor" ColumnName="actor" />
                 <ScalarProperty Name="client_id" ColumnName="client_id" />
                 <ScalarProperty Name="creation_date" ColumnName="creation_date" />
                 <ScalarProperty Name="first_name" ColumnName="first_name" />

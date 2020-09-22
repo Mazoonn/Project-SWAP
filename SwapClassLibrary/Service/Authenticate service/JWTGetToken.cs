@@ -10,25 +10,27 @@ namespace SwapClassLibrary.Service
 {
     public class JWTGetToken
     {
-        public static string getToken(string user_id, string email)
+        public static string getToken(string user_id, string email, string role)
         {
-            IAuthModel model = GetJWTModel(user_id, email);
+            IAuthModel model = GetJWTModel(user_id, email, role);
             IAuthService authService = new JWTService(model.SecretKey);
             string token = authService.GenerateToken(model);
             if (!authService.IsTokenValid(token))
                 return "false";
             return token;
         }
-        private static JWTModel GetJWTModel(string user_id, string email)
+        private static JWTModel GetJWTModel(string user_id, string email, string role)
         {
-            return new JWTModel()
+            return
+        new JWTModel()
+        {
+            Claims = new Claim[]
             {
-                Claims = new Claim[]
-                {
                     new Claim("id", user_id),
-                    new Claim(ClaimTypes.Email, email)
-                }
-            };
+                    new Claim(ClaimTypes.Email, email),
+                    new Claim(ClaimTypes.Authentication, role)
+            }
+        };
         }
     }
 }

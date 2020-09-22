@@ -36,7 +36,8 @@ namespace SwapClassLibrary.Service
                     password = body.password,
                     login_local = true,
                     login_facebock=false,
-                    login_google=false
+                    login_google=false,
+                    actor = "client"
                 };
 
                 db.clients.Add(new_client);
@@ -74,6 +75,7 @@ namespace SwapClassLibrary.Service
                         login_local = false,
                         login_facebock = false,
                         login_google = true,
+                        actor = "client"
                     };
                     db.clients.Add(new_client);
                     db.SaveChanges();
@@ -92,18 +94,50 @@ namespace SwapClassLibrary.Service
             
                 
         }
-        public static string checkUserLogin(loginDTO body)
+        public static loginDTO checkUserLogin(loginDTO body)
         {
             SwapDbConnection db = new SwapDbConnection();
-            loginDTO client = db.clients.Where(x => x.email == body.email).Select(x => new loginDTO
+            loginDTO user;
+            string actor = db.clients.Where(x => x.email == body.email).Select(x => x.actor).FirstOrDefault();
+
+            switch (actor)
             {
-                email = x.email,
-                user_id = x.client_id,
-                password = x.password
-            }).FirstOrDefault();
-            if (client == null || client.password != body.password)
+                case "client":
+                    user = db.clients.Where(x => x.email == body.email).Select(x => new loginDTO
+                    {
+                        email = x.email,
+                        user_id = x.client_id,
+                        password = x.password,
+                        role = x.actor
+
+                    }).FirstOrDefault();
+                    break;
+                case "admin":
+                    user = db.clients.Where(x => x.email == body.email).Select(x => new loginDTO
+                    {
+                        email = x.email,
+                        user_id = x.client_id,//TODO change this to admin table
+                        password = x.password,
+                        role = x.actor
+
+                    }).FirstOrDefault();
+                    break;
+                case "businessOwner":
+                    user = db.clients.Where(x => x.email == body.email).Select(x => new loginDTO
+                    {
+                        email = x.email,
+                        user_id = x.client_id,//TODO change this to BusinessOwner table
+                        password = x.password,
+                        role = x.actor
+                    }).FirstOrDefault();
+                    break;
+                default:
+                    throw new Exception("there was an error with the type of actor");
+            }
+           
+            if (user == null || user.password != body.password)
                 return null;
-            return client.user_id;
+            return user;
         }
     }
 

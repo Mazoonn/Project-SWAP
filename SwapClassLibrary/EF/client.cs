@@ -33,6 +33,7 @@ namespace SwapClassLibrary.EF
         public Nullable<bool> login_google { get; set; }
         public Nullable<bool> login_facebock { get; set; }
         public Nullable<bool> login_local { get; set; }
+        public string actor { get; set; }
     
         public virtual BusinessOwner BusinessOwner { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
