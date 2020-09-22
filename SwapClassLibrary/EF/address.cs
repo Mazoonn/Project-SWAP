@@ -15,10 +15,5 @@ namespace SwapClassLibrary.EF
     public partial class address
     {
         public string address_id { get; set; }
-        public System.DateTime creation_date { get; set; }
-        public string country { get; set; }
-        public string street { get; set; }
-        public string street_number { get; set; }
-        public string post_code { get; set; }
     }
 }

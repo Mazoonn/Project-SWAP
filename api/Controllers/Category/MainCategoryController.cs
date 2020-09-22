@@ -17,31 +17,38 @@ namespace api.Controllers
 
         [Route("GetAllMainCategory")]
         [HttpGet]
-        public HttpResponseMessage GetAllMainCategory()
+        public HttpResponseMessage GetAllMainCategory(bool test = false)
         {
+            try
+            {
             List<categoryDTO> list = MainCategoryService.GetAllMainCategorys().Where(x => x.is_active).ToList();
-            if (list == null)
+            if (list == null||test)
                 return Request.CreateResponse(HttpStatusCode.NotFound, "There is no Main Categoy value in the db");
             return Request.CreateResponse(HttpStatusCode.OK, list);
+
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
         }
-        [Route("GetAllMainCategoryAdmin")]
-        [HttpGet]
-        public HttpResponseMessage GetAllMainCategoryAdmin()
-        {
-            List<categoryDTO> list = MainCategoryService.GetAllMainCategorys();
-            if (list == null)
-                return Request.CreateResponse(HttpStatusCode.NotFound, "There is no Main Categoy value in the db");
-            return Request.CreateResponse(HttpStatusCode.OK, list);
-        }
+       
 
         // POST: api/MainCategory/AddMainCategory
         [Route("AddMainCategory")]
         [HttpPost]
         public HttpResponseMessage AddMainCategory([FromBody]requestValueDTO req)
         {
-            if (req!=null &&req.name != null)
-                return Request.CreateResponse(HttpStatusCode.OK, MainCategoryService.AddMainCategory(req.name, req.google_value));
-            return Request.CreateResponse(HttpStatusCode.BadRequest, "there is no name value in the body");
+            try
+            {
+                if (req.google_value != null && req.name != null)
+                    return Request.CreateResponse(HttpStatusCode.OK, MainCategoryService.AddMainCategory(req.name, req.google_value));
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "there is no name value in the body");
+            }
+            catch(Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: "+ e);
+            }
         }
 
         [Route("ChangeActiveMainCategory/{id}")]
@@ -50,16 +57,22 @@ namespace api.Controllers
         //body : "is_active":true
         public HttpResponseMessage ChangeActiveMainCategory([FromUri]string id, [FromBody]dynamic req)
         {
+            try
+            {
             main_category slected_main_category;
             SwapDbConnection db = new SwapDbConnection();
             slected_main_category = db.main_category
               .FirstOrDefault(x => x.main_id == id); ;
             if (slected_main_category == null)
                 return Request.CreateResponse(HttpStatusCode.NotFound, "There is not main category value with id - " + id);
-            slected_main_category.is_active = req.is_active;
+            slected_main_category.is_active = req;
             db.SaveChanges();
             return Request.CreateResponse(HttpStatusCode.OK, slected_main_category);
-
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
         }
          
 
@@ -68,12 +81,18 @@ namespace api.Controllers
         [HttpDelete]
         public HttpResponseMessage DeleteMainCategory(string id)
         {
+            try
+            {
             bool is_deleted;
             is_deleted = MainCategoryService.deleteMainCategory(id);
             if (!is_deleted)
                 return Request.CreateResponse(HttpStatusCode.NotFound, "There is not main category with id - " + id);
             return Request.CreateResponse(HttpStatusCode.OK, "the object had been deleted ");
-
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
         }
 
     }

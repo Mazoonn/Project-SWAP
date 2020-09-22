@@ -15,7 +15,7 @@ namespace SwapClassLibrary.Service
         //google_value
         /******************************************************************************************/
         //get all google value
-        public static List<googleValueDto> GetAllGoogleValue()
+        public virtual List<googleValueDto> GetAllGoogleValue()
         {
             SwapDbConnection db = new SwapDbConnection();
             List<googleValueDto> googleDto = db.google_value.Select(x=>new googleValueDto() {google_id =x.google_value_id,value=x.value }).ToList();

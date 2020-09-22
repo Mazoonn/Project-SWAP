@@ -17,18 +17,15 @@ namespace SwapClassLibrary.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public business()
         {
-            this.r_business_place = new HashSet<r_business_place>();
+            this.products = new HashSet<product>();
         }
     
         public string business_id { get; set; }
-        public System.DateTime creation_date { get; set; }
-        public bool is_active { get; set; }
-        public string name { get; set; }
-        public string descrition { get; set; }
-        public string email { get; set; }
-        public string phone { get; set; }
+        public string business_owner_id { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<r_business_place> r_business_place { get; set; }
+        public virtual ICollection<product> products { get; set; }
+        public virtual BusinessOwner BusinessOwner { get; set; }
+        public virtual place place { get; set; }
     }
 }

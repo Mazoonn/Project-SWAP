@@ -18,7 +18,6 @@ namespace SwapClassLibrary.EF
         public quest()
         {
             this.r_place_quest = new HashSet<r_place_quest>();
-            this.r_user_quest = new HashSet<r_user_quest>();
         }
     
         public string quest_id { get; set; }
@@ -26,10 +25,10 @@ namespace SwapClassLibrary.EF
         public string name { get; set; }
         public string descrition { get; set; }
         public Nullable<decimal> been_used { get; set; }
+        public string user_id { get; set; }
     
+        public virtual client client { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<r_place_quest> r_place_quest { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<r_user_quest> r_user_quest { get; set; }
     }
 }

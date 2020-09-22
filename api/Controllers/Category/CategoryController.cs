@@ -19,12 +19,19 @@ namespace api.Controllers
         // GET: api/Category/GetAllMainAndSubRelationship
         [Route("GetAllMainAndSubRelationship")]
         [HttpGet]
-        public HttpResponseMessage GetAllMainAndSubRelationship()
+        public HttpResponseMessage GetAllMainAndSubRelationship(bool test=false)
         {
-            List<MainAndSubRelationshipDTO> r_main_sub_category_list = CategoryService.GetAllMainAndSubRelationship();
-            if (r_main_sub_category_list.Count == 0)
-                return Request.CreateResponse(HttpStatusCode.NotFound, "There is no Main Categoy value in the db");
-            return Request.CreateResponse(HttpStatusCode.OK, r_main_sub_category_list);
+            try
+            {
+                List<MainAndSubRelationshipDTO> r_main_sub_category_list = CategoryService.GetAllMainAndSubRelationship();
+                if (r_main_sub_category_list.Count == 0|| test)
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is no Main Categoy value in the db");
+                return Request.CreateResponse(HttpStatusCode.OK, r_main_sub_category_list);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
         }
 
         // GET: api/Category/GetMainAndSubRelationship/{main_id}
@@ -32,10 +39,17 @@ namespace api.Controllers
         [HttpGet]
         public HttpResponseMessage GetMainAndSubRelationship(string main_id)
         {
-            List<MainAndSubRelationshipDTO> r_main_sub_category_obj = CategoryService.GetMainAndSubRelationship(main_id);
-            if (r_main_sub_category_obj == null)
-                return Request.CreateResponse(HttpStatusCode.NotFound, "There is no Main Categoy value in the db");
-            return Request.CreateResponse(HttpStatusCode.OK, r_main_sub_category_obj);
+            try
+            {
+                List<MainAndSubRelationshipDTO> r_main_sub_category_obj = CategoryService.GetMainAndSubRelationship(main_id);
+                if (r_main_sub_category_obj == null)
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is no Main Categoy value in the db");
+                return Request.CreateResponse(HttpStatusCode.OK, r_main_sub_category_obj);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
         }
 
         //POST: api/MainCategory/AddMainAndSubRelationship
@@ -43,13 +57,21 @@ namespace api.Controllers
         [HttpPost]
         public HttpResponseMessage AddMainAndSubRelationship([FromBody]MainAndSubRelationshipDTO req)
         {
-            MainAndSubRelationshipDTO object_add;
-            if (req.main_id == null)//matan -change
-                return Request.CreateResponse(HttpStatusCode.BadRequest, "The id is missing :" + req.main_id);
-            object_add = CategoryService.AddMainAndSubRelationship(req.main_id, req.sub_name, req.google_value, req.descrition);
-            if (object_add != null)//TODO matan change option that the reqhest was not completed there is a main\sub id like that in the db
-                return Request.CreateResponse(HttpStatusCode.OK, object_add);
-            return Request.CreateResponse(HttpStatusCode.BadRequest, "There category id is not as used in this API");
+            try
+            {
+                MainAndSubRelationshipDTO object_add;
+                if (req.main_id == null || req.sub_name==null ||req.google_value==null|| req.descrition == null)
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "The param is missing :" + req.main_id==null? req.google_value == null? req.sub_name == null? "":"sub_name" : "google_value" :  "main_id");
+                object_add = CategoryService.AddMainAndSubRelationship(req.main_id, req.sub_name, req.google_value, req.descrition);
+                    return Request.CreateResponse(HttpStatusCode.OK, object_add);
+            }
+            //handle of errors in exeptinos
+            catch (Exception error)
+            {
+                if (typeof(InvalidOperationException) == error.GetType())
+                           return Request.CreateResponse(HttpStatusCode.BadRequest, error.Message);
+                    return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + error);
+            }
         }
 
         // Delete:api/googleValue/DeleteGoogleValue/{type}/{req}
@@ -57,26 +79,81 @@ namespace api.Controllers
         [HttpDelete]
         public HttpResponseMessage RemoveMainAndSubRelationship(string main_id, string sub_id)
         {
-            bool is_deleted;
-            is_deleted = CategoryService.RemoveMainAndSubRelationship(main_id, sub_id);
-            if (!is_deleted)
-                return Request.CreateResponse(HttpStatusCode.NotFound, "There is no main category with main_id - " + main_id + " sub_id " + sub_id);
-            return Request.CreateResponse(HttpStatusCode.OK, "the sub category had been deleted ");
+            try
+            {
+                bool is_deleted;
+                is_deleted = CategoryService.RemoveMainAndSubRelationship(main_id, sub_id);
+                if (!is_deleted)
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is no main category with main_id - " + main_id + " sub_id " + sub_id);
+                return Request.CreateResponse(HttpStatusCode.OK, "the sub category had been deleted ");
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
         }
-        [Route("UpdateSubCategoryOfMainCategory")]
+
+        // PUT:api/category/UpdateSubCategoryOfMainCategoryDescription
+        [Route("UpdateSubCategoryOfMainCategoryDescription")]
         [HttpPut]
-        public HttpResponseMessage UpdateSubCategoryOfMainCategory([FromBody]MainAndSubRelationshipDTO req)
+        public HttpResponseMessage UpdateSubCategoryOfMainCategoryDescription([FromBody]MainAndSubRelationshipDTO req)
         {
-            bool success;
+            try
+            {
+                bool success;
+                if (req.main_id == null || req.sub_id == null || req.descrition == null)
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "missing parameters");
+                success = CategoryService.UpdateDescription(req.main_id, req.sub_id, req.descrition);
+                if (success)
+                    return Request.CreateResponse(HttpStatusCode.OK, "description is changed to :"+ req.descrition);
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Bad request");
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
+        }
 
-            if (req.main_id == null || req.sub_id == null || req.sub_name == null || req.google_value == null)
-                return Request.CreateResponse(HttpStatusCode.BadRequest, "missing parameters");
-
-            success = SubCategoryService.updateSubCategory(req.sub_id, req.google_value, req.sub_name);
-            success &= CategoryService.UpdateDescription(req.main_id, req.sub_id, req.descrition);
-            if(success)    
-            return Request.CreateResponse(HttpStatusCode.OK,true);
-            return Request.CreateResponse(HttpStatusCode.BadRequest, "Bad request");
+        // PUT:api/Category/UpdateSubCategoryOfMainCategoryChangeStatus
+        [Route("UpdateSubCategoryOfMainCategoryChangeStatus")]
+        [HttpPut]
+        public HttpResponseMessage UpdateSubCategoryOfMainCategoryChangeStatus([FromBody]MainAndSubRelationshipDTO req)
+        {
+            try
+            {
+                bool success;
+                if (req.main_id == null || req.sub_id == null || req.is_active == null)
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "missing parameters");
+                  success = CategoryService.UpdatStatusIsActive(req.main_id, req.sub_id, req.is_active);
+                if (success)
+                    return Request.CreateResponse(HttpStatusCode.OK,"status change to :"+req.is_active);
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Bad request");
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
+        }
+        // PUT:api/Category/UpdateSubCategoryOfMainCategoryClickes
+        [Route("UpdateSubCategoryOfMainCategoryClickes")]
+        
+        [HttpPut]
+        public HttpResponseMessage UpdateSubCategoryOfMainCategoryClickes([FromBody]MainAndSubRelationshipDTO req)
+        {
+            try
+            {
+                bool success;
+                if (req.main_id == null || req.sub_id == null || req.clicked == null)
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "missing parameters");
+                success = CategoryService.UpdateClickesForReletionship(req.main_id, req.sub_id, req.clicked);
+                if (success)
+                    return Request.CreateResponse(HttpStatusCode.OK, true);
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Bad request");
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
         }
     }
 

@@ -13,16 +13,25 @@ namespace api.Controllers
     [RoutePrefix("api/GoogleValue")]
     public class GoogleValueController : ApiController
     {
+        
 
         // GET: api/googleValue/GetAllGoogleValue
         [Route("GetAllGoogleValue")]
         [HttpGet]
-        public HttpResponseMessage GetAllGoogleValue()
+        public  HttpResponseMessage GetAllGoogleValue(bool test = false)
         {
-            List<googleValueDto> list = GoogleValueService.GetAllGoogleValue();
-            if(list.Count == 0)
-                return Request.CreateResponse(HttpStatusCode.NotFound, "There is no google value in the db");
-            return Request.CreateResponse(HttpStatusCode.OK, list);
+            GoogleValueService google_value_service = new GoogleValueService();
+            try
+            {
+                List<googleValueDto> list = google_value_service.GetAllGoogleValue();
+                if (list.Count == 0 ||test)
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is no google value in the db");
+                return Request.CreateResponse(HttpStatusCode.OK, list);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
         }
 
         // GET: api/googleValue/GetGoogleValue/{value}
@@ -30,11 +39,18 @@ namespace api.Controllers
         [HttpGet]
         public HttpResponseMessage GetGoogleValue(string id)
         {
-            googleValueDto db_value;
-                    db_value = GoogleValueService.GetGoogleValueByid(id);
-                    if (db_value == null)
-                        return Request.CreateResponse(HttpStatusCode.NotFound, "There is not google value with id - " + id);
-                    return Request.CreateResponse(HttpStatusCode.OK, db_value);
+            try
+            {
+                googleValueDto db_value;
+                db_value = GoogleValueService.GetGoogleValueByid(id);
+                if (db_value == null)
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is not google value with id - " + id);
+                return Request.CreateResponse(HttpStatusCode.OK, db_value);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
         }
 
         // POST:api/googleValue/AddGoogleValue
@@ -42,9 +58,16 @@ namespace api.Controllers
         [HttpPost]
         public HttpResponseMessage AddGoogleValue([FromBody]googleValueDto value)
         {
-            if (value != null)
-                return Request.CreateResponse(HttpStatusCode.OK, GoogleValueService.AddGoogleValue(value.value));
-            return Request.CreateResponse(HttpStatusCode.BadRequest, "there is no value in the body");
+            try
+            {
+                if (value != null)
+                    return Request.CreateResponse(HttpStatusCode.OK, GoogleValueService.AddGoogleValue(value.value));
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "there is no value in the body");
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
         }
 
         // Delete:api/googleValue/DeleteGoogleValue/{id}
@@ -52,12 +75,19 @@ namespace api.Controllers
         [HttpDelete]
         public HttpResponseMessage DeleteGoogleValue(string id)
         {
-            bool is_deleted;
-            is_deleted = GoogleValueService.deleteGoogleValue(id);
-            if (!is_deleted)
-                return Request.CreateResponse(HttpStatusCode.NotFound, "There is not google value with id - " + id);
-            return Request.CreateResponse(HttpStatusCode.OK, "the object had been deleted ");
-            
+            try
+            {
+                bool is_deleted;
+                is_deleted = GoogleValueService.deleteGoogleValue(id);
+                if (!is_deleted)
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is not google value with id - " + id);
+                return Request.CreateResponse(HttpStatusCode.OK, "the object had been deleted ");
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
         }
     }
 }
+

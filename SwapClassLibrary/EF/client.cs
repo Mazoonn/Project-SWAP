@@ -17,7 +17,7 @@ namespace SwapClassLibrary.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public client()
         {
-            this.r_user_quest = new HashSet<r_user_quest>();
+            this.quests = new HashSet<quest>();
         }
     
         public string client_id { get; set; }
@@ -34,7 +34,8 @@ namespace SwapClassLibrary.EF
         public Nullable<bool> login_facebock { get; set; }
         public Nullable<bool> login_local { get; set; }
     
+        public virtual BusinessOwner BusinessOwner { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<r_user_quest> r_user_quest { get; set; }
+        public virtual ICollection<quest> quests { get; set; }
     }
 }

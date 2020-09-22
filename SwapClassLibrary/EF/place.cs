@@ -17,7 +17,6 @@ namespace SwapClassLibrary.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public place()
         {
-            this.r_business_place = new HashSet<r_business_place>();
             this.r_place_quest = new HashSet<r_place_quest>();
             this.r_place_sub_and_main_category = new HashSet<r_place_sub_and_main_category>();
         }
@@ -35,8 +34,8 @@ namespace SwapClassLibrary.EF
         public string street_number { get; set; }
         public string post_code { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<r_business_place> r_business_place { get; set; }
+        public virtual business business { get; set; }
+        public virtual Event Event { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<r_place_quest> r_place_quest { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

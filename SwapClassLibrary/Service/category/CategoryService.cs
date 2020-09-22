@@ -19,7 +19,7 @@ namespace SwapClassLibrary.Service
         {
             SwapDbConnection db = new SwapDbConnection();
             List<MainAndSubRelationshipDTO> r_main_google_object = db.r_sub_and_main_category.Where(x => x.is_active).Select(x => new MainAndSubRelationshipDTO() { 
-            clicked = x.clicked,
+            clicked =  (int)x.clicked,
             is_active = x.is_active,
             descrition = x.descrition,
             main_name = x.main_category.name,
@@ -38,7 +38,7 @@ namespace SwapClassLibrary.Service
                 .Where(x => x.main_id == main_id)
                 .Select(x => new MainAndSubRelationshipDTO()
                 {
-                    clicked = x.clicked,//
+                    clicked = (int)x.clicked,
                     is_active = x.is_active,
                     descrition = x.descrition,
                     main_name = x.main_category.name,
@@ -49,38 +49,29 @@ namespace SwapClassLibrary.Service
                 }).ToList();
             return r_main_google_object;
         }
-        //add relationship between google value and category- matan to fix the if check buth tables and check if there is on in the r
-        public static MainAndSubRelationshipDTO AddMainAndSubRelationship(string main_id ,string name ,string google_value, string descrition = null)
+        //add relationship between main and sub
+        public static MainAndSubRelationshipDTO AddMainAndSubRelationship(string main_id ,string sub_name, string google_value, string descrition = null)
         {
             SwapDbConnection db = new SwapDbConnection();
-            sub_category subCategory = db.sub_category.FirstOrDefault(c => c.name == name);
-            main_category category = db.main_category.FirstOrDefault(c => c.main_id == main_id);
-            r_sub_and_main_category categoryOfMainCategory = db.r_sub_and_main_category.FirstOrDefault(c => c.main_id == main_id && c.sub_category.name == name);
+            sub_category subCategory = db.sub_category.FirstOrDefault(c => c.name == sub_name);
+            main_category mainCategory = db.main_category.FirstOrDefault(c => c.main_id == main_id);
 
-            if (category == null || categoryOfMainCategory!=null) return null;
+            if ( mainCategory == null)
+                throw new InvalidOperationException("there is a no main id as requested");
 
-            if (subCategory == null)
-            {
-                subCategory = Service.SubCategoryService.AddSubCategory(name, google_value);
-                if (subCategory == null) return null;
-            }
-            else 
-            {  
-                if (google_value != subCategory.google_value)
-                {
-                    if (db.sub_category.FirstOrDefault(c => c.google_value == google_value) != null)
-                        return null;
-                        subCategory.google_value = google_value;
-                }
-            }
+            r_sub_and_main_category categoryOfMainCategory = db.r_sub_and_main_category.FirstOrDefault(c => c.main_id == main_id && c.sub_category.name == sub_name);
+            if (categoryOfMainCategory!=null)
+                throw new InvalidOperationException("there is an reletinship as this");
 
-
+            if(subCategory==null)
+                 subCategory = SubCategoryService.AddSubCategory(sub_name, google_value);
+            
             r_sub_and_main_category r_main_sub_object = new r_sub_and_main_category()
             {
                 sub_id = subCategory.sub_id,
                 main_id = main_id,
                 creation_date = DateTime.Now,
-                is_active = true,//TODO matan change it to false
+                is_active = false,
                 clicked = 0,
                 descrition = descrition
             };
@@ -91,9 +82,11 @@ namespace SwapClassLibrary.Service
                   main_id = main_id,
                   sub_id = subCategory.sub_id,
                   descrition = descrition,
-                  is_active = true,//TODO matan change it to false
+                  is_active = false,
                   clicked = 0,
-                  google_value= subCategory.google_value
+                  main_name = r_main_sub_object.main_category.name,
+                  sub_name = sub_name,
+                  google_value = subCategory.google_value
             };
         }
 
@@ -101,9 +94,9 @@ namespace SwapClassLibrary.Service
         public static bool RemoveMainAndSubRelationship(string main_id, string sub_id)
         {
             SwapDbConnection db = new SwapDbConnection();
-            r_sub_and_main_category subCategory = db.r_sub_and_main_category.FirstOrDefault(c => c.main_id == main_id && c.sub_id == sub_id);
-            if (subCategory==null) return false;
-            db.r_sub_and_main_category.Remove(subCategory);
+            r_sub_and_main_category reletionship_sub_and_main_category = db.r_sub_and_main_category.FirstOrDefault(c => c.main_id == main_id && c.sub_id == sub_id);
+            if (reletionship_sub_and_main_category == null) return false;
+            db.r_sub_and_main_category.Remove(reletionship_sub_and_main_category);
             db.SaveChanges();
             return true;
         }
@@ -111,12 +104,29 @@ namespace SwapClassLibrary.Service
         public static bool UpdateDescription(string main_id, string sub_id, string description)
         {
             SwapDbConnection db = new SwapDbConnection();
-            r_sub_and_main_category subCategory = db.r_sub_and_main_category.FirstOrDefault(c => c.main_id == main_id && c.sub_id == sub_id);
-            if (subCategory == null) return false;
-            subCategory.descrition = description;
+            r_sub_and_main_category reletionship_sub_and_main_category = db.r_sub_and_main_category.FirstOrDefault(c => c.main_id == main_id && c.sub_id == sub_id);
+            if (reletionship_sub_and_main_category == null) return false;
+            reletionship_sub_and_main_category.descrition = description;
             db.SaveChanges();
             return true;
         }
-
+        public static bool UpdatStatusIsActive(string main_id, string sub_id, bool is_active)
+        {
+            SwapDbConnection db = new SwapDbConnection();
+            r_sub_and_main_category reletionship_sub_and_main_category = db.r_sub_and_main_category.FirstOrDefault(c => c.main_id == main_id && c.sub_id == sub_id);
+            if (reletionship_sub_and_main_category == null) return false;
+            reletionship_sub_and_main_category.is_active = is_active;
+            db.SaveChanges();
+            return true;
+        }
+        public static bool UpdateClickesForReletionship(string main_id, string sub_id, int clickes)
+        {
+            SwapDbConnection db = new SwapDbConnection();
+            r_sub_and_main_category reletionship_sub_and_main_category = db.r_sub_and_main_category.FirstOrDefault(c => c.main_id == main_id && c.sub_id == sub_id);
+            if (reletionship_sub_and_main_category == null) return false;
+            reletionship_sub_and_main_category.clicked = clickes;
+            db.SaveChanges();
+            return true;
+        }
     }
 }

@@ -32,13 +32,19 @@ namespace api.Controllers
         {
             return 0;
         }
-        [Route("RemoveAdmin")]
+        [Route("DeleteAdmin")]
         [HttpDelete]
-        public int RemoveAdmin()
+        public int DeleteAdmin()
         {
             return 0;
         }
-
+        
+        [Route("ChangeActiveAdmin")] 
+        [HttpDelete]
+        public int ChangeActiveAdmin()
+        {
+            return 0;
+        }
 
 
 

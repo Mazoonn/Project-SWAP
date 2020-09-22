@@ -63,6 +63,29 @@ namespace api.Controllers
             return 0;
         }
 
+        [Route("DeleteClient")]
+        [HttpPost]
+        public int DeleteClient()
+        {
+            return 0;
+        }
+
+
+        [Route("EditClient")]
+        [HttpPost]
+        public int EditClient()
+        {
+            return 0;
+        }
+
+
+        [Route("ChangeActiveClient")]
+        [HttpPost]
+        public int ChangeActiveClient()
+        {
+            return 0;
+        }
+
         //start / Edit / remove Mission
         [Route("StartQuest")]
         [HttpPost]

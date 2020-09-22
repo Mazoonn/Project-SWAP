@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwapClassLibrary", "..\Swap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "apiTests", "..\apiTests\apiTests.csproj", "{9CF2D1A9-F82B-43A1-8047-51D6EB529F29}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestProject", "..\UnitTestProject\UnitTestProject.csproj", "{62072F18-DC79-4246-BAA8-191DDC44E1C6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{9CF2D1A9-F82B-43A1-8047-51D6EB529F29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9CF2D1A9-F82B-43A1-8047-51D6EB529F29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9CF2D1A9-F82B-43A1-8047-51D6EB529F29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62072F18-DC79-4246-BAA8-191DDC44E1C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62072F18-DC79-4246-BAA8-191DDC44E1C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62072F18-DC79-4246-BAA8-191DDC44E1C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62072F18-DC79-4246-BAA8-191DDC44E1C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

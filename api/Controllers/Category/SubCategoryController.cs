@@ -17,12 +17,19 @@ namespace api.Controllers.Category
         // GET: api/SubCategory
         [Route("GetAllSubCategory")]
         [HttpGet]
-        public HttpResponseMessage GetAllSubCategory()
+        public HttpResponseMessage GetAllSubCategory(bool test =false)
         {
-            List<categoryDTO> list = SubCategoryService.GetAllSubCategorys();
-            if (list == null)
-                return Request.CreateResponse(HttpStatusCode.NotFound, "There is no Sub Categoy value in the db");
-            return Request.CreateResponse(HttpStatusCode.OK, list);
+            try
+            {
+                List<categoryDTO> list = SubCategoryService.GetAllSubCategorys();
+                if (list == null|| test)
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is no Sub Categoy value in the db");
+                return Request.CreateResponse(HttpStatusCode.OK, list);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
         }
 
         // POST: api/SubCategory/AddSubCategory
@@ -30,28 +37,41 @@ namespace api.Controllers.Category
         [HttpPost]
         public HttpResponseMessage AddSubCategory([FromBody]requestValueDTO req)
         {
-            if (req!=null && req.name != null )
-                return Request.CreateResponse(HttpStatusCode.OK, SubCategoryService.AddSubCategory(req.name,req.google_value));
-            return Request.CreateResponse(HttpStatusCode.BadRequest, "there is no 'value':'' in the body");
+            try
+            {
+                if (req.google_value != null && req.name != null)
+                    return Request.CreateResponse(HttpStatusCode.OK, SubCategoryService.AddSubCategory(req.name, req.google_value));
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "there is no 'value':'' in the body");
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
         }
 
         [Route("ChangeActiveSubCategory/{id}")]
         [HttpPut]
         // PUT: api/SubCategory/ChangeActiveSubCategory/id or value
         //need to send type : id,value 
-        //body : "is_active":true
+        //body : true
         public HttpResponseMessage ChangeActiveSubCategory([FromUri]string id, [FromBody]bool req)
         {
-            sub_category slected_Sub_category;
-            SwapDbConnection db = new SwapDbConnection();
-            slected_Sub_category = db.sub_category.Select(x => x)
-                .FirstOrDefault(x => x.sub_id == id); ;
-            if (slected_Sub_category == null)
-                return Request.CreateResponse(HttpStatusCode.NotFound, "There is not Sub category value with id - " + id);
-            slected_Sub_category.is_active = req;
-            db.SaveChanges();
-            return Request.CreateResponse(HttpStatusCode.OK, slected_Sub_category);
-
+            try
+            {
+                sub_category slected_Sub_category;
+                SwapDbConnection db = new SwapDbConnection();
+                slected_Sub_category = db.sub_category.Select(x => x)
+                    .FirstOrDefault(x => x.sub_id == id); ;
+                if (slected_Sub_category == null)
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is not Sub category value with id - " + id);
+                slected_Sub_category.is_active = req;
+                db.SaveChanges();
+                return Request.CreateResponse(HttpStatusCode.OK, slected_Sub_category);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
         }
 
         // Delete:api/googleValue/DeleteGoogleValue/{type}/{value}
@@ -59,12 +79,18 @@ namespace api.Controllers.Category
         [HttpDelete]
         public HttpResponseMessage DeleteSubCategory(string id)
         {
-            bool is_deleted;
-            is_deleted = SubCategoryService.deleteSubCategory(id);
-            if (!is_deleted)
-                return Request.CreateResponse(HttpStatusCode.NotFound, "There is not sub category with id - " + id);
-            return Request.CreateResponse(HttpStatusCode.OK, "the object had been deleted ");
-
+            try
+            {
+                bool is_deleted;
+                is_deleted = SubCategoryService.deleteSubCategory(id);
+                if (!is_deleted)
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is not sub category with id - " + id);
+                return Request.CreateResponse(HttpStatusCode.OK, "the object had been deleted ");
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
         }
     }
 }

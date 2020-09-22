@@ -18,21 +18,25 @@ namespace api.Controllers
         {
             return 0;
         }
-        [Route("EditBusiness")]
+        [Route("ChangeActiveBusiness")]
         [HttpPut]
-        public int EditBusiness()
+        public int ChangeActiveBusinessTest()
         {
             return 0;
         }
-        [Route("RemoveBusiness")]
+        [Route("DeleteBusiness")]
         [HttpDelete]
         public int RemoveBusiness()
         {
             return 0;
         }
 
-
-
+        [Route("EditBusinessTest")]
+        [HttpDelete]
+        public int EditBusiness()
+        {
+            return 0;
+        }
 
         //Discount add/change/request to Approve/delete
         [Route("AddBusiness")]

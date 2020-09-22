@@ -146,6 +146,7 @@
     <Reference Include="Microsoft.Net.Http.Headers, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Net.Http.Headers.2.2.0\lib\netstandard2.0\Microsoft.Net.Http.Headers.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\System.Buffers.4.5.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
@@ -336,14 +337,14 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\Category\CategoryController.cs" />
+    <Compile Include="Controllers\Category\GoogleValueController.cs" />
+    <Compile Include="Controllers\Category\MainCategoryController.cs" />
+    <Compile Include="Controllers\Category\SubCategoryController.cs" />
+    <Compile Include="Controllers\EventController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\BusinessController.cs" />
-    <Compile Include="Controllers\Category\MainCategoryController.cs" />
-    <Compile Include="Controllers\Category\CategoryController.cs" />
-    <Compile Include="Controllers\Category\SubCategoryController.cs" />
     <Compile Include="Controllers\ClientController.cs" />
-    <Compile Include="Controllers\Category\GoogleValueController.cs" />
-    <Compile Include="Controllers\testController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

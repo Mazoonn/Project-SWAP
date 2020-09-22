@@ -13,8 +13,8 @@ namespace SwapClassLibrary.DTO
         public string main_name;
         public string sub_name;
         public string descrition;
-        public bool? is_active;
-        public decimal? clicked;
+        public bool is_active;
+        public int clicked;
         public string google_value;
     }
 }
