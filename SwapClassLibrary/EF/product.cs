@@ -17,12 +17,12 @@ namespace SwapClassLibrary.EF
         public string product_id { get; set; }
         public string name { get; set; }
         public string description { get; set; }
-        public Nullable<double> price { get; set; }
-        public Nullable<double> discount { get; set; }
-        public Nullable<System.DateTime> creation_date { get; set; }
-        public Nullable<System.DateTime> discount_start_date { get; set; }
-        public Nullable<System.DateTime> discount_end_date { get; set; }
-        public Nullable<bool> is_active { get; set; }
+        public double price { get; set; }
+        public double discount { get; set; }
+        public System.DateTime creation_date { get; set; }
+        public System.DateTime discount_start_date { get; set; }
+        public System.DateTime discount_end_date { get; set; }
+        public bool is_active { get; set; }
         public string business_id { get; set; }
     
         public virtual business business { get; set; }

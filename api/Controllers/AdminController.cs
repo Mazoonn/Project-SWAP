@@ -31,6 +31,7 @@ namespace api.Controllers.admin
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
             }
         }
+
         //Delete add/Admin/AddAdmin
         [Route("DeleteAdmin")]
         [HttpDelete]
@@ -50,25 +51,14 @@ namespace api.Controllers.admin
 
         }
 
+        //TODO add in the DB
+        ////approve / Edit / remove Business
+        //[Route("ApproveBusiness")]
+        //[HttpPut]
+        //public HttpResponseMessage ApproveBusiness()
+        //{
+        //    return 0;
+        //}
 
-        //approve / Edit / remove Business
-        [Route("Approvebusiness")]
-        [HttpPut]
-        public int Approvebusiness()
-        {
-            return 0;
-        }
-        [Route("Editbusiness")]
-        [HttpPut]
-        public int Editbusiness()
-        {
-            return 0;
-        }
-        [Route("RemoveBusiness")]
-        [HttpDelete]
-        public int RemoveBusiness()
-        {
-            return 0;
-        }
     }
 }

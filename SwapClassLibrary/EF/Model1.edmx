@@ -23,6 +23,12 @@
           </Key>
           <Property Name="business_id" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="business_owner_id" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="is_active" Type="bit" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="description" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ratring" Type="float" Nullable="false" />
+          <Property Name="opening_houers" Type="time" Precision="4" Nullable="false" />
+          <Property Name="closing_houers" Type="time" Precision="4" Nullable="false" />
         </EntityType>
         <EntityType Name="BusinessOwner">
           <Key>
@@ -97,14 +103,14 @@
             <PropertyRef Name="product_id" />
           </Key>
           <Property Name="product_id" Type="nvarchar" MaxLength="40" Nullable="false" />
-          <Property Name="name" Type="nvarchar" MaxLength="20" />
-          <Property Name="description" Type="nvarchar" MaxLength="40" />
-          <Property Name="price" Type="float" />
-          <Property Name="discount" Type="float" />
-          <Property Name="creation_date" Type="date" />
-          <Property Name="discount_start_date" Type="date" />
-          <Property Name="discount_end_date" Type="date" />
-          <Property Name="is_active" Type="bit" />
+          <Property Name="name" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="description" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="price" Type="float" Nullable="false" />
+          <Property Name="discount" Type="float" Nullable="false" />
+          <Property Name="creation_date" Type="date" Nullable="false" />
+          <Property Name="discount_start_date" Type="date" Nullable="false" />
+          <Property Name="discount_end_date" Type="date" Nullable="false" />
+          <Property Name="is_active" Type="bit" Nullable="false" />
           <Property Name="business_id" Type="nvarchar" MaxLength="20" Nullable="false" />
         </EntityType>
         <EntityType Name="quest">
@@ -426,6 +432,12 @@
           <NavigationProperty Name="products" Relationship="Self.FK__product__busines__29E1370A" FromRole="business" ToRole="product" />
           <NavigationProperty Name="BusinessOwner" Relationship="Self.FK_business_BusinessOwner" FromRole="business" ToRole="BusinessOwner" />
           <NavigationProperty Name="place" Relationship="Self.FK_place_business1" FromRole="business" ToRole="place" />
+          <Property Name="is_active" Type="Boolean" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="description" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ratring" Type="Double" Nullable="false" />
+          <Property Name="opening_houers" Type="Time" Nullable="false" Precision="4" />
+          <Property Name="closing_houers" Type="Time" Nullable="false" Precision="4" />
         </EntityType>
         <EntityType Name="BusinessOwner">
           <Key>
@@ -511,14 +523,14 @@
             <PropertyRef Name="product_id" />
           </Key>
           <Property Name="product_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="description" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
-          <Property Name="price" Type="Double" />
-          <Property Name="discount" Type="Double" />
-          <Property Name="creation_date" Type="DateTime" Precision="0" />
-          <Property Name="discount_start_date" Type="DateTime" Precision="0" />
-          <Property Name="discount_end_date" Type="DateTime" Precision="0" />
-          <Property Name="is_active" Type="Boolean" />
+          <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="price" Type="Double" Nullable="false" />
+          <Property Name="discount" Type="Double" Nullable="false" />
+          <Property Name="creation_date" Type="DateTime" Precision="0" Nullable="false" />
+          <Property Name="discount_start_date" Type="DateTime" Precision="0" Nullable="false" />
+          <Property Name="discount_end_date" Type="DateTime" Precision="0" Nullable="false" />
+          <Property Name="is_active" Type="Boolean" Nullable="false" />
           <Property Name="business_id" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="business" Relationship="Self.FK__product__busines__29E1370A" FromRole="product" ToRole="business" />
         </EntityType>
@@ -848,6 +860,12 @@
           <EntitySetMapping Name="businesses">
             <EntityTypeMapping TypeName="SwapModel.business">
               <MappingFragment StoreEntitySet="business">
+                <ScalarProperty Name="closing_houers" ColumnName="closing_houers" />
+                <ScalarProperty Name="opening_houers" ColumnName="opening_houers" />
+                <ScalarProperty Name="ratring" ColumnName="ratring" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="is_active" ColumnName="is_active" />
                 <ScalarProperty Name="business_id" ColumnName="business_id" />
                 <ScalarProperty Name="business_owner_id" ColumnName="business_owner_id" />
               </MappingFragment>

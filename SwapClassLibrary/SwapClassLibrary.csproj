@@ -66,6 +66,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTO\productDTO\productDTO.cs" />
+    <Compile Include="DTO\bussinessDTO\bussinessDTO.cs" />
     <Compile Include="DTO\categoryDTO\MainAndSubRelationshipDTO.cs" />
     <Compile Include="DTO\categoryDTO\categoryAddGoogleDTO.cs" />
     <Compile Include="DTO\categoryDTO\categoryAddGoogleResponseDTO.cs" />
@@ -141,13 +143,15 @@
     <Compile Include="Models\JWTModel.cs" />
     <Compile Include="Models\IAuthModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\business\BusinessService.cs" />
+    <Compile Include="Service\product\ProductService.cs" />
     <Compile Include="Service\category\CategoryService.cs" />
     <Compile Include="Service\category\googleValueService.cs" />
     <Compile Include="Service\category\MainCategoryService.cs" />
     <Compile Include="Service\category\SubCategoryService.cs" />
     <Compile Include="Service\Authenticate service\JWTGetToken.cs" />
     <Compile Include="Service\Authenticate service\IAuthService.cs" />
-    <Compile Include="Service\users\businessService.cs" />
+    <Compile Include="Service\business\BusinessOwnerService.cs" />
     <Compile Include="Service\users\adminService.cs" />
     <Compile Include="Service\users\clientService.cs" />
     <Compile Include="Service\IdService.cs" />

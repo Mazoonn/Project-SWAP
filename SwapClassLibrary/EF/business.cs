@@ -22,6 +22,12 @@ namespace SwapClassLibrary.EF
     
         public string business_id { get; set; }
         public string business_owner_id { get; set; }
+        public bool is_active { get; set; }
+        public string name { get; set; }
+        public string description { get; set; }
+        public double ratring { get; set; }
+        public System.TimeSpan opening_houers { get; set; }
+        public System.TimeSpan closing_houers { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<product> products { get; set; }
