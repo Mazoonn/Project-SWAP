@@ -8,7 +8,7 @@ namespace SwapClassLibrary.DTO
 {
     public class bussinessDTO
     {
-        public string business_id;
+        public string place_id;
         public string business_owner_id;
         public bool is_active;
         public string name;

@@ -5,12 +5,6 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="SwapModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="address">
-          <Key>
-            <PropertyRef Name="address_id" />
-          </Key>
-          <Property Name="address_id" Type="nvarchar" MaxLength="20" Nullable="false" />
-        </EntityType>
         <EntityType Name="admin">
           <Key>
             <PropertyRef Name="admin_id" />
@@ -19,9 +13,9 @@
         </EntityType>
         <EntityType Name="business">
           <Key>
-            <PropertyRef Name="business_id" />
+            <PropertyRef Name="place_id" />
           </Key>
-          <Property Name="business_id" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="place_id" Type="nvarchar" MaxLength="40" Nullable="false" />
           <Property Name="business_owner_id" Type="nvarchar" MaxLength="40" Nullable="false" />
           <Property Name="is_active" Type="bit" Nullable="false" />
           <Property Name="name" Type="nvarchar" MaxLength="40" Nullable="false" />
@@ -29,6 +23,7 @@
           <Property Name="ratring" Type="float" Nullable="false" />
           <Property Name="opening_houers" Type="time" Precision="4" Nullable="false" />
           <Property Name="closing_houers" Type="time" Precision="4" Nullable="false" />
+          <Property Name="approve_by_admin" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="BusinessOwner">
           <Key>
@@ -57,12 +52,12 @@
         </EntityType>
         <EntityType Name="Event">
           <Key>
-            <PropertyRef Name="event_id" />
+            <PropertyRef Name="place_id" />
           </Key>
-          <Property Name="event_id" Type="nvarchar" MaxLength="20" Nullable="false" />
-          <Property Name="start_date" Type="date" />
-          <Property Name="end_date" Type="date" />
-          <Property Name="price" Type="float" />
+          <Property Name="place_id" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="start_date" Type="date" Nullable="false" />
+          <Property Name="end_date" Type="date" Nullable="false" />
+          <Property Name="price" Type="float" Nullable="false" />
         </EntityType>
         <EntityType Name="google_value">
           <Key>
@@ -75,7 +70,7 @@
           <Key>
             <PropertyRef Name="main_id" />
           </Key>
-          <Property Name="main_id" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="main_id" Type="nvarchar" MaxLength="40" Nullable="false" />
           <Property Name="creation_date" Type="date" Nullable="false" />
           <Property Name="name" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="google_value" Type="nvarchar" MaxLength="20" />
@@ -85,12 +80,11 @@
           <Key>
             <PropertyRef Name="place_id" />
           </Key>
-          <Property Name="place_id" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="place_id" Type="nvarchar" MaxLength="40" Nullable="false" />
           <Property Name="creation_date" Type="date" Nullable="false" />
           <Property Name="description" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="latitude" Type="decimal" Precision="11" Scale="8" Nullable="false" />
           <Property Name="longitude" Type="decimal" Precision="11" Scale="8" Nullable="false" />
-          <Property Name="opening_houers" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="Icon" Type="nvarchar" MaxLength="40" Nullable="false" />
           <Property Name="Rating" Type="decimal" Precision="1" Scale="0" />
           <Property Name="country" Type="nvarchar" MaxLength="20" Nullable="false" />
@@ -111,26 +105,26 @@
           <Property Name="discount_start_date" Type="date" Nullable="false" />
           <Property Name="discount_end_date" Type="date" Nullable="false" />
           <Property Name="is_active" Type="bit" Nullable="false" />
-          <Property Name="business_id" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="business_id" Type="nvarchar" MaxLength="40" Nullable="false" />
         </EntityType>
         <EntityType Name="quest">
           <Key>
             <PropertyRef Name="quest_id" />
           </Key>
-          <Property Name="quest_id" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="quest_id" Type="nvarchar" MaxLength="40" Nullable="false" />
           <Property Name="creation_date" Type="date" Nullable="false" />
           <Property Name="name" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="descrition" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="been_used" Type="decimal" Precision="5" Scale="0" />
-          <Property Name="user_id" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="client_id" Type="nvarchar" MaxLength="40" Nullable="false" />
         </EntityType>
         <EntityType Name="r_place_quest">
           <Key>
             <PropertyRef Name="place_id" />
             <PropertyRef Name="quest_id" />
           </Key>
-          <Property Name="place_id" Type="nvarchar" MaxLength="20" Nullable="false" />
-          <Property Name="quest_id" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="place_id" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="quest_id" Type="nvarchar" MaxLength="40" Nullable="false" />
           <Property Name="creation_date" Type="date" Nullable="false" />
           <Property Name="name" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="Rating" Type="decimal" Precision="1" Scale="0" />
@@ -141,9 +135,9 @@
             <PropertyRef Name="main_id" />
             <PropertyRef Name="place_id" />
           </Key>
-          <Property Name="sub_id" Type="nvarchar" MaxLength="20" Nullable="false" />
-          <Property Name="main_id" Type="nvarchar" MaxLength="20" Nullable="false" />
-          <Property Name="place_id" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="sub_id" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="main_id" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="place_id" Type="nvarchar" MaxLength="40" Nullable="false" />
           <Property Name="creation_date" Type="date" Nullable="false" />
         </EntityType>
         <EntityType Name="r_sub_and_main_category">
@@ -151,8 +145,8 @@
             <PropertyRef Name="sub_id" />
             <PropertyRef Name="main_id" />
           </Key>
-          <Property Name="sub_id" Type="nvarchar" MaxLength="20" Nullable="false" />
-          <Property Name="main_id" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="sub_id" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="main_id" Type="nvarchar" MaxLength="40" Nullable="false" />
           <Property Name="creation_date" Type="date" Nullable="false" />
           <Property Name="descrition" Type="nvarchar" MaxLength="20" />
           <Property Name="clicked" Type="decimal" Precision="5" Scale="0" />
@@ -162,21 +156,11 @@
           <Key>
             <PropertyRef Name="sub_id" />
           </Key>
-          <Property Name="sub_id" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="sub_id" Type="nvarchar" MaxLength="40" Nullable="false" />
           <Property Name="creation_date" Type="date" Nullable="false" />
           <Property Name="name" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="is_active" Type="bit" Nullable="false" />
           <Property Name="google_value" Type="nvarchar" MaxLength="20" />
-        </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="principal_id" Type="int" Nullable="false" />
-          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="version" Type="int" />
-          <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
         <Association Name="FK__Event__event_id__2CBDA3B5">
           <End Role="place" Type="Self.place" Multiplicity="1" />
@@ -186,7 +170,7 @@
               <PropertyRef Name="place_id" />
             </Principal>
             <Dependent Role="Event">
-              <PropertyRef Name="event_id" />
+              <PropertyRef Name="place_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -195,22 +179,10 @@
           <End Role="product" Type="Self.product" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="business">
-              <PropertyRef Name="business_id" />
+              <PropertyRef Name="place_id" />
             </Principal>
             <Dependent Role="product">
               <PropertyRef Name="business_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__quest__user_id__1A9EF37A">
-          <End Role="client" Type="Self.client" Multiplicity="1" />
-          <End Role="quest" Type="Self.quest" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="client">
-              <PropertyRef Name="client_id" />
-            </Principal>
-            <Dependent Role="quest">
-              <PropertyRef Name="user_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -255,10 +227,22 @@
           <End Role="place" Type="Self.place" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="business">
-              <PropertyRef Name="business_id" />
+              <PropertyRef Name="place_id" />
             </Principal>
             <Dependent Role="place">
               <PropertyRef Name="place_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_quest_client">
+          <End Role="client" Type="Self.client" Multiplicity="1" />
+          <End Role="quest" Type="Self.quest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="client">
+              <PropertyRef Name="client_id" />
+            </Principal>
+            <Dependent Role="quest">
+              <PropertyRef Name="client_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -337,7 +321,6 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="SwapModelStoreContainer">
-          <EntitySet Name="address" EntityType="Self.address" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="admin" EntityType="Self.admin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="business" EntityType="Self.business" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BusinessOwner" EntityType="Self.BusinessOwner" Schema="dbo" store:Type="Tables" />
@@ -352,7 +335,6 @@
           <EntitySet Name="r_place_sub_and_main_category" EntityType="Self.r_place_sub_and_main_category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="r_sub_and_main_category" EntityType="Self.r_sub_and_main_category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sub_category" EntityType="Self.sub_category" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__Event__event_id__2CBDA3B5" Association="Self.FK__Event__event_id__2CBDA3B5">
             <End Role="place" EntitySet="place" />
             <End Role="Event" EntitySet="Event" />
@@ -360,10 +342,6 @@
           <AssociationSet Name="FK__product__busines__29E1370A" Association="Self.FK__product__busines__29E1370A">
             <End Role="business" EntitySet="business" />
             <End Role="product" EntitySet="product" />
-          </AssociationSet>
-          <AssociationSet Name="FK__quest__user_id__1A9EF37A" Association="Self.FK__quest__user_id__1A9EF37A">
-            <End Role="client" EntitySet="client" />
-            <End Role="quest" EntitySet="quest" />
           </AssociationSet>
           <AssociationSet Name="FK_business_BusinessOwner" Association="Self.FK_business_BusinessOwner">
             <End Role="BusinessOwner" EntitySet="BusinessOwner" />
@@ -380,6 +358,10 @@
           <AssociationSet Name="FK_place_business1" Association="Self.FK_place_business1">
             <End Role="business" EntitySet="business" />
             <End Role="place" EntitySet="place" />
+          </AssociationSet>
+          <AssociationSet Name="FK_quest_client" Association="Self.FK_quest_client">
+            <End Role="client" EntitySet="client" />
+            <End Role="quest" EntitySet="quest" />
           </AssociationSet>
           <AssociationSet Name="FK_r_place_quest_place" Association="Self.FK_r_place_quest_place">
             <End Role="place" EntitySet="place" />
@@ -410,12 +392,6 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SwapModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="address">
-          <Key>
-            <PropertyRef Name="address_id" />
-          </Key>
-          <Property Name="address_id" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
-        </EntityType>
         <EntityType Name="admin">
           <Key>
             <PropertyRef Name="admin_id" />
@@ -425,19 +401,20 @@
         </EntityType>
         <EntityType Name="business">
           <Key>
-            <PropertyRef Name="business_id" />
+            <PropertyRef Name="place_id" />
           </Key>
-          <Property Name="business_id" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="place_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="business_owner_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="products" Relationship="Self.FK__product__busines__29E1370A" FromRole="business" ToRole="product" />
-          <NavigationProperty Name="BusinessOwner" Relationship="Self.FK_business_BusinessOwner" FromRole="business" ToRole="BusinessOwner" />
-          <NavigationProperty Name="place" Relationship="Self.FK_place_business1" FromRole="business" ToRole="place" />
           <Property Name="is_active" Type="Boolean" Nullable="false" />
-          <Property Name="name" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
-          <Property Name="description" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="name" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="ratring" Type="Double" Nullable="false" />
           <Property Name="opening_houers" Type="Time" Nullable="false" Precision="4" />
           <Property Name="closing_houers" Type="Time" Nullable="false" Precision="4" />
+          <Property Name="approve_by_admin" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="products" Relationship="Self.FK__product__busines__29E1370A" FromRole="business" ToRole="product" />
+          <NavigationProperty Name="BusinessOwner" Relationship="Self.FK_business_BusinessOwner" FromRole="business" ToRole="BusinessOwner" />
+          <NavigationProperty Name="place" Relationship="Self.FK_place_business1" FromRole="business" ToRole="place" />
         </EntityType>
         <EntityType Name="BusinessOwner">
           <Key>
@@ -465,18 +442,18 @@
           <Property Name="login_google" Type="Boolean" />
           <Property Name="login_facebock" Type="Boolean" />
           <Property Name="login_local" Type="Boolean" />
+          <Property Name="actor" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="BusinessOwner" Relationship="Self.FK_business_owner_id" FromRole="client" ToRole="BusinessOwner" />
-          <NavigationProperty Name="quests" Relationship="Self.FK__quest__user_id__1A9EF37A" FromRole="client" ToRole="quest" />
-          <Property Name="actor" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="quests" Relationship="Self.FK_quest_client" FromRole="client" ToRole="quest" />
         </EntityType>
         <EntityType Name="Event">
           <Key>
-            <PropertyRef Name="event_id" />
+            <PropertyRef Name="place_id" />
           </Key>
-          <Property Name="event_id" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="start_date" Type="DateTime" Precision="0" />
-          <Property Name="end_date" Type="DateTime" Precision="0" />
-          <Property Name="price" Type="Double" />
+          <Property Name="place_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="start_date" Type="DateTime" Precision="0" Nullable="false" />
+          <Property Name="end_date" Type="DateTime" Precision="0" Nullable="false" />
+          <Property Name="price" Type="Double" Nullable="false" />
           <NavigationProperty Name="place" Relationship="Self.FK__Event__event_id__2CBDA3B5" FromRole="Event" ToRole="place" />
         </EntityType>
         <EntityType Name="google_value">
@@ -490,7 +467,7 @@
           <Key>
             <PropertyRef Name="main_id" />
           </Key>
-          <Property Name="main_id" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="main_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="creation_date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="google_value" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
@@ -501,12 +478,11 @@
           <Key>
             <PropertyRef Name="place_id" />
           </Key>
-          <Property Name="place_id" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="place_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="creation_date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="description" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="latitude" Type="Decimal" Precision="11" Scale="8" Nullable="false" />
           <Property Name="longitude" Type="Decimal" Precision="11" Scale="8" Nullable="false" />
-          <Property Name="opening_houers" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Icon" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Rating" Type="Decimal" Precision="1" Scale="0" />
           <Property Name="country" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
@@ -527,24 +503,24 @@
           <Property Name="description" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="price" Type="Double" Nullable="false" />
           <Property Name="discount" Type="Double" Nullable="false" />
-          <Property Name="creation_date" Type="DateTime" Precision="0" Nullable="false" />
-          <Property Name="discount_start_date" Type="DateTime" Precision="0" Nullable="false" />
-          <Property Name="discount_end_date" Type="DateTime" Precision="0" Nullable="false" />
+          <Property Name="creation_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="discount_start_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="discount_end_date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="is_active" Type="Boolean" Nullable="false" />
-          <Property Name="business_id" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="business_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="business" Relationship="Self.FK__product__busines__29E1370A" FromRole="product" ToRole="business" />
         </EntityType>
         <EntityType Name="quest">
           <Key>
             <PropertyRef Name="quest_id" />
           </Key>
-          <Property Name="quest_id" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="quest_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="creation_date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="descrition" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="been_used" Type="Decimal" Precision="5" Scale="0" />
-          <Property Name="user_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="client" Relationship="Self.FK__quest__user_id__1A9EF37A" FromRole="quest" ToRole="client" />
+          <Property Name="client_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="client" Relationship="Self.FK_quest_client" FromRole="quest" ToRole="client" />
           <NavigationProperty Name="r_place_quest" Relationship="Self.FK_r_place_quest_quest" FromRole="quest" ToRole="r_place_quest" />
         </EntityType>
         <EntityType Name="r_place_quest">
@@ -552,8 +528,8 @@
             <PropertyRef Name="place_id" />
             <PropertyRef Name="quest_id" />
           </Key>
-          <Property Name="place_id" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="quest_id" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="place_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="quest_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="creation_date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Rating" Type="Decimal" Precision="1" Scale="0" />
@@ -566,9 +542,9 @@
             <PropertyRef Name="main_id" />
             <PropertyRef Name="place_id" />
           </Key>
-          <Property Name="sub_id" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="main_id" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="place_id" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="sub_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="main_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="place_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="creation_date" Type="DateTime" Nullable="false" Precision="0" />
           <NavigationProperty Name="place" Relationship="Self.FK_r_place_sub_and_main_category_place" FromRole="r_place_sub_and_main_category" ToRole="place" />
           <NavigationProperty Name="r_sub_and_main_category" Relationship="Self.FK_r_place_sub_and_main_category_r_sub_and_main_category" FromRole="r_place_sub_and_main_category" ToRole="r_sub_and_main_category" />
@@ -578,8 +554,8 @@
             <PropertyRef Name="sub_id" />
             <PropertyRef Name="main_id" />
           </Key>
-          <Property Name="sub_id" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="main_id" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="sub_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="main_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="creation_date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="descrition" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="clicked" Type="Decimal" Precision="5" Scale="0" />
@@ -592,22 +568,12 @@
           <Key>
             <PropertyRef Name="sub_id" />
           </Key>
-          <Property Name="sub_id" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="sub_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="creation_date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="is_active" Type="Boolean" Nullable="false" />
           <Property Name="google_value" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="r_sub_and_main_category" Relationship="Self.FK_r_sub_and_main_category_sub_category" FromRole="sub_category" ToRole="r_sub_and_main_category" />
-        </EntityType>
-        <EntityType Name="sysdiagram">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <Association Name="FK_BusinessOwner_admin">
           <End Role="admin" Type="Self.admin" Multiplicity="1" />
@@ -626,7 +592,7 @@
           <End Role="product" Type="Self.product" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="business">
-              <PropertyRef Name="business_id" />
+              <PropertyRef Name="place_id" />
             </Principal>
             <Dependent Role="product">
               <PropertyRef Name="business_id" />
@@ -650,7 +616,7 @@
           <End Role="place" Type="Self.place" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="business">
-              <PropertyRef Name="business_id" />
+              <PropertyRef Name="place_id" />
             </Principal>
             <Dependent Role="place">
               <PropertyRef Name="place_id" />
@@ -669,7 +635,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__quest__user_id__1A9EF37A">
+        <Association Name="FK_quest_client">
           <End Role="client" Type="Self.client" Multiplicity="1" />
           <End Role="quest" Type="Self.quest" Multiplicity="*" />
           <ReferentialConstraint>
@@ -677,7 +643,7 @@
               <PropertyRef Name="client_id" />
             </Principal>
             <Dependent Role="quest">
-              <PropertyRef Name="user_id" />
+              <PropertyRef Name="client_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -689,7 +655,7 @@
               <PropertyRef Name="place_id" />
             </Principal>
             <Dependent Role="Event">
-              <PropertyRef Name="event_id" />
+              <PropertyRef Name="place_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -768,7 +734,6 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="SwapDbConnection" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="addresses" EntityType="Self.address" />
           <EntitySet Name="admins" EntityType="Self.admin" />
           <EntitySet Name="businesses" EntityType="Self.business" />
           <EntitySet Name="BusinessOwners" EntityType="Self.BusinessOwner" />
@@ -783,7 +748,6 @@
           <EntitySet Name="r_place_sub_and_main_category" EntityType="Self.r_place_sub_and_main_category" />
           <EntitySet Name="r_sub_and_main_category" EntityType="Self.r_sub_and_main_category" />
           <EntitySet Name="sub_category" EntityType="Self.sub_category" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
           <AssociationSet Name="FK_BusinessOwner_admin" Association="Self.FK_BusinessOwner_admin">
             <End Role="admin" EntitySet="admins" />
             <End Role="BusinessOwner" EntitySet="BusinessOwners" />
@@ -804,7 +768,7 @@
             <End Role="client" EntitySet="clients" />
             <End Role="BusinessOwner" EntitySet="BusinessOwners" />
           </AssociationSet>
-          <AssociationSet Name="FK__quest__user_id__1A9EF37A" Association="Self.FK__quest__user_id__1A9EF37A">
+          <AssociationSet Name="FK_quest_client" Association="Self.FK_quest_client">
             <End Role="client" EntitySet="clients" />
             <End Role="quest" EntitySet="quests" />
           </AssociationSet>
@@ -843,13 +807,6 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="SwapModelStoreContainer" CdmEntityContainer="SwapDbConnection">
-          <EntitySetMapping Name="addresses">
-            <EntityTypeMapping TypeName="SwapModel.address">
-              <MappingFragment StoreEntitySet="address">
-                <ScalarProperty Name="address_id" ColumnName="address_id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="admins">
             <EntityTypeMapping TypeName="SwapModel.admin">
               <MappingFragment StoreEntitySet="admin">
@@ -860,14 +817,15 @@
           <EntitySetMapping Name="businesses">
             <EntityTypeMapping TypeName="SwapModel.business">
               <MappingFragment StoreEntitySet="business">
-                <ScalarProperty Name="closing_houers" ColumnName="closing_houers" />
-                <ScalarProperty Name="opening_houers" ColumnName="opening_houers" />
-                <ScalarProperty Name="ratring" ColumnName="ratring" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="is_active" ColumnName="is_active" />
-                <ScalarProperty Name="business_id" ColumnName="business_id" />
+                <ScalarProperty Name="place_id" ColumnName="place_id" />
                 <ScalarProperty Name="business_owner_id" ColumnName="business_owner_id" />
+                <ScalarProperty Name="is_active" ColumnName="is_active" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="ratring" ColumnName="ratring" />
+                <ScalarProperty Name="opening_houers" ColumnName="opening_houers" />
+                <ScalarProperty Name="closing_houers" ColumnName="closing_houers" />
+                <ScalarProperty Name="approve_by_admin" ColumnName="approve_by_admin" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -881,7 +839,6 @@
           <EntitySetMapping Name="clients">
             <EntityTypeMapping TypeName="SwapModel.client">
               <MappingFragment StoreEntitySet="client">
-                <ScalarProperty Name="actor" ColumnName="actor" />
                 <ScalarProperty Name="client_id" ColumnName="client_id" />
                 <ScalarProperty Name="creation_date" ColumnName="creation_date" />
                 <ScalarProperty Name="first_name" ColumnName="first_name" />
@@ -895,13 +852,14 @@
                 <ScalarProperty Name="login_google" ColumnName="login_google" />
                 <ScalarProperty Name="login_facebock" ColumnName="login_facebock" />
                 <ScalarProperty Name="login_local" ColumnName="login_local" />
+                <ScalarProperty Name="actor" ColumnName="actor" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Events">
             <EntityTypeMapping TypeName="SwapModel.Event">
               <MappingFragment StoreEntitySet="Event">
-                <ScalarProperty Name="event_id" ColumnName="event_id" />
+                <ScalarProperty Name="place_id" ColumnName="place_id" />
                 <ScalarProperty Name="start_date" ColumnName="start_date" />
                 <ScalarProperty Name="end_date" ColumnName="end_date" />
                 <ScalarProperty Name="price" ColumnName="price" />
@@ -935,7 +893,6 @@
                 <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="latitude" ColumnName="latitude" />
                 <ScalarProperty Name="longitude" ColumnName="longitude" />
-                <ScalarProperty Name="opening_houers" ColumnName="opening_houers" />
                 <ScalarProperty Name="Icon" ColumnName="Icon" />
                 <ScalarProperty Name="Rating" ColumnName="Rating" />
                 <ScalarProperty Name="country" ColumnName="country" />
@@ -969,7 +926,7 @@
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="descrition" ColumnName="descrition" />
                 <ScalarProperty Name="been_used" ColumnName="been_used" />
-                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="client_id" ColumnName="client_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1014,17 +971,6 @@
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="is_active" ColumnName="is_active" />
                 <ScalarProperty Name="google_value" ColumnName="google_value" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="SwapModel.sysdiagram">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="definition" ColumnName="definition" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

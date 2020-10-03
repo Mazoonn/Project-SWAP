@@ -112,9 +112,9 @@ namespace api.Controllers
         {
             try
             {
-                if (bussiness.business_id == null || bussiness.business_owner_id == null)
+                if (bussiness.place_id == null || bussiness.business_owner_id == null)
                 {
-                    bool is_deleted = BusinessService.DeleteBusiness(bussiness.business_owner_id, bussiness.business_id);
+                    bool is_deleted = BusinessService.DeleteBusiness(bussiness.business_owner_id, bussiness.place_id);
                     if (!is_deleted)
                         return Request.CreateResponse(HttpStatusCode.NotFound, "There is no business id as this in db");
                     return Request.CreateResponse(HttpStatusCode.OK, "The bussiness is removed");

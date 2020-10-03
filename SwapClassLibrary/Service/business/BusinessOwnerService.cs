@@ -35,8 +35,12 @@ namespace SwapClassLibrary.Service
             BusinessOwner business_owner = db.BusinessOwners.Where(c => c.business_owner_id == business_owner_id).FirstOrDefault();
             if (business_owner != null)
             {
+                List<business> businesses = db.businesses.Where(p => p.business_owner_id == business_owner_id).ToList();
+                for (int i = 0; i < businesses.Count(); i++)
+                {
+                    db.businesses.Remove(businesses[i]);
+                }
                 db.BusinessOwners.Remove(business_owner);
-                //TODO remove all bussiness and all the prodectes check if it is posible from the DB
                 client client = db.clients.Where(c => c.client_id == business_owner_id).FirstOrDefault();
                 client.actor = "client";
                 db.SaveChanges();

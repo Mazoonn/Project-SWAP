@@ -12,7 +12,7 @@ namespace SwapClassLibrary.Service
         public static string generateID(string class_name)
         {
             string name_for_id = class_name.Split('_')[0] + "_";
-            int langth_to_take = 20 - name_for_id.Length ;// place_id => palce
+            int langth_to_take = 40 - name_for_id.Length ;// place_id => palce
             StringBuilder builder = new StringBuilder();
             Enumerable
                .Range(65, 26)

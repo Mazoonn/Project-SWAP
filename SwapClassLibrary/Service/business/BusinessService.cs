@@ -20,7 +20,7 @@ namespace SwapClassLibrary.Service
                 return null;
             List<bussinessDTO> bussinesses = db.businesses.Select(b => new bussinessDTO()
             {
-                business_id = b.business_id,
+                place_id = b.place_id,
                 business_owner_id = b.business_owner_id,
                 is_active = b.is_active,
                 name = b.name,
@@ -40,7 +40,7 @@ namespace SwapClassLibrary.Service
             {
                 business Business_to_add = new business()
                 {
-                    business_id = bussiness.business_id,
+                    place_id = IdService.generateID("place_id"),
                     business_owner_id = bussiness.business_owner_id,
                     is_active = bussiness.is_active,
                     name = bussiness.name,
@@ -59,7 +59,7 @@ namespace SwapClassLibrary.Service
         public static bool EditBusiness(bussinessDTO business)
         {
             SwapDbConnection db = new SwapDbConnection();
-            business business_to_edit = db.businesses.FirstOrDefault(b => b.business_owner_id == business.business_owner_id && b.business_id == business.business_id);
+            business business_to_edit = db.businesses.FirstOrDefault(b => b.business_owner_id == business.business_owner_id && b.place_id == business.place_id);
             if (business == null ) return false;
             business_to_edit.name= business.name;
             business_to_edit.description = business.description;
@@ -73,7 +73,7 @@ namespace SwapClassLibrary.Service
         public static bool ChangeActiveBusiness(bussinessDTO business)
         {
             SwapDbConnection db = new SwapDbConnection();
-            business business_to_edit = db.businesses.FirstOrDefault(b => b.business_owner_id == business.business_owner_id && b.business_id == business.business_id);
+            business business_to_edit = db.businesses.FirstOrDefault(b => b.business_owner_id == business.business_owner_id && b.place_id == business.place_id);
 
             if (business == null) return false;
             business_to_edit.is_active = business.is_active;
@@ -81,14 +81,23 @@ namespace SwapClassLibrary.Service
             return true;
         }
 
-        public static bool DeleteBusiness(string business_owner_id, string business_id)
+        public static bool DeleteBusiness(string business_owner_id, string place_id)
         {
             SwapDbConnection db = new SwapDbConnection();
-            business Business = db.businesses.Where(b => b.business_owner_id == business_owner_id&&b.business_id == business_id).FirstOrDefault();
+            business Business = db.businesses.Where(b => b.business_owner_id == business_owner_id&&b.place_id == place_id).FirstOrDefault();
             if (Business != null)
             {
+                List<product> products = db.products.Where(p => p.business_id == place_id).ToList();
+                for (int i = 0; i < products.Count(); i++)
+                {
+                    db.products.Remove(products[i]);
+                }
+                place place = db.places.FirstOrDefault(p => p.place_id == place_id);
+                Event event_obj = db.Events.FirstOrDefault(e => e.place_id == place_id);
+                if(event_obj!= null) db.Events.Remove(event_obj);
+                //add remove from r category and places
+                db.places.Remove(place);
                 db.businesses.Remove(Business);
-                //TODO remove all prodects of this bussniss check if it is posible from the DB
                 db.SaveChanges();
                 return true;
             }

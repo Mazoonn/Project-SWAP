@@ -20,7 +20,7 @@ namespace SwapClassLibrary.EF
             this.products = new HashSet<product>();
         }
     
-        public string business_id { get; set; }
+        public string place_id { get; set; }
         public string business_owner_id { get; set; }
         public bool is_active { get; set; }
         public string name { get; set; }
@@ -28,6 +28,7 @@ namespace SwapClassLibrary.EF
         public double ratring { get; set; }
         public System.TimeSpan opening_houers { get; set; }
         public System.TimeSpan closing_houers { get; set; }
+        public bool approve_by_admin { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<product> products { get; set; }

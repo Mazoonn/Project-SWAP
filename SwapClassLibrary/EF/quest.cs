@@ -25,7 +25,7 @@ namespace SwapClassLibrary.EF
         public string name { get; set; }
         public string descrition { get; set; }
         public Nullable<decimal> been_used { get; set; }
-        public string user_id { get; set; }
+        public string client_id { get; set; }
     
         public virtual client client { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -15,7 +15,7 @@ namespace SwapClassLibrary.Service
         public static List<productDTO> GetAllProduct(string businness_id)
         {
             SwapDbConnection db = new SwapDbConnection();
-            int count = db.products.Count();
+            int count = db.products.Where(b=>b.business_id == businness_id).Count();
             if (count == 0)
                 return null;
             List<productDTO> products = db.products.Select(x => new productDTO()
@@ -36,7 +36,7 @@ namespace SwapClassLibrary.Service
         }
 
         //get product by id
-        public static productDTO GetProductByid(string id)
+        public static productDTO GetProductByid(string product_id)
         {
             SwapDbConnection db = new SwapDbConnection();
             productDTO product_obj = db.products.Select(x => new productDTO()
@@ -53,7 +53,7 @@ namespace SwapClassLibrary.Service
                 price = x.price,
                 product_id = x.product_id
             })
-                .FirstOrDefault(x => x.product_id == id);
+                .FirstOrDefault(x => x.product_id == product_id);
             return product_obj;
         }
 
