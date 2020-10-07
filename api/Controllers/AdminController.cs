@@ -14,6 +14,24 @@ namespace api.Controllers.admin
     [RoutePrefix("api/Admin")]
     public class AdminController : ApiController
     {
+
+        [Route("GetAllAdmins")]
+        [HttpGet]
+        public HttpResponseMessage GetAllAdmins(bool test = false)
+        {
+            try
+            {
+                List<clientInfoDTO> list = AdminService.GetAllAdmins();
+                if (list == null || test)
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is no Admins in the db");
+                return Request.CreateResponse(HttpStatusCode.OK, list);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
+        }
+
         //Post: add/Admin/AddAdmin
         [Route("AddAdmin")]
         [HttpPost]

@@ -16,13 +16,13 @@ namespace api.Controllers.Category
     {
 
         // GET: api/business/product/GetAllProduct/:businness_id/
-        [Route("GetAllProduct/{businness_id}")]
+        [Route("GetAllProduct/{business_id}")]
         [HttpGet]
-        public HttpResponseMessage GetAllProduct([FromUri]string businness_id, bool test = false)
+        public HttpResponseMessage GetAllProduct([FromUri]string business_id, bool test = false)
         {
             try
             {
-                List<productDTO> list = ProductService.GetAllProduct(businness_id);
+                List<productDTO> list = ProductService.GetAllProduct(business_id);
                 if (list == null || test)
                     return Request.CreateResponse(HttpStatusCode.NotFound, "There is no product fot this businness");
                 return Request.CreateResponse(HttpStatusCode.OK, list);
@@ -47,7 +47,7 @@ namespace api.Controllers.Category
                     product product = ProductService.AddProduct(req.name, req.business_id, req.discount, start_date_tmp, req.discount_end_date, req.price, req.description);
                     if (product != null)
                         return Request.CreateResponse(HttpStatusCode.OK, product);
-                    return Request.CreateResponse(HttpStatusCode.BadRequest, "There is a prodect with this name:" + product.name);
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "There is a prodect with this name:" + req.name);
                 }
 
                 return Request.CreateResponse(HttpStatusCode.BadRequest, "Missing prames in your request");
@@ -58,7 +58,7 @@ namespace api.Controllers.Category
             }
         }
 
-        [Route("ChangeProductToActive/{businness_id}/{product_id}")]
+        [Route("ChangeProductToActive/{business_id}/{product_id}")]
         [HttpPut]
         // PUT: api/business/product/ChangeProductToActive/{businness_id}/{product_id}
         //need to send type : id,name 
@@ -74,7 +74,7 @@ namespace api.Controllers.Category
                     return Request.CreateResponse(HttpStatusCode.NotFound, "There is prodect with that id :" + product_id);
                 slected_products.is_active = req;
                 db.SaveChanges();
-                return Request.CreateResponse(HttpStatusCode.OK, slected_products);
+                return Request.CreateResponse(HttpStatusCode.OK, true);
             }
             catch (Exception e)
             {
@@ -83,7 +83,7 @@ namespace api.Controllers.Category
         }
 
         // Delete:api/business/product/DeleteProduct/{businness_id}/{product_id}
-        [Route("DeleteProduct/{businness_id}/{product_id}")]
+        [Route("DeleteProduct/{business_id}/{product_id}")]
         [HttpDelete]
         public HttpResponseMessage DeleteProduct([FromUri]string business_id, [FromUri]string product_id)
         {
@@ -92,7 +92,7 @@ namespace api.Controllers.Category
                 bool is_deleted;
                 is_deleted = ProductService.deleteProduct(business_id, product_id);
                 if (!is_deleted)
-                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is prodect with that id :" + product_id);
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is no prodect with the id :" + product_id);
                 return Request.CreateResponse(HttpStatusCode.OK, "the prodect had been deleted ");
             }
             catch (Exception e)
@@ -101,7 +101,7 @@ namespace api.Controllers.Category
             }
         }
 
-        [Route("UpdateProduct/{businness_id}/{product_id}")]
+        [Route("UpdateProduct/{business_id}/{product_id}")]
         [HttpPut]
         // PUT:   api/business/product/UpdateProduct/{businness_id}/{product_id}
         //need to send type : id,name 
@@ -111,7 +111,7 @@ namespace api.Controllers.Category
             try
             {
                 SwapDbConnection db = new SwapDbConnection();
-                bool is_change = ProductService.updateProduct(business_id, product_id, req.discount, req.name, req.discount_start_date, req.discount_end_date, req.price, req.description);
+                bool is_change = ProductService.updateProduct(business_id, product_id, req);
                 if (!is_change)
                     return Request.CreateResponse(HttpStatusCode.NotFound, "There is prodect with that id :" + product_id);
                 return Request.CreateResponse(HttpStatusCode.OK, "The product was changed");

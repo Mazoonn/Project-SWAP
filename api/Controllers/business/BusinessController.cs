@@ -10,7 +10,7 @@ using SwapClassLibrary.Service;
 
 namespace api.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [RoutePrefix("api/business")]
     public class BusinessController : ApiController
     {
@@ -24,8 +24,8 @@ namespace api.Controllers
             {
                 bool is_add = BusinessOwnersService.AddBusinessOwners(business_owner_id);
                 if (!is_add)
-                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is no client id as this in db");
-                return Request.CreateResponse(HttpStatusCode.OK, "There the client is a Bussnes owner now");
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is not client id in the db");
+                return Request.CreateResponse(HttpStatusCode.OK, "The client is a Bussnes owner now");
             }
             catch (Exception e)
             {
@@ -43,8 +43,8 @@ namespace api.Controllers
             {
                 bool is_deleted = BusinessOwnersService.DeleteBusinessOwners(business_owner_id);
                 if (!is_deleted)
-                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is no  id as this in db");
-                return Request.CreateResponse(HttpStatusCode.OK, "There is client id as this in db and he is admin now");
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is no business owner id as this in db");
+                return Request.CreateResponse(HttpStatusCode.OK, "The business owner is now client now");
             }
             catch (Exception e)
             {
@@ -90,14 +90,14 @@ namespace api.Controllers
 
         [Route("ChangeActiveBusiness")]
         [HttpPut]
-        public HttpResponseMessage ChangeActiveBusinessTest([FromBody]bussinessDTO bussiness)
+        public HttpResponseMessage ChangeActiveBusiness([FromBody]bussinessDTO bussiness)
         {
             try
             {
                 bool is_edit = BusinessService.ChangeActiveBusiness(bussiness);
                 if (!is_edit)
                     return Request.CreateResponse(HttpStatusCode.NotFound, "There is no business id as this in db");
-                return Request.CreateResponse(HttpStatusCode.OK, "The business was edit");
+                return Request.CreateResponse(HttpStatusCode.OK, "The business was active");
             }
             catch (Exception e)
             {
@@ -112,7 +112,7 @@ namespace api.Controllers
         {
             try
             {
-                if (bussiness.place_id == null || bussiness.business_owner_id == null)
+                if (bussiness.place_id != null || bussiness.business_owner_id != null)
                 {
                     bool is_deleted = BusinessService.DeleteBusiness(bussiness.business_owner_id, bussiness.place_id);
                     if (!is_deleted)

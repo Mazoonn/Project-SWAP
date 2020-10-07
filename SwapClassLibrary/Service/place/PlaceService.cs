@@ -19,11 +19,8 @@ namespace SwapClassLibrary.Service
             {
                 place_id = x.place_id,
                 creation_date = x.creation_date,
-                description = x.description,
                 latitude = x.latitude,
                 longitude = x.longitude,
-                Icon = x.Icon,
-                 Rating = x.Rating,
                 country = x.country,
                 street = x.street,
                 street_number = x.street_number,
@@ -42,11 +39,8 @@ namespace SwapClassLibrary.Service
             {
                 place_id = place.place_id,
                 creation_date = DateTime.Now,
-                description = place.description,
                 latitude = place.latitude,
                 longitude = place.longitude,
-                Icon = place.Icon,
-                Rating = place.Rating,
                 country = place.country,
                 street = place.street,
                 street_number = place.street_number,
@@ -77,13 +71,9 @@ namespace SwapClassLibrary.Service
             if (place.longitude != null) place_obj.longitude = place.longitude;
             if (place.latitude != null) place_obj.latitude = place.latitude;
             if (place.post_code != null) place_obj.post_code = place.post_code;
-            if (place.Rating != null) place_obj.Rating = place.Rating;
             if (place.street != null) place_obj.street = place.street;
             if (place.street_number != null) place_obj.street_number = place.street_number;
             if (place.country != null) place_obj.country = place.country;
-            if (place.Icon != null) place_obj.Icon = place.Icon;
-            if (place.description != null) place_obj.description = place.description;
-            if (place.Icon != null) place_obj.Icon = place.Icon;
             db.SaveChanges();
             return true;
         }
@@ -92,12 +82,18 @@ namespace SwapClassLibrary.Service
         {
             SwapDbConnection db = new SwapDbConnection();
             r_place_sub_and_main_category place_obj = db.r_place_sub_and_main_category.FirstOrDefault(p => p.main_id == place.main_id&&p.sub_id ==place.sub_id && p.place_id==place.place_id);
+
             if (place_obj == null)
+                return false;
+            else
             {
-                place_obj.main_id = place.main_id;
-                place_obj.sub_id = place.sub_id;
-                place_obj.place_id = place.place_id;
-                db.r_place_sub_and_main_category.Add(place_obj);
+                r_place_sub_and_main_category new_obj = new r_place_sub_and_main_category()
+                {
+                    main_id = place.main_id,
+                    sub_id = place.sub_id,
+                    place_id = place.place_id
+                };
+                db.r_place_sub_and_main_category.Add(new_obj);
                 db.SaveChanges();
                 return true;
             }

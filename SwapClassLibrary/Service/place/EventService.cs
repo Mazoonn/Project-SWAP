@@ -18,14 +18,14 @@ namespace SwapClassLibrary.Service
             int count = db.Events.Count();
             if (count == 0)
                 return null;
-            List<eventDTO> Events = db.Events.Select(e => new eventDTO()
+            List<eventDTO> events = db.Events.Select(e => new eventDTO()
             {
-                place = PlaceService.GetPlaceInfoByid(e.place_id),
+                place = new placeDTO() { place_id = e.place_id },
                 end_date = e.end_date,
                 price = e.price,
                 start_date= e.start_date
             }).ToList();
-            return Events;
+            return events;
 
         }
 

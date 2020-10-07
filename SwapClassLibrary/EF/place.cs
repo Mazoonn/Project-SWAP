@@ -23,11 +23,8 @@ namespace SwapClassLibrary.EF
     
         public string place_id { get; set; }
         public System.DateTime creation_date { get; set; }
-        public string description { get; set; }
         public decimal latitude { get; set; }
         public decimal longitude { get; set; }
-        public string Icon { get; set; }
-        public Nullable<decimal> Rating { get; set; }
         public string country { get; set; }
         public string street { get; set; }
         public string street_number { get; set; }

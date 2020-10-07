@@ -66,6 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTO\clientDTO\clientInfoDTO.cs" />
     <Compile Include="DTO\placeDTO\eventDTO.cs" />
     <Compile Include="DTO\placeDTO\placeToCategoryDTO.cs" />
     <Compile Include="DTO\placeDTO\placeDTO.cs" />
@@ -80,6 +81,9 @@
     <Compile Include="DTO\categoryDTO\requestValueDTO.cs" />
     <Compile Include="DTO\clientDTO\loginDTO.cs" />
     <Compile Include="DTO\clientDTO\registerDTO.cs" />
+    <Compile Include="EF\address.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="EF\admin.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -135,6 +139,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="EF\sub_category.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\sysdiagram.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\JWTModel.cs" />

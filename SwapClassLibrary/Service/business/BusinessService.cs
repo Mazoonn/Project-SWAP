@@ -25,7 +25,7 @@ namespace SwapClassLibrary.Service
                 is_active = b.is_active,
                 name = b.name,
                 description = b.description,
-                ratring = b.ratring,
+                ratring =  b.rating,
                 opening_houers = b.opening_houers,
                 closing_houers = b.closing_houers,
             }).ToList();
@@ -34,22 +34,25 @@ namespace SwapClassLibrary.Service
 
         public static bool AddBusiness(bussinessDTO bussiness)
         {
+
             SwapDbConnection db = new SwapDbConnection();
-            business business = db.businesses.Where(b => b.business_owner_id == bussiness.business_owner_id && b.name == bussiness.name).FirstOrDefault();
-            if (business != null)
+            business business_obj = db.businesses.FirstOrDefault(b => b.business_owner_id == bussiness.business_owner_id && b.name == bussiness.name);
+            if (business_obj == null)
             {
-                business Business_to_add = new business()
+                business business_to_add = new business()
                 {
                     place_id = IdService.generateID("place_id"),
                     business_owner_id = bussiness.business_owner_id,
                     is_active = bussiness.is_active,
                     name = bussiness.name,
                     description = bussiness.description,
-                    ratring = bussiness.ratring,
+                    Icon = bussiness.Icon,
+                    rating = bussiness.ratring,
                     opening_houers = bussiness.opening_houers,
                     closing_houers = bussiness.closing_houers,
+                    approve_by_admin = false
                 };
-                db.businesses.Add(Business_to_add);
+                db.businesses.Add(business_to_add);
                 db.SaveChanges();
                 return true;
             }
@@ -63,9 +66,12 @@ namespace SwapClassLibrary.Service
             if (business == null ) return false;
             business_to_edit.name= business.name;
             business_to_edit.description = business.description;
-            business_to_edit.ratring = business.ratring;
+            business_to_edit.rating = business.ratring;
             business_to_edit.opening_houers = business.opening_houers;
             business_to_edit.closing_houers = business.closing_houers;
+            business_to_edit.Icon = business.Icon;
+            business_to_edit.rating = business.ratring;
+            business_to_edit.description = business.description;
             db.SaveChanges();
             return true;
         }
@@ -73,9 +79,9 @@ namespace SwapClassLibrary.Service
         public static bool ChangeActiveBusiness(bussinessDTO business)
         {
             SwapDbConnection db = new SwapDbConnection();
-            business business_to_edit = db.businesses.FirstOrDefault(b => b.business_owner_id == business.business_owner_id && b.place_id == business.place_id);
+            business business_to_edit = db.businesses.FirstOrDefault(b => b.place_id == business.place_id);
 
-            if (business == null) return false;
+            if (business_to_edit == null) return false;
             business_to_edit.is_active = business.is_active;
             db.SaveChanges();
             return true;
@@ -88,15 +94,17 @@ namespace SwapClassLibrary.Service
             if (Business != null)
             {
                 List<product> products = db.products.Where(p => p.business_id == place_id).ToList();
-                for (int i = 0; i < products.Count(); i++)
+                if(products!=null)
                 {
-                    db.products.Remove(products[i]);
+                    for (int i = 0; i < products.Count(); i++)
+                        db.products.Remove(products[i]);
                 }
-                place place = db.places.FirstOrDefault(p => p.place_id == place_id);
+                place place_obj = db.places.FirstOrDefault(p => p.place_id == place_id);
                 Event event_obj = db.Events.FirstOrDefault(e => e.place_id == place_id);
                 if(event_obj!= null) db.Events.Remove(event_obj);
                 //add remove from r category and places
-                db.places.Remove(place);
+                if(place_obj!=null)
+                 db.places.Remove(place_obj);
                 db.businesses.Remove(Business);
                 db.SaveChanges();
                 return true;

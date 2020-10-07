@@ -13,8 +13,9 @@ namespace SwapClassLibrary.DTO
         public bool is_active;
         public string name;
         public string description;
-        public double ratring;
-        public System.TimeSpan opening_houers;
-        public System.TimeSpan closing_houers;
+        public string Icon;
+        public int ratring;
+        public Nullable<System.TimeSpan> opening_houers;
+        public Nullable<System.TimeSpan> closing_houers;
     }
 }

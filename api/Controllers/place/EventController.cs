@@ -10,7 +10,7 @@ using SwapClassLibrary.Service;
 
 namespace api.Controllers
 {
-    [Authorize]
+   // [Authorize]
     [RoutePrefix("api/place/event")]
     public class EventController : ApiController
     {
@@ -67,7 +67,7 @@ namespace api.Controllers
 
         [Route("DeleteEvent")]
         [HttpDelete]
-        public HttpResponseMessage DeleteEvent(string event_obj)
+        public HttpResponseMessage DeleteEvent([FromBody]string event_obj)
         {
             try
             {

@@ -25,6 +25,7 @@ namespace SwapClassLibrary.EF
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<address> addresses { get; set; }
         public virtual DbSet<admin> admins { get; set; }
         public virtual DbSet<business> businesses { get; set; }
         public virtual DbSet<BusinessOwner> BusinessOwners { get; set; }
@@ -39,5 +40,6 @@ namespace SwapClassLibrary.EF
         public virtual DbSet<r_place_sub_and_main_category> r_place_sub_and_main_category { get; set; }
         public virtual DbSet<r_sub_and_main_category> r_sub_and_main_category { get; set; }
         public virtual DbSet<sub_category> sub_category { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
     }
 }

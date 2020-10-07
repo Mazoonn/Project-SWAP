@@ -10,12 +10,12 @@ using SwapClassLibrary.Service;
 
 namespace api.Controllers
 {
-    [Authorize]
+   // [Authorize]
     [RoutePrefix("api/place")]
     public class PlaceController : ApiController
     {
         
-        [Route("GetPlace")]
+        [Route("GetPlace/{place_id}")]
         [HttpGet]
         public HttpResponseMessage GetPlace(string place_id ,bool test = false)
         {
@@ -71,7 +71,7 @@ namespace api.Controllers
 
         [Route("DeletePlace")]
         [HttpDelete]
-        public HttpResponseMessage RemoveAdmin([FromBody]string place_id)
+        public HttpResponseMessage DeletePlace([FromBody]string place_id)
         {
             try
             {
@@ -88,7 +88,7 @@ namespace api.Controllers
 
         // PUT:api/place/addOrEditPlaceToCategory
         [Route("addOrEditPlaceToCategory")]
-        [HttpPut]
+        [HttpPost]
         public HttpResponseMessage addOrEditPlaceToCategory([FromBody]placeToCategoryDTO req)
         {
             try

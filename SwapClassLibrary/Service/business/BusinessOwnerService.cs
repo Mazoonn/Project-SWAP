@@ -15,13 +15,15 @@ namespace SwapClassLibrary.Service
         public static bool AddBusinessOwners(string business_owner_id)
         {
             SwapDbConnection db = new SwapDbConnection();
-            BusinessOwner business_owner_obj = db.BusinessOwners.Where(b => b.business_owner_id == business_owner_id).FirstOrDefault();
-            if (business_owner_obj == null)
+            BusinessOwner business_owner_obj = db.BusinessOwners.FirstOrDefault(b => b.business_owner_id == business_owner_id);
+            client client_to_change = db.clients.FirstOrDefault(c => c.client_id == business_owner_id);
+            if (business_owner_obj == null && client_to_change != null)
             {
                 BusinessOwner business_owner = new BusinessOwner()
                 {
-                    business_owner_id = IdService.generateID("business_owner_id"),
+                    business_owner_id = business_owner_id,
                 };
+                client_to_change.actor = "business_owner";
                 db.BusinessOwners.Add(business_owner);
                 db.SaveChanges();
                 return true;
