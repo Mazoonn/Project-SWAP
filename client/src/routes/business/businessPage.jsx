@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import BusinessButtons from "./businessButtons";
 
-class AdminPage extends Component {
+class BusinessPage extends Component {
   state = {
     business: [],
     products: [],
@@ -49,19 +49,19 @@ class AdminPage extends Component {
                       <thead>
                         <tr>
                           <th colSpan={5} className="text-center">
-                            {this.state.business[this.state.indexCategory].name}
+                            {/* {this.state.business[this.state.indexCategory].name} */}
                           </th>
                         </tr>
                         <tr>
-                          <th>Name</th>
+                          {/* <th>Name</th>
                           <th>Description</th>
                           <th>Google Value</th>
                           <th className="text-center">Save</th>
-                          <th className="text-center">Delete</th>
+                          <th className="text-center">Delete</th> */}
                         </tr>
                       </thead>
                       <tbody>
-                        {this.state.subCategories.map((subCategory, index) => {
+                        {/* {this.state.subCategories.map((subCategory, index) => {
                           return (
                             <tr key={subCategory.sub_id}>
                               <td>
@@ -167,7 +167,7 @@ class AdminPage extends Component {
                               Add new
                             </button>
                           </td>
-                        </tr>
+                        </tr> */}
                       </tbody>
                     </table>
                   </React.Fragment>
@@ -189,4 +189,4 @@ class AdminPage extends Component {
   }
 }
 
-export default AdminPage;
+export default BusinessPage;
