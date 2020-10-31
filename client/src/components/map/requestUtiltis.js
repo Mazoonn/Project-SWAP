@@ -1,7 +1,7 @@
 //בקשה לגוגל
 
 //טיפול בכלל השגיאות
-const handlaErrors = err => {
+const handlaErrors = (err) => {
   OK;
   ZERO_RESULTS;
   OVER_QUERY_LIMIT;

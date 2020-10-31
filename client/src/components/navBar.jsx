@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import Login from "../routes/login";
 import Register from "../routes/register";
 import Admin from "../routes/admin/AdminPage";
+import Business from "../routes/business/businessPage";
+import Profile from "../routes/ProfilePage";
 import Home from "../routes/HomePage";
 import { BrowserRouter, Switch, Route, NavLink } from "react-router-dom";
 import Quest from "./quest/quest";
@@ -33,15 +35,22 @@ class NavBar extends Component {
               {user && (
                 <React.Fragment>
                   <NavLink activeClassName="active" to="/quest">
-                    Quest
+                    Quest{console.log(user)}
                   </NavLink>
                   <NavLink activeClassName="active" to="/logout">
                     Logout
                   </NavLink>
+                  <NavLink activeClassName="active" to="/profile">
+                    Profile
+                  </NavLink>
                 </React.Fragment>
               )}
-
-              {user && user.isAdmin && (
+              {user && ( //TODO user.isBusinessOwner && (
+                <NavLink activeClassName="active" to="/business">
+                  Business Owner Page
+                </NavLink>
+              )}
+              {user && ( //TODO user.isAdmin && (
                 <NavLink activeClassName="active" to="/admin">
                   Admin-Page
                 </NavLink>
@@ -53,6 +62,8 @@ class NavBar extends Component {
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/register" component={Register} />
                 <PrivateRoute exact path="/quest" component={Quest} />
+                <PrivateRoute exact path="/profile" component={Profile} />
+                <PrivateRoute exact path="/business" component={Business} />
                 <PrivateRoute exact path="/admin" component={Admin} />
                 <PrivateRoute exact path="/logout" component={Logout} />
               </Switch>

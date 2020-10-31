@@ -122,7 +122,7 @@ namespace SwapClassLibrary.Service
 
                     }).FirstOrDefault();
                     break;
-                case "businessOwner":
+                case "business_owner":
                     user = db.clients.Where(x => x.email == body.email).Select(x => new loginDTO
                     {
                         email = x.email,

@@ -34,10 +34,11 @@ export async function deleteSubCategory(main_id, sub_id) {
     console.log("Check your connection , error:", e);
   }
 }
+
 export async function getAllMainCategoriesAdmin() {
   try {
     const main_list = await http.get(
-      `${API_URL_Dev}/MainCategory/GetAllMainCategoryAdmin`
+      `${API_URL_Dev}/MainCategory/GetAllMainCategory`
     );
     return main_list.data;
   } catch (e) {
