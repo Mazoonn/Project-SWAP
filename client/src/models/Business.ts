@@ -13,7 +13,7 @@ export class Business {
     this.business_owner_id = business.business_owner_id ? business.business_owner_id : "";
     this.business_id = business.business_id ? business.business_id : "";
     this.Icon = business.Icon ? business.Icon : "";
-    this.closing_houers = business.description ? business.description : "";
+    this.closing_houers = business.closing_houers ? business.closing_houers : "";
     this.is_active = business.is_active ? business.is_active : false;
     this.name = business.name ? business.name : "";
     this.rating = business.rating ? business.rating : 0;
@@ -32,4 +32,9 @@ export class Business_owner_is_active {
     this.business_id = business.business_id ? business.business_id : "";
     this.is_active = business.is_active ? business.is_active : false;
   }
+}
+export enum Business_button_types {
+  "add_business" = 0,
+  "List_of_business" = 1,
+  "Products" = 2,
 }

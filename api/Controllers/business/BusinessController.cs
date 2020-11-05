@@ -14,6 +14,25 @@ namespace api.Controllers
     [RoutePrefix("api/business")]
     public class BusinessController : ApiController
     {
+        [Route("GetAllBusiness/{business_owner}")]
+        [HttpGet]
+        public HttpResponseMessage GetAllBusiness(string business_owner)
+        {
+            try
+            {
+                List<bussinessDTO> list = BusinessService.GetAllBusinesses(business_owner);
+                if (list == null)
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is no Main Categoy value in the db");
+                return Request.CreateResponse(HttpStatusCode.OK, list);
+
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
+        }
+
+
 
         //Post api/business/AddBusinessOwner
         [Route("AddBusinessOwner")]

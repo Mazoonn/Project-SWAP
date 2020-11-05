@@ -1,24 +1,32 @@
 import React from "react";
 
-const businessCategories = (props) => {
-  if (!props.isCategories) return null;
+const BusinessCategories = (props) => {
+  if (!props.businesses) return null;
   return (
     <React.Fragment>
-      <h3>Categories</h3>
+      <h3>businesses</h3>
       <table className="table table-bordered table-sm">
         <thead>
           <tr>
             <th>Name</th>
-            <th>Google Value</th>
+            <th>Description</th>
+            <th>Opening Hours</th>
+            <th>Opening Closing</th>
+            <th>Rating</th>
+            <th>Icon</th>
             <th className="text-center">Active</th>
           </tr>
         </thead>
         <tbody>
-          {props.categories.map((category, index) => {
+          {props.businesses.map((business, index) => {
             return (
-              <tr key={category.id}>
-                <td>{category.name}</td>
-                <td>{category.google_value}</td>
+              <tr key={business.place_id}>
+                <td>{business.name}</td>
+                <td>{business.description}</td>
+                <td>{business.opening_hours}</td>
+                <td>{business.closing_hours}</td>
+                <td>{business.description}</td>
+                <td>{business.Icon}</td>
                 <td className="text-center">
                   <div>
                     <input
@@ -26,7 +34,7 @@ const businessCategories = (props) => {
                         props.handleOnChangeIsActive(index);
                       }}
                       type="checkbox"
-                      checked={category.is_active}
+                      checked={business.is_active}
                     />
                   </div>
                 </td>
@@ -40,7 +48,7 @@ const businessCategories = (props) => {
           disabled={!props.AreChanges() || props.loading}
           className="btn btn-primary"
           type="button"
-          onClick={props.handlePutCategories}
+          onClick={props.changeActiveBusiness}
         >
           {(props.loading && "Loading...") || "Save Changes"}
         </button>
@@ -49,4 +57,4 @@ const businessCategories = (props) => {
   );
 };
 
-export default businessCategories;
+export default BusinessCategories;

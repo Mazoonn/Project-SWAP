@@ -19,6 +19,7 @@ class LoginGoF extends Component {
       const token = await clientLogin({
         email: email,
         platform: "google",
+        // client: client_id,
         first_name: givenName,
         last_name: familyName,
         user_id: googleId,

@@ -63,7 +63,7 @@ namespace api.Controllers.Category
         // PUT: api/business/product/ChangeProductToActive/{businness_id}/{product_id}
         //need to send type : id,name 
         //body : true
-        public HttpResponseMessage ChangeProductToActive([FromUri]string business_id, [FromUri]string product_id, [FromBody]bool req)
+        public HttpResponseMessage ChangeProductToActive([FromUri]string business_id, [FromUri]string product_id, [FromBody]bool flag)
         {
             try
             {
@@ -72,7 +72,7 @@ namespace api.Controllers.Category
                     .FirstOrDefault(x => x.business_id == business_id && x.product_id == product_id); ;
                 if (slected_products == null)
                     return Request.CreateResponse(HttpStatusCode.NotFound, "There is prodect with that id :" + product_id);
-                slected_products.is_active = req;
+                slected_products.is_active = flag;
                 db.SaveChanges();
                 return Request.CreateResponse(HttpStatusCode.OK, true);
             }
@@ -101,19 +101,19 @@ namespace api.Controllers.Category
             }
         }
 
-        [Route("UpdateProduct/{business_id}/{product_id}")]
+        [Route("UpdateProduct")]
         [HttpPut]
         // PUT:   api/business/product/UpdateProduct/{businness_id}/{product_id}
         //need to send type : id,name 
         //body : true
-        public HttpResponseMessage UpdateProduct([FromUri]string business_id, [FromUri]string product_id, [FromBody]productDTO req)
+        public HttpResponseMessage UpdateProduct( [FromBody]productDTO req)
         {
             try
             {
                 SwapDbConnection db = new SwapDbConnection();
-                bool is_change = ProductService.updateProduct(business_id, product_id, req);
+                bool is_change = ProductService.updateProduct(req);
                 if (!is_change)
-                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is prodect with that id :" + product_id);
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is prodect with that id :" + req.product_id);
                 return Request.CreateResponse(HttpStatusCode.OK, "The product was changed");
             }
             catch (Exception e)

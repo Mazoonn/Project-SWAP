@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DTO\clientDTO\clientInfoDTO.cs" />
+    <Compile Include="DTO\clientDTO\responseLoginDTO.cs" />
     <Compile Include="DTO\placeDTO\eventDTO.cs" />
     <Compile Include="DTO\placeDTO\placeToCategoryDTO.cs" />
     <Compile Include="DTO\placeDTO\placeDTO.cs" />

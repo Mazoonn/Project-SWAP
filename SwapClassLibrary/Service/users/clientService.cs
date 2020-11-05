@@ -52,10 +52,10 @@ namespace SwapClassLibrary.Service
             return false;
         }
 
-        public static void registerClientgoogle(loginDTO body)
+        public static string registerClientgoogle(loginDTO body)
         {
-            try
-            {
+            //try
+            //{
                 SwapDbConnection db = new SwapDbConnection();
                 client client = db.clients.FirstOrDefault(user => user.email == body.email);
                 if (client == null)
@@ -79,18 +79,20 @@ namespace SwapClassLibrary.Service
                     };
                     db.clients.Add(new_client);
                     db.SaveChanges();
+                    return new_client.client_id;
                 }
-            }
-            catch (DbEntityValidationException ex)
-            {
-                foreach (var entityValidationErrors in ex.EntityValidationErrors)
-                {
-                    foreach (var validationError in entityValidationErrors.ValidationErrors)
-                    {
-                        Console.WriteLine("Property: " + validationError.PropertyName + " Error: " + validationError.ErrorMessage);
-                    }
-                }
-            }
+                return "";
+            //}
+            //catch (DbEntityValidationException ex)
+            //{
+            //    foreach (var entityValidationErrors in ex.EntityValidationErrors)
+            //    {
+            //        foreach (var validationError in entityValidationErrors.ValidationErrors)
+            //        {
+            //            Console.WriteLine("Property: " + validationError.PropertyName + " Error: " + validationError.ErrorMessage);
+            //        }
+            //    }
+            //}
             
                 
         }

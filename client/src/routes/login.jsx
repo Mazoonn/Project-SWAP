@@ -37,19 +37,17 @@ function Login(props) {
     if (errorsState) return;
     setLoading(true);
     try {
-      const token = await clientLogin({
+      const { token, client_id: user_id } = await clientLogin({
         email: user.email,
         password: user.password,
+        //client: client_id,
         platform: "local",
-      });
+      }).data;
       setUserSession(token.data, user.email);
       window.location = "/";
     } catch (error) {
       setLoading(false);
-      if (
-        error.response &&
-        (error.response.status >= 400 || error.response.status <= 500)
-      )
+      if (error.response && (error.response.status >= 400 || error.response.status <= 500))
         setErrors({ server: error.response.data });
     }
   };
@@ -64,11 +62,7 @@ function Login(props) {
         <br />
         <form>
           <div className="form-group">
-            <label
-              htmlFor="exampleInputEmail1"
-              className="text-left"
-              style={{ width: "280px" }}
-            >
+            <label htmlFor="exampleInputEmail1" className="text-left" style={{ width: "280px" }}>
               Email address
               <input
                 autoFocus
@@ -89,11 +83,7 @@ function Login(props) {
             </label>
           </div>
           <div className="form-group">
-            <label
-              htmlFor="exampleInputPassword1"
-              className="text-left"
-              style={{ width: "280px" }}
-            >
+            <label htmlFor="exampleInputPassword1" className="text-left" style={{ width: "280px" }}>
               Password
               <input
                 value={user.password}
@@ -119,9 +109,7 @@ function Login(props) {
           <button
             type="submit"
             onClick={handleLogin}
-            disabled={
-              loading || Object.values(user).some((attr) => attr === "")
-            }
+            disabled={loading || Object.values(user).some((attr) => attr === "")}
             className="btn btn-primary"
           >
             {loading ? "Loading..." : "Login"}

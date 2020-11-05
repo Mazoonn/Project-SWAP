@@ -50,7 +50,6 @@ namespace SwapClassLibrary.Service
             }
             return false;
         }
-
     }
 
 }

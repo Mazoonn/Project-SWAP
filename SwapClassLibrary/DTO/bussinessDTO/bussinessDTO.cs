@@ -14,8 +14,8 @@ namespace SwapClassLibrary.DTO
         public string name;
         public string description;
         public string Icon;
-        public int ratring;
-        public Nullable<System.TimeSpan> opening_houers;
-        public Nullable<System.TimeSpan> closing_houers;
+        public int rating;
+        public Nullable<System.TimeSpan> opening_hours;
+        public Nullable<System.TimeSpan> closing_hours;
     }
 }

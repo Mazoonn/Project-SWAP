@@ -25,9 +25,9 @@ namespace SwapClassLibrary.Service
                 is_active = b.is_active,
                 name = b.name,
                 description = b.description,
-                ratring =  b.rating,
-                opening_houers = b.opening_houers,
-                closing_houers = b.closing_houers,
+                rating =  b.rating,
+                opening_hours = b.opening_houers,
+                closing_hours = b.closing_houers,
             }).ToList();
             return bussinesses;
         }
@@ -47,9 +47,9 @@ namespace SwapClassLibrary.Service
                     name = bussiness.name,
                     description = bussiness.description,
                     Icon = bussiness.Icon,
-                    rating = bussiness.ratring,
-                    opening_houers = bussiness.opening_houers,
-                    closing_houers = bussiness.closing_houers,
+                    rating = bussiness.rating,
+                    opening_houers = bussiness.opening_hours,
+                    closing_houers = bussiness.closing_hours,
                     approve_by_admin = false
                 };
                 db.businesses.Add(business_to_add);
@@ -66,11 +66,11 @@ namespace SwapClassLibrary.Service
             if (business == null ) return false;
             business_to_edit.name= business.name;
             business_to_edit.description = business.description;
-            business_to_edit.rating = business.ratring;
-            business_to_edit.opening_houers = business.opening_houers;
-            business_to_edit.closing_houers = business.closing_houers;
+            business_to_edit.rating = business.rating;
+            business_to_edit.opening_houers = business.opening_hours;
+            business_to_edit.closing_houers = business.closing_hours;
             business_to_edit.Icon = business.Icon;
-            business_to_edit.rating = business.ratring;
+            business_to_edit.rating = business.rating;
             business_to_edit.description = business.description;
             db.SaveChanges();
             return true;

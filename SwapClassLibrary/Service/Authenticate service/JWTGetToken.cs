@@ -26,7 +26,7 @@ namespace SwapClassLibrary.Service
         {
             Claims = new Claim[]
             {
-                    new Claim("id", user_id),
+                    new Claim(ClaimTypes.NameIdentifier, user_id),
                     new Claim(ClaimTypes.Email, email),
                     new Claim(ClaimTypes.Authentication, role)
             }

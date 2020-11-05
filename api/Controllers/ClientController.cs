@@ -43,7 +43,10 @@ namespace api.Controllers
                         return Request.CreateResponse(HttpStatusCode.BadRequest, "Client params illigel"); ;
                 }
                 token = JWTGetToken.getToken(local_user_id.user_id == null ? body.user_id : local_user_id.user_id, body.email, local_user_id.role);
-                if (token != "flase") return Request.CreateResponse(HttpStatusCode.OK, token);
+                if (token != "flase") return Request.CreateResponse(HttpStatusCode.OK, new responseLoginDTO() { 
+                token=token,
+                user_id= local_user_id.user_id
+                });
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, "Unable to create token");
             }
             catch (Exception e)

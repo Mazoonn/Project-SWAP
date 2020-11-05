@@ -92,21 +92,16 @@ namespace SwapClassLibrary.Service
             return true;
         }
 
-        public static bool updateProduct(string business_id, string product_id, productDTO product_req)
+        public static bool updateProduct(productDTO product_req)
         {
             SwapDbConnection db = new SwapDbConnection();
-            product product = db.products.FirstOrDefault(p => p.business_id == business_id && p.product_id == product_id);
+            product product = db.products.FirstOrDefault(p => p.business_id == product_req.business_id && p.product_id == product_req.product_id);
             if (product == null) return false;
             product.price = product_req.price;
-            db.SaveChanges();
             product.name = product_req.name;
-            db.SaveChanges();
             product.description = product_req.description;
-            db.SaveChanges();
             product.discount = product_req.discount;
-            db.SaveChanges();
             product.discount_end_date = product_req.discount_end_date;
-            db.SaveChanges();
             product.discount_start_date = product_req.discount_start_date;
             db.SaveChanges();
             return true;
