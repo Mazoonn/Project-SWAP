@@ -33,8 +33,3 @@ export class Business_owner_is_active {
     this.is_active = business.is_active ? business.is_active : false;
   }
 }
-export enum Business_button_types {
-  "add_business" = 0,
-  "List_of_business" = 1,
-  "Products" = 2,
-}

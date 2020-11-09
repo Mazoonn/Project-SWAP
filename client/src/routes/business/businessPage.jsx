@@ -3,7 +3,7 @@ import BusinessButtons from "./businessButtons";
 import BusinessCategories from "./BusinessCategories";
 import { getAllBusiness, changeActiveBusiness } from "../../services/Business";
 import { GetAllProduct } from "../../services/Products";
-
+import { businessForm } from "./businessForm";
 class BusinessPage extends Component {
   state = {
     business: [],
@@ -27,22 +27,23 @@ class BusinessPage extends Component {
     this.setState({ isAddBusiness });
   };
 
-  handleClickListOfBusiness = async () => {
-    let isListOfBusiness = !this.state.isListOfBusiness;
-    if (isListOfBusiness) {
-      this.setState({ isListOfBusiness: false, isDefault: true });
-      await this.handleGetBusiness();
+  handleOnSelectButton = async (event) => {
+    const indexOfButton = event.target.id;
+    this.setState({ index_business_id: event.target.value });
+    this.setState({ isAddBusiness: false, isListOfBusiness: false, isProducts: false });
+    switch (indexOfButton) {
+      case "add business":
+        this.setState({ isAddBusiness: true });
+        break;
+      case "list of business":
+        this.setState({ isListOfBusiness: true });
+        await this.handleGetBusiness();
+        break;
+      case "products":
+        await this.handleGetBusiness();
+        this.setState({ isProducts: true });
+        break;
     }
-    this.setState({ isListOfBusiness });
-  };
-
-  handleClickProducts = async () => {
-    let isProducts = !this.state.isProducts;
-    if (isProducts) {
-      this.setState({ isProducts: false });
-      await this.handleGetBusiness();
-    }
-    this.setState({ isProducts });
   };
 
   handleOnChangeIsActive = (index) => {
@@ -86,13 +87,17 @@ class BusinessPage extends Component {
 
   handleOnChangeSelect = async (event) => {
     const index = event.target.value;
-    this.setState({ products: undefined });
+    const business_selected_id = this.state.business[index].place_id;
+    this.setState({ products: [] });
     if (index !== "default") {
-      const business_selected_id = this.state.business[index].place_id;
       const products = await GetAllProduct(business_selected_id);
-      this.addNewValuesToProducts(products);
-      this.setState({ products, isDefault: false, index_business_id: index });
-    } else this.setState({ isDefault: true }); // TODO check this products: []
+      if (products) {
+        this.addNewValuesToProducts(products);
+        this.setState({ products, isDefault: false, index_business_id: index });
+      } else {
+        this.setState({ isDefault: false, index_business_id: index });
+      }
+    } else this.setState({ isDefault: true });
   };
 
   addNewValuesToProducts = (Products) => {
@@ -134,18 +139,16 @@ class BusinessPage extends Component {
       products["is_active"] === ""
     );
   };
+
   handleOnChangeProduct = (event, index) => {
     const value = event.target.value;
     const name = event.target.name;
+    const products = [...this.state.products];
+    let item = {};
     if (index !== -1) {
-      const products = [...this.state.products];
       const products_to_change = products[index];
       products_to_change[name] = value;
       products[index] = products_to_change;
-      this.setState({ products });
-    } else {
-      const products = { ...this.state.products };
-      products[name] = value;
       this.setState({ products });
     }
   };
@@ -157,16 +160,14 @@ class BusinessPage extends Component {
         <div className="row ml-2">
           <div className="col-">
             <BusinessButtons
-              handleClickAddBusiness={this.handleClickAddBusiness}
-              handleClickListOfBusiness={this.handleClickListOfBusiness}
-              handleClickProducts={this.handleClickProducts}
+              handleOnSelectButton={this.handleOnSelectButton}
               isAddBusiness={isAddBusiness}
               isProducts={isProducts}
               isListOfBusiness={isListOfBusiness}
             />
           </div>
           <div className="col">
-            {isProducts && (
+            {this.state.isProducts && (
               <div>
                 <h4>Choose A Business</h4>
                 <select
@@ -187,7 +188,7 @@ class BusinessPage extends Component {
                   })}
                 </select>
                 {!this.state.isDefault && (
-                  <React.Fragment>
+                  <div>
                     <h3>Products</h3>
                     <table className="table table-bordered table-sm mt-4">
                       <thead>
@@ -209,112 +210,115 @@ class BusinessPage extends Component {
                         </tr>
                       </thead>
                       <tbody>
-                        {this.state.products.map((products, index) => {
-                          return (
-                            <tr key={products.place_id}>
-                              <td>
-                                <input
-                                  onChange={(event) => {
-                                    this.handleOnChangeProduct(event, index);
-                                  }}
-                                  name="name"
-                                  type="text"
-                                  className="form-control"
-                                  value={products.name}
-                                />
-                              </td>
-                              <td>
-                                <input
-                                  onChange={(event) => {
-                                    this.handleOnChangeProduct(event, index);
-                                  }}
-                                  name="description"
-                                  type="text"
-                                  className="form-control"
-                                  value={products.description}
-                                />
-                              </td>
-                              <td>
-                                <input
-                                  onChange={(event) => {
-                                    this.handleOnChangeProduct(event, index);
-                                  }}
-                                  name="price"
-                                  type="text"
-                                  className="form-control"
-                                  value={products.price}
-                                />
-                              </td>
-                              <td>
-                                <input
-                                  onChange={(event) => {
-                                    this.handleOnChangeProduct(event, index);
-                                  }}
-                                  name="discount"
-                                  type="text"
-                                  className="form-control"
-                                  value={products.discount}
-                                />
-                              </td>
-                              <td>
-                                <input
-                                  onChange={(event) => {
-                                    this.handleOnChangeProduct(event, index);
-                                  }}
-                                  name="discount_start_date"
-                                  type="text"
-                                  className="form-control"
-                                  value={products.discount_start_date}
-                                />
-                              </td>
-                              <td>
-                                <input
-                                  onChange={(event) => {
-                                    this.handleOnChangeProduct(event, index);
-                                  }}
-                                  name="discount_end_date"
-                                  type="text"
-                                  className="form-control"
-                                  value={products.discount_end_date}
-                                />
-                              </td>
-                              <td className="text-center">
-                                <div>
+                        {
+                          // this.state.products &&
+                          this.state.products.map((products, index) => {
+                            return (
+                              <tr key={products.place_id}>
+                                <td>
                                   <input
-                                    onChange={() => {
-                                      //  props.handleOnChangeIsActive(index);
+                                    onChange={(event) => {
+                                      this.handleOnChangeProduct(event, index);
                                     }}
-                                    type="checkbox"
-                                    checked={products.is_active}
+                                    name="name"
+                                    type="text"
+                                    className="form-control"
+                                    value={products.name}
                                   />
-                                </div>
-                              </td>
-                              <td className="text-center">
-                                <button
-                                  type="button"
-                                  className="btn btn-success btn-sm"
-                                  onClick={() => {
-                                    // this.handleOnClickSaveSubbusiness(index);
-                                  }}
-                                  // disabled={!this.isSubbusinessChange(index)}
-                                >
-                                  Save
-                                </button>
-                              </td>
-                              <td className="text-center">
-                                <button
-                                  onClick={() => {
-                                    // this.handleDeleteSubbusiness(index);
-                                  }}
-                                  type="button"
-                                  className="btn btn-danger btn-sm"
-                                >
-                                  Delete
-                                </button>
-                              </td>
-                            </tr>
-                          );
-                        })}
+                                </td>
+                                <td>
+                                  <input
+                                    onChange={(event) => {
+                                      this.handleOnChangeProduct(event, index);
+                                    }}
+                                    name="description"
+                                    type="text"
+                                    className="form-control"
+                                    value={products.description}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    onChange={(event) => {
+                                      this.handleOnChangeProduct(event, index);
+                                    }}
+                                    name="price"
+                                    type="text"
+                                    className="form-control"
+                                    value={products.price}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    onChange={(event) => {
+                                      this.handleOnChangeProduct(event, index);
+                                    }}
+                                    name="discount"
+                                    type="text"
+                                    className="form-control"
+                                    value={products.discount}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    onChange={(event) => {
+                                      this.handleOnChangeProduct(event, index);
+                                    }}
+                                    name="discount_start_date"
+                                    type="text"
+                                    className="form-control"
+                                    value={products.discount_start_date}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    onChange={(event) => {
+                                      this.handleOnChangeProduct(event, index);
+                                    }}
+                                    name="discount_end_date"
+                                    type="text"
+                                    className="form-control"
+                                    value={products.discount_end_date}
+                                  />
+                                </td>
+                                <td className="text-center">
+                                  <div>
+                                    <input
+                                      onChange={() => {
+                                        //  props.handleOnChangeIsActive(index);
+                                      }}
+                                      type="checkbox"
+                                      checked={products.is_active}
+                                    />
+                                  </div>
+                                </td>
+                                <td className="text-center">
+                                  <button
+                                    type="button"
+                                    className="btn btn-success btn-sm"
+                                    onClick={() => {
+                                      // this.handleOnClickSaveSubbusiness(index);
+                                    }}
+                                    //disabled={!this.isSubbusinessChange(index)}
+                                  >
+                                    Save
+                                  </button>
+                                </td>
+                                <td className="text-center">
+                                  <button
+                                    onClick={() => {
+                                      // this.handleDeleteSubbusiness(index);
+                                    }}
+                                    type="button"
+                                    className="btn btn-danger btn-sm"
+                                  >
+                                    Delete
+                                  </button>
+                                </td>
+                              </tr>
+                            );
+                          })
+                        }
                         <tr>
                           <td>
                             <input
@@ -413,7 +417,7 @@ class BusinessPage extends Component {
                         </tr>
                       </tbody>
                     </table>
-                  </React.Fragment>
+                  </div>
                 )}
               </div>
             )}
@@ -428,6 +432,7 @@ class BusinessPage extends Component {
                 businessOwnerId={this.state.business_owner_id}
               />
             )}
+            {isAddBusiness && <businessForm />}
           </div>
         </div>
       </React.Fragment>
