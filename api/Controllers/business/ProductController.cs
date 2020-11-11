@@ -40,11 +40,10 @@ namespace api.Controllers.Category
         {
             try
             {
-                if (req.business_id != null && req.name != null && req.description != null
-                    && req.discount_end_date != null && req.discount_start_date != null)
+                if (req.name != null && req.description != null && req.price != null)
                 {
-                    DateTime start_date_tmp = req.discount_start_date != null ? req.discount_start_date : DateTime.Now;
-                    product product = ProductService.AddProduct(req.name, req.business_id, req.discount, start_date_tmp, req.discount_end_date, req.price, req.description);
+                    req.discount_start_date= DateTime.Now;
+                    product product = ProductService.AddProduct(req);
                     if (product != null)
                         return Request.CreateResponse(HttpStatusCode.OK, product);
                     return Request.CreateResponse(HttpStatusCode.BadRequest, "There is a prodect with this name:" + req.name);

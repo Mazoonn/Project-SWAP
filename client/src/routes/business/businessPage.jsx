@@ -2,12 +2,14 @@ import React, { Component } from "react";
 import BusinessButtons from "./businessButtons";
 import BusinessCategories from "./BusinessCategories";
 import { getAllBusiness, changeActiveBusiness } from "../../services/Business";
+import { AddProduct } from "../../services/Products";
 import { GetAllProduct } from "../../services/Products";
 import { businessForm } from "./businessForm";
 class BusinessPage extends Component {
   state = {
     business: [],
     products: [],
+    products_to_add: {},
     index_business_id: "",
     //TODO get the id from the login
     business_owner_id: "client_M8PSxa14IZo6T",
@@ -86,10 +88,10 @@ class BusinessPage extends Component {
   };
 
   handleOnChangeSelect = async (event) => {
-    const index = event.target.value;
-    const business_selected_id = this.state.business[index].place_id;
     this.setState({ products: [] });
+    const index = event.target.value;
     if (index !== "default") {
+      const business_selected_id = this.state.business[index].place_id;
       const products = await GetAllProduct(business_selected_id);
       if (products) {
         this.addNewValuesToProducts(products);
@@ -98,6 +100,25 @@ class BusinessPage extends Component {
         this.setState({ isDefault: false, index_business_id: index });
       }
     } else this.setState({ isDefault: true });
+  };
+
+  handleAddNewProduct = async () => {
+    const { business_owner_id, products_to_add, products, index_business_id } = this.state;
+    const business_selected_id = this.state.business[index_business_id].place_id;
+    const product = {
+      business_owner_id: business_owner_id,
+      business_id: this.state.business[index_business_id].place_id,
+      ...products_to_add,
+    };
+    this.setState({ products: [{ ...products, [`${products.length}`]: product }] });
+    await AddProduct(product);
+
+    const newListProducts = await GetAllProduct(business_selected_id);
+
+    this.setState({
+      products: newListProducts,
+    });
+    this.addNewValuesToProducts(products);
   };
 
   addNewValuesToProducts = (Products) => {
@@ -121,35 +142,32 @@ class BusinessPage extends Component {
       !Products["is_active"] && (Products["is_active"] = "");
 
       values.forEach((value) => {
-        Products[`${value}_new`] = Products[value];
+        Products[`${value}`] = Products[value];
       });
     });
   };
 
   isValidProduct = () => {
-    const { products } = this.state;
-    return (
-      !products ||
-      Object.keys(products).length !== 7 ||
-      products["name"] === "" ||
-      products["description"] === "" ||
-      products["price"] === "" ||
-      products["discount_start_date"] === "" ||
-      products["discount_end_date"] === "" ||
-      products["is_active"] === ""
-    );
+    const { products_to_add } = this.state;
+    let isValidProduct =
+      products_to_add && products_to_add["name"] && products_to_add["description"] && products_to_add["price"] ? false : true;
+    return isValidProduct;
   };
 
   handleOnChangeProduct = (event, index) => {
     const value = event.target.value;
     const name = event.target.name;
-    const products = [...this.state.products];
-    let item = {};
-    if (index !== -1) {
-      const products_to_change = products[index];
-      products_to_change[name] = value;
-      products[index] = products_to_change;
-      this.setState({ products });
+    if (index !== this.state.products.length) {
+      const products_to_change = this.state.products;
+      products_to_change[index][`${name}`] = value;
+      this.setState({ products: products_to_change });
+    } else {
+      let products_to_add = this.state.products_to_add;
+      if (name === "is_active") products_to_add[`${name}`] = event.target.checked;
+      else {
+        products_to_add[`${name}`] = value;
+        this.setState({ products_to_add });
+      }
     }
   };
 
@@ -210,121 +228,118 @@ class BusinessPage extends Component {
                         </tr>
                       </thead>
                       <tbody>
-                        {
-                          // this.state.products &&
-                          this.state.products.map((products, index) => {
-                            return (
-                              <tr key={products.place_id}>
-                                <td>
+                        {this.state.products.map((products, index) => {
+                          return (
+                            <tr key={products.place_id}>
+                              <td>
+                                <input
+                                  onChange={(event) => {
+                                    this.handleOnChangeProduct(event, index);
+                                  }}
+                                  name="name"
+                                  type="text"
+                                  className="form-control"
+                                  value={products.name}
+                                />
+                              </td>
+                              <td>
+                                <input
+                                  onChange={(event) => {
+                                    this.handleOnChangeProduct(event, index);
+                                  }}
+                                  name="description"
+                                  type="text"
+                                  className="form-control"
+                                  value={products.description}
+                                />
+                              </td>
+                              <td>
+                                <input
+                                  onChange={(event) => {
+                                    this.handleOnChangeProduct(event, index);
+                                  }}
+                                  name="price"
+                                  type="text"
+                                  className="form-control"
+                                  value={products.price}
+                                />
+                              </td>
+                              <td>
+                                <input
+                                  onChange={(event) => {
+                                    this.handleOnChangeProduct(event, index);
+                                  }}
+                                  name="discount"
+                                  type="text"
+                                  className="form-control"
+                                  value={products.discount}
+                                />
+                              </td>
+                              <td>
+                                <input
+                                  onChange={(event) => {
+                                    this.handleOnChangeProduct(event, index);
+                                  }}
+                                  name="discount_start_date"
+                                  type="text"
+                                  className="form-control"
+                                  value={products.discount_start_date}
+                                />
+                              </td>
+                              <td>
+                                <input
+                                  onChange={(event) => {
+                                    this.handleOnChangeProduct(event, index);
+                                  }}
+                                  name="discount_end_date"
+                                  type="text"
+                                  className="form-control"
+                                  value={products.discount_end_date}
+                                />
+                              </td>
+                              <td className="text-center">
+                                <div>
                                   <input
-                                    onChange={(event) => {
-                                      this.handleOnChangeProduct(event, index);
+                                    onChange={() => {
+                                      //  props.handleOnChangeIsActive(index);
                                     }}
-                                    name="name"
-                                    type="text"
-                                    className="form-control"
-                                    value={products.name}
+                                    type="checkbox"
+                                    checked={products.is_active}
                                   />
-                                </td>
-                                <td>
-                                  <input
-                                    onChange={(event) => {
-                                      this.handleOnChangeProduct(event, index);
-                                    }}
-                                    name="description"
-                                    type="text"
-                                    className="form-control"
-                                    value={products.description}
-                                  />
-                                </td>
-                                <td>
-                                  <input
-                                    onChange={(event) => {
-                                      this.handleOnChangeProduct(event, index);
-                                    }}
-                                    name="price"
-                                    type="text"
-                                    className="form-control"
-                                    value={products.price}
-                                  />
-                                </td>
-                                <td>
-                                  <input
-                                    onChange={(event) => {
-                                      this.handleOnChangeProduct(event, index);
-                                    }}
-                                    name="discount"
-                                    type="text"
-                                    className="form-control"
-                                    value={products.discount}
-                                  />
-                                </td>
-                                <td>
-                                  <input
-                                    onChange={(event) => {
-                                      this.handleOnChangeProduct(event, index);
-                                    }}
-                                    name="discount_start_date"
-                                    type="text"
-                                    className="form-control"
-                                    value={products.discount_start_date}
-                                  />
-                                </td>
-                                <td>
-                                  <input
-                                    onChange={(event) => {
-                                      this.handleOnChangeProduct(event, index);
-                                    }}
-                                    name="discount_end_date"
-                                    type="text"
-                                    className="form-control"
-                                    value={products.discount_end_date}
-                                  />
-                                </td>
-                                <td className="text-center">
-                                  <div>
-                                    <input
-                                      onChange={() => {
-                                        //  props.handleOnChangeIsActive(index);
-                                      }}
-                                      type="checkbox"
-                                      checked={products.is_active}
-                                    />
-                                  </div>
-                                </td>
-                                <td className="text-center">
-                                  <button
-                                    type="button"
-                                    className="btn btn-success btn-sm"
-                                    onClick={() => {
-                                      // this.handleOnClickSaveSubbusiness(index);
-                                    }}
-                                    //disabled={!this.isSubbusinessChange(index)}
-                                  >
-                                    Save
-                                  </button>
-                                </td>
-                                <td className="text-center">
-                                  <button
-                                    onClick={() => {
-                                      // this.handleDeleteSubbusiness(index);
-                                    }}
-                                    type="button"
-                                    className="btn btn-danger btn-sm"
-                                  >
-                                    Delete
-                                  </button>
-                                </td>
-                              </tr>
-                            );
-                          })
-                        }
+                                </div>
+                              </td>
+                              <td className="text-center">
+                                <button
+                                  type="button"
+                                  className="btn btn-success btn-sm"
+                                  onClick={() => {
+                                    // this.handleOnClickSaveSubbusiness(index);
+                                  }}
+                                  //disabled={!this.isSubbusinessChange(index)}
+                                >
+                                  Save
+                                </button>
+                              </td>
+                              <td className="text-center">
+                                <button
+                                  onClick={() => {
+                                    // this.handleDeleteSubbusiness(index);
+                                  }}
+                                  type="button"
+                                  className="btn btn-danger btn-sm"
+                                >
+                                  Delete
+                                </button>
+                              </td>
+                            </tr>
+                          );
+                        })}
                         <tr>
                           <td>
                             <input
                               value={(products && products.name) || ""}
                               onChange={(event) => {
-                                this.handleOnChangeProduct(event, -1);
+                                this.handleOnChangeProduct(event, this.state.products.length);
                               }}
                               name="name"
                               type="text"
@@ -336,7 +351,7 @@ class BusinessPage extends Component {
                             <input
                               value={(products && products.description) || ""}
                               onChange={(event) => {
-                                this.handleOnChangeProduct(event, -1);
+                                this.handleOnChangeProduct(event, this.state.products.length);
                               }}
                               name="description"
                               type="text"
@@ -348,7 +363,7 @@ class BusinessPage extends Component {
                             <input
                               value={(products && products.price) || ""}
                               onChange={(event) => {
-                                this.handleOnChangeProduct(event, -1);
+                                this.handleOnChangeProduct(event, this.state.products.length);
                               }}
                               name="price"
                               type="text"
@@ -360,7 +375,7 @@ class BusinessPage extends Component {
                             <input
                               value={(products && products.discount) || ""}
                               onChange={(event) => {
-                                this.handleOnChangeProduct(event, -1);
+                                this.handleOnChangeProduct(event, this.state.products.length);
                               }}
                               name="discount"
                               type="text"
@@ -372,7 +387,7 @@ class BusinessPage extends Component {
                             <input
                               value={(products && products.discount_start_date) || ""}
                               onChange={(event) => {
-                                this.handleOnChangeProduct(event, -1);
+                                this.handleOnChangeProduct(event, this.state.products.length);
                               }}
                               name="discount_start_date"
                               type="text"
@@ -384,7 +399,7 @@ class BusinessPage extends Component {
                             <input
                               value={(products && products.discount_end_date) || ""}
                               onChange={(event) => {
-                                this.handleOnChangeProduct(event, -1);
+                                this.handleOnChangeProduct(event, this.state.products.length);
                               }}
                               name="discount_end_date"
                               type="text"
@@ -395,19 +410,19 @@ class BusinessPage extends Component {
                           <td className="text-center">
                             <div>
                               <input
-                                value={(products && products.is_active) || false}
-                                onChange={() => {
-                                  //  props.handleOnChangeIsActive(-1);
+                                onChange={(event) => {
+                                  this.handleOnChangeProduct(event, this.state.products.length);
                                 }}
                                 type="checkbox"
                                 checked={products.is_active}
+                                name="is_active"
                               />
                             </div>
                           </td>
                           <td colSpan={2} className="text-center">
                             <button
                               disabled={this.isValidProduct()}
-                              onClick={this.addNewValuesToProducts}
+                              onClick={this.handleAddNewProduct}
                               type="button"
                               className="btn btn-primary btn-sm"
                             >

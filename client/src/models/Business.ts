@@ -4,8 +4,8 @@ export class Business {
   is_active: boolean;
   name: string;
   rating: number;
-  opening_houers: string;
-  closing_houers: string;
+  opening_hours: string;
+  closing_hours: string;
   description: string;
   Icon: string;
 
@@ -13,11 +13,11 @@ export class Business {
     this.business_owner_id = business.business_owner_id ? business.business_owner_id : "";
     this.business_id = business.business_id ? business.business_id : "";
     this.Icon = business.Icon ? business.Icon : "";
-    this.closing_houers = business.closing_houers ? business.closing_houers : "";
+    this.closing_hours = business.closing_hours ? business.closing_hours : "";
     this.is_active = business.is_active ? business.is_active : false;
     this.name = business.name ? business.name : "";
     this.rating = business.rating ? business.rating : 0;
-    this.opening_houers = business.opening_houers ? business.opening_houers : "";
+    this.opening_hours = business.opening_hours ? business.opening_hours : "";
     this.description = business.description ? business.description : "";
   }
 }

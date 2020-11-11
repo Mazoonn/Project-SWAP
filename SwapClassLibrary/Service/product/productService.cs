@@ -58,23 +58,23 @@ namespace SwapClassLibrary.Service
         }
 
         //add product
-        public static product AddProduct(string name, string business_id, double discount, DateTime start_date, DateTime end_date, double price, string description)
+        public static product AddProduct(productDTO req)
         {
             SwapDbConnection db = new SwapDbConnection();
-            if (db.products.FirstOrDefault(p => p.name == name && p.business_id == business_id) != null) return null;
+            if (db.products.FirstOrDefault(p => p.name == req.name && p.business_id == req.business_id) != null) return null;
 
             product product_obj = new product()
             {
                 product_id = IdService.generateID("product_id"),
                 creation_date = DateTime.Now,
                 is_active = false,
-                name = name,
-                business_id = business_id,
-                discount = discount,
-                discount_start_date = start_date,
-                discount_end_date = end_date,
-                price = price,
-                description = description
+                name = req.name,
+                business_id = req.business_id,
+                discount = req.discount,
+                discount_start_date = req.discount_start_date,
+                discount_end_date = req.discount_end_date,
+                price = req.price,
+                description = req.description
             };
             db.products.Add(product_obj);
             db.SaveChanges();

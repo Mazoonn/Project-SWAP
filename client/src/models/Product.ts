@@ -9,10 +9,12 @@ export class Product {
   discount_end_date: string;
   is_active: boolean;
   business_id: string;
+  business_owner_id: string;
 
   constructor(product: Product) {
     this.product_id = product.product_id ? product.product_id : "";
     this.business_id = product.business_id ? product.business_id : "";
+    this.business_owner_id = product.business_owner_id ? product.business_owner_id : "";
     this.price = product.price ? product.price : 0;
     this.discount = product.discount ? product.discount : 0;
     this.is_active = product.is_active ? product.is_active : false;
