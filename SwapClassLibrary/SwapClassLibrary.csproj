@@ -71,6 +71,7 @@
     <Compile Include="DTO\placeDTO\eventDTO.cs" />
     <Compile Include="DTO\placeDTO\placeToCategoryDTO.cs" />
     <Compile Include="DTO\placeDTO\placeDTO.cs" />
+    <Compile Include="DTO\productDTO\productReqDTO.cs" />
     <Compile Include="DTO\productDTO\productDTO.cs" />
     <Compile Include="DTO\bussinessDTO\bussinessDTO.cs" />
     <Compile Include="DTO\categoryDTO\MainAndSubRelationshipDTO.cs" />

@@ -67,7 +67,7 @@ namespace SwapClassLibrary.Service
             {
                 product_id = IdService.generateID("product_id"),
                 creation_date = DateTime.Now,
-                is_active = false,
+                is_active = req.is_active,
                 name = req.name,
                 business_id = req.business_id,
                 discount = req.discount,

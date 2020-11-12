@@ -3,7 +3,7 @@ import BusinessButtons from "./businessButtons";
 import BusinessCategories from "./BusinessCategories";
 import { getAllBusiness, changeActiveBusiness } from "../../services/Business";
 import { AddProduct } from "../../services/Products";
-import { GetAllProduct } from "../../services/Products";
+import { GetAllProduct, deleteProduct, updateProduct, ChangeProductToActive } from "../../services/Products";
 import { businessForm } from "./businessForm";
 class BusinessPage extends Component {
   state = {
@@ -48,12 +48,20 @@ class BusinessPage extends Component {
     }
   };
 
-  handleOnChangeIsActive = (index) => {
+  handleOnChangeIsActiveBusiness = (index) => {
     const businesses = [...this.state.business];
     const business = businesses[index];
     business.is_active = !business.is_active;
     business.is_change = business.is_change === undefined ? true : !business.is_change;
     this.setState({ businesses });
+  };
+
+  handleOnChangeIsActiveProducts = async (index) => {
+    const products = [...this.state.products];
+    const product = products[index];
+    product.is_active = !product.is_active;
+    product.is_change = product.is_change === undefined ? true : !product.is_change;
+    this.setState({ products });
   };
 
   handleGetBusiness = async () => {
@@ -142,7 +150,7 @@ class BusinessPage extends Component {
       !Products["is_active"] && (Products["is_active"] = "");
 
       values.forEach((value) => {
-        Products[`${value}`] = Products[value];
+        Products[`${value}_new`] = Products[value];
       });
     });
   };
@@ -169,6 +177,59 @@ class BusinessPage extends Component {
         this.setState({ products_to_add });
       }
     }
+  };
+
+  handleDeleteProduct = async (indexProduct) => {
+    const business_id = this.state.business[this.state.index_business_id].place_id;
+    const products = this.state.products;
+    await deleteProduct({ business_id: business_id, product_id: products[indexProduct].product_id });
+    delete products[indexProduct];
+    this.addNewValuesToProducts(products);
+    this.setState({ products });
+  };
+
+  handleOnClickSaveProduct = async (index) => {
+    const product = this.state.products[index];
+    const { name, price, is_active, product_id, business_id, description, discount_end_date, discount_start_date } = product;
+    const req = {
+      name,
+      price,
+      product_id,
+      business_id,
+      description,
+      discount_end_date,
+      discount_start_date,
+    };
+    await ChangeProductToActive({
+      product_id,
+      business_id,
+      is_active,
+    });
+    await updateProduct(req);
+    const newListProducts = await GetAllProduct(business_id);
+    this.addNewValuesToProducts(newListProducts);
+    this.setState({
+      products: newListProducts,
+    });
+  };
+
+  isProductChange = (index) => {
+    let result = false;
+    const product = this.state.products[index];
+    const values = [
+      "name",
+      "description",
+      "price",
+      "creation_date",
+      "discount",
+      "discount_start_date",
+      "discount_end_date",
+      "is_active",
+    ];
+    values.forEach((value) => {
+      if (product[value] !== product[`${value}_new`]) result = true;
+    });
+    return result;
   };
 
   render() {
@@ -301,7 +362,7 @@ class BusinessPage extends Component {
                                 <div>
                                   <input
                                     onChange={() => {
-                                      //  props.handleOnChangeIsActive(index);
+                                      this.handleOnChangeIsActiveProducts(index);
                                     }}
                                     type="checkbox"
                                     checked={products.is_active}
@@ -313,9 +374,9 @@ class BusinessPage extends Component {
                                   type="button"
                                   className="btn btn-success btn-sm"
                                   onClick={() => {
-                                    // this.handleOnClickSaveSubbusiness(index);
+                                    this.handleOnClickSaveProduct(index);
                                   }}
-                                  //disabled={!this.isSubbusinessChange(index)}
+                                  disabled={!this.isProductChange(index)}
                                 >
                                   Save
                                 </button>
@@ -323,7 +384,7 @@ class BusinessPage extends Component {
                               <td className="text-center">
                                 <button
                                   onClick={() => {
-                                    // this.handleDeleteSubbusiness(index);
+                                    this.handleDeleteProduct(index);
                                   }}
                                   type="button"
                                   className="btn btn-danger btn-sm"
@@ -439,7 +500,7 @@ class BusinessPage extends Component {
             {isListOfBusiness && (
               <BusinessCategories
                 AreChanges={this.AreChanges}
-                handleOnChangeIsActive={this.handleOnChangeIsActive}
+                handleOnChangeIsActiveBusiness={this.handleOnChangeIsActiveBusiness}
                 changeActiveBusiness={this.changeActiveBusiness}
                 isAddBusiness={isAddBusiness}
                 loading={loading}

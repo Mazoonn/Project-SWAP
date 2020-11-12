@@ -42,7 +42,6 @@ namespace api.Controllers.Category
             {
                 if (req.name != null && req.description != null && req.price != null)
                 {
-                    req.discount_start_date= DateTime.Now;
                     product product = ProductService.AddProduct(req);
                     if (product != null)
                         return Request.CreateResponse(HttpStatusCode.OK, product);
@@ -57,21 +56,21 @@ namespace api.Controllers.Category
             }
         }
 
-        [Route("ChangeProductToActive/{business_id}/{product_id}")]
+        [Route("ChangeProductToActive/")]
         [HttpPut]
         // PUT: api/business/product/ChangeProductToActive/{businness_id}/{product_id}
         //need to send type : id,name 
         //body : true
-        public HttpResponseMessage ChangeProductToActive([FromUri]string business_id, [FromUri]string product_id, [FromBody]bool flag)
+        public HttpResponseMessage ChangeProductToActive([FromBody]productDTO products)
         {
             try
             {
                 SwapDbConnection db = new SwapDbConnection();
                 product slected_products = db.products.Select(x => x)
-                    .FirstOrDefault(x => x.business_id == business_id && x.product_id == product_id); ;
+                    .FirstOrDefault(x => x.business_id == products.business_id && x.product_id == products.product_id); ;
                 if (slected_products == null)
-                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is prodect with that id :" + product_id);
-                slected_products.is_active = flag;
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is prodect with that id :" + products.product_id);
+                slected_products.is_active = products.is_active;
                 db.SaveChanges();
                 return Request.CreateResponse(HttpStatusCode.OK, true);
             }
