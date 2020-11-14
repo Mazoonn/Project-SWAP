@@ -19,11 +19,11 @@ class BusinessForm extends Component {
           <div class="form-row">
             <div className="col">
               <h3 className="">Opening Hours:</h3>
-              <input type="time" id="appt" name="appt" />
+              <input type="time" className="form-control" />
             </div>
             <div className="col">
               <h3 className="">Closing Hours:</h3>
-              <input type="time" id="appt" name="appt" />
+              <input type="time" className="form-control" />
             </div>
           </div>
           <div class="form-row">

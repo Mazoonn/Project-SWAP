@@ -9,14 +9,25 @@ class ListOfBusiness extends Component {
   handleOnChangeBusiness = (event, index) => {
     const value = event.target.value;
     const name = event.target.name;
-
     const business_to_change = this.props.businesses;
-    business_to_change[index][`${name}`] = value;
+    if (name === "is_active") {
+      business_to_change[index].is_active = event.target.checked;
+      business_to_change[index][`is_active_new`] = !event.target.checked;
+    } else {
+      business_to_change[index][`${name}_new`] = business_to_change[index][`${name}`];
+      business_to_change[index][`${name}`] = value;
+    }
+
     this.setState({ business: business_to_change });
   };
 
+  handleGetBusiness = async () => {
+    let business = await BusinessService.getAllBusiness(this.state.business_owner_id);
+    return business;
+  };
+
   handleDeleteBusiness = async (indexBusiness) => {
-    const business = this.props.businesses;
+    const business = this.state.business;
     await BusinessService.deleteBusiness({
       business_owner_id: this.props.businessOwnerId,
       place_id: business[indexBusiness].place_id,
@@ -34,7 +45,6 @@ class ListOfBusiness extends Component {
       !business["description"] && (business["description"] = "");
       !business["opening_hours"] && (business["opening_hours"] = "");
       !business["closing_hours"] && (business["closing_hours"] = "");
-      !business["rating"] && (business["rating"] = "");
       !business["icon"] && (business["icon"] = "");
       !business["is_active"] && (business["is_active"] = "");
 
@@ -62,7 +72,7 @@ class ListOfBusiness extends Component {
     });
     await BusinessService.editBusiness(req);
     const newListBusiness = await BusinessService.getAllBusiness(this.props.businessOwnerId);
-    this.addNewValuesToBusiness(newListBusiness,...);
+    this.addNewValuesToBusiness(newListBusiness);
     this.setState({
       business: newListBusiness,
     });
@@ -70,20 +80,17 @@ class ListOfBusiness extends Component {
 
   isBusinessChange = (index) => {
     let result = false;
-    const business = this.props.businesses[index];
+    let businesses;
+    if (this.state.business.length === 0) businesses = this.props.businesses;
+    else {
+      businesses = this.state.business;
+    }
+    const business = businesses[index];
     const values = ["name", "description", "opening_hours", "closing_hours", "icon", "is_active"];
     values.forEach((value) => {
       if (business[value] !== business[`${value}_new`]) result = true;
     });
     return result;
-  };
-
-  handleOnChangeIsActiveBusiness = async (index) => {
-    const business = [...this.props.businesses];
-    const newBusiness = business[index];
-    newBusiness.is_active = !newBusiness.is_active;
-    newBusiness.is_change = business.is_change === undefined ? true : !newBusiness.is_change;
-    this.setState({ business });
   };
 
   render() {
@@ -174,10 +181,11 @@ class ListOfBusiness extends Component {
                     <td className="text-center">
                       <div>
                         <input
-                          onChange={() => {
-                            this.handleOnChangeIsActiveBusiness(index);
+                          onChange={(event) => {
+                            this.handleOnChangeBusiness(event, index);
                           }}
                           type="checkbox"
+                          name="is_active"
                           checked={business.is_active}
                         />
                       </div>
