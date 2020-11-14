@@ -26,9 +26,9 @@ namespace SwapClassLibrary.Service
                 name = b.name,
                 description = b.description,
                 rating =  b.rating,
-                opening_hours = b.opening_houers,
-                closing_hours = b.closing_houers,
-            }).ToList();
+                opening_hours = b.opening_hours,
+                closing_hours = b.closing_hours,
+            }).Where(b => b.business_owner_id == business_owner_id).ToList();
             return bussinesses;
         }
 
@@ -48,8 +48,8 @@ namespace SwapClassLibrary.Service
                     description = bussiness.description,
                     Icon = bussiness.Icon,
                     rating = bussiness.rating,
-                    opening_houers = bussiness.opening_hours,
-                    closing_houers = bussiness.closing_hours,
+                    opening_hours = bussiness.opening_hours,
+                    closing_hours = bussiness.closing_hours,
                     approve_by_admin = false
                 };
                 db.businesses.Add(business_to_add);
@@ -61,16 +61,14 @@ namespace SwapClassLibrary.Service
 
         public static bool EditBusiness(bussinessDTO business)
         {
-            SwapDbConnection db = new SwapDbConnection();
+            SwapDbConnection  db = new SwapDbConnection();
             business business_to_edit = db.businesses.FirstOrDefault(b => b.business_owner_id == business.business_owner_id && b.place_id == business.place_id);
-            if (business == null ) return false;
+            if (business_to_edit == null ) return false;
             business_to_edit.name= business.name;
             business_to_edit.description = business.description;
-            business_to_edit.rating = business.rating;
-            business_to_edit.opening_houers = business.opening_hours;
-            business_to_edit.closing_houers = business.closing_hours;
-            business_to_edit.Icon = business.Icon;
-            business_to_edit.rating = business.rating;
+            business_to_edit.opening_hours = business.opening_hours;
+            business_to_edit.closing_hours = business.closing_hours;
+           // business_to_edit.Icon = business.Icon;
             business_to_edit.description = business.description;
             db.SaveChanges();
             return true;

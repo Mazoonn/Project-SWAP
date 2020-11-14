@@ -127,7 +127,7 @@ namespace api.Controllers
 
         [Route("RemoveBusiness")]
         [HttpDelete]
-        public HttpResponseMessage RemoveDiscount([FromBody]bussinessDTO bussiness)
+        public HttpResponseMessage RemoveBusiness([FromBody]bussinessDTO bussiness)
         {
             try
             {

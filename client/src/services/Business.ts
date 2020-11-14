@@ -58,9 +58,9 @@ export async function changeActiveBusiness(req: Business_owner_is_active): Promi
   }
 }
 
-export async function removeBusiness(req: Business_owner_is_active): Promise<any> {
+export async function deleteBusiness(req: Business_owner_is_active): Promise<any> {
   try {
-    const response = await http.delete(`${API_URL_Dev}/business/RemoveBusiness`, { params: req });
+    const response = await http.delete(`${API_URL_Dev}/business/RemoveBusiness`, { data: req });
     return response.data;
   } catch (e) {
     console.log("Check your connection , error:", e);

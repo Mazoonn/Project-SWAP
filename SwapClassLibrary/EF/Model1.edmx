@@ -26,8 +26,8 @@
           <Property Name="is_active" Type="bit" Nullable="false" />
           <Property Name="name" Type="nvarchar" MaxLength="40" Nullable="false" />
           <Property Name="description" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="opening_houers" Type="time" Precision="6" />
-          <Property Name="closing_houers" Type="time" Precision="6" />
+          <Property Name="opening_hours" Type="time" Precision="6" />
+          <Property Name="closing_hours" Type="time" Precision="6" />
           <Property Name="Icon" Type="nvarchar" MaxLength="40" Nullable="false" />
           <Property Name="rating" Type="int" Nullable="false" />
           <Property Name="approve_by_admin" Type="bit" Nullable="false" />
@@ -165,16 +165,6 @@
           <Property Name="name" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="is_active" Type="bit" Nullable="false" />
           <Property Name="google_value" Type="nvarchar" MaxLength="20" />
-        </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="principal_id" Type="int" Nullable="false" />
-          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="version" Type="int" />
-          <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
         <Association Name="FK__Event__event_id__2CBDA3B5">
           <End Role="place" Type="Self.place" Multiplicity="1" />
@@ -350,7 +340,6 @@
           <EntitySet Name="r_place_sub_and_main_category" EntityType="Self.r_place_sub_and_main_category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="r_sub_and_main_category" EntityType="Self.r_sub_and_main_category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sub_category" EntityType="Self.sub_category" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__Event__event_id__2CBDA3B5" Association="Self.FK__Event__event_id__2CBDA3B5">
             <End Role="place" EntitySet="place" />
             <End Role="Event" EntitySet="Event" />
@@ -431,8 +420,8 @@
           <Property Name="is_active" Type="Boolean" Nullable="false" />
           <Property Name="name" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="opening_houers" Type="Time" Precision="6" />
-          <Property Name="closing_houers" Type="Time" Precision="6" />
+          <Property Name="opening_hours" Type="Time" Precision="6" />
+          <Property Name="closing_hours" Type="Time" Precision="6" />
           <Property Name="Icon" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="rating" Type="Int32" Nullable="false" />
           <Property Name="approve_by_admin" Type="Boolean" Nullable="false" />
@@ -595,16 +584,6 @@
           <Property Name="is_active" Type="Boolean" Nullable="false" />
           <Property Name="google_value" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="r_sub_and_main_category" Relationship="Self.FK_r_sub_and_main_category_sub_category" FromRole="sub_category" ToRole="r_sub_and_main_category" />
-        </EntityType>
-        <EntityType Name="sysdiagram">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <Association Name="FK_admin_BusinessOwner">
           <End Role="BusinessOwner" Type="Self.BusinessOwner" Multiplicity="1" />
@@ -780,7 +759,6 @@
           <EntitySet Name="r_place_sub_and_main_category" EntityType="Self.r_place_sub_and_main_category" />
           <EntitySet Name="r_sub_and_main_category" EntityType="Self.r_sub_and_main_category" />
           <EntitySet Name="sub_category" EntityType="Self.sub_category" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
           <AssociationSet Name="FK_admin_BusinessOwner" Association="Self.FK_admin_BusinessOwner">
             <End Role="BusinessOwner" EntitySet="BusinessOwners" />
             <End Role="admin" EntitySet="admins" />
@@ -862,8 +840,8 @@
                 <ScalarProperty Name="is_active" ColumnName="is_active" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="opening_houers" ColumnName="opening_houers" />
-                <ScalarProperty Name="closing_houers" ColumnName="closing_houers" />
+                <ScalarProperty Name="opening_hours" ColumnName="opening_hours" />
+                <ScalarProperty Name="closing_hours" ColumnName="closing_hours" />
                 <ScalarProperty Name="Icon" ColumnName="Icon" />
                 <ScalarProperty Name="rating" ColumnName="rating" />
                 <ScalarProperty Name="approve_by_admin" ColumnName="approve_by_admin" />
@@ -1009,17 +987,6 @@
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="is_active" ColumnName="is_active" />
                 <ScalarProperty Name="google_value" ColumnName="google_value" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="SwapModel.sysdiagram">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="definition" ColumnName="definition" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
