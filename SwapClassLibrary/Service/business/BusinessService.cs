@@ -47,10 +47,11 @@ namespace SwapClassLibrary.Service
                     name = bussiness.name,
                     description = bussiness.description,
                     Icon = bussiness.Icon,
-                    rating = bussiness.rating,
+                    rating = 0 ,
                     opening_hours = bussiness.opening_hours,
                     closing_hours = bussiness.closing_hours,
-                    approve_by_admin = false
+                    approve_by_admin = false,
+                    
                 };
                 db.businesses.Add(business_to_add);
                 db.SaveChanges();

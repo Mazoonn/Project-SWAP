@@ -110,7 +110,7 @@ class BusinessPage extends Component {
                 businessOwnerId={business_owner_id}
               />
             )}
-            {isAddBusiness && <BusinessForm />}
+            {isAddBusiness && <BusinessForm business_owner_id={business_owner_id} />}
           </div>
         </div>
       </React.Fragment>

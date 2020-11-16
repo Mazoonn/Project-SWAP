@@ -1,44 +1,94 @@
 import React, { Component } from "react";
-
+import * as BusinessService from "../../services/Business";
 class BusinessForm extends Component {
-  handleAddBusiness = () => {};
+  state = {
+    formData: { business_owner_id: this.props.business_owner_id },
+  };
+  handleAddBusiness = async () => {
+    const data = this.state.formData;
+    await BusinessService.addBusiness({ ...data });
+    window.location.reload();
+  };
+
+  handelOnChangeForm = (event) => {
+    const formData = { ...this.state.formData };
+    const input = event.target.name;
+    if (input === "is_active") {
+      formData[`${input}`] = event.target.checked;
+    } else {
+      formData[`${input}`] = event.target.value;
+    }
+    this.setState({ formData: { ...formData } });
+  };
+
+  isDisable = (formDataInfo) => {
+    //is active not needed
+    let flag = true;
+    const values = ["name", "description", "opening_hours", "closing_hours", "location", "Icon"];
+    const length = Object.keys(formDataInfo).length;
+    if (Object.keys(formDataInfo).length >= Object.keys(values).length + 1) {
+      for (let i; i < length; i++) {
+        flag = formDataInfo[`${values[i]}`] === "" || formDataInfo[`${values[i]}`] === undefined ? false : true;
+        if (!flag) return flag;
+      }
+    }
+    return flag;
+  };
   render() {
+    let { formData } = this.state;
     return (
       <React.Fragment>
         <form>
           <div class="form-row">
             <div className="col">
               <h3 className="">Name:</h3>
-              <input type="text" className="form-control" placeholder="" />
+              <input type="text" className="form-control" name="name" onBlur={this.handelOnChangeForm} />
             </div>
             <div className="col">
               <h3 className="">Description:</h3>
-              <input type="text" className="form-control" placeholder="" />
+              <input type="text" className="form-control" name="description" onBlur={this.handelOnChangeForm} />
             </div>
           </div>
           <div class="form-row">
             <div className="col">
               <h3 className="">Opening Hours:</h3>
-              <input type="time" className="form-control" />
+              <input type="time" className="form-control" name="opening_hours" onBlur={this.handelOnChangeForm} />
             </div>
             <div className="col">
               <h3 className="">Closing Hours:</h3>
-              <input type="time" className="form-control" />
+              <input type="time" className="form-control" name="closing_hours" onBlur={this.handelOnChangeForm} />
             </div>
           </div>
           <div class="form-row">
             <div className="col">
-              <h3 className="">Active:</h3>
-              <input type="checkbox" className="form-control" placeholder="" />
+              <h3 className="">Location:</h3>
+              <input type="text" className="form-control" name="location" onBlur={this.handelOnChangeForm} />
             </div>
+
             <div className="col">
-              <h3 Icon="">Location:</h3>
-              <input type="text" className="form-control" placeholder="" />
+              <h3 Icon="">Icon:</h3>
+              <input type="text" className="form-control" placeholder="" name="Icon" onBlur={this.handelOnChangeForm} />
+            </div>
+          </div>
+          <div>
+            <div className="form-row">
+              <div>
+                <h3 className="">Active:</h3>
+                <input
+                  type="checkbox"
+                  className="form-control"
+                  placeholder=""
+                  name="is_active"
+                  onChange={this.handelOnChangeForm}
+                />
+              </div>
             </div>
           </div>
         </form>
+        <br />
+        <br />
         <div class="col-auto my-1">
-          <button type="submit" class="btn btn-primary" onClick={this.handleAddBusiness}>
+          <button type="submit" class="btn btn-primary" onClick={this.handleAddBusiness} disabled={!this.isDisable(formData)}>
             Add
           </button>
         </div>
