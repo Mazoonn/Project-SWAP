@@ -49,7 +49,12 @@ export async function getAllMainCategoriesAdmin() {
 export async function putCategories(id, is_active) {
   try {
     const main_list = await http.put(
-      `${API_URL_Dev}/MainCategory/ChangeActiveMainCategory/${id}`,{is_active, token: localStorage.getItem("token")});
+      `${API_URL_Dev}/MainCategory/ChangeActiveMainCategory/${id}`,{is_active}
+      , {
+        headers: {
+        'Authorization': `Bearer ${localStorage.getItem("token")}`
+      }}
+      );
     return main_list.data;
   } catch (e) {
     console.log("Check your connection , error:", e);

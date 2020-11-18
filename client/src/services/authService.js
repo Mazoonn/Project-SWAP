@@ -17,4 +17,13 @@ export function getCurrentUser()
     return decoded;
 }
 
-export default getCurrentUser;
+export function isAdmin() 
+{
+    const user = getCurrentUser();
+    if(user)
+    {
+        return user["role"] === 'admin';
+    }
+    return null;
+}
+
