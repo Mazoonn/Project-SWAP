@@ -7,6 +7,8 @@ using System.Data.Entity;
 using SwapClassLibrary.EF;
 using SwapClassLibrary.DTO;
 using System.Data.Entity.Validation;
+using SwapClassLibrary.Models;
+using System.Security.Claims;
 
 namespace SwapClassLibrary.Service
 {
@@ -63,9 +65,6 @@ namespace SwapClassLibrary.Service
             }
             return false;
         }
-
-
-
     }
 
 }

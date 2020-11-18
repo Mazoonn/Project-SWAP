@@ -20,9 +20,8 @@ namespace api.Controllers
         {
             try
             {
-                loginDTO local_user_id = new loginDTO();
+                client user = null;    
                 string token = "";
-                bool admin_login = false;
 
                 switch (body.platform)
                 {
@@ -30,23 +29,21 @@ namespace api.Controllers
                         clientService.registerClientfacebook(body);
                         break;
                     case "google":
-                        clientService.registerClientgoogle(body);
+                        user = clientService.registerClientgoogle(body);
                         break;
                     case "local":
                         if (body.password == null || body.email == null)
                             return Request.CreateResponse(HttpStatusCode.BadRequest, "Client params illigel");
-                        local_user_id = clientService.checkUserLogin(body);
-                        if (local_user_id == null)
-                            return Request.CreateResponse(HttpStatusCode.Unauthorized, "Email or password is incorrect");
+                        user = clientService.checkUserLogin(body);
+                        if (user == null)
+                            return Request.CreateResponse(HttpStatusCode.Unauthorized, "Email or password is incorrect");                  
                         break;
                     default:
                         return Request.CreateResponse(HttpStatusCode.BadRequest, "Client params illigel"); ;
                 }
-                token = JWTGetToken.getToken(local_user_id.user_id == null ? body.user_id : local_user_id.user_id, body.email, local_user_id.role);
-                if (token != "flase") return Request.CreateResponse(HttpStatusCode.OK, new responseLoginDTO() { 
-                token=token,
-                user_id= local_user_id.user_id
-                });
+                
+                token = JWTGetToken.getToken(user.client_id, user.email, user.actor);
+                if (token != "flase") return Request.CreateResponse(HttpStatusCode.OK, token);
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, "Unable to create token");
             }
             catch (Exception e)

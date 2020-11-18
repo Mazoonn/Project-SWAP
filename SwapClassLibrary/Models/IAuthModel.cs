@@ -10,7 +10,8 @@ namespace SwapClassLibrary.Models
     public interface IAuthModel
     {
         #region Members
-        string SecretKey { get; set; }
+        string PrivateKey { get; set; }
+        string PublicKey { get; set; }
         string SecurityAlgorithm { get; set; }
         int ExpireMinutes { get; set; }
 

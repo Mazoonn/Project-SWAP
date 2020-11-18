@@ -31,9 +31,9 @@ namespace SwapClassLibrary.EF
         public int rating { get; set; }
         public bool approve_by_admin { get; set; }
     
+        public virtual place place { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<product> products { get; set; }
         public virtual BusinessOwner BusinessOwner { get; set; }
-        public virtual place place { get; set; }
     }
 }

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { clientRegister } from "../services/client";
 import { setUserSession } from "../Utils/Common";
 import Joi from "joi-browser";
-import { getCurrentUser } from "./../services/authServie";
+import { getCurrentUser } from "../services/authService";
 
 class RegisterForm extends Component {
   state = {
