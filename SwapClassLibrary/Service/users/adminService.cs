@@ -65,27 +65,6 @@ namespace SwapClassLibrary.Service
             }
             return false;
         }
-
-        public static bool IsAuthorized(string token)
-        {
-            JWTModel model = new JWTModel();
-            JWTService jwtService = new JWTService(model.PrivateKey, model.PublicKey);
-            IEnumerable<Claim> claims;
-            string role;
-
-            try
-            {
-                claims = jwtService.GetTokenClaims(token);
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-            role = claims.First(c => c.Type == ClaimTypes.Role).Value;
-            if (role == "admin")
-                return true;
-            return false;
-        }
     }
 
 }

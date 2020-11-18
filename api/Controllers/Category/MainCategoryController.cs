@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using api.Authoriztion;
 using SwapClassLibrary.DTO;
 using SwapClassLibrary.EF;
 using SwapClassLibrary.Service;
@@ -74,10 +75,9 @@ namespace api.Controllers
         [HttpPut]
         // PUT: api/MainCategory/ChangeActiveMainCategory/id
         //body : "is_active":true
+        [MyAuthorize("admin")]
         public HttpResponseMessage ChangeActiveMainCategory([FromUri]string id,[FromBody] dynamic req)
         {
-            if (!AdminService.IsAuthorized((string)req.token))
-                return Request.CreateResponse(HttpStatusCode.Unauthorized, "Unauthorized");
             try
             {
             main_category slected_main_category;
