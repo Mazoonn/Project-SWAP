@@ -14,14 +14,15 @@ namespace SwapClassLibrary.Service
     {
         public static string registerClientLocal(registerDTO body)
         {
-            
             SwapDbConnection db = new SwapDbConnection();
-            client client=db.clients.FirstOrDefault(c=>c.email==body.email);
+            client client = db.clients.FirstOrDefault(c => c.email == body.email && (c.login_local ?? false));
             string id = "";
 
-            if (client==null)
+            if (client == null)
             {
                 id = IdService.generateID("client");
+                HashSalt hs = HashSalt.GenerateSaltedHash(body.password);
+
                 client new_client = new client()
                 {
                     client_id = id,
@@ -33,10 +34,11 @@ namespace SwapClassLibrary.Service
                     last_name = body.last_name,
                     phone = body.phone,
                     sex = body.sex,
-                    password = body.password,
+                    password = hs.Hash,
+                    salt = hs.Salt,
                     login_local = true,
-                    login_facebock=false,
-                    login_google=false,
+                    login_facebock = false,
+                    login_google = false,
                     actor = "client"
                 };
 
@@ -52,36 +54,43 @@ namespace SwapClassLibrary.Service
             return false;
         }
 
-        public static string registerClientgoogle(loginDTO body)
+        private static void SetUser(loginDTO user,string role, string id, string email)
+        {
+            user.role = role;
+            user.email = email;
+            user.user_id = id;
+        }
+
+        public static client registerClientgoogle(loginDTO body)
         {
             //try
             //{
-                SwapDbConnection db = new SwapDbConnection();
-                client client = db.clients.FirstOrDefault(user => user.email == body.email);
-                if (client == null)
+            SwapDbConnection db = new SwapDbConnection();
+            client client = db.clients.FirstOrDefault(u => u.email == body.email);
+            if (client == null)
+            {
+                client = new client
                 {
-                    client new_client = new client()
-                    {
-                        client_id = body.user_id,
-                        email = body.email,
-                        creation_date = DateTime.Now,
-                        first_name = body.first_name,
-                        last_login = DateTime.Now,
-                        last_name = body.last_name,
-                        birthday_date = "",
-                        password = "",
-                        phone = "",
-                        sex = "",
-                        login_local = false,
-                        login_facebock = false,
-                        login_google = true,
-                        actor = "client"
-                    };
-                    db.clients.Add(new_client);
-                    db.SaveChanges();
-                    return new_client.client_id;
-                }
-                return "";
+                    client_id = body.user_id,
+                    email = body.email,
+                    creation_date = DateTime.Now,
+                    first_name = body.first_name,
+                    last_login = DateTime.Now,
+                    last_name = body.last_name,
+                    birthday_date = "",
+                    password = "",
+                    phone = "",
+                    sex = "",
+                    login_local = false,
+                    login_facebock = false,
+                    login_google = true,
+                    actor = "client"
+                };
+                db.clients.Add(client);
+                db.SaveChanges();
+            }
+            
+            return client;
             //}
             //catch (DbEntityValidationException ex)
             //{
@@ -93,16 +102,19 @@ namespace SwapClassLibrary.Service
             //        }
             //    }
             //}
-            
-                
+
+
         }
-        public static loginDTO checkUserLogin(loginDTO body)
+        public static client checkUserLogin(loginDTO body)
         {
             SwapDbConnection db = new SwapDbConnection();
-            loginDTO user;
-            string actor = db.clients.Where(x => x.email == body.email).Select(x => x.actor).FirstOrDefault();
+            client user = db.clients.FirstOrDefault(x => x.email == body.email && (x.login_local ?? false));
 
-            switch (actor)
+            if (user == null || !HashSalt.VerifyPassword(body.password, user.password, user.salt))
+                return null;
+
+
+            /*switch (actor)
             {
                 case "client":
                     user = db.clients.Where(x => x.email == body.email).Select(x => new loginDTO
@@ -135,10 +147,9 @@ namespace SwapClassLibrary.Service
                     break;
                 default:
                     throw new Exception("there was an error with the type of actor");
-            }
-           
-            if (user == null || user.password != body.password)
-                return null;
+            }*/
+
+
             return user;
         }
     }

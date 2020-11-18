@@ -10,7 +10,6 @@ using SwapClassLibrary.Service;
 
 namespace api.Controllers.admin
 {
-    [Authorize]
     [RoutePrefix("api/Admin")]
     public class AdminController : ApiController
     {

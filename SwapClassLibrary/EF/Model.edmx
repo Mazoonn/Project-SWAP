@@ -51,11 +51,12 @@
           <Property Name="sex" Type="nvarchar" MaxLength="8" />
           <Property Name="last_login" Type="date" Nullable="false" />
           <Property Name="phone" Type="nvarchar" MaxLength="20" />
-          <Property Name="password" Type="nvarchar" MaxLength="20" />
           <Property Name="login_google" Type="bit" />
           <Property Name="login_facebock" Type="bit" />
           <Property Name="login_local" Type="bit" />
           <Property Name="actor" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="salt" Type="nvarchar" MaxLength="128" />
+          <Property Name="password" Type="nvarchar" MaxLength="128" />
         </EntityType>
         <EntityType Name="Event">
           <Key>
@@ -166,6 +167,28 @@
           <Property Name="is_active" Type="bit" Nullable="false" />
           <Property Name="google_value" Type="nvarchar" MaxLength="20" />
         </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <Association Name="FK__business__place___324172E1">
+          <End Role="place" Type="Self.place" Multiplicity="1" />
+          <End Role="business" Type="Self.business" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="place">
+              <PropertyRef Name="place_id" />
+            </Principal>
+            <Dependent Role="business">
+              <PropertyRef Name="place_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__Event__event_id__2CBDA3B5">
           <End Role="place" Type="Self.place" Multiplicity="1" />
           <End Role="Event" Type="Self.Event" Multiplicity="0..1" />
@@ -223,18 +246,6 @@
             </Principal>
             <Dependent Role="BusinessOwner">
               <PropertyRef Name="business_owner_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_place_business">
-          <End Role="business" Type="Self.business" Multiplicity="1" />
-          <End Role="place" Type="Self.place" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="business">
-              <PropertyRef Name="place_id" />
-            </Principal>
-            <Dependent Role="place">
-              <PropertyRef Name="place_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -340,6 +351,11 @@
           <EntitySet Name="r_place_sub_and_main_category" EntityType="Self.r_place_sub_and_main_category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="r_sub_and_main_category" EntityType="Self.r_sub_and_main_category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sub_category" EntityType="Self.sub_category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__business__place___324172E1" Association="Self.FK__business__place___324172E1">
+            <End Role="place" EntitySet="place" />
+            <End Role="business" EntitySet="business" />
+          </AssociationSet>
           <AssociationSet Name="FK__Event__event_id__2CBDA3B5" Association="Self.FK__Event__event_id__2CBDA3B5">
             <End Role="place" EntitySet="place" />
             <End Role="Event" EntitySet="Event" />
@@ -359,10 +375,6 @@
           <AssociationSet Name="FK_BusinessOwner_client" Association="Self.FK_BusinessOwner_client">
             <End Role="client" EntitySet="client" />
             <End Role="BusinessOwner" EntitySet="BusinessOwner" />
-          </AssociationSet>
-          <AssociationSet Name="FK_place_business" Association="Self.FK_place_business">
-            <End Role="business" EntitySet="business" />
-            <End Role="place" EntitySet="place" />
           </AssociationSet>
           <AssociationSet Name="FK_quest_client" Association="Self.FK_quest_client">
             <End Role="client" EntitySet="client" />
@@ -425,9 +437,9 @@
           <Property Name="Icon" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="rating" Type="Int32" Nullable="false" />
           <Property Name="approve_by_admin" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="place" Relationship="Self.FK__business__place___324172E1" FromRole="business" ToRole="place" />
           <NavigationProperty Name="products" Relationship="Self.FK__product__busines__29E1370A" FromRole="business" ToRole="product" />
           <NavigationProperty Name="BusinessOwner" Relationship="Self.FK_business_BusinessOwner" FromRole="business" ToRole="BusinessOwner" />
-          <NavigationProperty Name="place" Relationship="Self.FK_place_business" FromRole="business" ToRole="place" />
         </EntityType>
         <EntityType Name="BusinessOwner">
           <Key>
@@ -451,11 +463,12 @@
           <Property Name="sex" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
           <Property Name="last_login" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="password" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="login_google" Type="Boolean" />
           <Property Name="login_facebock" Type="Boolean" />
           <Property Name="login_local" Type="Boolean" />
           <Property Name="actor" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="salt" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="password" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="BusinessOwner" Relationship="Self.FK_BusinessOwner_client" FromRole="client" ToRole="BusinessOwner" />
           <NavigationProperty Name="quests" Relationship="Self.FK_quest_client" FromRole="client" ToRole="quest" />
         </EntityType>
@@ -499,7 +512,7 @@
           <Property Name="street" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="street_number" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="post_code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="business" Relationship="Self.FK_place_business" FromRole="place" ToRole="business" />
+          <NavigationProperty Name="business" Relationship="Self.FK__business__place___324172E1" FromRole="place" ToRole="business" />
           <NavigationProperty Name="Event" Relationship="Self.FK__Event__event_id__2CBDA3B5" FromRole="place" ToRole="Event" />
           <NavigationProperty Name="r_place_quest" Relationship="Self.FK_r_place_quest_place" FromRole="place" ToRole="r_place_quest" />
           <NavigationProperty Name="r_place_sub_and_main_category" Relationship="Self.FK_r_place_sub_and_main_category_place" FromRole="place" ToRole="r_place_sub_and_main_category" />
@@ -585,6 +598,16 @@
           <Property Name="google_value" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="r_sub_and_main_category" Relationship="Self.FK_r_sub_and_main_category_sub_category" FromRole="sub_category" ToRole="r_sub_and_main_category" />
         </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
         <Association Name="FK_admin_BusinessOwner">
           <End Role="BusinessOwner" Type="Self.BusinessOwner" Multiplicity="1" />
           <End Role="admin" Type="Self.admin" Multiplicity="0..1" />
@@ -594,6 +617,18 @@
             </Principal>
             <Dependent Role="admin">
               <PropertyRef Name="admin_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__business__place___324172E1">
+          <End Role="place" Type="Self.place" Multiplicity="1" />
+          <End Role="business" Type="Self.business" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="place">
+              <PropertyRef Name="place_id" />
+            </Principal>
+            <Dependent Role="business">
+              <PropertyRef Name="place_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -618,18 +653,6 @@
             </Principal>
             <Dependent Role="business">
               <PropertyRef Name="business_owner_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_place_business">
-          <End Role="business" Type="Self.business" Multiplicity="1" />
-          <End Role="place" Type="Self.place" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="business">
-              <PropertyRef Name="place_id" />
-            </Principal>
-            <Dependent Role="place">
-              <PropertyRef Name="place_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -759,9 +782,14 @@
           <EntitySet Name="r_place_sub_and_main_category" EntityType="Self.r_place_sub_and_main_category" />
           <EntitySet Name="r_sub_and_main_category" EntityType="Self.r_sub_and_main_category" />
           <EntitySet Name="sub_category" EntityType="Self.sub_category" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
           <AssociationSet Name="FK_admin_BusinessOwner" Association="Self.FK_admin_BusinessOwner">
             <End Role="BusinessOwner" EntitySet="BusinessOwners" />
             <End Role="admin" EntitySet="admins" />
+          </AssociationSet>
+          <AssociationSet Name="FK__business__place___324172E1" Association="Self.FK__business__place___324172E1">
+            <End Role="place" EntitySet="places" />
+            <End Role="business" EntitySet="businesses" />
           </AssociationSet>
           <AssociationSet Name="FK__product__busines__29E1370A" Association="Self.FK__product__busines__29E1370A">
             <End Role="business" EntitySet="businesses" />
@@ -770,10 +798,6 @@
           <AssociationSet Name="FK_business_BusinessOwner" Association="Self.FK_business_BusinessOwner">
             <End Role="BusinessOwner" EntitySet="BusinessOwners" />
             <End Role="business" EntitySet="businesses" />
-          </AssociationSet>
-          <AssociationSet Name="FK_place_business" Association="Self.FK_place_business">
-            <End Role="business" EntitySet="businesses" />
-            <End Role="place" EntitySet="places" />
           </AssociationSet>
           <AssociationSet Name="FK_BusinessOwner_client" Association="Self.FK_BusinessOwner_client">
             <End Role="client" EntitySet="clients" />
@@ -867,11 +891,12 @@
                 <ScalarProperty Name="sex" ColumnName="sex" />
                 <ScalarProperty Name="last_login" ColumnName="last_login" />
                 <ScalarProperty Name="phone" ColumnName="phone" />
-                <ScalarProperty Name="password" ColumnName="password" />
                 <ScalarProperty Name="login_google" ColumnName="login_google" />
                 <ScalarProperty Name="login_facebock" ColumnName="login_facebock" />
                 <ScalarProperty Name="login_local" ColumnName="login_local" />
                 <ScalarProperty Name="actor" ColumnName="actor" />
+                <ScalarProperty Name="salt" ColumnName="salt" />
+                <ScalarProperty Name="password" ColumnName="password" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -987,6 +1012,17 @@
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="is_active" ColumnName="is_active" />
                 <ScalarProperty Name="google_value" ColumnName="google_value" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="SwapModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
