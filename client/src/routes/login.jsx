@@ -3,7 +3,7 @@ import { setUserSession } from "../Utils/Common";
 import LoginGoF from "./loginGoF";
 import { clientLogin } from "../services/client";
 import Joi from "joi-browser";
-import { getCurrentUser } from "./../services/authServie";
+import { getCurrentUser } from "../services/authService";
 
 function Login(props) {
   const [loading, setLoading] = useState(false);
@@ -23,7 +23,7 @@ function Login(props) {
     return errorsState;
   };
 
-  const handeOnChange = (e) => {
+  const handleOnChange = (e) => {
     const userDetails = { ...user };
     userDetails[e.target.name] = e.target.value;
     setUser(userDetails);
@@ -37,12 +37,11 @@ function Login(props) {
     if (errorsState) return;
     setLoading(true);
     try {
-      const { token, client_id: user_id } = await clientLogin({
+      const token = await clientLogin({
         email: user.email,
         password: user.password,
-        //client: client_id,
         platform: "local",
-      }).data;
+      });
       setUserSession(token.data, user.email);
       window.location = "/";
     } catch (error) {
@@ -67,7 +66,7 @@ function Login(props) {
               <input
                 autoFocus
                 value={user.email}
-                onChange={handeOnChange}
+                onChange={handleOnChange}
                 name="email"
                 type="email"
                 className="form-control w-2"
@@ -87,7 +86,7 @@ function Login(props) {
               Password
               <input
                 value={user.password}
-                onChange={handeOnChange}
+                onChange={handleOnChange}
                 name="password"
                 type="password"
                 className="form-control"
