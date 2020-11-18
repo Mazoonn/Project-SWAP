@@ -54,7 +54,6 @@
           <Property Name="login_google" Type="bit" />
           <Property Name="login_facebock" Type="bit" />
           <Property Name="login_local" Type="bit" />
-          <Property Name="actor" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="salt" Type="nvarchar" MaxLength="128" />
           <Property Name="password" Type="nvarchar" MaxLength="128" />
         </EntityType>
@@ -466,7 +465,6 @@
           <Property Name="login_google" Type="Boolean" />
           <Property Name="login_facebock" Type="Boolean" />
           <Property Name="login_local" Type="Boolean" />
-          <Property Name="actor" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="salt" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="password" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="BusinessOwner" Relationship="Self.FK_BusinessOwner_client" FromRole="client" ToRole="BusinessOwner" />
@@ -894,7 +892,6 @@
                 <ScalarProperty Name="login_google" ColumnName="login_google" />
                 <ScalarProperty Name="login_facebock" ColumnName="login_facebock" />
                 <ScalarProperty Name="login_local" ColumnName="login_local" />
-                <ScalarProperty Name="actor" ColumnName="actor" />
                 <ScalarProperty Name="salt" ColumnName="salt" />
                 <ScalarProperty Name="password" ColumnName="password" />
               </MappingFragment>

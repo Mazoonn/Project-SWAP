@@ -11,7 +11,6 @@ using SwapClassLibrary.Service;
 
 namespace api.Controllers
 {
-   ////[Authorize(Roles = "admin")]
     [RoutePrefix("api/MainCategory")]
     public class MainCategoryController : ApiController
     {
@@ -23,10 +22,10 @@ namespace api.Controllers
         {
             try
             {
-            List<categoryDTO> list = MainCategoryService.GetAllMainCategorys().Where(x => x.is_active).ToList();
-            if (list == null||test)
-                return Request.CreateResponse(HttpStatusCode.NotFound, "There is no Main Categoy value in the db");
-            return Request.CreateResponse(HttpStatusCode.OK, list);
+                List<categoryDTO> list = MainCategoryService.GetAllMainCategorys().Where(x => x.is_active).ToList();
+                if (list == null || test)
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is no Main Categoy value in the db");
+                return Request.CreateResponse(HttpStatusCode.OK, list);
 
             }
             catch (Exception e)
@@ -65,9 +64,9 @@ namespace api.Controllers
                     return Request.CreateResponse(HttpStatusCode.OK, MainCategoryService.AddMainCategory(req.name, req.google_value));
                 return Request.CreateResponse(HttpStatusCode.BadRequest, "there is no name value in the body");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: "+ e);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
             }
         }
 

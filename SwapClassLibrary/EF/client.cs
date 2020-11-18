@@ -32,7 +32,6 @@ namespace SwapClassLibrary.EF
         public Nullable<bool> login_google { get; set; }
         public Nullable<bool> login_facebock { get; set; }
         public Nullable<bool> login_local { get; set; }
-        public string actor { get; set; }
         public string salt { get; set; }
         public string password { get; set; }
     
