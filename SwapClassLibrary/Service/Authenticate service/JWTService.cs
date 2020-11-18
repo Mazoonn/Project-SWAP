@@ -4,7 +4,12 @@ using System.Collections.Generic;
 using SwapClassLibrary.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-
+using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.OpenSsl;
+using Org.BouncyCastle.Security;
+using System.IO;
+using System.Security.Cryptography;
 
 namespace SwapClassLibrary.Service
 {
@@ -14,13 +19,16 @@ namespace SwapClassLibrary.Service
         /// <summary>
         /// The secret key we use to encrypt out token with.
         /// </summary>
-        public string SecretKey { get; set; }
+        public string PrivateKey { get; set; }
+        public string PublicKey { get; set; }
+
         #endregion
 
         #region Constructor
-        public JWTService(string secretKey)
+        public JWTService(string privateKey, string publicKey)
         {
-            SecretKey = secretKey;
+            PrivateKey = privateKey;
+            PublicKey = publicKey;
         }
         #endregion
 
@@ -65,7 +73,7 @@ namespace SwapClassLibrary.Service
             {
                 Subject = new ClaimsIdentity(model.Claims),
                 Expires = DateTime.UtcNow.AddMinutes(Convert.ToInt32(model.ExpireMinutes)),
-                SigningCredentials = new SigningCredentials(GetSymmetricSecurityKey(), model.SecurityAlgorithm)
+                SigningCredentials = new SigningCredentials(GetPrivateKey(model.PrivateKey), model.SecurityAlgorithm)
             };
 
             JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
@@ -88,6 +96,7 @@ namespace SwapClassLibrary.Service
             if (string.IsNullOrEmpty(token))
                 throw new ArgumentException("Given token is null or empty.");
 
+
             TokenValidationParameters tokenValidationParameters = GetTokenValidationParameters();
 
             JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
@@ -103,22 +112,43 @@ namespace SwapClassLibrary.Service
         }
         #endregion
 
-        #region Private Methods
-        private SecurityKey GetSymmetricSecurityKey()
+        private RsaSecurityKey GetPrivateKey(string privateKey)
         {
-            byte[] symmetricKey = Convert.FromBase64String(SecretKey);
-            return new SymmetricSecurityKey(symmetricKey);
+            PemReader pr = new PemReader(new StringReader(privateKey));
+            RsaSecurityKey key;
+            AsymmetricCipherKeyPair KeyPair = (AsymmetricCipherKeyPair)pr.ReadObject();
+            RSAParameters rsaParams = DotNetUtilities.ToRSAParameters((RsaPrivateCrtKeyParameters)KeyPair.Private);
+            var rsaProvider = RSA.Create(2048);
+            rsaProvider.ImportParameters(rsaParams);
+            key = new RsaSecurityKey(rsaProvider);
+            return key;
+        }
+
+        private RsaSecurityKey GetPublicKey(string publicKey)
+        {
+            PemReader pr = new PemReader(new StringReader(publicKey));
+            AsymmetricKeyParameter pKey = (AsymmetricKeyParameter)pr.ReadObject();
+            RSAParameters rsaParams = DotNetUtilities.ToRSAParameters((RsaKeyParameters)pKey);
+
+            return new RsaSecurityKey(rsaParams);
         }
 
         private TokenValidationParameters GetTokenValidationParameters()
+
         {
+
             return new TokenValidationParameters()
+
             {
+
                 ValidateIssuer = false,
+
                 ValidateAudience = false,
-                IssuerSigningKey = GetSymmetricSecurityKey()
+
+                IssuerSigningKey = GetPublicKey(PublicKey)
+
             };
+
         }
-        #endregion
     }
 }

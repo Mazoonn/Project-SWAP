@@ -7,7 +7,8 @@ namespace SwapClassLibrary.Service
 {
     public interface IAuthService
     {
-        string SecretKey { get; set; }
+        string PrivateKey { get; set; }
+        string PublicKey { get; set; }
         bool IsTokenValid(string token);
         string GenerateToken(IAuthModel model);
         IEnumerable<Claim> GetTokenClaims(string token);

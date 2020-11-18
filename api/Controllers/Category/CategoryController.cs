@@ -61,7 +61,7 @@ namespace api.Controllers
             try
             {
                 MainAndSubRelationshipDTO object_add;
-                if (req.main_id == null || req.sub_name==null ||req.google_value==null|| req.descrition == null)
+                if (req.main_id == null || req.sub_name == null ||req.google_value == null|| req.descrition == null)
                     return Request.CreateResponse(HttpStatusCode.BadRequest, "The param is missing :" + req.main_id==null? req.google_value == null? req.sub_name == null? "":"sub_name" : "google_value" :  "main_id");
                 object_add = CategoryService.AddMainAndSubRelationship(req.main_id, req.sub_name, req.google_value, req.descrition);
                     return Request.CreateResponse(HttpStatusCode.OK, object_add);
@@ -93,6 +93,30 @@ namespace api.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
             }
         }
+
+
+        // PUT:api/category/UpdateSubCategoryOfMainCategory
+        [Route("UpdateSubCategoryOfMainCategory")]
+        [HttpPut]
+        public HttpResponseMessage UpdateSubCategoryOfMainCategory([FromBody]MainAndSubRelationshipDTO req)
+        {
+            try
+            {
+                bool success;
+                if (req.main_id == null || req.sub_id == null || req.sub_name == null || req.google_value == null)
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "missing parameters");
+                success = SubCategoryService.updateSubCategory(req.sub_id, req.google_value, req.sub_name);
+                success &= CategoryService.UpdateDescription(req.main_id, req.sub_id, req.descrition);
+                if (success)
+                    return Request.CreateResponse(HttpStatusCode.OK, true);
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Bad request");
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
+        }
+
 
         // PUT:api/category/UpdateSubCategoryOfMainCategoryDescription
         [Route("UpdateSubCategoryOfMainCategoryDescription")]
