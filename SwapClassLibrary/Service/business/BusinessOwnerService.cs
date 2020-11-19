@@ -23,7 +23,6 @@ namespace SwapClassLibrary.Service
                 {
                     business_owner_id = business_owner_id,
                 };
-                client_to_change.actor = "business_owner";
                 db.BusinessOwners.Add(business_owner);
                 db.SaveChanges();
                 return true;
@@ -44,7 +43,6 @@ namespace SwapClassLibrary.Service
                 }
                 db.BusinessOwners.Remove(business_owner);
                 client client = db.clients.Where(c => c.client_id == business_owner_id).FirstOrDefault();
-                client.actor = "client";
                 db.SaveChanges();
                 return true;
             }

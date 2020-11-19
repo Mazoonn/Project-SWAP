@@ -21,7 +21,8 @@ namespace api.Controllers
             try
             {
                 client user = null;    
-                string token = "";
+                string actor, token = "";
+
 
                 switch (body.platform)
                 {
@@ -41,8 +42,8 @@ namespace api.Controllers
                     default:
                         return Request.CreateResponse(HttpStatusCode.BadRequest, "Client params illigel"); ;
                 }
-                
-                token = JWTGetToken.getToken(user.client_id, user.email, user.actor);
+                actor = clientService.GetRole(user.client_id);
+                token = JWTGetToken.getToken(user.client_id, user.email, actor);
                 if (token != "flase") return Request.CreateResponse(HttpStatusCode.OK, token);
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, "Unable to create token");
             }

@@ -7,8 +7,11 @@ import Profile from "../routes/ProfilePage";
 import Home from "../routes/HomePage";
 import { BrowserRouter, Switch, Route, NavLink } from "react-router-dom";
 import Quest from "./quest/quest";
-import PrivateRoute from "./../Utils/PrivateRoute";
+import ClientRoute from "./../Utils/ClientRoute";
 import Logout from "./../routes/logout";
+import AdminRoute from './../Utils/AdminRoute';
+import BusinessRoute from './../Utils/BusinessRote';
+
 
 class NavBar extends Component {
   render() {
@@ -35,7 +38,7 @@ class NavBar extends Component {
               {user && (
                 <React.Fragment>
                   <NavLink activeClassName="active" to="/quest">
-                    Quest{console.log(user)}
+                    Quest
                   </NavLink>
                   <NavLink activeClassName="active" to="/logout">
                     Logout
@@ -45,14 +48,14 @@ class NavBar extends Component {
                   </NavLink>
                 </React.Fragment>
               )}
-              {user && ( //TODO user.isBusinessOwner && (
+              {user && (user['role'] === 'business' || user['role'] === 'admin') && (
                 <NavLink activeClassName="active" to="/business">
                   Business Owner Page
                 </NavLink>
               )}
-              {user && ( //TODO user.isAdmin && (
+              {user && (user["role"] === 'admin') && (
                 <NavLink activeClassName="active" to="/admin">
-                  Admin-Page
+                  Admin
                 </NavLink>
               )}
             </div>
@@ -61,11 +64,11 @@ class NavBar extends Component {
                 <Route exact path="/" component={Home} />
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/register" component={Register} />
-                <PrivateRoute exact path="/quest" component={Quest} />
-                <PrivateRoute exact path="/profile" component={Profile} />
-                <PrivateRoute exact path="/business" component={Business} />
-                <PrivateRoute exact path="/admin" component={Admin} />
-                <PrivateRoute exact path="/logout" component={Logout} />
+                <ClientRoute exact path="/quest" component={Quest} />
+                <ClientRoute exact path="/profile" component={Profile} />
+                <BusinessRoute exact path="/business" component={Business} />
+                <AdminRoute exact path="/admin" component={Admin} />
+                <ClientRoute exact path="/logout" component={Logout} />
               </Switch>
             </div>
           </div>

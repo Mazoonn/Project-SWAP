@@ -4,12 +4,12 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="7e15cb9ec7024b26b894046662900ac5" Name="Diagram1" ZoomLevel="53">
+      <Diagram DiagramId="fe716da104d8488e9b91fcc89b8cdc68" Name="Diagram1">
         <EntityTypeShape EntityType="SwapModel.address" Width="1.5" PointX="5.75" PointY="1.25" IsExpanded="true" />
         <EntityTypeShape EntityType="SwapModel.admin" Width="1.5" PointX="3" PointY="19.375" IsExpanded="true" />
         <EntityTypeShape EntityType="SwapModel.business" Width="1.5" PointX="3" PointY="6.375" IsExpanded="true" />
         <EntityTypeShape EntityType="SwapModel.BusinessOwner" Width="1.5" PointX="0.75" PointY="19.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SwapModel.client" Width="1.5" PointX="1.5" PointY="22" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapModel.client" Width="1.5" PointX="1.5" PointY="22.125" IsExpanded="true" />
         <EntityTypeShape EntityType="SwapModel.Event" Width="1.5" PointX="3" PointY="11.375" IsExpanded="true" />
         <EntityTypeShape EntityType="SwapModel.google_value" Width="1.5" PointX="7.75" PointY="1.25" IsExpanded="true" />
         <EntityTypeShape EntityType="SwapModel.main_category" Width="1.5" PointX="1.5" PointY="3" IsExpanded="true" />

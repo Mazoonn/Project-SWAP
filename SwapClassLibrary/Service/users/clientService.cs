@@ -39,7 +39,6 @@ namespace SwapClassLibrary.Service
                     login_local = true,
                     login_facebock = false,
                     login_google = false,
-                    actor = "client"
                 };
 
                 db.clients.Add(new_client);
@@ -84,7 +83,6 @@ namespace SwapClassLibrary.Service
                     login_local = false,
                     login_facebock = false,
                     login_google = true,
-                    actor = "client"
                 };
                 db.clients.Add(client);
                 db.SaveChanges();
@@ -113,44 +111,19 @@ namespace SwapClassLibrary.Service
             if (user == null || !HashSalt.VerifyPassword(body.password, user.password, user.salt))
                 return null;
 
-
-            /*switch (actor)
-            {
-                case "client":
-                    user = db.clients.Where(x => x.email == body.email).Select(x => new loginDTO
-                    {
-                        email = x.email,
-                        user_id = x.client_id,
-                        password = x.password,
-                        role = x.actor
-
-                    }).FirstOrDefault();
-                    break;
-                case "admin":
-                    user = db.clients.Where(x => x.email == body.email).Select(x => new loginDTO
-                    {
-                        email = x.email,
-                        user_id = x.client_id,//TODO change this to admin table
-                        password = x.password,
-                        role = x.actor
-
-                    }).FirstOrDefault();
-                    break;
-                case "business_owner":
-                    user = db.clients.Where(x => x.email == body.email).Select(x => new loginDTO
-                    {
-                        email = x.email,
-                        user_id = x.client_id,//TODO change this to BusinessOwner table
-                        password = x.password,
-                        role = x.actor
-                    }).FirstOrDefault();
-                    break;
-                default:
-                    throw new Exception("there was an error with the type of actor");
-            }*/
-
-
             return user;
+        }
+
+        public static string GetRole(string id)
+        {
+            SwapDbConnection db = new SwapDbConnection();
+            admin admin = db.admins.FirstOrDefault(a => a.admin_id == id);
+            BusinessOwner businessOwner;
+
+            if (admin != null) return "admin";
+            businessOwner = db.BusinessOwners.FirstOrDefault(b => b.business_owner_id == id);
+            if (businessOwner != null) return "business";
+            return "client";
         }
     }
 

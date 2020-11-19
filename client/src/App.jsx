@@ -1,6 +1,6 @@
 import React from "react";
 import NavBar from "./components/navBar";
-import getCurrentUser from "./services/authService";
+import { getCurrentUser } from "./services/authService";
 
 function App() {
   const [currentUser, setUser] = React.useState(null);

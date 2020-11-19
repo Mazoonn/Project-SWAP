@@ -12,11 +12,11 @@ namespace api.Authoriztion
 {
     public class MyAuthorizeAttribute : AuthorizeAttribute
     {
-        private readonly string AllowedRole;
+        private readonly string[] AllowedRoles;
 
-        public MyAuthorizeAttribute(string role)
+        public MyAuthorizeAttribute(params string[] roles)
         {
-            AllowedRole = role;
+            AllowedRoles = roles;
         }
 
         protected override bool IsAuthorized(HttpActionContext actionContext)
@@ -38,7 +38,7 @@ namespace api.Authoriztion
 
             role = claims.First(c => c.Type == ClaimTypes.Role).Value;
 
-            return (role == AllowedRole);
+            return (AllowedRoles.Any(r=> r == role));
         }
     }
 }

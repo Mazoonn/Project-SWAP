@@ -43,7 +43,6 @@ namespace SwapClassLibrary.Service
                 client client = db.clients.Where(c => c.client_id == client_id).FirstOrDefault();
                 admin = new admin() { admin_id = client_id };
                 db.admins.Add(admin);
-                client.actor = "admin";
                 db.SaveChanges();
                 return true;
             }
@@ -59,7 +58,6 @@ namespace SwapClassLibrary.Service
             {
                 client client = db.clients.Where(c => c.client_id == client_id).FirstOrDefault();
                 db.admins.Remove(admin);
-                client.actor = "client";
                 db.SaveChanges();
                 return true;
             }
