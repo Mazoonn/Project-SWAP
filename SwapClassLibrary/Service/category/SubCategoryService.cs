@@ -73,7 +73,7 @@ namespace SwapClassLibrary.Service
         {
             SwapDbConnection db = new SwapDbConnection();
             sub_category subCategory = db.sub_category.FirstOrDefault(c => c.sub_id == id);
-            int duplicates = db.sub_category.Where(c => c.sub_id != id && (c.name == name || c.google_value == google_value)).ToList().Count();
+            int duplicates = db.sub_category.Where(c => c.sub_id != id && (c.name == name || (!string.IsNullOrEmpty(c.google_value) && c.google_value == google_value))).ToList().Count();
 
             if (subCategory == null || duplicates!=0) return false;
             subCategory.name = name;
