@@ -10,7 +10,7 @@ import Quest from "./quest/quest";
 import ClientRoute from "./../Utils/ClientRoute";
 import Logout from "./../routes/logout";
 import AdminRoute from './../Utils/AdminRoute';
-import BusinessRoute from './../Utils/BusinessRote';
+import BusinessRoute from '../Utils/BusinessRoute';
 
 
 class NavBar extends Component {
