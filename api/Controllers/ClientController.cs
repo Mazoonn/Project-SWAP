@@ -13,7 +13,6 @@ namespace api.Controllers
     [RoutePrefix("api/client")]
     public class ClientController : ApiController
     {
-        //צריך לבודק האם זה צריך לשמור את ה TOKEN KEY
         [Route("login")]
         [HttpPost]
         public HttpResponseMessage login([FromBody]loginDTO body)

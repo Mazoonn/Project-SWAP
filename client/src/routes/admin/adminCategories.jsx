@@ -1,7 +1,59 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { 
+  getAllMainCategoriesAdmin,
+  putCategories
+ } from "../../services/Categories";
 
 const AdminCategories = (props) => {
-  if (!props.isCategories) return null;
+  const [categories, setCategories] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
+
+  useEffect(()=>
+  {
+    const fetchData = async () => 
+    {
+      const data = await getAllMainCategoriesAdmin(); 
+      setCategories(data);
+    };
+    fetchData();
+  }, []);
+
+  const AreChanged = () => {
+    let result = false;
+    result = categories.some((category) =>
+      category.is_changed === undefined ? false : category.is_changed
+    );
+    return result;
+  };
+
+  const handleOnChangeIsActive = (index) => {
+    const changedCategories = [...categories];
+    const category = changedCategories[index];
+    category.is_active = !category.is_active;
+    category.is_changed =
+    category.is_changed === undefined ? true : !category.is_changed;
+    setCategories(changedCategories);
+  };
+
+  const handlePutCategories = async () => {
+    setLoading(true);
+    const request = [];
+    for (const category of categories) {
+      if (category.is_changed) request.push(category);
+    }
+    await Promise.all(
+      request.map((category) => {
+        return putCategories(category.id, category.is_active);
+      })
+    );
+    categories.forEach((category) => {
+      category.is_changed = false;
+    });
+    setCategories(categories);
+    setLoading(false);
+  };
+
+
   return (
     <React.Fragment>
       <h3>Categories</h3>
@@ -14,7 +66,7 @@ const AdminCategories = (props) => {
           </tr>
         </thead>
         <tbody>
-          {props.categories.map((category, index) => {
+          {categories.map((category, index) => {
             return (
               <tr key={category.id}>
                 <td>{category.name}</td>
@@ -23,7 +75,7 @@ const AdminCategories = (props) => {
                   <div>
                     <input
                       onChange={() => {
-                        props.handleOnChangeIsActive(index);
+                        handleOnChangeIsActive(index);
                       }}
                       type="checkbox"
                       checked={category.is_active}
@@ -37,12 +89,12 @@ const AdminCategories = (props) => {
       </table>
       <div className="text-center">
         <button
-          disabled={!props.AreChanges() || props.loading}
+          disabled={!AreChanged() || loading}
           className="btn btn-primary"
           type="button"
-          onClick={props.handlePutCategories}
+          onClick={handlePutCategories}
         >
-          {(props.loading && "Loading...") || "Save Changes"}
+          {(loading && "Loading...") || "Save Changes"}
         </button>
       </div>
     </React.Fragment>

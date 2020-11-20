@@ -21,7 +21,7 @@ const removeDuplicates = (array) => {
 
   if (array.length !== 0) {
     for (let places of array) {
-      if (places !== undefined) {
+      if (places) {
         for (let place of places) {
           arrayOfPlaces.push(place);
         }
