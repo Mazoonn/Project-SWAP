@@ -22,7 +22,7 @@ namespace api.Controllers
             {
                 List<bussinessDTO> list = BusinessService.GetAllBusinesses(business_owner);
                 if (list == null)
-                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is no Main Categoy value in the db");
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is no business");
                 return Request.CreateResponse(HttpStatusCode.OK, list);
 
             }

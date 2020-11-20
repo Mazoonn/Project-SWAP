@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="SwapModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="SwapModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="address">
           <Key>
             <PropertyRef Name="address_id" />
@@ -89,11 +89,11 @@
           </Key>
           <Property Name="place_id" Type="nvarchar" MaxLength="40" Nullable="false" />
           <Property Name="creation_date" Type="date" Nullable="false" />
-          <Property Name="latitude" Type="decimal" Precision="11" Scale="8" Nullable="false" />
-          <Property Name="longitude" Type="decimal" Precision="11" Scale="8" Nullable="false" />
-          <Property Name="country" Type="nvarchar" MaxLength="20" Nullable="false" />
-          <Property Name="street" Type="nvarchar" MaxLength="20" Nullable="false" />
-          <Property Name="street_number" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="latitude" Type="decimal" Precision="11" Scale="8" />
+          <Property Name="longitude" Type="decimal" Precision="11" Scale="8" />
+          <Property Name="country" Type="nvarchar" MaxLength="20" />
+          <Property Name="street" Type="nvarchar" MaxLength="20" />
+          <Property Name="street_number" Type="nvarchar" MaxLength="10" />
           <Property Name="post_code" Type="nvarchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="product">
@@ -404,8 +404,7 @@
             <End Role="r_sub_and_main_category" EntitySet="r_sub_and_main_category" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SwapModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -504,11 +503,11 @@
           </Key>
           <Property Name="place_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="creation_date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="latitude" Type="Decimal" Precision="11" Scale="8" Nullable="false" />
-          <Property Name="longitude" Type="Decimal" Precision="11" Scale="8" Nullable="false" />
-          <Property Name="country" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="street" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="street_number" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="latitude" Type="Decimal" Precision="11" Scale="8" />
+          <Property Name="longitude" Type="Decimal" Precision="11" Scale="8" />
+          <Property Name="country" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="street" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="street_number" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="post_code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="business" Relationship="Self.FK__business__place___324172E1" FromRole="place" ToRole="business" />
           <NavigationProperty Name="Event" Relationship="Self.FK__Event__event_id__2CBDA3B5" FromRole="place" ToRole="Event" />

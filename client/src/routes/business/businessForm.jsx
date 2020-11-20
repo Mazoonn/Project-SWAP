@@ -23,16 +23,14 @@ class BusinessForm extends Component {
 
   isDisable = (formDataInfo) => {
     //is active not needed
-    let flag = true;
     const values = ["name", "description", "opening_hours", "closing_hours", "location", "Icon"];
     const length = Object.keys(formDataInfo).length;
-    if (Object.keys(formDataInfo).length >= Object.keys(values).length + 1) {
-      for (let i; i < length; i++) {
-        flag = formDataInfo[`${values[i]}`] === "" || formDataInfo[`${values[i]}`] === undefined ? false : true;
-        if (!flag) return flag;
+    if (length >= Object.keys(values).length + 1) {
+      for (var i = 0; i < length; i++) {
+        if (formDataInfo[`${values[i]}`] === "" || formDataInfo[`${values[i]}`] === undefined) return false;
       }
     }
-    return flag;
+    return true;
   };
   render() {
     let { formData } = this.state;
@@ -88,7 +86,7 @@ class BusinessForm extends Component {
         <br />
         <br />
         <div class="col-auto my-1">
-          <button type="submit" class="btn btn-primary" onClick={this.handleAddBusiness} disabled={!this.isDisable(formData)}>
+          <button type="submit" class="btn btn-primary" onClick={this.handleAddBusiness} disabled={this.isDisable(formData)}>
             Add
           </button>
         </div>

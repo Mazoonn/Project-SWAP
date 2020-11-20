@@ -80,14 +80,24 @@ class ListOfProducts extends Component {
   };
 
   handleOnClickSaveProduct = async (index) => {
-    const product = this.state.products[index];
-    const { name, price, is_active, product_id, business_id, description, discount_end_date, discount_start_date } = product;
+    const {
+      name,
+      price,
+      is_active,
+      product_id,
+      business_id,
+      description,
+      discount,
+      discount_end_date,
+      discount_start_date,
+    } = this.state.products[index];
     const req = {
       name,
       price,
       product_id,
       business_id,
       description,
+      discount,
       discount_end_date,
       discount_start_date,
     };
@@ -164,13 +174,14 @@ class ListOfProducts extends Component {
             <option value={"default"} defaultValue>
               Business...
             </option>
-            {this.props.business.map((business, index) => {
-              return (
-                <option key={business.place_id} value={index}>
-                  {business.name}
-                </option>
-              );
-            })}
+            {this.props.business &&
+              this.props.business.map((business, index) => {
+                return (
+                  <option key={business.place_id} value={index}>
+                    {business.name}
+                  </option>
+                );
+              })}
           </select>
           {!this.state.isDefault && (
             <div>

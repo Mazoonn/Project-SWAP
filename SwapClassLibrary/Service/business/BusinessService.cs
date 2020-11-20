@@ -26,6 +26,7 @@ namespace SwapClassLibrary.Service
                 name = b.name,
                 description = b.description,
                 rating =  b.rating,
+                 Icon = b.Icon,
                 opening_hours = b.opening_hours,
                 closing_hours = b.closing_hours,
             }).Where(b => b.business_owner_id == business_owner_id).ToList();
@@ -36,12 +37,13 @@ namespace SwapClassLibrary.Service
         {
 
             SwapDbConnection db = new SwapDbConnection();
-            business business_obj = db.businesses.FirstOrDefault(b => b.business_owner_id == bussiness.business_owner_id && b.name == bussiness.name);
+            string place_id = IdService.generateID("place_id");
+            business business_obj = db.businesses.FirstOrDefault(b => b.business_owner_id == bussiness.business_owner_id);
             if (business_obj == null)
             {
                 business business_to_add = new business()
                 {
-                    place_id = IdService.generateID("place_id"),
+                    place_id = place_id,
                     business_owner_id = bussiness.business_owner_id,
                     is_active = bussiness.is_active,
                     name = bussiness.name,
@@ -51,7 +53,12 @@ namespace SwapClassLibrary.Service
                     opening_hours = bussiness.opening_hours,
                     closing_hours = bussiness.closing_hours,
                     approve_by_admin = false,
-                    
+                    place = new place()
+                    {
+                        place_id = place_id,
+                        
+                     
+                    }
                 };
                 db.businesses.Add(business_to_add);
                 db.SaveChanges();
