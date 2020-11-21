@@ -13,7 +13,6 @@ namespace SwapClassLibrary.DTO
         public bool is_active;
         public string name;
         public string description;
-        public string Icon;
         public int rating;
         public Nullable<System.TimeSpan> opening_hours;
         public Nullable<System.TimeSpan> closing_hours;

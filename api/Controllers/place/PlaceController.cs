@@ -93,11 +93,10 @@ namespace api.Controllers
         {
             try
             {
-                bool success;
                 if (req.main_id == null || req.sub_id == null || req.place_id == null)
                     return Request.CreateResponse(HttpStatusCode.BadRequest, "missing parameters");
                   PlaceService.addOrEditPlaceToCategory(req);
-                  return Request.CreateResponse(HttpStatusCode.OK, "The place was add to the sub category :" + req.sub_id);
+                  return Request.CreateResponse(HttpStatusCode.OK, "The place was add to the main and sub category table");
                 //return Request.CreateResponse(HttpStatusCode.BadRequest, "Bad request");//TODO to chekc this 
             }
             catch (Exception e)

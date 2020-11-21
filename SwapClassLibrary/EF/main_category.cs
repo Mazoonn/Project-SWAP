@@ -25,6 +25,7 @@ namespace SwapClassLibrary.EF
         public string name { get; set; }
         public string google_value { get; set; }
         public bool is_active { get; set; }
+        public string icon_name { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<r_sub_and_main_category> r_sub_and_main_category { get; set; }
