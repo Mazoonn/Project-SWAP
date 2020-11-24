@@ -32,31 +32,38 @@ namespace SwapClassLibrary.Service
             return bussinesses;
         }
 
-        public static bool AddBusiness(bussinessDTO bussiness)
+        public static string AddBusiness(bussinessDTO bussiness)
         {
 
             SwapDbConnection db = new SwapDbConnection();
-            business business_obj = db.businesses.FirstOrDefault(b => b.business_owner_id == bussiness.business_owner_id && b.name == bussiness.name);
+            string place_id = IdService.generateID("place_id");
+            business business_obj = null;
+                //= db.businesses.FirstOrDefault(b => b.business_owner_id == bussiness.business_owner_id && b.place)
+
             if (business_obj == null)
             {
                 business business_to_add = new business()
                 {
-                    place_id = IdService.generateID("place_id"),
+                    place_id = place_id,
                     business_owner_id = bussiness.business_owner_id,
                     is_active = bussiness.is_active,
                     name = bussiness.name,
                     description = bussiness.description,
-                    Icon = bussiness.Icon,
-                    rating = bussiness.rating,
+                    rating = 0 ,
                     opening_hours = bussiness.opening_hours,
                     closing_hours = bussiness.closing_hours,
-                    approve_by_admin = false
+                    approve_by_admin = false,
+                    place = new place()
+                    {
+                        place_id = place_id,
+
+                    }
                 };
                 db.businesses.Add(business_to_add);
                 db.SaveChanges();
-                return true;
+                return place_id;
             }
-            return false;
+            return null;
         }
 
         public static bool EditBusiness(bussinessDTO business)
@@ -68,7 +75,6 @@ namespace SwapClassLibrary.Service
             business_to_edit.description = business.description;
             business_to_edit.opening_hours = business.opening_hours;
             business_to_edit.closing_hours = business.closing_hours;
-           // business_to_edit.Icon = business.Icon;
             business_to_edit.description = business.description;
             db.SaveChanges();
             return true;
@@ -97,11 +103,12 @@ namespace SwapClassLibrary.Service
                     for (int i = 0; i < products.Count(); i++)
                         db.products.Remove(products[i]);
                 }
-                place place_obj = db.places.FirstOrDefault(p => p.place_id == place_id);
                 Event event_obj = db.Events.FirstOrDefault(e => e.place_id == place_id);
                 if(event_obj!= null) db.Events.Remove(event_obj);
-                //add remove from r category and places
-                if(place_obj!=null)
+                r_place_sub_and_main_category r_object = db.r_place_sub_and_main_category.FirstOrDefault(r => r.place_id == place_id);
+                if (r_object != null) db.r_place_sub_and_main_category.Remove(r_object);
+                place place_obj = db.places.FirstOrDefault(p => p.place_id == place_id);
+                if (place_obj!=null)
                  db.places.Remove(place_obj);
                 db.businesses.Remove(Business);
                 db.SaveChanges();

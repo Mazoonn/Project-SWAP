@@ -9,17 +9,21 @@ class ListOfBusiness extends Component {
   handleOnChangeBusiness = (event, index) => {
     const value = event.target.value;
     const name = event.target.name;
-    const business_to_change = this.props.businesses;
-    if (name === "is_active") {
-      business_to_change[index].is_active = event.target.checked;
-      business_to_change[index][`is_active_new`] = !event.target.checked;
+    const business_to_change = this.state.business;
+    if (name === "is_active_new") {
+      business_to_change[index][`is_active_new`] = event.target.checked;
     } else {
-      business_to_change[index][`${name}_new`] = business_to_change[index][`${name}`];
       business_to_change[index][`${name}`] = value;
     }
 
     this.setState({ business: business_to_change });
   };
+
+  componentDidMount() {
+    const all_business = this.props.business;
+    this.setState({ business: all_business });
+    this.addNewValuesToBusiness(all_business);
+  }
 
   handleGetBusiness = async () => {
     let business = await BusinessService.getAllBusiness(this.state.business_owner_id);
@@ -38,24 +42,23 @@ class ListOfBusiness extends Component {
   };
 
   addNewValuesToBusiness = (business) => {
-    const values = ["name", "description", "opening_hours", "closing_hours", "rating", "icon", "is_active"];
+    const values = ["name", "description", "opening_hours", "closing_hours", "rating", "Icon", "is_active"];
+    business &&
+      business.forEach((business) => {
+        !business["name"] && (business["name"] = "");
+        !business["description"] && (business["description"] = "");
+        !business["opening_hours"] && (business["opening_hours"] = "");
+        !business["closing_hours"] && (business["closing_hours"] = "");
+        !business["Icon"] && (business["Icon"] = "");
 
-    business.forEach((business) => {
-      !business["name"] && (business["name"] = "");
-      !business["description"] && (business["description"] = "");
-      !business["opening_hours"] && (business["opening_hours"] = "");
-      !business["closing_hours"] && (business["closing_hours"] = "");
-      !business["icon"] && (business["icon"] = "");
-      !business["is_active"] && (business["is_active"] = "");
-
-      values.forEach((value) => {
-        business[`${value}_new`] = business[value];
+        values.forEach((value) => {
+          business[`${value}_new`] = business[value];
+        });
       });
-    });
   };
 
   handleOnClickSaveBusiness = async (index) => {
-    const { name, Icon, place_id, is_active, description, closing_hours, opening_hours } = this.props.businesses[index];
+    const { name, Icon, place_id, is_active, description, closing_hours, opening_hours } = this.state.business[index];
     const req = {
       business_owner_id: this.props.businessOwnerId,
       name,
@@ -77,20 +80,16 @@ class ListOfBusiness extends Component {
       business: newListBusiness,
     });
   };
-
+  e;
   isBusinessChange = (index) => {
-    let result = false;
-    let businesses;
-    if (this.state.business.length === 0) businesses = this.props.businesses;
-    else {
-      businesses = this.state.business;
-    }
-    const business = businesses[index];
-    const values = ["name", "description", "opening_hours", "closing_hours", "icon", "is_active"];
-    values.forEach((value) => {
-      if (business[value] !== business[`${value}_new`]) result = true;
-    });
-    return result;
+    let flag = false;
+    const business = this.state.business[index];
+    const values = ["name", "description", "opening_hours", "closing_hours", "Icon", "is_active"];
+    business &&
+      values.forEach((value) => {
+        if (business[value] !== business[`${value}_new`]) flag = true;
+      });
+    return flag;
   };
 
   render() {
@@ -113,110 +112,111 @@ class ListOfBusiness extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.props.businesses.map((business, index) => {
-              return (
-                <React.Fragment>
-                  <tr key={business.place_id}>
-                    <td>
-                      <input
-                        onChange={(event) => {
-                          this.handleOnChangeBusiness(event, index);
-                        }}
-                        name="name"
-                        type="text"
-                        className="form-control"
-                        value={business.name}
-                      />
-                    </td>
-
-                    <td>
-                      <input
-                        onChange={(event) => {
-                          this.handleOnChangeBusiness(event, index);
-                        }}
-                        name="description"
-                        type="text"
-                        className="form-control"
-                        value={business.description}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        onChange={(event) => {
-                          this.handleOnChangeBusiness(event, index);
-                        }}
-                        name="opening_hours"
-                        type="time"
-                        className="form-control"
-                        value={business.opening_hours}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        onChange={(event) => {
-                          this.handleOnChangeBusiness(event, index);
-                        }}
-                        name="closing_hours"
-                        type="time"
-                        className="form-control"
-                        value={business.closing_hours}
-                      />
-                    </td>
-                    <td>
-                      <div>
-                        <h2 className="text-center">{business.rating}</h2>
-                      </div>
-                    </td>
-                    <td>
-                      <input
-                        onChange={(event) => {
-                          this.handleOnChangeBusiness(event, index);
-                        }}
-                        name="icon"
-                        type="text"
-                        className="form-control"
-                        value={business.icon}
-                      />
-                    </td>
-                    <td className="text-center">
-                      <div>
+            {this.state.business &&
+              this.state.business.map((business, index) => {
+                return (
+                  <React.Fragment>
+                    <tr key={business.place_id}>
+                      <td>
                         <input
                           onChange={(event) => {
                             this.handleOnChangeBusiness(event, index);
                           }}
-                          type="checkbox"
-                          name="is_active"
-                          checked={business.is_active}
+                          name="name_new"
+                          type="text"
+                          className="form-control"
+                          value={business[`name_new`]}
                         />
-                      </div>
-                    </td>
-                    <td className="text-center">
-                      <button
-                        type="button"
-                        className="btn btn-success btn-sm"
-                        onClick={() => {
-                          this.handleOnClickSaveBusiness(index);
-                        }}
-                        disabled={!this.isBusinessChange(index)}
-                      >
-                        Save
-                      </button>
-                    </td>
-                    <td className="text-center">
-                      <button
-                        onClick={() => {
-                          this.handleDeleteBusiness(index);
-                        }}
-                        type="button"
-                        className="btn btn-danger btn-sm"
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                </React.Fragment>
-              );
-            })}
+                      </td>
+
+                      <td>
+                        <input
+                          onChange={(event) => {
+                            this.handleOnChangeBusiness(event, index);
+                          }}
+                          name="description_new"
+                          type="text"
+                          className="form-control"
+                          value={business[`description_new`]}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          onChange={(event) => {
+                            this.handleOnChangeBusiness(event, index);
+                          }}
+                          name="opening_hours_new"
+                          type="time"
+                          className="form-control"
+                          value={business[`opening_hours_new`]}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          onChange={(event) => {
+                            this.handleOnChangeBusiness(event, index);
+                          }}
+                          name="closing_hours_new"
+                          type="time"
+                          className="form-control"
+                          value={business[`closing_hours_new`]}
+                        />
+                      </td>
+                      <td>
+                        <div>
+                          <h2 className="text-center">{business.rating}</h2>
+                        </div>
+                      </td>
+                      <td>
+                        <input
+                          onChange={(event) => {
+                            this.handleOnChangeBusiness(event, index);
+                          }}
+                          name="Icon_new"
+                          type="text"
+                          className="form-control"
+                          value={business[`Icon_new`]}
+                        />
+                      </td>
+                      <td className="text-center">
+                        <div>
+                          <input
+                            onChange={(event) => {
+                              this.handleOnChangeBusiness(event, index);
+                            }}
+                            type="checkbox"
+                            name="is_active_new"
+                            checked={business[`is_active_new`]}
+                          />
+                        </div>
+                      </td>
+                      <td className="text-center">
+                        <button
+                          type="button"
+                          className="btn btn-success btn-sm"
+                          onClick={() => {
+                            this.handleOnClickSaveBusiness(index);
+                          }}
+                          disabled={!this.isBusinessChange(index)}
+                        >
+                          Save
+                        </button>
+                      </td>
+                      <td className="text-center">
+                        <button
+                          onClick={() => {
+                            this.handleDeleteBusiness(index);
+                          }}
+                          type="button"
+                          className="btn btn-danger btn-sm"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  </React.Fragment>
+                );
+              })}
           </tbody>
         </table>
       </React.Fragment>

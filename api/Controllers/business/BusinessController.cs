@@ -22,7 +22,7 @@ namespace api.Controllers
             {
                 List<bussinessDTO> list = BusinessService.GetAllBusinesses(business_owner);
                 if (list == null)
-                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is no Main Categoy value in the db");
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is no business");
                 return Request.CreateResponse(HttpStatusCode.OK, list);
 
             }
@@ -79,10 +79,10 @@ namespace api.Controllers
         {
             try
             {
-                bool is_add = BusinessService.AddBusiness(bussiness);
-                if (!is_add)
+                string place_id = BusinessService.AddBusiness(bussiness);
+                if (place_id==null)
                     return Request.CreateResponse(HttpStatusCode.NotFound, "There is no business id as this in db");
-                return Request.CreateResponse(HttpStatusCode.OK, "There Business was add");
+                return Request.CreateResponse(HttpStatusCode.OK, place_id);
             }
             catch (Exception e)
             {

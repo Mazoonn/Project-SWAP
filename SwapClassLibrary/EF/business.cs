@@ -27,7 +27,6 @@ namespace SwapClassLibrary.EF
         public string description { get; set; }
         public Nullable<System.TimeSpan> opening_hours { get; set; }
         public Nullable<System.TimeSpan> closing_hours { get; set; }
-        public string Icon { get; set; }
         public int rating { get; set; }
         public bool approve_by_admin { get; set; }
     

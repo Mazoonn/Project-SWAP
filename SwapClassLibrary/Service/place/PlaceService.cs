@@ -83,12 +83,13 @@ namespace SwapClassLibrary.Service
             SwapDbConnection db = new SwapDbConnection();
             r_place_sub_and_main_category place_obj = db.r_place_sub_and_main_category.FirstOrDefault(p => p.main_id == place.main_id&&p.sub_id ==place.sub_id && p.place_id==place.place_id);
 
-            if (place_obj == null)
+            if (place_obj != null)
                 return false;
             else
             {
                 r_place_sub_and_main_category new_obj = new r_place_sub_and_main_category()
                 {
+                    creation_date = DateTime.Now,
                     main_id = place.main_id,
                     sub_id = place.sub_id,
                     place_id = place.place_id

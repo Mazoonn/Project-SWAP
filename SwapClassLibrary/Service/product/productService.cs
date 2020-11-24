@@ -71,7 +71,7 @@ namespace SwapClassLibrary.Service
                 name = req.name,
                 business_id = req.business_id,
                 discount = req.discount,
-                discount_start_date = req.discount_start_date,
+                discount_start_date =  req.discount_start_date,
                 discount_end_date = req.discount_end_date,
                 price = req.price,
                 description = req.description

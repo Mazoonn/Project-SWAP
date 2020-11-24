@@ -80,14 +80,24 @@ class ListOfProducts extends Component {
   };
 
   handleOnClickSaveProduct = async (index) => {
-    const product = this.state.products[index];
-    const { name, price, is_active, product_id, business_id, description, discount_end_date, discount_start_date } = product;
+    const {
+      name,
+      price,
+      is_active,
+      product_id,
+      business_id,
+      description,
+      discount,
+      discount_end_date,
+      discount_start_date,
+    } = this.state.products[index];
     const req = {
       name,
       price,
       product_id,
       business_id,
       description,
+      discount,
       discount_end_date,
       discount_start_date,
     };
@@ -148,9 +158,25 @@ class ListOfProducts extends Component {
 
   isValidProduct = () => {
     const { products_to_add } = this.state;
-    let isValidProduct =
-      products_to_add && products_to_add["name"] && products_to_add["description"] && products_to_add["price"] ? false : true;
+    let isValidProduct = this.isEmptyParam([products_to_add[`name`], products_to_add[`description`], products_to_add[`price`]]);
+
+    if (!isValidProduct && products_to_add[`discount`] && products_to_add[`discount`] !== "")
+      isValidProduct = this.isEmptyParam([
+        products_to_add[`discount`],
+        products_to_add[`discount_start_date`],
+        products_to_add[`discount_end_date`],
+      ]);
+
     return isValidProduct;
+  };
+
+  isEmptyParam = (arrayOfValues) => {
+    let flag = false;
+    arrayOfValues.forEach((value) => {
+      flag = value === "" || value === undefined ? true : false;
+      if (flag) return flag;
+    });
+    return flag;
   };
 
   render() {
@@ -164,13 +190,14 @@ class ListOfProducts extends Component {
             <option value={"default"} defaultValue>
               Business...
             </option>
-            {this.props.business.map((business, index) => {
-              return (
-                <option key={business.place_id} value={index}>
-                  {business.name}
-                </option>
-              );
-            })}
+            {this.props.business &&
+              this.props.business.map((business, index) => {
+                return (
+                  <option key={business.place_id} value={index}>
+                    {business.name}
+                  </option>
+                );
+              })}
           </select>
           {!this.state.isDefault && (
             <div>
@@ -248,9 +275,9 @@ class ListOfProducts extends Component {
                               this.handleOnChangeProduct(event, index);
                             }}
                             name="discount_start_date"
-                            type="time"
+                            type="date"
                             className="form-control"
-                            value={products.discount_start_date}
+                            value={products.discount_start_date.slice(0, 10)}
                           />
                         </td>
                         <td>
@@ -259,9 +286,9 @@ class ListOfProducts extends Component {
                               this.handleOnChangeProduct(event, index);
                             }}
                             name="discount_end_date"
-                            type="time"
+                            type="date"
                             className="form-control"
-                            value={products.discount_end_date}
+                            value={products.discount_end_date.slice(0, 10)}
                           />
                         </td>
                         <td className="text-center">
@@ -357,7 +384,7 @@ class ListOfProducts extends Component {
                           this.handleOnChangeProduct(event, this.state.products.length);
                         }}
                         name="discount_start_date"
-                        type="time"
+                        type="date"
                         className="form-control"
                         value={products.discount_start_date}
                       />
@@ -369,7 +396,7 @@ class ListOfProducts extends Component {
                           this.handleOnChangeProduct(event, this.state.products.length);
                         }}
                         name="discount_end_date"
-                        type="time"
+                        type="date"
                         className="form-control"
                         value={products.discount_end_date}
                       />
