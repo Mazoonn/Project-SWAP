@@ -2,10 +2,11 @@ import React, { Component } from "react";
 import AdminCategories from "./adminCategories";
 import AdminButtons from "./adminButtons";
 import AdminSubCategories from "./AdminSubCategories";
+import UsersManager from './users/UsersManager';
 
 const data = {
-name: ["Categories", "Sub Categories"],
-component: [<AdminCategories />, <AdminSubCategories />]
+name: ["Categories", "Sub Categories", "Users"],
+component: [<AdminCategories />, <AdminSubCategories />, <UsersManager />]
 } 
 
 class AdminPage extends Component {

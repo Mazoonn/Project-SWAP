@@ -10,12 +10,17 @@ const AdminCategories = (props) => {
 
   useEffect(()=>
   {
+    const isMounted = { state: true };
+
     const fetchData = async () => 
     {
       const data = await getAllMainCategoriesAdmin(); 
+      if(!isMounted.state) return;
       setCategories(data);
     };
     fetchData();
+
+    return 
   }, []);
 
   const AreChanged = () => {

@@ -29,9 +29,12 @@ const [subCategory, setSubCategory] = React.useState({});
 
 useEffect(()=>
 {
+  const isMounted = { state: true };
+
   const fetchData = async () => 
   {
-    const data = await getAllMainCategoriesAdmin(); 
+    if(!isMounted.state) return; 
+    const data = await getAllMainCategoriesAdmin();
     setCategories(data);
   };
   fetchData();
@@ -81,7 +84,6 @@ const handleOnClickSaveSubCategory = async (index) => {
       descrition: descrition_new,
       google_value: google_value_new,
     };
-    console.log(req);
     await updateSubCategoryOfMainCategory(req);
     const newSubCategories = await getSubCategoriesId(main_id);
     addNewValuesToSubCategories(newSubCategories);
