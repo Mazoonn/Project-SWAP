@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="fe716da104d8488e9b91fcc89b8cdc68" Name="Diagram1">
+      <Diagram DiagramId="63df5721f0fb457b83ef1cab195f10a8" Name="Diagram1">
         <EntityTypeShape EntityType="SwapModel.address" Width="1.5" PointX="5.75" PointY="1.25" IsExpanded="true" />
         <EntityTypeShape EntityType="SwapModel.admin" Width="1.5" PointX="3" PointY="19.375" IsExpanded="true" />
         <EntityTypeShape EntityType="SwapModel.business" Width="1.5" PointX="3" PointY="6.375" IsExpanded="true" />
@@ -20,7 +20,6 @@
         <EntityTypeShape EntityType="SwapModel.r_place_sub_and_main_category" Width="1.5" PointX="6" PointY="4" IsExpanded="true" />
         <EntityTypeShape EntityType="SwapModel.r_sub_and_main_category" Width="1.5" PointX="3.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="SwapModel.sub_category" Width="1.5" PointX="1.5" PointY="15" IsExpanded="true" />
-        <EntityTypeShape EntityType="SwapModel.sysdiagram" Width="1.5" PointX="8.75" PointY="4.25" IsExpanded="true" />
         <AssociationConnector Association="SwapModel.FK_admin_BusinessOwner" ManuallyRouted="false" />
         <AssociationConnector Association="SwapModel.FK__business__place___324172E1" ManuallyRouted="false" />
         <AssociationConnector Association="SwapModel.FK__product__busines__29E1370A" ManuallyRouted="false" />

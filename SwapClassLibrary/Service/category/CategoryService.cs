@@ -53,7 +53,7 @@ namespace SwapClassLibrary.Service
         public static MainAndSubRelationshipDTO AddMainAndSubRelationship(string main_id ,string sub_name, string google_value, string descrition = null)
         {
             SwapDbConnection db = new SwapDbConnection();
-            sub_category subCategory = db.sub_category.FirstOrDefault(c => c.name == sub_name);
+            sub_category subCategory = db.sub_category.FirstOrDefault(c => c.name == sub_name && c.google_value == google_value);
             main_category mainCategory = db.main_category.FirstOrDefault(c => c.main_id == main_id);
 
             if ( mainCategory == null)

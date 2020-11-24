@@ -7,10 +7,12 @@ using System.Web.Http;
 using SwapClassLibrary.DTO;
 using SwapClassLibrary.EF;
 using SwapClassLibrary.Service;
+using api.Authoriztion;
 
 namespace api.Controllers.admin
 {
     [RoutePrefix("api/Admin")]
+    [MyAuthorize("admin")]
     public class AdminController : ApiController
     {
 
@@ -31,17 +33,35 @@ namespace api.Controllers.admin
             }
         }
 
-        //Post: add/Admin/AddAdmin
-        [Route("AddAdmin")]
+        [Route("GetAllUsers")]
+        [HttpGet]
+        public HttpResponseMessage GetAllUsers(bool test = false)
+        {
+            try
+            {
+                List<clientInfoDTO> users = AdminService.GetAllUsers();
+                if (users == null || test)
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is no users in the db");
+                return Request.CreateResponse(HttpStatusCode.OK, users);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
+        }
+
+        [Route("ChangeRole")]
         [HttpPost]
-        public HttpResponseMessage AddAdmin([FromBody]string client_id)
+        public HttpResponseMessage ChangeRole(RoleDTO req)
         {
             try
             {
-                bool is_admin = AdminService.AddAdmin(client_id);
-                if (!is_admin)
-                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is no client id as this in db");
-                return Request.CreateResponse(HttpStatusCode.OK, "There is client id as this in db and he is admin now");
+                if (req.id == null || req.currentRole == null || req.newRole == null)
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Illegal parameters");
+                bool success = AdminService.ChangeRole(req.id, req.currentRole, req.newRole);
+                if (!success)
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Bad Request");
+                return Request.CreateResponse(HttpStatusCode.OK, "Role changed");
             }
             catch (Exception e)
             {
@@ -49,24 +69,43 @@ namespace api.Controllers.admin
             }
         }
 
-        //Delete add/Admin/AddAdmin
-        [Route("DeleteAdmin")]
+        [Route("DeleteUser/{id}")]
         [HttpDelete]
-        public HttpResponseMessage DeleteAdmin([FromBody]string client_id)
+        public HttpResponseMessage DeleteUser(string id)
         {
             try
             {
-                bool is_admin = AdminService.DeleteAdmin(client_id);
-                if (!is_admin)
-                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is no client id as this in db");
-                return Request.CreateResponse(HttpStatusCode.OK, "There is client id as this in db and he is admin now");
+                bool success = AdminService.DeleteUser(id);
+                if (!success)
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "User not found");
+                return Request.CreateResponse(HttpStatusCode.OK, "User deleted");
             }
             catch (Exception e)
             {
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
             }
-
         }
+
+
+        [Route("newPassword/{id}")]
+        [HttpPut]
+        public HttpResponseMessage NewPassword(PasswordDTO password, string id)
+        {
+            try
+            {
+                if(password.Password == null) return Request.CreateResponse(HttpStatusCode.Forbidden, "Illegal parameter");
+                string msg = AdminService.NewPassword(id, password.Password);
+                if (msg == "same")
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Same password");
+                if(msg == "false") return Request.CreateResponse(HttpStatusCode.NotFound, "User not found or User not local");
+                return Request.CreateResponse(HttpStatusCode.OK, "Password changed");
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
+        }
+
 
         //TODO add in the DB
         ////approve / Edit / remove Business
