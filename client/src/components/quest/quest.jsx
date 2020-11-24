@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { getAllMainCategories } from "../../services/Categories";
 import Category from "./category";
-import { getSubCategoriesId } from "../../services/CategSubCateg";
+import { getSubCategoriesId } from "../../services/SubCategory";
 import SubCategory from "./subCategory";
 import { getPlaces } from "./../../Utils/httpRequest/GoogleRequest";
 
@@ -22,8 +22,7 @@ class Quest extends Component {
       if (category.isCurrentlySelected) {
         const subCategory = [];
         category.subCategory.forEach((sub) => {
-          if (sub.isSelected)
-            subCategory.push(sub.google_value || sub.sub_name);
+          if (sub.isSelected) subCategory.push(sub.google_value || sub.sub_name);
         });
         places[category.google_value || category.name] = subCategory;
       }
@@ -57,36 +56,24 @@ class Quest extends Component {
   };
   handleOnClickCategory = async (key) => {
     const categories = [...this.state.categoryList];
-    const indexCategories = categories.findIndex(
-      (category) => category.id === key
-    );
+    const indexCategories = categories.findIndex((category) => category.id === key);
     if (!categories[indexCategories].isFirstSelected) {
       categories[indexCategories].isFirstSelected = true;
       categories[indexCategories].isCurrentlySelected = true;
-      categories[
-        indexCategories
-      ].subCategory = await this.handleGetSubCategories(key);
-    } else
-      categories[indexCategories].isCurrentlySelected = !categories[
-        indexCategories
-      ].isCurrentlySelected;
+      categories[indexCategories].subCategory = await this.handleGetSubCategories(key);
+    } else categories[indexCategories].isCurrentlySelected = !categories[indexCategories].isCurrentlySelected;
     this.setState({ categoryList: categories });
   };
 
   handleOnClickSubCategory = (keyCategory, keySubCategory) => {
     const categoryList = [...this.state.categoryList];
 
-    const indexCategory = categoryList.findIndex(
-      (category) => category.id === keyCategory
-    );
+    const indexCategory = categoryList.findIndex((category) => category.id === keyCategory);
     const indexSubCategory = categoryList[indexCategory].subCategory.findIndex(
       (subCategory) => subCategory.sub_id === keySubCategory
     );
-    const flag =
-      categoryList[indexCategory].subCategory[indexSubCategory].isSelected;
-    categoryList[indexCategory].subCategory[
-      indexSubCategory
-    ].isSelected = !flag;
+    const flag = categoryList[indexCategory].subCategory[indexSubCategory].isSelected;
+    categoryList[indexCategory].subCategory[indexSubCategory].isSelected = !flag;
     this.setState({ categoryList });
   };
 
@@ -99,9 +86,7 @@ class Quest extends Component {
   };
 
   handleDivideSubCategories = () => {
-    const categories = this.state.categoryList.filter(
-      (category) => category.isCurrentlySelected
-    );
+    const categories = this.state.categoryList.filter((category) => category.isCurrentlySelected);
     return (
       <div className={`row row-cols-${this.state.columnsOfSubcategories}`}>
         {categories.map((category) => {
@@ -135,11 +120,7 @@ class Quest extends Component {
             {(!this.state.isLoading && (
               <button
                 onClick={this.getPlaces}
-                hidden={
-                  !this.state.categoryList.some(
-                    (category) => category.isCurrentlySelected
-                  )
-                }
+                hidden={!this.state.categoryList.some((category) => category.isCurrentlySelected)}
                 type="button"
                 className="btn btn-primary btn-md"
               >
@@ -147,11 +128,7 @@ class Quest extends Component {
               </button>
             )) || (
               <button className="btn btn-primary btn-md" type="button" disabled>
-                <span
-                  className="spinner-grow spinner-grow-sm"
-                  role="status"
-                  aria-hidden="true"
-                ></span>
+                <span className="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
                 Loading...
               </button>
             )}

@@ -9,7 +9,6 @@ using SwapClassLibrary.EF;
 using SwapClassLibrary.Service;
 namespace api.Controllers
 {
-    //[Authorize]
     [RoutePrefix("api/client")]
     public class ClientController : ApiController
     {
@@ -21,7 +20,6 @@ namespace api.Controllers
             {
                 client user = null;    
                 string actor, token = "";
-
 
                 switch (body.platform)
                 {
@@ -41,9 +39,9 @@ namespace api.Controllers
                     default:
                         return Request.CreateResponse(HttpStatusCode.BadRequest, "Client params illigel"); ;
                 }
-                actor = clientService.GetRole(user.client_id);
+                actor = clientService.GetRole(user);
                 token = JWTGetToken.getToken(user.client_id, user.email, actor);
-                if (token != "flase") return Request.CreateResponse(HttpStatusCode.OK, token);
+                if (token != "false") return Request.CreateResponse(HttpStatusCode.OK, token);
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, "Unable to create token");
             }
             catch (Exception e)

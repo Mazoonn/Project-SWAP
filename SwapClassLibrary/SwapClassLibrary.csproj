@@ -70,7 +70,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DTO\clientDTO\clientInfoDTO.cs" />
+    <Compile Include="DTO\clientDTO\PasswordDTO.cs" />
     <Compile Include="DTO\clientDTO\responseLoginDTO.cs" />
+    <Compile Include="DTO\clientDTO\RoleDTO.cs" />
     <Compile Include="DTO\placeDTO\eventDTO.cs" />
     <Compile Include="DTO\placeDTO\placeToCategoryDTO.cs" />
     <Compile Include="DTO\placeDTO\placeDTO.cs" />
@@ -146,9 +148,6 @@
     <Compile Include="EF\sub_category.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="EF\sysdiagram.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\JWTModel.cs" />
     <Compile Include="Models\IAuthModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -170,11 +169,11 @@
     <Compile Include="Service\Authenticate service\JWTService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.Config" />
     <EntityDeploy Include="EF\Model.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Model.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <None Include="App.Config" />
     <None Include="EF\Model.edmx.diagram">
       <DependentUpon>Model.edmx</DependentUpon>
     </None>

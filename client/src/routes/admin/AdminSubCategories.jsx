@@ -1,32 +1,32 @@
 import React, { useEffect } from "react";
 import {
-    updateSubCategoryOfMainCategory,
-    deleteSubCategory,
-    postSubCategory,
-    getAllMainCategoriesAdmin
-  } from "../../services/Categories";
-import { getSubCategoriesId } from "../../services/CategSubCateg";
+  updateSubCategoryOfMainCategory,
+  deleteSubCategory,
+  postSubCategory,
+  getAllMainCategoriesAdmin,
+} from "../../services/Categories";
+import { getSubCategoriesId } from "../../services/SubCategory";
 
 const addNewValuesToSubCategories = (subCategories) => {
-    const values = ["descrition", "google_value", "sub_name"];
-    subCategories.forEach((subCategory) => {
-      !subCategory["descrition"] && (subCategory["descrition"] = "");
-      !subCategory["google_value"] && (subCategory["google_value"] = "");
+  const values = ["descrition", "google_value", "sub_name"];
+  subCategories.forEach((subCategory) => {
+    !subCategory["descrition"] && (subCategory["descrition"] = "");
+    !subCategory["google_value"] && (subCategory["google_value"] = "");
 
-      values.forEach((value) => {
-        subCategory[`${value}_new`] = subCategory[value];
-      });
+    values.forEach((value) => {
+      subCategory[`${value}_new`] = subCategory[value];
     });
-  };
+  });
+};
 
-const AdminSubCategories = (props) =>
-{
-const [categories, setCategories] = React.useState([]);
-const [subCategories, setSubCategories] = React.useState([]);
-const [isDefault, setIsDefault] = React.useState(true);
-const [indexCategory, setIndexCategory] = React.useState("default");
-const [subCategory, setSubCategory] = React.useState({});
+const AdminSubCategories = (props) => {
+  const [categories, setCategories] = React.useState([]);
+  const [subCategories, setSubCategories] = React.useState([]);
+  const [isDefault, setIsDefault] = React.useState(true);
+  const [indexCategory, setIndexCategory] = React.useState("default");
+  const [subCategory, setSubCategory] = React.useState({});
 
+<<<<<<< HEAD
 useEffect(()=>
 {
   const isMounted = { state: true };
@@ -39,8 +39,17 @@ useEffect(()=>
   };
   fetchData();
 }, []);
+=======
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getAllMainCategoriesAdmin();
+      setCategories(data);
+    };
+    fetchData();
+  }, []);
+>>>>>>> 4a13e44be7e0b5df716c8f262f56d86608f5f1cc
 
-const handleOnChangeSelect = async (event) => {
+  const handleOnChangeSelect = async (event) => {
     const index = event.target.value;
     setSubCategories([]);
     if (index !== "default") {
@@ -53,7 +62,7 @@ const handleOnChangeSelect = async (event) => {
     } else setIsDefault(true);
   };
 
-const handleOnChangeSubCategory = (event, index) => {
+  const handleOnChangeSubCategory = (event, index) => {
     const value = event.target.value;
     const name = event.target.name;
     if (index !== -1) {
@@ -69,14 +78,8 @@ const handleOnChangeSubCategory = (event, index) => {
     }
   };
 
-const handleOnClickSaveSubCategory = async (index) => {
-    const {
-      main_id,
-      sub_id,
-      sub_name_new,
-      google_value_new,
-      descrition_new,
-    } = subCategories[index];
+  const handleOnClickSaveSubCategory = async (index) => {
+    const { main_id, sub_id, sub_name_new, google_value_new, descrition_new } = subCategories[index];
     const req = {
       main_id,
       sub_id,
@@ -90,7 +93,7 @@ const handleOnClickSaveSubCategory = async (index) => {
     setSubCategories(newSubCategories);
   };
 
-const isSubCategoryChanged = (index) => {
+  const isSubCategoryChanged = (index) => {
     let result = false;
     const sCategory = subCategories[index];
     const values = ["descrition", "sub_name", "google_value"];
@@ -100,8 +103,8 @@ const isSubCategoryChanged = (index) => {
     return result;
   };
 
-const isValidSubCategory = () => {
-    const sCategory = {...subCategory};
+  const isValidSubCategory = () => {
+    const sCategory = { ...subCategory };
     return (
       !sCategory ||
       Object.keys(sCategory).length !== 3 ||
@@ -109,18 +112,18 @@ const isValidSubCategory = () => {
       sCategory["descrition"] === "" ||
       sCategory["google_value"] === ""
     );
-  };  
+  };
 
-const handleDeleteSubCategory = async (indexOfSubCategory) => {
+  const handleDeleteSubCategory = async (indexOfSubCategory) => {
     const main_id = categories[indexCategory].id;
     const sub_id = subCategories[indexOfSubCategory].sub_id;
     await deleteSubCategory(main_id, sub_id);
     const newSubCategories = await getSubCategoriesId(main_id);
     addNewValuesToSubCategories(newSubCategories);
     setSubCategories(newSubCategories);
-  };  
+  };
 
-const handleAddNewSubCategory = async () => {
+  const handleAddNewSubCategory = async () => {
     const index = indexCategory;
     const main_id = categories[index].id;
     const category = { ...subCategory };
@@ -131,17 +134,12 @@ const handleAddNewSubCategory = async () => {
     const newSubCategories = await getSubCategoriesId(main_id);
     addNewValuesToSubCategories(newSubCategories);
     setSubCategories(newSubCategories);
-  };   
+  };
 
-return(
-<div>
+  return (
+    <div>
       <h4>Categories</h4>
-      <select
-        id="categories"
-        onChange={handleOnChangeSelect}
-        className="custom-select mb-4"
-        style={{ width: "200px" }}
-      >
+      <select id="categories" onChange={handleOnChangeSelect} className="custom-select mb-4" style={{ width: "200px" }}>
         <option value={"default"} defaultValue>
           Category...
         </option>
@@ -160,10 +158,7 @@ return(
             <thead>
               <tr>
                 <th colSpan={5} className="text-center">
-                  {
-                    categories[indexCategory]
-                      .name
-                  }
+                  {categories[indexCategory].name}
                 </th>
               </tr>
               <tr>
@@ -181,10 +176,7 @@ return(
                     <td>
                       <input
                         onChange={(event) => {
-                            handleOnChangeSubCategory(
-                            event,
-                            index
-                          );
+                          handleOnChangeSubCategory(event, index);
                         }}
                         name="sub_name_new"
                         type="text"
@@ -195,10 +187,7 @@ return(
                     <td>
                       <input
                         onChange={(event) => {
-                            handleOnChangeSubCategory(
-                            event,
-                            index
-                          );
+                          handleOnChangeSubCategory(event, index);
                         }}
                         name="descrition_new"
                         type="text"
@@ -209,10 +198,7 @@ return(
                     <td>
                       <input
                         onChange={(event) => {
-                            handleOnChangeSubCategory(
-                            event,
-                            index
-                          );
+                          handleOnChangeSubCategory(event, index);
                         }}
                         name="google_value_new"
                         type="text"
@@ -225,7 +211,7 @@ return(
                         type="button"
                         className="btn btn-success btn-sm"
                         onClick={() => {
-                            handleOnClickSaveSubCategory(index);
+                          handleOnClickSaveSubCategory(index);
                         }}
                         disabled={!isSubCategoryChanged(index)}
                       >
@@ -235,7 +221,7 @@ return(
                     <td className="text-center">
                       <button
                         onClick={() => {
-                            handleDeleteSubCategory(index);
+                          handleDeleteSubCategory(index);
                         }}
                         type="button"
                         className="btn btn-danger btn-sm"
@@ -249,11 +235,9 @@ return(
               <tr>
                 <td>
                   <input
-                    value={
-                      (subCategory && subCategory.sub_name) || ""
-                    }
+                    value={(subCategory && subCategory.sub_name) || ""}
                     onChange={(event) => {
-                        handleOnChangeSubCategory(event, -1);
+                      handleOnChangeSubCategory(event, -1);
                     }}
                     name="sub_name"
                     type="text"
@@ -262,11 +246,9 @@ return(
                 </td>
                 <td>
                   <input
-                    value={
-                      (subCategory && subCategory.descrition) || ""
-                    }
+                    value={(subCategory && subCategory.descrition) || ""}
                     onChange={(event) => {
-                        handleOnChangeSubCategory(event, -1);
+                      handleOnChangeSubCategory(event, -1);
                     }}
                     name="descrition"
                     type="text"
@@ -275,11 +257,9 @@ return(
                 </td>
                 <td>
                   <input
-                    value={
-                      (subCategory && subCategory.google_value) || ""
-                    }
+                    value={(subCategory && subCategory.google_value) || ""}
                     onChange={(event) => {
-                        handleOnChangeSubCategory(event, -1);
+                      handleOnChangeSubCategory(event, -1);
                     }}
                     name="google_value"
                     type="text"
@@ -303,6 +283,6 @@ return(
       )}
     </div>
   );
-}
-  
-  export default AdminSubCategories;
+};
+
+export default AdminSubCategories;

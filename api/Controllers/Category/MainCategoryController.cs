@@ -34,7 +34,7 @@ namespace api.Controllers
             }
         }
 
-
+        [MyAuthorize("admin")]
         [Route("GetAllMainCategoriesAdmin")]
         [HttpGet]
         public HttpResponseMessage GetAllMainCategoriesAdmin(bool test = false)

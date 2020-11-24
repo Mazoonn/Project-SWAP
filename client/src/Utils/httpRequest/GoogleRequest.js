@@ -1,10 +1,5 @@
 //nearby Search request
-import {
-  googleKey,
-  nearBySearchUrl,
-  textSearchUrl,
-  radius,
-} from "../../config.json";
+import { googleKey, nearBySearchUrl, textSearchUrl, autocompleteAddressesUrl, radius } from "../../config.json";
 import http from "./httpRequest";
 import Logger from "../loggerServices";
 
@@ -38,22 +33,19 @@ export const fetchCoordinates = async () => {
     // Handle coordinates
   } catch (error) {
     // Handle error
-    console.error(error);
+    Logger.error(error);
   }
 };
 
 const getNearbyPlaces = async (request) => {
   try {
-    const list_of_places = await http.get(
-      "https://cors-anywhere.herokuapp.com/" + nearBySearchUrl,
-      {
-        params: request,
-      }
-    );
+    const list_of_places = await http.get("https://cors-anywhere.herokuapp.com/" + nearBySearchUrl, {
+      params: request,
+    });
     return list_of_places.data.results;
     // return list_of_places;
   } catch (err) {
-    console.log(err);
+    Logger.log(err);
   }
 };
 
@@ -62,9 +54,7 @@ export const getTextSearch = async (query) => {
     if (!query) {
       throw Error("Did Not enter a text to search");
     }
-    const list_of_places = await http.get(
-      `${textSearchUrl}?query=${query}&key=${googleKey}`
-    );
+    const list_of_places = await http.get(`${textSearchUrl}?query=${query}&key=${googleKey}`);
     // if (list_of_places.next_page_token) {
     //   const next_page_request = getTextSearch(list_of_places.next_page_token);
     //   list_of_places = { ...list_of_places, ...next_page_request };

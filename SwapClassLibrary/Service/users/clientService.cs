@@ -15,7 +15,7 @@ namespace SwapClassLibrary.Service
         public static string registerClientLocal(registerDTO body)
         {
             SwapDbConnection db = new SwapDbConnection();
-            client client = db.clients.FirstOrDefault(c => c.email == body.email && (c.login_local ?? false));
+            client client = db.clients.FirstOrDefault(c => c.email == body.email && (c.platform == "local"));
             string id = "";
 
             if (client == null)
@@ -36,9 +36,7 @@ namespace SwapClassLibrary.Service
                     sex = body.sex,
                     password = hs.Hash,
                     salt = hs.Salt,
-                    login_local = true,
-                    login_facebock = false,
-                    login_google = false,
+                    platform= "local"
                 };
 
                 db.clients.Add(new_client);
@@ -80,14 +78,14 @@ namespace SwapClassLibrary.Service
                     password = "",
                     phone = "",
                     sex = "",
-                    login_local = false,
-                    login_facebock = false,
-                    login_google = true,
+                    platform = "google"
                 };
                 db.clients.Add(client);
-                db.SaveChanges();
             }
-            
+
+            client.last_login = DateTime.Now;
+            db.SaveChanges();
+
             return client;
             //}
             //catch (DbEntityValidationException ex)
@@ -106,23 +104,23 @@ namespace SwapClassLibrary.Service
         public static client checkUserLogin(loginDTO body)
         {
             SwapDbConnection db = new SwapDbConnection();
-            client user = db.clients.FirstOrDefault(x => x.email == body.email && (x.login_local ?? false));
+            client user = db.clients.FirstOrDefault(x => x.email == body.email && x.platform == "local");
 
             if (user == null || !HashSalt.VerifyPassword(body.password, user.password, user.salt))
                 return null;
+            user.last_login = DateTime.Now;
+            db.SaveChanges();
 
             return user;
         }
 
-        public static string GetRole(string id)
+        public static string GetRole(client user)
         {
-            SwapDbConnection db = new SwapDbConnection();
-            admin admin = db.admins.FirstOrDefault(a => a.admin_id == id);
-            BusinessOwner businessOwner;
-
-            if (admin != null) return "admin";
-            businessOwner = db.BusinessOwners.FirstOrDefault(b => b.business_owner_id == id);
-            if (businessOwner != null) return "business";
+            if (user.BusinessOwner != null)
+            {
+                if (user.BusinessOwner.admin != null) return "admin";
+                return "business";
+            }
             return "client";
         }
     }

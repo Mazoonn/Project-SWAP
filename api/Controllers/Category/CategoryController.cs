@@ -7,10 +7,10 @@ using System.Web.Http;
 using SwapClassLibrary.DTO;
 using SwapClassLibrary.EF;
 using SwapClassLibrary.Service;
+using api.Authoriztion;
 
 namespace api.Controllers
 {
-   //[Authorize(Roles = "admin")]
     [RoutePrefix("api/Category")]
     public class CategoryController : ApiController
     {
@@ -54,6 +54,7 @@ namespace api.Controllers
         }
 
         //POST: api/MainCategory/AddMainAndSubRelationship
+        [MyAuthorize("admin")]
         [Route("AddMainAndSubRelationship")]
         [HttpPost]
         public HttpResponseMessage AddMainAndSubRelationship([FromBody]MainAndSubRelationshipDTO req)
@@ -76,6 +77,7 @@ namespace api.Controllers
         }
 
         // Delete:api/googleValue/DeleteGoogleValue/{type}/{req}
+        [MyAuthorize("admin")]
         [Route("RemoveMainAndSubRelationship/{main_id}/{sub_id}")]
         [HttpDelete]
         public HttpResponseMessage RemoveMainAndSubRelationship(string main_id, string sub_id)
@@ -97,6 +99,7 @@ namespace api.Controllers
 
         // PUT:api/category/UpdateSubCategoryOfMainCategory
         [Route("UpdateSubCategoryOfMainCategory")]
+        [MyAuthorize("admin")]
         [HttpPut]
         public HttpResponseMessage UpdateSubCategoryOfMainCategory([FromBody]MainAndSubRelationshipDTO req)
         {
