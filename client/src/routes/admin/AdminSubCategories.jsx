@@ -26,7 +26,6 @@ const AdminSubCategories = (props) => {
   const [indexCategory, setIndexCategory] = React.useState("default");
   const [subCategory, setSubCategory] = React.useState({});
 
-<<<<<<< HEAD
 useEffect(()=>
 {
   const isMounted = { state: true };
@@ -39,15 +38,6 @@ useEffect(()=>
   };
   fetchData();
 }, []);
-=======
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await getAllMainCategoriesAdmin();
-      setCategories(data);
-    };
-    fetchData();
-  }, []);
->>>>>>> 4a13e44be7e0b5df716c8f262f56d86608f5f1cc
 
   const handleOnChangeSelect = async (event) => {
     const index = event.target.value;
