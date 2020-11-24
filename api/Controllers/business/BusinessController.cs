@@ -79,10 +79,10 @@ namespace api.Controllers
         {
             try
             {
-                string place_id = BusinessService.AddBusiness(bussiness);
-                if (place_id==null)
+                bool place_id = BusinessService.AddBusiness(bussiness);
+                if (!place_id)
                     return Request.CreateResponse(HttpStatusCode.NotFound, "There is no business id as this in db");
-                return Request.CreateResponse(HttpStatusCode.OK, place_id);
+                return Request.CreateResponse(HttpStatusCode.OK, "The Business was add");
             }
             catch (Exception e)
             {

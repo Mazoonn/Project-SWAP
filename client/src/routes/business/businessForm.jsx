@@ -3,6 +3,8 @@ import { getAllMainCategoriesAdmin } from "../../services/Categories";
 import * as BusinessService from "../../services/Business";
 import * as PlaceService from "../../services/place";
 import { getSubCategoriesId } from "../../services/SubCategory";
+import LocationSearchInput from "../../components/LocationSearchInput";
+import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 
 class BusinessForm extends Component {
   state = {
@@ -10,16 +12,27 @@ class BusinessForm extends Component {
     mainCategoryList: [],
     subCategoryList: [],
     mainCategorySelectedIndex: 0,
+
+    place: {},
+    address: "",
   };
+
   async componentDidMount() {
     const mainCategoryList = await getAllMainCategoriesAdmin();
     this.setState({ mainCategoryList });
   }
+
   handleAddBusiness = async () => {
     const data = this.state.formData;
-    const businessId = await BusinessService.addBusiness({ ...data });
-    await PlaceService.addOrEditPlaceToCategory({ main_id: data.main_id, sub_id: data.sub_id, place_id: businessId });
-    window.location.href = "./business";
+    const place_id = await PlaceService.AddPlace(this.state.place);
+    if (place_id) {
+      await BusinessService.addBusiness({ ...data, place_id });
+      await PlaceService.addOrEditPlaceToCategory({ main_id: data.main_id, sub_id: data.sub_id, place_id });
+    }
+  };
+
+  handleChangeSearch = (address) => {
+    this.setState({ address });
   };
 
   handelOnChangeForm = (event) => {
@@ -47,6 +60,45 @@ class BusinessForm extends Component {
     }
   };
 
+  getPlaceClass = async (GooglePlaceObject) => {
+    let LatLng = await getLatLng(GooglePlaceObject);
+    let place = {
+      place_id: GooglePlaceObject.place_id,
+      latitude: LatLng.lat,
+      longitude: LatLng.lng,
+      city: "",
+      country: "",
+      street: "",
+      street_number: "",
+      post_code: "",
+    };
+
+    const AddressArray = GooglePlaceObject.formatted_address.split(",");
+
+    switch (AddressArray.length) {
+      case 4:
+        place.post_code = GooglePlaceObject[AddressArray.length - 2];
+      case 3:
+        place.street = AddressArray[0]
+          .match(/[a-zA-Z\s]/g)
+          .join("")
+          .trim();
+        place.street_number = AddressArray[0].match(/\d/g) ? AddressArray[0].match(/\d/g).join("") : "";
+        place.city = AddressArray[1].trim();
+        place.country = AddressArray[AddressArray.length - 1];
+        break;
+    }
+    return place;
+  };
+
+  handleSelectSearch = async (address) => {
+    let GooglePlaceObject = await geocodeByAddress(address);
+    if (GooglePlaceObject[0].formatted_address.split(",").length >= 3) {
+      const place = await this.getPlaceClass(GooglePlaceObject[0]);
+      this.setState({ address, place });
+    }
+  };
+
   handleOnChangeSelectSub = async (event) => {
     const index = event.target.value;
     if (index !== "default") {
@@ -68,7 +120,7 @@ class BusinessForm extends Component {
     return true;
   };
   render() {
-    let { formData, mainCategoryList, mainCategorySelectedIndex, subCategoryList } = this.state;
+    let { formData, mainCategoryList, address, place, mainCategorySelectedIndex, subCategoryList } = this.state;
     return (
       <React.Fragment>
         <form>
@@ -95,7 +147,13 @@ class BusinessForm extends Component {
           <div class="form-row">
             <div className="col">
               <h3 className="">Location:</h3>
-              <input type="text" className="form-control" name="location" onBlur={this.handelOnChangeForm} />
+              <LocationSearchInput
+                AddPlace={this.AddPlace}
+                place={place}
+                address={address}
+                handleSelectSearch={this.handleSelectSearch}
+                handleChangeSearch={this.handleChangeSearch}
+              />
             </div>
           </div>
           <div class="form-row">

@@ -7,6 +7,7 @@ export class Place {
   street: string;
   street_number: string;
   post_code: string;
+  city: string;
 
   constructor(place: Place) {
     this.place_id = place.place_id ? place.place_id : "";
@@ -17,6 +18,7 @@ export class Place {
     this.street = place.street ? place.street : "";
     this.street_number = place.street_number ? place.street_number : "";
     this.post_code = place.post_code ? place.post_code : "";
+    this.city = place.city ? place.city : "";
   }
 }
 
