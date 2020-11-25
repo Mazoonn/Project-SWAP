@@ -46,4 +46,32 @@ export async function newPassword(id, password) {
     'Authorization': `Bearer ${localStorage.getItem("token")}`
   }});
 } 
-  
+ 
+export async function getNotApprovedBusinesses() {
+  return await http.get(
+    `${API_URL_Dev}/Admin/GetNotApprovedBusinesses/`,
+    {
+      headers: {
+      'Authorization': `Bearer ${localStorage.getItem("token")}`
+    }}
+    );
+}
+
+export function paginate(items, pageNumber, pageSize) 
+{
+  const startIndex = (pageNumber - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+
+  return (items.slice(startIndex, endIndex));
+};
+
+export async function approvesBusinesses(ids) {
+  return await http.put(
+    `${API_URL_Dev}/Admin/ApproveBusinesses/`,
+    ids,
+    {
+      headers: {
+      'Authorization': `Bearer ${localStorage.getItem("token")}`
+    }}
+    );
+}

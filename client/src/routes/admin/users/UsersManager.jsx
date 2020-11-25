@@ -1,17 +1,10 @@
 import React, { Component } from 'react';
-import { changeRole, getAllUsers, deleteUser, newPassword } from "../../../services/AdminServices";
+import { changeRole, getAllUsers, deleteUser, newPassword, paginate } from "../../../services/AdminServices";
 import { getCurrentUser } from '../../../services/authService';
-import UsersPagination from './UsersPagination';
+import Pagination from '../AdminPagination';
 import UserModal from './UserModal';
 import UserRaw from './UserRaw';
 
-const paginate =(items, pageNumber, pageSize) => 
-{
-  const startIndex = (pageNumber - 1) * pageSize;
-  const endIndex = startIndex + pageSize;
-
-  return (items.slice(startIndex, endIndex));
-};
 
 const filterUsers = (users, name, email, request) =>
 {
@@ -204,7 +197,7 @@ class UsersManager extends Component
                 )}
               </tbody>
             </table>
-            <UsersPagination 
+            <Pagination 
             itemsCount={totalCount}
             pageSize={pageSize}
             currentPage={currentPage}
