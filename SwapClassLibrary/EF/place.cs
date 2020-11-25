@@ -23,12 +23,14 @@ namespace SwapClassLibrary.EF
     
         public string place_id { get; set; }
         public System.DateTime creation_date { get; set; }
-        public Nullable<decimal> latitude { get; set; }
-        public Nullable<decimal> longitude { get; set; }
+        public decimal latitude { get; set; }
+        public decimal longitude { get; set; }
         public string country { get; set; }
         public string street { get; set; }
         public string street_number { get; set; }
+        public string state { get; set; }
         public string post_code { get; set; }
+        public string city { get; set; }
     
         public virtual business business { get; set; }
         public virtual Event Event { get; set; }
