@@ -30,10 +30,10 @@ namespace SwapClassLibrary.Service
             return place_obj;
         }
 
-        public static bool AddPlace(placeDTO place)
+        public static string AddPlace(placeDTO place)
         {
             SwapDbConnection db = new SwapDbConnection();
-            if (db.places.FirstOrDefault(p => p.latitude == place.latitude && p.longitude == place.longitude) != null) return false;
+            if (db.places.FirstOrDefault(p => p.latitude == place.latitude && p.longitude == place.longitude) != null) return null;
 
             place place_obj = new place()
             {
@@ -48,7 +48,7 @@ namespace SwapClassLibrary.Service
             };
             db.places.Add(place_obj);
             db.SaveChanges();
-            return true;
+            return place.place_id;
         }
 
         public static bool DeletePlace(string place_id)

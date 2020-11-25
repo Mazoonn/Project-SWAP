@@ -68,7 +68,7 @@ class ListOfProducts extends Component {
       business_id: this.props.business[index_business_id].place_id,
       ...products_to_add,
     };
-    this.setState({ products: [{ ...products, [`${products.length}`]: product }] });
+    this.setState({ products: [...products, product] });
     await AddProduct(product);
 
     const newListProducts = await GetAllProduct(business_selected_id);

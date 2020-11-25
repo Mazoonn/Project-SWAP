@@ -39,10 +39,10 @@ namespace api.Controllers
         {
             try
             {
-                bool is_add = PlaceService.AddPlace(place);
-                if (!is_add)
+                string place_id = PlaceService.AddPlace(place);
+                if (place_id ==null)
                     return Request.CreateResponse(HttpStatusCode.NotFound, "There is no Place id as this in db");
-                return Request.CreateResponse(HttpStatusCode.OK, "There Place was add");
+                return Request.CreateResponse(HttpStatusCode.OK, place_id);
             }
             catch (Exception e)
             {

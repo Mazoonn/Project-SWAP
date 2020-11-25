@@ -46,7 +46,7 @@ function Login(props) {
       window.location = "/";
     } catch (error) {
       setLoading(false);
-      if (error.response && (error.response.status >= 400 || error.response.status <= 500))
+      if (error.response && (error.response.status >= 400 || error.response.status < 500))
         setErrors({ server: error.response.data });
     }
   };

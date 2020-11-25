@@ -32,19 +32,18 @@ namespace SwapClassLibrary.Service
             return bussinesses;
         }
 
-        public static string AddBusiness(bussinessDTO bussiness)
+        public static bool AddBusiness(bussinessDTO bussiness)
         {
 
             SwapDbConnection db = new SwapDbConnection();
-            string place_id = IdService.generateID("place_id");
-            business business_obj = null;
-                //= db.businesses.FirstOrDefault(b => b.business_owner_id == bussiness.business_owner_id && b.place)
-
+            if (bussiness.place_id == null)
+                bussiness.place_id = IdService.generateID("place_id");
+            business business_obj = db.businesses.FirstOrDefault(b => b.business_owner_id == bussiness.business_owner_id && b.place_id == bussiness.place_id);
             if (business_obj == null)
             {
                 business business_to_add = new business()
                 {
-                    place_id = place_id,
+                    place_id = bussiness.place_id,
                     business_owner_id = bussiness.business_owner_id,
                     is_active = bussiness.is_active,
                     name = bussiness.name,
@@ -53,17 +52,17 @@ namespace SwapClassLibrary.Service
                     opening_hours = bussiness.opening_hours,
                     closing_hours = bussiness.closing_hours,
                     approve_by_admin = false,
-                    place = new place()
-                    {
-                        place_id = place_id,
+                    //place = new place()
+                    //{
+                    //    place_id = bussiness.place_id,
 
-                    }
+                    //}
                 };
                 db.businesses.Add(business_to_add);
                 db.SaveChanges();
-                return place_id;
+                return true;
             }
-            return null;
+            return false;
         }
 
         public static bool EditBusiness(bussinessDTO business)
