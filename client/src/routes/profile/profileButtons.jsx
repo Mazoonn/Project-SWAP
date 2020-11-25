@@ -1,6 +1,6 @@
 import React from "react";
 
-const BusinessButtons = (props) => {
+const profileButtons = (props) => {
   return (
     <div className="list-group">
       {props.data.map((name, index) => {
@@ -20,4 +20,4 @@ const BusinessButtons = (props) => {
   );
 };
 
-export default BusinessButtons;
+export default profileButtons;

@@ -8,6 +8,7 @@ import { getCurrentUser } from "../../services/authService";
 
 class BusinessPage extends Component {
   state = {
+    selected: -1,
     business: [],
     index_business_id: "",
     business_owner_id: "",
@@ -15,6 +16,22 @@ class BusinessPage extends Component {
     isListOfBusiness: false,
     isProducts: false,
     loading: false,
+  };
+
+  data = {
+    name: ["Add Business", "List Of Business", "Products"],
+    component: [
+      <BusinessForm business_owner_id={this.state.business_owner_id} />,
+      <ListOfBusiness
+        AreChanges={this.AreChanges}
+        handleOnChangeIsActiveBusiness={this.handleOnChangeIsActiveBusiness}
+        isAddBusiness={this.state.isAddBusiness}
+        loading={this.state.loading}
+        business={this.state.business}
+        businessOwnerId={this.state.business_owner_id}
+      />,
+      <ListOfProducts business_owner_id={this.state.business_owner_id} business={this.state.business} />,
+    ],
   };
 
   componentDidMount() {
@@ -31,25 +48,6 @@ class BusinessPage extends Component {
       this.setState({ isAddBusiness: false });
     }
     this.setState({ isAddBusiness });
-  };
-
-  handleOnSelectButton = async (event) => {
-    const indexOfButton = event.target.id;
-    this.setState({ index_business_id: event.target.value });
-    this.setState({ isAddBusiness: false, isListOfBusiness: false, isProducts: false });
-    switch (indexOfButton) {
-      case "add business":
-        this.setState({ isAddBusiness: true });
-        break;
-      case "list of business":
-        await this.handleGetBusiness();
-        this.setState({ isListOfBusiness: true });
-        break;
-      case "products":
-        await this.handleGetBusiness();
-        this.setState({ isProducts: true });
-        break;
-    }
   };
 
   handleOnChangeIsActiveBusiness = (index) => {
@@ -73,33 +71,22 @@ class BusinessPage extends Component {
     return result;
   };
 
+  handleClick = (index) => {
+    const selected = this.state.selected !== index ? index : -1;
+    this.setState({ selected });
+  };
+
   render() {
     const { isAddBusiness, loading, business, business_owner_id, isProducts: isListOfProducts, isListOfBusiness } = this.state;
+    const { selected } = this.state;
+    const { name, component } = this.data;
     return (
       <React.Fragment>
         <div className="row ml-2">
           <div className="col-">
-            <BusinessButtons
-              handleOnSelectButton={this.handleOnSelectButton}
-              isAddBusiness={isAddBusiness}
-              isProducts={isListOfProducts}
-              isListOfBusiness={isListOfBusiness}
-            />
+            <BusinessButtons handleClick={this.handleClick} data={name} selected={selected} />
           </div>
-          <div className="col">
-            {isListOfProducts && <ListOfProducts business_owner_id={business_owner_id} business={business} />}
-            {isListOfBusiness && (
-              <ListOfBusiness
-                AreChanges={this.AreChanges}
-                handleOnChangeIsActiveBusiness={this.handleOnChangeIsActiveBusiness}
-                isAddBusiness={isAddBusiness}
-                loading={loading}
-                business={business}
-                businessOwnerId={business_owner_id}
-              />
-            )}
-            {isAddBusiness && <BusinessForm business_owner_id={business_owner_id} />}
-          </div>
+          <div className="col">{selected !== -1 && component[selected]}</div>
         </div>
       </React.Fragment>
     );

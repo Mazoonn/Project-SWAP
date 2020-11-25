@@ -3,15 +3,14 @@ import Login from "../routes/login";
 import Register from "../routes/register";
 import Admin from "../routes/admin/AdminPage";
 import Business from "../routes/business/businessPage";
-import Profile from "../routes/ProfilePage";
+import Profile from "../routes/profile/profilePage";
 import Home from "../routes/HomePage";
 import { BrowserRouter, Switch, Route, NavLink } from "react-router-dom";
 import Quest from "./quest/quest";
 import ClientRoute from "./../Utils/ClientRoute";
 import Logout from "./../routes/logout";
-import AdminRoute from './../Utils/AdminRoute';
-import BusinessRoute from '../Utils/BusinessRoute';
-
+import AdminRoute from "./../Utils/AdminRoute";
+import BusinessRoute from "../Utils/BusinessRoute";
 
 class NavBar extends Component {
   render() {
@@ -48,12 +47,12 @@ class NavBar extends Component {
                   </NavLink>
                 </React.Fragment>
               )}
-              {user && (user['role'] === 'business' || user['role'] === 'admin') && (
+              {user && (user["role"] === "business" || user["role"] === "admin") && (
                 <NavLink activeClassName="active" to="/business">
                   Business Owner Page
                 </NavLink>
               )}
-              {user && (user["role"] === 'admin') && (
+              {user && user["role"] === "admin" && (
                 <NavLink activeClassName="active" to="/admin">
                   Admin
                 </NavLink>
