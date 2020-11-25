@@ -210,5 +210,54 @@ namespace SwapClassLibrary.Service
             db.SaveChanges();
             return "ok";
         }
+
+
+        public static List<BusinessInfoDTO> GetNotApprovedBusinesses()
+        {
+            return new SwapDbConnection().businesses.Where(b => !b.approve_by_admin)
+                .Select(business => new BusinessInfoDTO
+                {
+                    businessId = business.place_id,
+                    country = business.place.country,
+                    creation_date = business.place.creation_date,
+                    description = business.description,
+                    name = business.name,
+                    post_code = business.place.post_code,
+                    state = business.place.state,
+                    street = business.place.street,
+                    street_number = business.place.street_number,
+                    approve = business.approve_by_admin,
+                    city = business.place.city,
+                    user = new clientInfoDTO
+                                {
+                                      birthday_date = business.BusinessOwner.client.birthday_date,
+                                      client_id = business.BusinessOwner.client.client_id,
+                                      email = business.BusinessOwner.client.email,
+                                      first_name = business.BusinessOwner.client.first_name,
+                                      last_name = business.BusinessOwner.client.last_name,
+                                      actor = business.BusinessOwner.admin != null ? "admin" : "business",
+                                      phone = business.BusinessOwner.client.phone,
+                                      sex = business.BusinessOwner.client.sex,
+                                      platform = business.BusinessOwner.client.platform
+                                },
+                }).ToList();
+        }
+
+        public static bool ApproveBusinesses(List<string> ids)
+        {
+            SwapDbConnection db = new SwapDbConnection();
+            business business;
+
+            foreach (string id in ids)
+            {
+                business = db.businesses.FirstOrDefault(b => (b.place_id == id)
+                && !b.approve_by_admin);
+                if (business == null) return false;
+                business.approve_by_admin = true;
+            }
+            db.SaveChanges();
+
+            return true;
+        }
     }
 }

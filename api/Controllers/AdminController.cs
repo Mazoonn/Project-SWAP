@@ -106,7 +106,37 @@ namespace api.Controllers.admin
             }
         }
 
+        [Route("GetNotApprovedBusinesses")]
+        [HttpGet]
+        public HttpResponseMessage GetNotApprovedBusinesses()
+        {
+            try
+            {
+                List<BusinessInfoDTO> bussinesses = AdminService.GetNotApprovedBusinesses();
+                return Request.CreateResponse(HttpStatusCode.OK, bussinesses);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
+        }
 
+        [Route("ApproveBusinesses")]
+        [HttpPut]
+        public HttpResponseMessage ApproveBusinesses(List<string> businessesIds)
+        {
+            try
+            {
+                bool result = AdminService.ApproveBusinesses(businessesIds);
+                if (!result)
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Bad Request");
+                return Request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
+        }
         //TODO add in the DB
         ////approve / Edit / remove Business
         //[Route("ApproveBusiness")]

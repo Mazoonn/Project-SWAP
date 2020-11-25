@@ -69,6 +69,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTO\bussinessDTO\BusinessInfoDTO.cs" />
     <Compile Include="DTO\clientDTO\clientInfoDTO.cs" />
     <Compile Include="DTO\clientDTO\PasswordDTO.cs" />
     <Compile Include="DTO\clientDTO\responseLoginDTO.cs" />
@@ -88,9 +89,6 @@
     <Compile Include="DTO\categoryDTO\requestValueDTO.cs" />
     <Compile Include="DTO\clientDTO\loginDTO.cs" />
     <Compile Include="DTO\clientDTO\registerDTO.cs" />
-    <Compile Include="EF\address.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
     <Compile Include="EF\admin.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -185,6 +183,7 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="EF\Model.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

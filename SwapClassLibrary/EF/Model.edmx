@@ -4,13 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="SwapModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="address">
-          <Key>
-            <PropertyRef Name="address_id" />
-          </Key>
-          <Property Name="address_id" Type="nvarchar" MaxLength="20" Nullable="false" />
-        </EntityType>
+      <Schema Namespace="SwapModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="admin">
           <Key>
             <PropertyRef Name="admin_id" />
@@ -21,14 +15,13 @@
           <Key>
             <PropertyRef Name="place_id" />
           </Key>
-          <Property Name="place_id" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="place_id" Type="nvarchar" MaxLength="120" Nullable="false" />
           <Property Name="business_owner_id" Type="nvarchar" MaxLength="40" Nullable="false" />
           <Property Name="is_active" Type="bit" Nullable="false" />
           <Property Name="name" Type="nvarchar" MaxLength="40" Nullable="false" />
           <Property Name="description" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="opening_hours" Type="time" Precision="6" />
           <Property Name="closing_hours" Type="time" Precision="6" />
-          <Property Name="Icon" Type="nvarchar" MaxLength="40" Nullable="false" />
           <Property Name="rating" Type="int" Nullable="false" />
           <Property Name="approve_by_admin" Type="bit" Nullable="false" />
         </EntityType>
@@ -60,7 +53,7 @@
           <Key>
             <PropertyRef Name="place_id" />
           </Key>
-          <Property Name="place_id" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="place_id" Type="nvarchar" MaxLength="120" Nullable="false" />
           <Property Name="start_date" Type="date" Nullable="false" />
           <Property Name="end_date" Type="date" Nullable="false" />
           <Property Name="price" Type="float" Nullable="false" />
@@ -86,14 +79,16 @@
           <Key>
             <PropertyRef Name="place_id" />
           </Key>
-          <Property Name="place_id" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="place_id" Type="nvarchar" MaxLength="120" Nullable="false" />
           <Property Name="creation_date" Type="date" Nullable="false" />
-          <Property Name="latitude" Type="decimal" Precision="11" Scale="8" />
-          <Property Name="longitude" Type="decimal" Precision="11" Scale="8" />
-          <Property Name="country" Type="nvarchar" MaxLength="20" />
-          <Property Name="street" Type="nvarchar" MaxLength="20" />
-          <Property Name="street_number" Type="nvarchar" MaxLength="10" />
+          <Property Name="latitude" Type="decimal" Precision="11" Scale="8" Nullable="false" />
+          <Property Name="longitude" Type="decimal" Precision="11" Scale="8" Nullable="false" />
+          <Property Name="country" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="street" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="street_number" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="state" Type="nvarchar" MaxLength="100" />
           <Property Name="post_code" Type="nvarchar" MaxLength="20" />
+          <Property Name="city" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="product">
           <Key>
@@ -108,7 +103,7 @@
           <Property Name="discount_start_date" Type="date" Nullable="false" />
           <Property Name="discount_end_date" Type="date" Nullable="false" />
           <Property Name="is_active" Type="bit" Nullable="false" />
-          <Property Name="business_id" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="business_id" Type="nvarchar" MaxLength="120" Nullable="false" />
         </EntityType>
         <EntityType Name="quest">
           <Key>
@@ -126,7 +121,7 @@
             <PropertyRef Name="place_id" />
             <PropertyRef Name="quest_id" />
           </Key>
-          <Property Name="place_id" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="place_id" Type="nvarchar" MaxLength="120" Nullable="false" />
           <Property Name="quest_id" Type="nvarchar" MaxLength="40" Nullable="false" />
           <Property Name="creation_date" Type="date" Nullable="false" />
           <Property Name="name" Type="nvarchar" MaxLength="20" Nullable="false" />
@@ -140,7 +135,7 @@
           </Key>
           <Property Name="sub_id" Type="nvarchar" MaxLength="40" Nullable="false" />
           <Property Name="main_id" Type="nvarchar" MaxLength="40" Nullable="false" />
-          <Property Name="place_id" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="place_id" Type="nvarchar" MaxLength="120" Nullable="false" />
           <Property Name="creation_date" Type="date" Nullable="false" />
         </EntityType>
         <EntityType Name="r_sub_and_main_category">
@@ -190,7 +185,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__product__busines__29E1370A">
-          <End Role="business" Type="Self.business" Multiplicity="1" />
+          <End Role="business" Type="Self.business" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="product" Type="Self.product" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="business">
@@ -202,7 +199,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_admin_BusinessOwner">
-          <End Role="BusinessOwner" Type="Self.BusinessOwner" Multiplicity="1" />
+          <End Role="BusinessOwner" Type="Self.BusinessOwner" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="admin" Type="Self.admin" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="BusinessOwner">
@@ -214,7 +213,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_business_BusinessOwner">
-          <End Role="BusinessOwner" Type="Self.BusinessOwner" Multiplicity="1" />
+          <End Role="BusinessOwner" Type="Self.BusinessOwner" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="business" Type="Self.business" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="BusinessOwner">
@@ -226,7 +227,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_BusinessOwner_client">
-          <End Role="client" Type="Self.client" Multiplicity="1" />
+          <End Role="client" Type="Self.client" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="BusinessOwner" Type="Self.BusinessOwner" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="client">
@@ -238,7 +241,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_quest_client">
-          <End Role="client" Type="Self.client" Multiplicity="1" />
+          <End Role="client" Type="Self.client" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="quest" Type="Self.quest" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="client">
@@ -262,7 +267,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_r_place_quest_quest">
-          <End Role="quest" Type="Self.quest" Multiplicity="1" />
+          <End Role="quest" Type="Self.quest" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="r_place_quest" Type="Self.r_place_quest" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="quest">
@@ -286,7 +293,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_r_place_sub_and_main_category_r_sub_and_main_category">
-          <End Role="r_sub_and_main_category" Type="Self.r_sub_and_main_category" Multiplicity="1" />
+          <End Role="r_sub_and_main_category" Type="Self.r_sub_and_main_category" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="r_place_sub_and_main_category" Type="Self.r_place_sub_and_main_category" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="r_sub_and_main_category">
@@ -324,7 +333,6 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="SwapModelStoreContainer">
-          <EntitySet Name="address" EntityType="Self.address" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="admin" EntityType="Self.admin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="business" EntityType="Self.business" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BusinessOwner" EntityType="Self.BusinessOwner" Schema="dbo" store:Type="Tables" />
@@ -392,16 +400,11 @@
             <End Role="r_sub_and_main_category" EntitySet="r_sub_and_main_category" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SwapModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="address">
-          <Key>
-            <PropertyRef Name="address_id" />
-          </Key>
-          <Property Name="address_id" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
-        </EntityType>
         <EntityType Name="admin">
           <Key>
             <PropertyRef Name="admin_id" />
@@ -413,14 +416,13 @@
           <Key>
             <PropertyRef Name="place_id" />
           </Key>
-          <Property Name="place_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="place_id" Type="String" MaxLength="120" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="business_owner_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="is_active" Type="Boolean" Nullable="false" />
           <Property Name="name" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="opening_hours" Type="Time" Precision="6" />
           <Property Name="closing_hours" Type="Time" Precision="6" />
-          <Property Name="Icon" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="rating" Type="Int32" Nullable="false" />
           <Property Name="approve_by_admin" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="place" Relationship="Self.FK__business__place___324172E1" FromRole="business" ToRole="place" />
@@ -460,7 +462,7 @@
           <Key>
             <PropertyRef Name="place_id" />
           </Key>
-          <Property Name="place_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="place_id" Type="String" MaxLength="120" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="start_date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="end_date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="price" Type="Double" Nullable="false" />
@@ -488,14 +490,16 @@
           <Key>
             <PropertyRef Name="place_id" />
           </Key>
-          <Property Name="place_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="place_id" Type="String" MaxLength="120" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="creation_date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="latitude" Type="Decimal" Precision="11" Scale="8" />
-          <Property Name="longitude" Type="Decimal" Precision="11" Scale="8" />
-          <Property Name="country" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="street" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="street_number" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="latitude" Type="Decimal" Precision="11" Scale="8" Nullable="false" />
+          <Property Name="longitude" Type="Decimal" Precision="11" Scale="8" Nullable="false" />
+          <Property Name="country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="street" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="street_number" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="state" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="post_code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="city" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="business" Relationship="Self.FK__business__place___324172E1" FromRole="place" ToRole="business" />
           <NavigationProperty Name="Event" Relationship="Self.FK__Event__event_id__2CBDA3B5" FromRole="place" ToRole="Event" />
           <NavigationProperty Name="r_place_quest" Relationship="Self.FK_r_place_quest_place" FromRole="place" ToRole="r_place_quest" />
@@ -514,7 +518,7 @@
           <Property Name="discount_start_date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="discount_end_date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="is_active" Type="Boolean" Nullable="false" />
-          <Property Name="business_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="business_id" Type="String" MaxLength="120" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="business" Relationship="Self.FK__product__busines__29E1370A" FromRole="product" ToRole="business" />
         </EntityType>
         <EntityType Name="quest">
@@ -535,7 +539,7 @@
             <PropertyRef Name="place_id" />
             <PropertyRef Name="quest_id" />
           </Key>
-          <Property Name="place_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="place_id" Type="String" MaxLength="120" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="quest_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="creation_date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
@@ -551,7 +555,7 @@
           </Key>
           <Property Name="sub_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="main_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="place_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="place_id" Type="String" MaxLength="120" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="creation_date" Type="DateTime" Nullable="false" Precision="0" />
           <NavigationProperty Name="place" Relationship="Self.FK_r_place_sub_and_main_category_place" FromRole="r_place_sub_and_main_category" ToRole="place" />
           <NavigationProperty Name="r_sub_and_main_category" Relationship="Self.FK_r_place_sub_and_main_category_r_sub_and_main_category" FromRole="r_place_sub_and_main_category" ToRole="r_sub_and_main_category" />
@@ -583,7 +587,9 @@
           <NavigationProperty Name="r_sub_and_main_category" Relationship="Self.FK_r_sub_and_main_category_sub_category" FromRole="sub_category" ToRole="r_sub_and_main_category" />
         </EntityType>
         <Association Name="FK_admin_BusinessOwner">
-          <End Role="BusinessOwner" Type="Self.BusinessOwner" Multiplicity="1" />
+          <End Role="BusinessOwner" Type="Self.BusinessOwner" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="admin" Type="Self.admin" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="BusinessOwner">
@@ -607,7 +613,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__product__busines__29E1370A">
-          <End Role="business" Type="Self.business" Multiplicity="1" />
+          <End Role="business" Type="Self.business" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="product" Type="Self.product" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="business">
@@ -619,7 +627,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_business_BusinessOwner">
-          <End Role="BusinessOwner" Type="Self.BusinessOwner" Multiplicity="1" />
+          <End Role="BusinessOwner" Type="Self.BusinessOwner" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="business" Type="Self.business" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="BusinessOwner">
@@ -631,7 +641,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_BusinessOwner_client">
-          <End Role="client" Type="Self.client" Multiplicity="1" />
+          <End Role="client" Type="Self.client" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="BusinessOwner" Type="Self.BusinessOwner" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="client">
@@ -643,7 +655,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_quest_client">
-          <End Role="client" Type="Self.client" Multiplicity="1" />
+          <End Role="client" Type="Self.client" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="quest" Type="Self.quest" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="client">
@@ -703,7 +717,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_r_place_quest_quest">
-          <End Role="quest" Type="Self.quest" Multiplicity="1" />
+          <End Role="quest" Type="Self.quest" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="r_place_quest" Type="Self.r_place_quest" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="quest">
@@ -715,7 +731,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_r_place_sub_and_main_category_r_sub_and_main_category">
-          <End Role="r_sub_and_main_category" Type="Self.r_sub_and_main_category" Multiplicity="1" />
+          <End Role="r_sub_and_main_category" Type="Self.r_sub_and_main_category" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="r_place_sub_and_main_category" Type="Self.r_place_sub_and_main_category" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="r_sub_and_main_category">
@@ -741,7 +759,6 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="SwapDbConnection" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="addresses" EntityType="Self.address" />
           <EntitySet Name="admins" EntityType="Self.admin" />
           <EntitySet Name="businesses" EntityType="Self.business" />
           <EntitySet Name="BusinessOwners" EntityType="Self.BusinessOwner" />
@@ -815,13 +832,6 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="SwapModelStoreContainer" CdmEntityContainer="SwapDbConnection">
-          <EntitySetMapping Name="addresses">
-            <EntityTypeMapping TypeName="SwapModel.address">
-              <MappingFragment StoreEntitySet="address">
-                <ScalarProperty Name="address_id" ColumnName="address_id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="admins">
             <EntityTypeMapping TypeName="SwapModel.admin">
               <MappingFragment StoreEntitySet="admin">
@@ -839,7 +849,6 @@
                 <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="opening_hours" ColumnName="opening_hours" />
                 <ScalarProperty Name="closing_hours" ColumnName="closing_hours" />
-                <ScalarProperty Name="Icon" ColumnName="Icon" />
                 <ScalarProperty Name="rating" ColumnName="rating" />
                 <ScalarProperty Name="approve_by_admin" ColumnName="approve_by_admin" />
               </MappingFragment>
@@ -910,7 +919,9 @@
                 <ScalarProperty Name="country" ColumnName="country" />
                 <ScalarProperty Name="street" ColumnName="street" />
                 <ScalarProperty Name="street_number" ColumnName="street_number" />
+                <ScalarProperty Name="state" ColumnName="state" />
                 <ScalarProperty Name="post_code" ColumnName="post_code" />
+                <ScalarProperty Name="city" ColumnName="city" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

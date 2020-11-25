@@ -4,22 +4,21 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="63df5721f0fb457b83ef1cab195f10a8" Name="Diagram1">
-        <EntityTypeShape EntityType="SwapModel.address" Width="1.5" PointX="5.75" PointY="1.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SwapModel.admin" Width="1.5" PointX="3" PointY="19.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="SwapModel.business" Width="1.5" PointX="3" PointY="6.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="SwapModel.BusinessOwner" Width="1.5" PointX="0.75" PointY="19.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SwapModel.client" Width="1.5" PointX="1.5" PointY="22.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="SwapModel.Event" Width="1.5" PointX="3" PointY="11.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="SwapModel.google_value" Width="1.5" PointX="7.75" PointY="1.25" IsExpanded="true" />
+      <Diagram DiagramId="9a1e6876007c40dea1c12dd85b990a8e" Name="Diagram1">
+        <EntityTypeShape EntityType="SwapModel.admin" Width="1.5" PointX="3" PointY="26.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapModel.business" Width="1.5" PointX="3" PointY="6.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapModel.BusinessOwner" Width="1.5" PointX="0.75" PointY="18.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapModel.client" Width="1.5" PointX="1.5" PointY="21.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapModel.Event" Width="1.5" PointX="3" PointY="11.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapModel.google_value" Width="1.5" PointX="5.75" PointY="1.375" IsExpanded="true" />
         <EntityTypeShape EntityType="SwapModel.main_category" Width="1.5" PointX="1.5" PointY="3" IsExpanded="true" />
-        <EntityTypeShape EntityType="SwapModel.place" Width="1.5" PointX="0.75" PointY="6.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapModel.place" Width="1.5" PointX="0.75" PointY="6.25" IsExpanded="true" />
         <EntityTypeShape EntityType="SwapModel.product" Width="1.5" PointX="5.25" PointY="10.5" IsExpanded="true" />
         <EntityTypeShape EntityType="SwapModel.quest" Width="1.5" PointX="3.75" PointY="15.875" IsExpanded="true" />
         <EntityTypeShape EntityType="SwapModel.r_place_quest" Width="1.5" PointX="6" PointY="7" IsExpanded="true" />
         <EntityTypeShape EntityType="SwapModel.r_place_sub_and_main_category" Width="1.5" PointX="6" PointY="4" IsExpanded="true" />
         <EntityTypeShape EntityType="SwapModel.r_sub_and_main_category" Width="1.5" PointX="3.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="SwapModel.sub_category" Width="1.5" PointX="1.5" PointY="15" IsExpanded="true" />
+        <EntityTypeShape EntityType="SwapModel.sub_category" Width="1.5" PointX="1.5" PointY="14" IsExpanded="true" />
         <AssociationConnector Association="SwapModel.FK_admin_BusinessOwner" ManuallyRouted="false" />
         <AssociationConnector Association="SwapModel.FK__business__place___324172E1" ManuallyRouted="false" />
         <AssociationConnector Association="SwapModel.FK__product__busines__29E1370A" ManuallyRouted="false" />

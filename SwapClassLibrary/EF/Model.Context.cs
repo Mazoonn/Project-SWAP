@@ -25,7 +25,6 @@ namespace SwapClassLibrary.EF
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<address> addresses { get; set; }
         public virtual DbSet<admin> admins { get; set; }
         public virtual DbSet<business> businesses { get; set; }
         public virtual DbSet<BusinessOwner> BusinessOwners { get; set; }
