@@ -30,7 +30,9 @@ namespace SwapClassLibrary.EF
         public string street_number { get; set; }
         public string state { get; set; }
         public string post_code { get; set; }
-        public string city { get; set; }
+        public string settlement { get; set; }
+        public string name { get; set; }
+        public string description { get; set; }
     
         public virtual business business { get; set; }
         public virtual Event Event { get; set; }

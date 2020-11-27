@@ -220,14 +220,14 @@ namespace SwapClassLibrary.Service
                     businessId = business.place_id,
                     country = business.place.country,
                     creation_date = business.place.creation_date,
-                    description = business.description,
-                    name = business.name,
-                    post_code = business.place.post_code,
-                    state = business.place.state,
+                    description = business.place.description ?? "",
+                    name = business.place.name ?? "",
+                    post_code = business.place.post_code?? "",
+                    state = business.place.state?? "",
                     street = business.place.street,
                     street_number = business.place.street_number,
                     approve = business.approve_by_admin,
-                    city = business.place.city,
+                    settlement = business.place.settlement,
                     user = new clientInfoDTO
                                 {
                                       birthday_date = business.BusinessOwner.client.birthday_date,
@@ -258,6 +258,27 @@ namespace SwapClassLibrary.Service
             db.SaveChanges();
 
             return true;
+        }
+
+        public static List<EventDTO> GetEvents()
+        {
+            SwapDbConnection db = new SwapDbConnection();
+
+            return db.Events.Select(e => new EventDTO
+            {
+                place_id = e.place_id,
+                name = e.place.name ?? "",
+                description = e.place.description ?? "",
+                end_date = e.end_date,
+                start_date = e.start_date,
+                price = e.price,
+                country = e.place.country,
+                settlement = e.place.settlement,
+                state = e.place.state ?? "",
+                street = e.place.street,
+                street_number = e.place.street_number ?? "",
+                post_code = e.place.post_code ?? "",
+            }).ToList();
         }
     }
 }

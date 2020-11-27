@@ -84,13 +84,12 @@ useEffect(()=>
   };
 
   const isSubCategoryChanged = (index) => {
-    let result = false;
+    let result = true;
     const sCategory = subCategories[index];
     const values = ["descrition", "sub_name", "google_value"];
-    values.forEach((value) => {
-      if (sCategory[value] !== sCategory[`${value}_new`]) result = true;
-    });
-    return result;
+    values.forEach(value => 
+      result = result && sCategory[`${value}_new`] && sCategory[value] !== sCategory[`${value}_new`]);
+    return result;  
   };
 
   const isValidSubCategory = () => {

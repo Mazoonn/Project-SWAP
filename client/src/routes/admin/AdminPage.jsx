@@ -4,10 +4,11 @@ import AdminButtons from "./adminButtons";
 import AdminSubCategories from "./AdminSubCategories";
 import UsersManager from './users/UsersManager';
 import AdminBusinesses from './businesses/AdminBusinesses';
+import AdminEvents from './events/Events';
 
 const data = {
-name: ["Categories", "Sub Categories", "Manage Users", "Approve Businesses"],
-component: [<AdminCategories />, <AdminSubCategories />, <UsersManager />,<AdminBusinesses />]
+name: ["Categories", "Sub Categories", "Manage Users", "Businesses", "Events"],
+component: [<AdminCategories />, <AdminSubCategories />, <UsersManager />,<AdminBusinesses />, <AdminEvents/> ]
 } 
 
 class AdminPage extends Component {

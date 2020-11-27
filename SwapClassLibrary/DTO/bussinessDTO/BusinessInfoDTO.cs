@@ -13,7 +13,7 @@ namespace SwapClassLibrary.DTO
         public string description { get; set; }
         public System.DateTime creation_date { get; set; }
         public string country { get; set; }
-        public string city { get; set; }
+        public string settlement { get; set; }
         public string street { get; set; }
         public string street_number { get; set; }
         public string state { get; set; }

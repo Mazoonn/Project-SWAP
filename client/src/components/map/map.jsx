@@ -57,11 +57,6 @@ const setIndexes = (places) => {
 };
 
 export default function Map(props) {
-  const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: googleKey,
-    language: "en",
-    libraries,
-  });
 
   const [route, setRoute] = React.useState(undefined);
 
@@ -242,8 +237,6 @@ export default function Map(props) {
     getLocation();
   }, []);
 
-  if (loadError) return "Error";
-  if (!isLoaded) return "Loading...";
 
   const getInfoWindows = () => {
     let arrInfoWindows = [];

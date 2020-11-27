@@ -23,8 +23,6 @@ namespace SwapClassLibrary.EF
         public string place_id { get; set; }
         public string business_owner_id { get; set; }
         public bool is_active { get; set; }
-        public string name { get; set; }
-        public string description { get; set; }
         public Nullable<System.TimeSpan> opening_hours { get; set; }
         public Nullable<System.TimeSpan> closing_hours { get; set; }
         public int rating { get; set; }

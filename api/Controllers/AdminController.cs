@@ -137,6 +137,23 @@ namespace api.Controllers.admin
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
             }
         }
+
+        [Route("GetEvents")]
+        [HttpGet]
+        public HttpResponseMessage GetEvents()
+        {
+            try
+            {
+                List<EventDTO> result = AdminService.GetEvents();
+                return Request.CreateResponse(HttpStatusCode.OK, result);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
+        }
+
+
         //TODO add in the DB
         ////approve / Edit / remove Business
         //[Route("ApproveBusiness")]

@@ -15,9 +15,9 @@ namespace SwapClassLibrary.EF
     public partial class Event
     {
         public string place_id { get; set; }
-        public System.DateTime start_date { get; set; }
-        public System.DateTime end_date { get; set; }
         public double price { get; set; }
+        public System.DateTime end_date { get; set; }
+        public System.DateTime start_date { get; set; }
     
         public virtual place place { get; set; }
     }

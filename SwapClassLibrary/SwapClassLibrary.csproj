@@ -74,6 +74,7 @@
     <Compile Include="DTO\clientDTO\PasswordDTO.cs" />
     <Compile Include="DTO\clientDTO\responseLoginDTO.cs" />
     <Compile Include="DTO\clientDTO\RoleDTO.cs" />
+    <Compile Include="DTO\eventDTO\EventDTO.cs" />
     <Compile Include="DTO\placeDTO\eventDTO.cs" />
     <Compile Include="DTO\placeDTO\placeToCategoryDTO.cs" />
     <Compile Include="DTO\placeDTO\placeDTO.cs" />
@@ -183,7 +184,6 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="EF\Model.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

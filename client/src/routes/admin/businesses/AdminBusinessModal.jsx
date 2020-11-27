@@ -42,8 +42,8 @@ const BusinessModal = ({business, handleExitModal})=>
               <td className="pb-2 pt-2">{business["country"]}</td>
             </tr>
             <tr>
-              <td className="pb-2 pt-2">City:</td>
-              <td className="pb-2 pt-2">{business["city"]}</td>
+              <td className="pb-2 pt-2">Settlement:</td>
+              <td className="pb-2 pt-2">{business["settlement"]}</td>
             </tr>
             <tr>
               <td className="pb-2 pt-2">Street:</td>

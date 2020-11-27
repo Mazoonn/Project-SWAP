@@ -23,8 +23,8 @@ namespace SwapClassLibrary.Service
                 place_id = b.place_id,
                 business_owner_id = b.business_owner_id,
                 is_active = b.is_active,
-                name = b.name,
-                description = b.description,
+                name = b.place.name,
+                description = b.place.description,
                 rating =  b.rating,
                 opening_hours = b.opening_hours,
                 closing_hours = b.closing_hours,
@@ -46,8 +46,6 @@ namespace SwapClassLibrary.Service
                     place_id = bussiness.place_id,
                     business_owner_id = bussiness.business_owner_id,
                     is_active = bussiness.is_active,
-                    name = bussiness.name,
-                    description = bussiness.description,
                     rating = 0 ,
                     opening_hours = bussiness.opening_hours,
                     closing_hours = bussiness.closing_hours,
@@ -70,11 +68,10 @@ namespace SwapClassLibrary.Service
             SwapDbConnection  db = new SwapDbConnection();
             business business_to_edit = db.businesses.FirstOrDefault(b => b.business_owner_id == business.business_owner_id && b.place_id == business.place_id);
             if (business_to_edit == null ) return false;
-            business_to_edit.name= business.name;
-            business_to_edit.description = business.description;
+            business_to_edit.place.name= business.name;
+            business_to_edit.place.description = business.description;
             business_to_edit.opening_hours = business.opening_hours;
             business_to_edit.closing_hours = business.closing_hours;
-            business_to_edit.description = business.description;
             db.SaveChanges();
             return true;
         }

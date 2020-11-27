@@ -74,4 +74,15 @@ export async function approvesBusinesses(ids) {
       'Authorization': `Bearer ${localStorage.getItem("token")}`
     }}
     );
-}
+};    
+    
+export async function getEvents() 
+{
+  return await http.get(
+        `${API_URL_Dev}/Admin/GetEvents/`,
+        {
+          headers: {
+          'Authorization': `Bearer ${localStorage.getItem("token")}`
+        }}
+        );   
+};
