@@ -280,5 +280,41 @@ namespace SwapClassLibrary.Service
                 post_code = e.place.post_code ?? "",
             }).ToList();
         }
+
+
+        public static bool DeleteEvent(string id)
+        {
+            SwapDbConnection db = new SwapDbConnection();
+            Event myEvent = db.Events.FirstOrDefault(e => e.place_id == id);
+
+            if (myEvent == null) return false;
+            db.Events.Remove(myEvent);
+            db.SaveChanges();
+            return true;
+        }
+
+        public static bool EditEvent(EditEventDTO eventToEdit)
+        {
+            SwapDbConnection db = new SwapDbConnection();
+            Event myEvent = db.Events.FirstOrDefault(e => e.place_id == eventToEdit.place_id);
+
+            if (myEvent == null) return false;
+            myEvent.price = eventToEdit.price;
+            myEvent.place.name = eventToEdit.name;
+            db.SaveChanges();
+            return true;
+        }
+
+        public static bool EditDescriptionEvent(DescriptionEventDTO eventToEdit)
+        {
+            SwapDbConnection db = new SwapDbConnection();
+            Event myEvent = db.Events.FirstOrDefault(e => e.place_id == eventToEdit.place_id);
+
+            if (myEvent == null) return false;
+            myEvent.place.description = eventToEdit.description;
+            db.SaveChanges();
+
+            return true;
+        }
     }
 }

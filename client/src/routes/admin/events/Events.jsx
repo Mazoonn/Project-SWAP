@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getEvents, paginate } from "../../../services/AdminServices";
+import { getEvents, paginate, deleteEvent, editEvent, editEventDescription } from "../../../services/AdminServices";
 import EventRaw from './EventsRaw';
 import SearchLocationInput from './searchLocation';
 import EventDescriptionModal from './EventDescriptionModal';
@@ -36,6 +36,7 @@ class AdminEvents extends Component {
         events: [],
         address: {},
         loading: false,
+        loadingDescription: false,
         modal: {},
         filter:
         {
@@ -51,10 +52,11 @@ class AdminEvents extends Component {
         }
     }
 
-    handleSetAddress= (address)=>
+    handleSetAddress= address =>
     {
         this.setState({address});
     }
+
 
     componentDidMount()
     {
@@ -119,16 +121,98 @@ class AdminEvents extends Component {
         const { value, name } = e.target;
         filter[name] = value;
         this.setState({ filter });
+    
     }
 
     handlePageChange = page => {
         const pagination = { ...this.state.pagination };
         pagination.currentPage = page;
         this.setState({ pagination });
-      }
+    }
+
+    handleDeleteEvent = async event =>
+    {
+        this.setState({ loading: true });
+        try
+        {
+            await deleteEvent(event["place_id"]);
+            const events = this.state.events.filter(e=> e.place_id !== event.place_id);
+            this.setState({ events, loading: false });
+        }
+        catch(err)
+        {
+            this.setState({ loading: false });
+            console.log(err);
+        }
+    }
+
+    handleSaveEvent = async event =>
+    {
+        this.setState({ loading: true });
+        try
+        {
+            const {place_id, name_new : name, price_new: price } = event;
+            const req = 
+            {
+                place_id,
+                name,
+                price
+            };
+            await editEvent(req);
+            const events = [...this.state.events];
+            const index = events.indexOf(event);
+            events[index].name = name;
+            events[index].price = price;
+            this.setState({ events, loading: false });
+        }
+        catch(err)
+        {
+            this.setState({ loading: false });
+            console.log(err);
+        }
+    }
+
+    handleEditDescription = async event =>
+    {
+        this.setState({ loadingDescription: true });
+        try
+        {
+            console.log(event);
+            const {eventId: place_id, description_new: description } = event;
+            const req = 
+            {
+                place_id,
+                description
+            };
+            await editEventDescription(req);
+            const events = [...this.state.events];
+            const modal = {...this.state.modal};
+            const index = events.findIndex(e => e.place_id === place_id);
+            modal.description = modal.description_new;
+            events[index].description = description;
+            this.setState({ events, modal, loadingDescription: false });
+        }
+        catch(err)
+        {
+            this.setState({ loadingDescription: false });
+            console.log(err);
+        }
+    }
 
     render() { 
-        const { events, modal: event } = this.state;
+
+        
+        const { events, modal: event, loading, loadingDescription } = this.state;
+        if(loading) return(
+            <React.Fragment>
+            <h3>Events</h3>
+            <div className="text-center">
+              <div className="spinner-border text-primary">
+              <span className="sr-only">Loading...</span>
+              </div>
+            </div>
+            </React.Fragment>
+        );
         const { name, country, settlement, street } = this.state.filter;
         const { pageSize, currentPage } = this.state.pagination;
         const filteredEvents = filterEvents(events, name, country, settlement, street);
@@ -176,6 +260,8 @@ class AdminEvents extends Component {
               <tbody>
                   {newEvents.map(event => 
                   <EventRaw
+                    handleSaveEvent={this.handleSaveEvent}
+                    handleDeleteEvent = {this.handleDeleteEvent}
                     key={event["place_id"]}
                     event={event}
                     handleValuesOnChange={this.handleValuesOnChange}
@@ -184,7 +270,9 @@ class AdminEvents extends Component {
               </tbody>
             </table>
             <EventDescriptionModal
+                handleEditDescription={this.handleEditDescription}
                 event={event}
+                loading={loadingDescription}
                 handleExitModal={this.handleExitDescriptionModal}
                 handleOnChange={this.handleOnChangeModal}
                />

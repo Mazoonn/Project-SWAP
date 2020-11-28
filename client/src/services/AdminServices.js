@@ -86,3 +86,38 @@ export async function getEvents()
         }}
         );   
 };
+
+
+export async function deleteEvent(id) {
+  return await http.delete(
+    `${API_URL_Dev}/Admin/DeleteEvent/${id}/`,
+    {
+      headers: {
+      'Authorization': `Bearer ${localStorage.getItem("token")}`
+    }}
+    );
+  };
+
+export async function editEvent(req) 
+    {
+      return await http.post(
+        `${API_URL_Dev}/Admin/EditEvent`,
+        req,
+        {
+          headers: {
+          'Authorization': `Bearer ${localStorage.getItem("token")}`
+        }}
+        );
+    };    
+
+    export async function editEventDescription(req) 
+    {
+      return await http.post(
+        `${API_URL_Dev}/Admin/EditEventDescription`,
+        req,
+        {
+          headers: {
+          'Authorization': `Bearer ${localStorage.getItem("token")}`
+        }}
+        );
+    }; 

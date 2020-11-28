@@ -153,6 +153,56 @@ namespace api.Controllers.admin
             }
         }
 
+        [Route("DeleteEvent/{id}")]
+        [HttpDelete]
+        public HttpResponseMessage DeleteEvent(string id)
+        {
+            try
+            {
+                bool result = AdminService.DeleteEvent(id);
+                if(!result) return Request.CreateResponse(HttpStatusCode.BadRequest, result);
+                return Request.CreateResponse(HttpStatusCode.OK, result);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
+        }
+
+        [Route("EditEvent")]
+        [HttpPost]
+        public HttpResponseMessage EditEvent(EditEventDTO eventToEdit)
+        {
+            try
+            {
+                if(eventToEdit.name == null || eventToEdit.place_id == null) return Request.CreateResponse(HttpStatusCode.BadRequest, "Illegal parameters");
+                bool result = AdminService.EditEvent(eventToEdit);
+                if (!result) return Request.CreateResponse(HttpStatusCode.NotFound, "Event not found");
+                return Request.CreateResponse(HttpStatusCode.OK, result);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
+        }
+
+        [Route("EditEventDescription")]
+        [HttpPost]
+        public HttpResponseMessage EditEventDescription(DescriptionEventDTO eventToEdit)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(eventToEdit.place_id) || string.IsNullOrEmpty(eventToEdit.description)) return Request.CreateResponse(HttpStatusCode.BadRequest, "Illegal parameters");
+                bool result = AdminService.EditDescriptionEvent(eventToEdit);
+                if (!result) return Request.CreateResponse(HttpStatusCode.NotFound, "Event not found");
+                return Request.CreateResponse(HttpStatusCode.OK, result);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
+        }
+
 
         //TODO add in the DB
         ////approve / Edit / remove Business

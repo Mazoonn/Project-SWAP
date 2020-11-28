@@ -35,7 +35,14 @@ const UserModal = ({user, loading, handleExitModal, password, handlePasswordOnCh
       <div className="modal-content">
         <div className="modal-header">
           <h5 className="modal-title">{role[user["actor"]]}</h5>
-          <button onClick={handleExitModal} type="button" className="close" data-dismiss="modal" aria-label="Close">
+          <button 
+            onClick={handleExitModal} 
+            type="button" 
+            className="close" 
+            data-dismiss="modal" 
+            aria-label="Close"
+            disabled={loading}
+          >
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
@@ -86,7 +93,14 @@ const UserModal = ({user, loading, handleExitModal, password, handlePasswordOnCh
                                 </span> Loading...
                             </React.Fragment>) || <span>Save</span>}
                     </button>}
-          <button onClick={handleExitModal} type="button" className="btn btn-secondary">Close</button>
+          <button 
+            onClick={handleExitModal} 
+            type="button" 
+            className="btn btn-secondary"
+            disabled={loading}
+          >
+            Close
+          </button>
         </div>
       </div>
     </div>

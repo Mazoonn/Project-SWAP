@@ -24,7 +24,7 @@ const areChanged = event =>
 
 
 
-const EventRaw = ({ event, handleValuesOnChange, handleClickOnDescription })=>
+const EventRaw = ({ event, handleSaveEvent, handleDeleteEvent, handleValuesOnChange, handleClickOnDescription })=>
 {
 
     return (<tr>
@@ -77,12 +77,13 @@ const EventRaw = ({ event, handleValuesOnChange, handleClickOnDescription })=>
               <button 
                 className="btn btn-sm btn-success"
                 disabled={!areChanged(event)}
+                onClick={()=>{handleSaveEvent(event)}}
               >
                   <span>Save</span>
               </button>
         </td>
         <td className="pt-2 text-center">
-              <button className="btn btn-sm btn-danger">
+              <button onClick={()=>{handleDeleteEvent(event)}} className="btn btn-sm btn-danger">
                   <span>Remove</span>
               </button>
         </td>
