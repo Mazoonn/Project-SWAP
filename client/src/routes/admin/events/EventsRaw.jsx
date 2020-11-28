@@ -2,21 +2,29 @@ import React from 'react';
 
 const values = ["name", "price"];
 
+const dateString = date =>
+{
+    const d = new Date(date);
+    const string = `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()} ${d.getHours()}:${(d.getMinutes() === 0) && "00" || d.getMinutes()}`;
+    return string;
+};
+
 const areChanged = event =>
 {
-    let result = true;
+    let b1 = true, b2 = false;
       values.forEach(value => 
     {
         const newValue = `${value}_new`;
-        if(value === "price") result = result && (event[newValue] > 0);
-        result = result && event[newValue] && (event[value] !== event[newValue])
+        b1 = b1 && event[newValue] !== "";
+        b2 = b2 || event[newValue] !== event[value];
+        if(value === "price") b1 = b1 && (event[newValue] > 0);
     });
-    return result;
+    return b1 && b2;
 };
 
 
 
-const EventRaw = ({ event, handleValuesOnChange })=>
+const EventRaw = ({ event, handleValuesOnChange, handleClickOnDescription })=>
 {
 
     return (<tr>
@@ -26,7 +34,7 @@ const EventRaw = ({ event, handleValuesOnChange })=>
               name="name"
               type="text"
               className="form-control"
-              value={event["name_new"] !== undefined ? event["name_new"] : event["name"]}
+              value={event["name_new"]}
           />
         </td>
         <td className="pt-2">
@@ -39,18 +47,18 @@ const EventRaw = ({ event, handleValuesOnChange })=>
         {`${event["street"]} ${event["street_number"]}`}
         </td>      
         <td className="pt-2 text-center">
-              <button className="btn btn-sm btn-info">
+              <button onClick={()=>{handleClickOnDescription(event)}} className="btn btn-sm btn-info">
                   <span>Description</span>
               </button>
         </td>
         <td className="pt-2">
           <span>
-            {event["start_date"]}
+            {dateString(event["start_date"])}
           </span>
         </td>
         <td className="pt-2">
             <span>
-                {event["end_date"]}
+                {dateString(event["end_date"])}
             </span>
         </td>
         <td>
@@ -63,7 +71,7 @@ const EventRaw = ({ event, handleValuesOnChange })=>
                   required
                   className="form-control"
                   onChange={e=>{handleValuesOnChange(event, e)}}
-                  value={event["price_new"] !== undefined ? event["price_new"] : event["price"]}              />
+                  value={event["price_new"]}              />
         </td>
         <td className="pt-2 text-center">
               <button 

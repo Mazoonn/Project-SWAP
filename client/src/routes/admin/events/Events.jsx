@@ -1,7 +1,34 @@
 import React, { Component } from 'react';
-import { getEvents } from "../../../services/AdminServices";
+import { getEvents, paginate } from "../../../services/AdminServices";
 import EventRaw from './EventsRaw';
 import SearchLocationInput from './searchLocation';
+import EventDescriptionModal from './EventDescriptionModal';
+import FilterInput from './FilterInput';
+import AdminPagination from "../AdminPagination";
+
+
+const filterEvents = (events ,name, country, settlement, street) =>
+{
+    return events.filter(event =>
+            event.name.toLowerCase().startsWith(name.toLowerCase()) &&
+            event.country.toLowerCase().startsWith(country.toLowerCase()) &&
+            event.settlement.toLowerCase().startsWith(settlement.toLowerCase()) &&
+            event.street.toLowerCase().startsWith(street.toLowerCase())
+            );
+}
+
+const addNewValues = events =>
+{
+    const values = ["name", "price"];
+
+    events.forEach(event =>
+        {
+            values.forEach(value =>
+                {
+                    event[`${value}_new`] = event[value];
+                });
+        });
+};
 
 class AdminEvents extends Component {
     state = 
@@ -9,6 +36,19 @@ class AdminEvents extends Component {
         events: [],
         address: {},
         loading: false,
+        modal: {},
+        filter:
+        {
+            name: "", 
+            country: "", 
+            settlement: "", 
+            street: ""
+        },
+        pagination:
+        {
+            pageSize: 10,
+            currentPage: 1,
+        }
     }
 
     handleSetAddress= (address)=>
@@ -27,6 +67,7 @@ class AdminEvents extends Component {
         try
         {
             const events = await getEvents();
+            addNewValues(events.data);
             this.setState({ events: events.data, loading:false });
         }
         catch(err)
@@ -40,43 +81,83 @@ class AdminEvents extends Component {
     {
         const events = [...this.state.events];
         const index = events.indexOf(event);
-        let { name, value } = e.target;
-        if(name === "price" && parseFloat(value) < 0) return;
+        let { value, name } = e.target;
+        if(name === "price")
+        {
+            if(parseFloat(value)) value = parseFloat(value);
+            if(value < 0) return;
+        }
         events[index][`${name}_new`] = value;
         this.setState({ events });
     }
 
+    handleExitDescriptionModal = () =>
+    {
+        this.setState({ modal: {} });
+    }
+
+    handleClickOnDescription = event =>
+    {
+        this.setState({ modal: 
+            {
+                eventId: event.place_id,
+                description: event.description,
+                description_new: event.description
+            } });
+    }
+
+    handleOnChangeModal = e =>
+    {
+        const modal = { ...this.state.modal };
+        modal.description_new = e.target.value;
+        this.setState({ modal });
+    }
+
+    handleFilterOnChange = e =>
+    {
+        const filter = { ...this.state.filter };
+        const { value, name } = e.target;
+        filter[name] = value;
+        this.setState({ filter });
+    }
+
+    handlePageChange = page => {
+        const pagination = { ...this.state.pagination };
+        pagination.currentPage = page;
+        this.setState({ pagination });
+      }
+
     render() { 
-        const { events } = this.state;
+        const { events, modal: event } = this.state;
+        const { name, country, settlement, street } = this.state.filter;
+        const { pageSize, currentPage } = this.state.pagination;
+        const filteredEvents = filterEvents(events, name, country, settlement, street);
+        const itemCount = filteredEvents.length;
+        const newEvents = paginate(filteredEvents, currentPage, pageSize);
 
         return (<React.Fragment>
             <h3>Events</h3>
             <div className="input-group w-75 mb-2">
                 <button className="btn btn-sm btn-primary mr-1">Add Event</button>
-                <input 
-                    type="text" 
-                    className="form-control" 
-                    placeholder="Filter Name"
-                    name="name"
-                />
-                <input 
-                    type="text" 
-                    className="form-control" 
-                    placeholder="Filter Country"
+                <FilterInput 
+                    value={name} 
+                    onChange={this.handleFilterOnChange} 
+                    name="name" placeholder="Filter Name" />
+                <FilterInput 
+                    value={country}
+                    onChange={this.handleFilterOnChange}
                     name="country" 
-                />                
-                <input 
-                    type="text" 
-                    className="form-control" 
-                    placeholder="Filter Settlement"
+                    placeholder="Filter Country" />
+                <FilterInput 
+                    value={settlement}
+                    onChange={this.handleFilterOnChange} 
                     name="settlement" 
-                />                
-                <input 
-                    type="text" 
-                    className="form-control" 
-                    placeholder="Filter Street"
+                    placeholder="Filter Settlement" />
+                <FilterInput 
+                    value={street}
+                    onChange={this.handleFilterOnChange} 
                     name="street" 
-                />
+                    placeholder="Filter Street" />
             </div>
             <table className="table table-bordered table-sm mt-2">
               <thead>
@@ -93,14 +174,26 @@ class AdminEvents extends Component {
                 </tr>
               </thead>
               <tbody>
-                  {events.map(event => 
+                  {newEvents.map(event => 
                   <EventRaw
                     key={event["place_id"]}
                     event={event}
                     handleValuesOnChange={this.handleValuesOnChange}
+                    handleClickOnDescription={this.handleClickOnDescription}
                   />)}
               </tbody>
             </table>
+            <EventDescriptionModal
+                event={event}
+                handleExitModal={this.handleExitDescriptionModal}
+                handleOnChange={this.handleOnChangeModal}
+               />
+            <AdminPagination
+                currentPage={currentPage}
+                itemsCount={itemCount}
+                onPageChange={this.handlePageChange}
+                pageSize={pageSize}
+             />
           </React.Fragment>);
     }
 }

@@ -24,7 +24,7 @@ function getAge(date){
 
 const UserModal = ({user, loading, handleExitModal, password, handlePasswordOnChange, handleSaveNewPassword})=>
 {
-    const values = Object.values(user)
+    const values = Object.values(user);
     if(values.length === 0)
      return null;
     const isLocal = user["platform"] === "local";
