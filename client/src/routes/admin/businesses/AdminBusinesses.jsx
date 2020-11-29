@@ -94,7 +94,7 @@ class AdminBusinesses extends Component
     {
         const filter = { ...this.state.filter }; 
         filter[name] = value;
-        this.setState({ filter });
+        this.setState({ filter, currentPage: 1 });
     }
 
     handleOnClickUser = user => 

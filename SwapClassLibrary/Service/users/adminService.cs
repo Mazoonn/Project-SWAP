@@ -316,5 +316,56 @@ namespace SwapClassLibrary.Service
 
             return true;
         }
+
+        static public EventDTO AddEvent(NewEventDTO eventToAdd)
+        {
+            SwapDbConnection db = new SwapDbConnection();
+            Event myEvent = db.Events.FirstOrDefault(e => e.place_id == eventToAdd.place.place_id);
+            place place;
+
+            if (myEvent != null) return null;
+            place = db.places.FirstOrDefault(p => p.place_id == eventToAdd.place.place_id);
+            if (place != null && place.business != null) return null;
+            myEvent = new Event
+            {
+                end_date = eventToAdd.end_date,
+                start_date = eventToAdd.start_date,
+                place_id = eventToAdd.place.place_id,
+                price = eventToAdd.price,
+                place = place ?? new place
+                {
+                    place_id = eventToAdd.place.place_id,
+                    country = eventToAdd.place.country,
+                    creation_date = DateTime.Now,
+                    description = eventToAdd.place.description,
+                    name = eventToAdd.place.name,
+                    post_code = eventToAdd.place.post_code,
+                    settlement = eventToAdd.place.settlement,
+                    state = eventToAdd.place.state,
+                    street_number = eventToAdd.place.street_number ?? "",
+                    street = eventToAdd.place.street,
+                    latitude = eventToAdd.place.latitude,
+                    longitude = eventToAdd.place.longitude,
+                }
+            };
+            db.Events.Add(myEvent);
+            db.SaveChanges();
+
+            return new EventDTO
+            {
+                country = myEvent.place.country,
+                description = myEvent.place.description ?? "",
+                end_date = myEvent.end_date,
+                name = myEvent.place.name ?? "",
+                place_id = myEvent.place_id,
+                post_code = myEvent.place.post_code ?? "",
+                price = myEvent.price,
+                settlement = myEvent.place.settlement,
+                start_date = myEvent.start_date,
+                state = myEvent.place.state ?? "",
+                street = myEvent.place.street,
+                street_number = myEvent.place.street_number ?? ""
+            };
+        }
     }
 }

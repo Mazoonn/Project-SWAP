@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { getEvents, paginate, deleteEvent, editEvent, editEventDescription } from "../../../services/AdminServices";
+import { getEvents, paginate, deleteEvent, editEvent, editEventDescription, addEvent } from "../../../services/AdminServices";
 import EventRaw from './EventsRaw';
-import SearchLocationInput from './searchLocation';
 import EventDescriptionModal from './EventDescriptionModal';
 import FilterInput from './FilterInput';
 import AdminPagination from "../AdminPagination";
+import AddEventModal from './AddEventModal';
 
 
 const filterEvents = (events ,name, country, settlement, street) =>
@@ -30,31 +30,166 @@ const addNewValues = events =>
         });
 };
 
+const addressValidate = address =>
+{
+    const schema = ["country",  "settlement", "street"];
+
+    if(schema.some(value => !address[value])) 
+        return "Address must contain Country, Settlement and Street Name";
+    return ""
+}
+
+const getAddress = place =>
+{
+    const componentForm = {
+        street_number: "short_name",
+        route: "long_name",
+        locality: "long_name",
+        administrative_area_level_1: "short_name",
+        country: "long_name",
+        postal_code: "short_name",
+      };
+    const addressForm =
+    {
+        street_number: "street_number",
+        country: "country",
+        postal_code: "post_code",
+        locality: "settlement",
+        administrative_area_level_1: "state",
+        route: "street"
+    };
+    const newPlace = {};
+
+    for (const component of place.address_components) 
+    {
+        const addressType = component.types[0];
+
+    if (componentForm[addressType]) 
+     newPlace[addressForm[addressType]] = component[componentForm[addressType]];
+    }
+
+     return newPlace;
+};
+
+const getPlace = address =>
+{
+    if(!address.address_components) return {};
+    const place = getAddress(address);
+    place.place_id = address.place_id;
+    place.latitude = address.geometry.location.lat();
+    place.longitude = address.geometry.location.lng();
+    
+    return place;
+};
+
+
 class AdminEvents extends Component {
     state = 
     {
         events: [],
-        address: {},
         loading: false,
         loadingDescription: false,
+        loadingNewEvent: false,
         modal: {},
-        filter:
-        {
+        filter: 
+        { 
             name: "", 
             country: "", 
             settlement: "", 
             street: ""
         },
-        pagination:
+        pagination: 
         {
             pageSize: 10,
-            currentPage: 1,
+            currentPage: 1
+        },
+        newEvent: 
+        { 
+            isActive: false,
+            name: "",
+            description: "",
+            start_date: "",
+            end_date: "",
+            price: "",
+            place: {},
+            errors: {},
+         }
+    }
+
+    handleReloadPage = events =>
+    {
+        const pagination = { ...this.state.pagination };
+        pagination.currentPage = 1;
+        this.setState(
+            {
+                events,
+                pagination,
+                loadingNewEvent: false,
+                filter: 
+                { 
+                    name: "", 
+                    country: "", 
+                    settlement: "", 
+                    street: ""
+                },
+                newEvent: 
+                { 
+                    isActive: false,
+                    name: "",
+                    description: "",
+                    start_date: "",
+                    end_date: "",
+                    price: "",
+                    place: {},
+                    errors: {},
+                }
+            });
+    }
+
+    handleClickOnSaveNewEvent = async () =>
+    {
+        const newEvent = { ...this.state.newEvent };
+        const { place } = newEvent;
+
+        const error = addressValidate(place);
+        newEvent.errors.address = error;
+        this.setState({ newEvent });
+        if(error) return;
+        this.setState({ loadingNewEvent: true });
+        try
+        {
+            const { end_date, start_date, description, name, price } = this.state.newEvent;
+            const place = {...this.state.newEvent.place}
+            place.name = name;
+            place.description = description;
+            const req = 
+            {
+                end_date,
+                start_date,
+                price,
+                place
+            };
+            const promiseEvent = await addEvent(req);
+            const { data: event } =  promiseEvent;
+            event.name_new = event.name;
+            event.price_new = event.price;
+            const events = [...this.state.events];
+            events.push(event);
+            this.handleReloadPage(events);
+        }
+        catch(err)
+        {   
+            this.setState({ loadingNewEvent: true });
+            console.log(err);
         }
     }
 
     handleSetAddress= address =>
     {
-        this.setState({address});
+        const newEvent = {...this.state.newEvent};
+        const place = getPlace(address);
+        newEvent.place = place;
+        this.setState({newEvent});
     }
 
 
@@ -117,11 +252,12 @@ class AdminEvents extends Component {
 
     handleFilterOnChange = e =>
     {
-        const filter = { ...this.state.filter };
+        const filter = { ...this.state.filter };     
+        const pagination = { ...this.state.pagination };
+        pagination.currentPage = 1;
         const { value, name } = e.target;
         filter[name] = value;
-        this.setState({ filter });
-    
+        this.setState({ filter, pagination });
     }
 
     handlePageChange = page => {
@@ -177,7 +313,6 @@ class AdminEvents extends Component {
         this.setState({ loadingDescription: true });
         try
         {
-            console.log(event);
             const {eventId: place_id, description_new: description } = event;
             const req = 
             {
@@ -199,10 +334,43 @@ class AdminEvents extends Component {
         }
     }
 
+    handleExitAddEvent = () =>
+    {                                                     
+        this.setState(
+            { 
+                newEvent: 
+                { 
+                    isActive: false,
+                    name: "",
+                    description: "",
+                    start_date: "",
+                    end_date: "",
+                    price: "",
+                    place: {},
+                    errors: {},
+                 } });
+    }
+
+    handleClickOnAddEvent = ()=>
+    {
+        const newEvent = {...this.state.newEvent};
+        newEvent.isActive = true;
+        this.setState({ newEvent });
+    }
+
+    handleNewPlaceOnChange = e =>
+    {
+        const newEvent = {...this.state.newEvent};
+        const { name, value } = e.target;
+        if(name === "price" && value < 0) return; 
+        newEvent[name] = value;
+        this.setState({ newEvent });
+    }
+
     render() { 
 
         
-        const { events, modal: event, loading, loadingDescription } = this.state;
+        const { events, modal: event, loading, loadingDescription, newEvent, loadingNewEvent } = this.state;
         if(loading) return(
             <React.Fragment>
             <h3>Events</h3>
@@ -222,11 +390,17 @@ class AdminEvents extends Component {
         return (<React.Fragment>
             <h3>Events</h3>
             <div className="input-group w-75 mb-2">
-                <button className="btn btn-sm btn-primary mr-1">Add Event</button>
+                <button 
+                    className="btn btn-sm btn-primary mr-1"
+                    onClick={this.handleClickOnAddEvent}
+                >
+                    Add Event
+                </button>
                 <FilterInput 
                     value={name} 
                     onChange={this.handleFilterOnChange} 
-                    name="name" placeholder="Filter Name" />
+                    name="name" 
+                    placeholder="Filter Name" />
                 <FilterInput 
                     value={country}
                     onChange={this.handleFilterOnChange}
@@ -282,6 +456,14 @@ class AdminEvents extends Component {
                 onPageChange={this.handlePageChange}
                 pageSize={pageSize}
              />
+             <AddEventModal
+                setAddress={this.handleSetAddress}
+                event={newEvent}
+                handleExitModal={this.handleExitAddEvent}
+                handleOnChange={this.handleNewPlaceOnChange}
+                clickOnSave={this.handleClickOnSaveNewEvent}
+                loading={loadingNewEvent}
+              />
           </React.Fragment>);
     }
 }

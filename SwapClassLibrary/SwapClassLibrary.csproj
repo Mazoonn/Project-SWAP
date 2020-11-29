@@ -77,7 +77,8 @@
     <Compile Include="DTO\eventDTO\DescriptionEventDTO.cs" />
     <Compile Include="DTO\eventDTO\EditEventDTO.cs" />
     <Compile Include="DTO\eventDTO\EventDTO.cs" />
-    <Compile Include="DTO\placeDTO\eventDTO.cs" />
+    <Compile Include="DTO\eventDTO\NewEventDTO.cs" />
+    <Compile Include="DTO\placeDTO\NewPlaceDTO.cs" />
     <Compile Include="DTO\placeDTO\placeToCategoryDTO.cs" />
     <Compile Include="DTO\placeDTO\placeDTO.cs" />
     <Compile Include="DTO\productDTO\productReqDTO.cs" />
@@ -154,7 +155,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\business\BusinessService.cs" />
     <Compile Include="Service\HashSalt\HashSalt.cs" />
-    <Compile Include="Service\place\EventService.cs" />
     <Compile Include="Service\place\PlaceService.cs" />
     <Compile Include="Service\product\ProductService.cs" />
     <Compile Include="Service\category\CategoryService.cs" />

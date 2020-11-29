@@ -120,4 +120,16 @@ export async function editEvent(req)
           'Authorization': `Bearer ${localStorage.getItem("token")}`
         }}
         );
-    }; 
+    };
+
+    export async function addEvent(req) 
+    {
+      return await http.put(
+        `${API_URL_Dev}/Admin/AddEvent`,
+        req,
+        {
+          headers: {
+          'Authorization': `Bearer ${localStorage.getItem("token")}`
+        }}
+        );
+    };

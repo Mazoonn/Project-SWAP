@@ -1,9 +1,10 @@
 import React from 'react';
 
-const FilterInput = ({ placeholder, name, onChange }) =>
+const FilterInput = ({ placeholder, name, onChange, value }) =>
 {
     return (
     <input 
+        value={value}
         type="text" 
         className="form-control" 
         placeholder

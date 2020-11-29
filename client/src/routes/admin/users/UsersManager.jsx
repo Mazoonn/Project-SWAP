@@ -98,8 +98,8 @@ class UsersManager extends Component
   {
     const { value, name } = event.target;
     const obj = {};
-
     obj[name] = value
+    obj.currentPage = 1;
     this.setState(obj);
   }
 

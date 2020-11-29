@@ -2,10 +2,24 @@ import React from 'react';
 
 const values = ["name", "price"];
 
+const dateExpired = date =>
+{
+    const timeNow = new Date().getTime();
+    const timeDate = new Date(date).getTime();
+    
+    return timeDate < timeNow; 
+};
+
+const zeroPrefixNumber = number =>
+{
+    if(number < 10 && number >= 0) return `0${number}`;
+    return number;
+};
+
 const dateString = date =>
 {
     const d = new Date(date);
-    const string = `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()} ${d.getHours()}:${(d.getMinutes() === 0) && "00" || d.getMinutes()}`;
+    const string = `${zeroPrefixNumber(d.getHours())}:${zeroPrefixNumber(d.getMinutes())} ${zeroPrefixNumber(d.getDate())}/${zeroPrefixNumber(d.getMonth() + 1)}/${d.getFullYear()}`;
     return string;
 };
 
@@ -26,8 +40,10 @@ const areChanged = event =>
 
 const EventRaw = ({ event, handleSaveEvent, handleDeleteEvent, handleValuesOnChange, handleClickOnDescription })=>
 {
+    const { start_date, end_date } = event;
+    const isDateExpired = dateExpired(end_date);
 
-    return (<tr>
+    return (<tr className={isDateExpired ? "alert-danger" : undefined}>
         <td>
         <input
               onChange={e =>{handleValuesOnChange(event, e)}}  
@@ -53,12 +69,12 @@ const EventRaw = ({ event, handleSaveEvent, handleDeleteEvent, handleValuesOnCha
         </td>
         <td className="pt-2">
           <span>
-            {dateString(event["start_date"])}
+            {dateString(start_date)}
           </span>
         </td>
         <td className="pt-2">
             <span>
-                {dateString(event["end_date"])}
+                {dateString(end_date)}
             </span>
         </td>
         <td>
@@ -71,7 +87,8 @@ const EventRaw = ({ event, handleSaveEvent, handleDeleteEvent, handleValuesOnCha
                   required
                   className="form-control"
                   onChange={e=>{handleValuesOnChange(event, e)}}
-                  value={event["price_new"]}              />
+                  value={event["price_new"]}              
+              />
         </td>
         <td className="pt-2 text-center">
               <button 

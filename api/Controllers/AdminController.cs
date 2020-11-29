@@ -203,6 +203,23 @@ namespace api.Controllers.admin
             }
         }
 
+        [Route("AddEvent")]
+        [HttpPut]
+        public HttpResponseMessage AddEvent(NewEventDTO eventToAdd)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(eventToAdd.place.place_id) || eventToAdd.place == null) return Request.CreateResponse(HttpStatusCode.BadRequest, "Illegal parameters");
+                EventDTO newEvent = AdminService.AddEvent(eventToAdd);
+                if (newEvent == null) return Request.CreateResponse(HttpStatusCode.BadRequest, "Event or place exists");
+                return Request.CreateResponse(HttpStatusCode.OK, newEvent);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
+        }
+
 
         //TODO add in the DB
         ////approve / Edit / remove Business
