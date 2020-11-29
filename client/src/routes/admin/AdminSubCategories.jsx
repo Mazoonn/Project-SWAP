@@ -19,47 +19,59 @@ const addNewValuesToSubCategories = (subCategories) => {
   });
 };
 
-const AdminSubCategories = (props) => {
+const AdminSubCategories = () => {
   const [categories, setCategories] = React.useState([]);
   const [subCategories, setSubCategories] = React.useState([]);
   const [isDefault, setIsDefault] = React.useState(true);
   const [indexCategory, setIndexCategory] = React.useState("default");
   const [subCategory, setSubCategory] = React.useState({});
+  const [loading, setLoading] = React.useState(false);
+  const [selectValue , setSelectValue] = React.useState("default");
 
 useEffect(()=>
 {
-  const isMounted = { state: true };
+  let isMounted = true;
 
   const fetchData = async () => 
   {
-    if(!isMounted.state) return; 
+    setLoading(true); 
     const data = await getAllMainCategoriesAdmin();
+    if(!isMounted) return;
     setCategories(data);
+    setLoading(false);
   };
   fetchData();
+
+  return () => { isMounted = false };
 }, []);
 
   const handleOnChangeSelect = async (event) => {
     const index = event.target.value;
-    setSubCategories([]);
+    
     if (index !== "default") {
+      setLoading(true);
       const category_id = categories[index].id;
       const newSubCategories = await getSubCategoriesId(category_id);
       addNewValuesToSubCategories(newSubCategories);
       setSubCategories(newSubCategories);
       setIndexCategory(index);
+      setLoading(false);
       setIsDefault(false);
-    } else setIsDefault(true);
+    } 
+    else 
+    {
+      setSubCategories([]);
+      setIsDefault(true)
+    };
+    setSelectValue(index);
   };
 
   const handleOnChangeSubCategory = (event, index) => {
-    const value = event.target.value;
-    const name = event.target.name;
+    const { value, name } = event.target;
     if (index !== -1) {
       const newSubCategories = [...subCategories];
       const category = newSubCategories[index];
       category[name] = value;
-      newSubCategories[index] = category;
       setSubCategories(newSubCategories);
     } else {
       const newSubCategory = { ...subCategory };
@@ -68,8 +80,12 @@ useEffect(()=>
     }
   };
 
-  const handleOnClickSaveSubCategory = async (index) => {
-    const { main_id, sub_id, sub_name_new, google_value_new, descrition_new } = subCategories[index];
+  const handleOnClickSaveSubCategory = async (index) => 
+  {
+    setLoading(true);
+    const newSubCategories = [...subCategories];
+    const subCategory = subCategories[index];
+    const { main_id, sub_id, sub_name_new, google_value_new, descrition_new } = subCategory;
     const req = {
       main_id,
       sub_id,
@@ -78,9 +94,11 @@ useEffect(()=>
       google_value: google_value_new,
     };
     await updateSubCategoryOfMainCategory(req);
-    const newSubCategories = await getSubCategoriesId(main_id);
-    addNewValuesToSubCategories(newSubCategories);
+    subCategory.sub_name = subCategory.sub_name_new;
+    subCategory.descrition = subCategory.descrition_new;
+    subCategory.google_value = subCategory.google_value_new;
     setSubCategories(newSubCategories);
+    setLoading(false);
   };
 
   const isSubCategoryChanged = (index) => {
@@ -106,37 +124,57 @@ useEffect(()=>
   };
 
   const handleDeleteSubCategory = async (indexOfSubCategory) => {
+    setLoading(true);
     const main_id = categories[indexCategory].id;
     const sub_id = subCategories[indexOfSubCategory].sub_id;
     await deleteSubCategory(main_id, sub_id);
-    const newSubCategories = await getSubCategoriesId(main_id);
-    addNewValuesToSubCategories(newSubCategories);
+    const newSubCategories = subCategories.filter(subCat => subCat.sub_id !== sub_id);
     setSubCategories(newSubCategories);
+    setLoading(false);
   };
 
   const handleAddNewSubCategory = async () => {
-    const index = indexCategory;
-    const main_id = categories[index].id;
+    setLoading(true);
+    const main_id = categories[indexCategory].id;
     const category = { ...subCategory };
     setSubCategory({});
     category.main_id = main_id;
     await postSubCategory(category);
-
     const newSubCategories = await getSubCategoriesId(main_id);
     addNewValuesToSubCategories(newSubCategories);
     setSubCategories(newSubCategories);
+    setLoading(false);
   };
+
+  if(loading) return(
+    <React.Fragment>
+    <h3>Categories</h3>
+    <div className="text-center">
+      <div className="spinner-border text-primary">
+      <span className="sr-only">Loading...</span>
+      </div>
+    </div>
+    </React.Fragment>
+  );
 
   return (
     <div>
       <h4>Categories</h4>
-      <select id="categories" onChange={handleOnChangeSelect} className="custom-select mb-4" style={{ width: "200px" }}>
-        <option value={"default"} defaultValue>
+      <select 
+        id="categories" 
+        onChange={(event)=>(handleOnChangeSelect(event))} 
+        className="custom-select mb-4" 
+        style={{ width: "200px" }}
+        value={selectValue}
+      >
+        <option value={"default"}>
           Category...
         </option>
         {categories.map((category, index) => {
           return (
-            <option key={category.id} value={index}>
+            <option 
+              key={category.id} 
+              value={index}>
               {category.name}
             </option>
           );

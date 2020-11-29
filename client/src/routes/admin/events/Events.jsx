@@ -272,8 +272,10 @@ class AdminEvents extends Component {
         try
         {
             await deleteEvent(event["place_id"]);
+            const pagination = {...this.state.pagination};
+            pagination.currentPage = 1;
             const events = this.state.events.filter(e=> e.place_id !== event.place_id);
-            this.setState({ events, loading: false });
+            this.setState({ events, loading: false, pagination });
         }
         catch(err)
         {

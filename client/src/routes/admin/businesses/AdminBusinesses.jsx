@@ -39,7 +39,7 @@ class AdminBusinesses extends Component
             country: "",
             approves: false
         },
-        pageSize: 5,
+        pageSize: 10,
         currentPage: 1    
     };
     
@@ -146,7 +146,7 @@ class AdminBusinesses extends Component
         {
             await approvesBusinesses(request);
             const businesses = this.state.businesses.filter(b => !b["approve"])
-            this.setState({ businesses, loading: false });
+            this.setState({ businesses, loading: false, currentPage: 1 });
         }
         catch(error)
         {

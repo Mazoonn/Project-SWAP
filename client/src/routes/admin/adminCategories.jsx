@@ -7,20 +7,23 @@ import {
 const AdminCategories = (props) => {
   const [categories, setCategories] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
+  const [loadingPage, setLoadingPage] = React.useState(false);
 
   useEffect(()=>
   {
-    const isMounted = { state: true };
+    let isMounted = true;
 
     const fetchData = async () => 
     {
+      setLoadingPage(true);
       const data = await getAllMainCategoriesAdmin(); 
-      if(!isMounted.state) return;
+      if(!isMounted) return;
       setCategories(data);
+      setLoadingPage(false);
     };
-    fetchData();
+    fetchData(); 
 
-    return 
+    return () => { isMounted = false };
   }, []);
 
   const AreChanged = () => {
@@ -58,6 +61,16 @@ const AdminCategories = (props) => {
     setLoading(false);
   };
 
+  if(loadingPage) return(
+    <React.Fragment>
+    <h3>Categories</h3>
+    <div className="text-center">
+      <div className="spinner-border text-primary">
+      <span className="sr-only">Loading...</span>
+      </div>
+    </div>
+    </React.Fragment>
+  ); 
 
   return (
     <React.Fragment>

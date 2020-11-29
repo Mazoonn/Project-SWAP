@@ -117,7 +117,7 @@ class UsersManager extends Component
     {
       await deleteUser(user["client_id"]);
       const users = this.state.users.filter(u => user["client_id"] !== u["client_id"]);
-      this.setState({users, loading: false});
+      this.setState({users, loading: false, currentPage: 1});
     }
     catch(error)
     {
