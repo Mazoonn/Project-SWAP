@@ -78,29 +78,60 @@ namespace api.Controllers
             return 0;
         }
 
-        [Route("DeleteClient")]
+        [Route("getClientInfo")]
         [HttpPost]
-        public int DeleteClient()
+        public HttpResponseMessage getClientInfo([FromBody]string client_Id)
         {
-            return 0;
+            try
+            {
+                clientInfoDTO client_info = clientService.getClientInfo(client_Id);
+                if (client_info==null)
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is no client with this ID");
+                return Request.CreateResponse(HttpStatusCode.OK, client_info);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
         }
-
-
+        
         [Route("EditClient")]
         [HttpPost]
-        public int EditClient()
+        public HttpResponseMessage EditClient([FromBody]clientInfoDTO client_info)
         {
-            return 0;
+            try
+            {
+                bool is_change = clientService.EditClient(client_info);
+                if (is_change == null)
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is no client with this ID");
+                return Request.CreateResponse(HttpStatusCode.OK, is_change);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
         }
 
 
-        [Route("ChangeActiveClient")]
-        [HttpPost]
-        public int ChangeActiveClient()
+        [Route("DeleteClient")]
+        [HttpDelete]
+        public HttpResponseMessage DeleteClient([FromBody]string client_Id)
         {
-            return 0;
+            try
+            {
+                bool is_deleted = clientService.DeleteClient(client_Id);
+                if (!is_deleted)
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is no client with this ID");
+                return Request.CreateResponse(HttpStatusCode.OK, is_deleted);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
         }
 
+
+      
         //start / Edit / remove Mission
         [Route("StartQuest")]
         [HttpPost]

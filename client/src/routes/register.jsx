@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { clientRegister } from "../services/client";
+import { clientRegister } from "../services/client.ts";
 import { setUserSession } from "../Utils/Common";
 import Joi from "joi-browser";
 import { getCurrentUser } from "../services/authService";
@@ -49,8 +49,7 @@ class RegisterForm extends Component {
       for (let item of error.details) errorsState[item.path[0]] = item.message;
     }
     if (user.password !== user.confirm_password && !errorsState.password)
-      errorsState["confirm_password"] =
-        "Password and confirm password do not match";
+      errorsState["confirm_password"] = "Password and confirm password do not match";
 
     return errorsState;
   };
@@ -70,10 +69,7 @@ class RegisterForm extends Component {
       window.location = "/";
     } catch (error) {
       this.setState({ loading: false });
-      if (
-        error.response &&
-        (error.response.status >= 400 || error.response.status <= 500)
-      )
+      if (error.response && (error.response.status >= 400 || error.response.status <= 500))
         this.setState({ errors: { server: error.response.data } });
     }
   };
@@ -195,11 +191,7 @@ class RegisterForm extends Component {
           </div>
           <div className="form-group col-md-6">
             <label htmlFor="sex">Sex</label>
-            <select
-              id="sex"
-              className="form-control"
-              onBlur={this.handleChange}
-            >
+            <select id="sex" className="form-control" onBlur={this.handleChange}>
               <option value="male" defaultValue>
                 Male
               </option>
@@ -217,10 +209,7 @@ class RegisterForm extends Component {
           <br />
           <button
             type="submit"
-            disabled={
-              this.state.loading ||
-              Object.values(this.state.user).some((attr) => attr === "")
-            }
+            disabled={this.state.loading || Object.values(this.state.user).some((attr) => attr === "")}
             onClick={this.handleSubmit}
             className="btn btn-primary mt-4"
             value={this.state.loading ? "Loading..." : "Login"}

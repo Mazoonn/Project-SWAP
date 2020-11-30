@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { setUserSession } from "../Utils/Common";
 import LoginGoF from "./loginGoF";
-import { clientLogin } from "../services/client";
+import { clientLogin } from "../services/client.ts";
 import Joi from "joi-browser";
 import { getCurrentUser } from "../services/authService";
 

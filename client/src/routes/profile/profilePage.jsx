@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import Buttons from "./profileButtons";
-
+import RequestBusinessOwner from "./RequestBusinessOwner";
+import * as infoPageComponent from "./infoPageComponent";
 const data = {
-  name: ["Info", "Quests", "Become Business Owner"],
-  component: [<div></div>, <div></div>, <div></div>],
+  name: ["Info", "Edit ", "Become Business Owner", "Quests"],
+  component: [<infoPageComponent.default />, <div></div>, <RequestBusinessOwner />, <div></div>],
 };
 
 class profilePage extends Component {
@@ -26,7 +27,7 @@ class profilePage extends Component {
           <div className="col-">
             <Buttons handleClick={this.handleClick} data={name} selected={selected} />
           </div>
-          <div className="col">{selected !== -1 && component[selected]}</div>
+          <div className="col-">{selected !== -1 && component[selected]}</div>
         </div>
       </React.Fragment>
     );
