@@ -32,6 +32,23 @@ namespace api.Controllers
             }
         }
 
+        [Route("GetFilteredBusinesses")]
+        [HttpGet]
+        public HttpResponseMessage GetFilteredBusinesses([FromUri] PointDTO position , [FromUri] CategoriesIdsDTO ids, double radius)
+        {
+            try
+            {
+                if(string.IsNullOrEmpty(ids.mainId) || ids.subIds == null) return Request.CreateResponse(HttpStatusCode.BadRequest, "Illegal parameters");
+                List<MapBusinessDTO> list = BusinessService.GetFilteredBusinessesAround(position, ids, radius);
+                return Request.CreateResponse(HttpStatusCode.OK, list);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
+        }
+
+
 
 
         //Post api/business/AddBusinessOwner

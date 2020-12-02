@@ -12,6 +12,19 @@ namespace SwapClassLibrary.Service
 
     public class PlaceService
     {
+        public static double GetDistance(PointDTO startPosition, PointDTO endPosition)
+        {
+            int R = 6378137; // Earth’s mean radius in meter
+            double dLat = Radian.DegreesToRadians(endPosition.lat - startPosition.lat);
+            double dLong = Radian.DegreesToRadians(endPosition.lng - startPosition.lng);
+            double a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+            Math.Cos(Radian.DegreesToRadians(startPosition.lat)) * Math.Cos(Radian.DegreesToRadians(endPosition.lat)) *
+            Math.Sin(dLong / 2) * Math.Sin(dLong / 2);
+            double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+            double d = R * c;
+            return d; // returns the distance in meter
+        }
+
         public static placeDTO GetPlaceInfoByid(string id)
         {
             SwapDbConnection db = new SwapDbConnection();

@@ -1,12 +1,10 @@
 import React from "react";
 import "../../css/compass.css";
-import { googleKey } from "../../config.json";
 import { arrayMove, arrayRemove } from "react-movable";
 import Removable from "../dnd-list/dndList";
 import DropDown from "./../dnd-list/drodDown";
 import {
   GoogleMap,
-  useLoadScript,
   Marker,
   InfoWindow,
   DirectionsRenderer,
@@ -14,15 +12,56 @@ import {
   TrafficLayer,
 } from "@react-google-maps/api";
 
+const zeroPrefixNumber = number =>
+{
+    if(number < 10 && number >= 0) return `0${number}`;
+    return number;
+};
+
+const dateString = date =>
+{
+    const d = new Date(date);
+    const string = `${zeroPrefixNumber(d.getDate())}/${zeroPrefixNumber(d.getMonth() + 1)}/${d.getFullYear()}`;
+    return string;
+};
+
+const addressString = ({settlement, street, street_number}) =>
+{
+  return `${street} ${street_number}, ${settlement}`;
+};
+
+const setPlacesFromChosenPlaces = (places, setGooglePlaces, setEventsPlaces) =>
+{
+  const google = [];
+  const events = [];
+
+  places.forEach(place =>
+    {
+      switch(place.type)
+      {
+        case "google" :
+          google.push(place);
+        break;
+        case "event" :
+          events.push(place);
+        break;
+        default :
+        break;
+      }
+    });
+    setGooglePlaces(google);
+    setEventsPlaces(events);
+};
+
 const removeDuplicates = (array) => {
   const arrayOfPlaces = [];
   let obj = {};
   let withoutDuplicates = [];
-
   if (array.length !== 0) {
-    for (let places of array) {
-      if (places) {
-        for (let place of places) {
+    for (let item of array) {
+      if (item.places) {
+        for (let place of item.places) {
+          place.ids = item.ids;
           arrayOfPlaces.push(place);
         }
       }
@@ -31,7 +70,7 @@ const removeDuplicates = (array) => {
       obj[place.place_id] = place;
     }
   }
-  withoutDuplicates = [[...Object.values(obj)]];
+  withoutDuplicates = Object.values(obj);
   return withoutDuplicates;
 };
 
@@ -66,9 +105,13 @@ export default function Map(props) {
     removeDuplicates([...props.places])
   );
 
+  const [events, setEvents] = React.useState(props.events);
+
+  const [businesses, setBusinesses] = React.useState(props.businesses);
+
   const [position, setPosition] = React.useState({ lat: 0, lng: 0 });
 
-  const [radioValue, setradioValue] = React.useState("walk");
+  const [radioValue, setRadioValue] = React.useState("walk");
 
   const [isFinished, setIsFinished] = React.useState(false);
 
@@ -76,11 +119,12 @@ export default function Map(props) {
   if (finished === null) finished = false;
 
   if (finished && !isFinished) {
-    setradioValue(window.localStorage.getItem("radioValue"));
+    const chosenPlaces = JSON.parse(window.localStorage.getItem("places")); 
+    setRadioValue(window.localStorage.getItem("radioValue"));
     setRoute(JSON.parse(window.localStorage.getItem("route")));
-    setChosenPlaces(JSON.parse(window.localStorage.getItem("places")));
+    setChosenPlaces(chosenPlaces);
     setIsFinished(true);
-    setPlaces([[...JSON.parse(window.localStorage.getItem("places"))]]);
+    setPlacesFromChosenPlaces(chosenPlaces, setPlaces, setEvents);
   }
 
   const mapRef = React.useRef();
@@ -88,6 +132,7 @@ export default function Map(props) {
   const onMapLoad = React.useCallback((map) => {
     mapRef.current = map;
   }, []);
+
 
   const handleFinish = () => {
     const storage = window.localStorage;
@@ -99,7 +144,7 @@ export default function Map(props) {
   };
 
   const handleRadioOnChange = (changeEvent) => {
-    setradioValue(changeEvent.target.value);
+    setRadioValue(changeEvent.target.value);
     if (chosenPlaces.length !== 0)
       getRoute(chosenPlaces, changeEvent.target.value);
   };
@@ -111,7 +156,7 @@ export default function Map(props) {
     if (cplaces.length > 1) {
       for (var i = 0; i < cplaces.length - 1; i++)
         waypoints.push({
-          location: cplaces[i].geometry.location,
+          location: cplaces[i].type === "google" ? cplaces[i].geometry.location : {lat:cplaces[i].lat, lng:cplaces[i].lng},
           stopover: true,
         });
     }
@@ -132,7 +177,7 @@ export default function Map(props) {
       {
         origin: position,
         waypoints: waypoints,
-        destination: cplaces[cplaces.length - 1].geometry.location,
+        destination: cplaces[cplaces.length - 1].type === "google" ? cplaces[cplaces.length - 1].geometry.location : {lat:cplaces[cplaces.length - 1].lat, lng:cplaces[cplaces.length - 1].lng},
         travelMode: mode,
       },
       (result, status) => {
@@ -145,7 +190,7 @@ export default function Map(props) {
     );
   };
 
-  const draggPlace = (oldIndex, newIndex) => {
+  const dragPlace = (oldIndex, newIndex) => {
     const newArr = setIndexes(arrayMove(chosenPlaces, oldIndex, newIndex));
     setChosenPlaces(setIndexes(arrayMove(chosenPlaces, oldIndex, newIndex)));
     getRoute(newArr, radioValue);
@@ -166,9 +211,8 @@ export default function Map(props) {
   const getMarkers = React.useCallback(() => {
     let markers = [];
 
-    if (places.length !== 0) {
-      places.forEach((p, indexPlaces) => {
-        p.forEach((place, indexPlace) => {
+      places.forEach((place, indexPlaces) => 
+      {
           markers.push(
             <Marker
               visible={
@@ -181,7 +225,7 @@ export default function Map(props) {
               key={`${place.place_id}Marker`}
               onClick={() => {
                 const allPlaces = [...places];
-                allPlaces[indexPlaces][indexPlace].isSelected = true;
+                allPlaces[indexPlaces].isSelected = true;
                 setPlaces(allPlaces);
               }}
               label={
@@ -210,11 +254,9 @@ export default function Map(props) {
                 }) ||
                 undefined
               }
-            ></Marker>
-          );
-        });
+            ></Marker>);
       });
-    }
+
 
     return markers;
   }, [places, isFinished]);
@@ -223,7 +265,6 @@ export default function Map(props) {
   const getEventsMarkers = () => 
   {
     let markers = [];
-
       if(events)
       events.forEach((event, index) => 
       {
@@ -262,6 +303,47 @@ export default function Map(props) {
     return markers;
   }
 
+  const getBusinessesMarkers = () => 
+  {
+    let markers = [];
+      if(businesses)
+      businesses.forEach((business, index) => 
+      {
+          markers.push(
+            <Marker
+              visible={
+                isFinished ? business.isChosen !== undefined
+                    ? business.isChosen
+                    : false
+                  : true
+              }
+              onClick={() => {
+                const allBusiness = [...businesses];
+                allBusiness[index].isSelected = true;
+                setEvents(allBusiness);
+              }}
+              key={`${business.place_id}Marker`}
+              label={
+                ((business.isChosen !== undefined ? business.isChosen : false) && {
+                  color: "white",
+                  fontSize: "25px",
+                  text: (business.chosenIndex + 1).toString(),
+                }) || {
+                  fontSize: "17px",
+                  fontWeight: "bold",
+                  text: business.name,
+                }
+              }
+              position={{
+                lat: business.lat,
+                lng: business.lng,
+              }}
+              title={business.name}
+            ></Marker>);
+      });
+    return markers;
+  }
+
   const getLocation = () => {
     navigator.geolocation.getCurrentPosition((pos) => {
       setPosition({ lat: pos.coords.latitude, lng: pos.coords.longitude });
@@ -278,20 +360,21 @@ export default function Map(props) {
 
   React.useEffect(() => {
     getLocation();
-  }, []);
+    if(!isFinished) setEvents(props.events);
+  }, [props.events]);
 
 
   const getInfoWindows = () => {
     let arrInfoWindows = [];
-    places.forEach((p, indexPlaces) => {
-      p.forEach((place, indexPlace) => {
-        arrInfoWindows.push(
-          (place.isSelected !== undefined ? place.isSelected : false) && (
+    places.forEach((place, indexPlaces) => 
+    {
+        if((place.isSelected !== undefined ? place.isSelected : false))
+        arrInfoWindows.push((
             <InfoWindow
               key={`${place.place_id}InfoWindow`}
               onCloseClick={() => {
                 const allPlaces = [...places];
-                allPlaces[indexPlaces][indexPlace].isSelected = false;
+                allPlaces[indexPlaces].isSelected = false;
                 setPlaces(allPlaces);
               }}
               position={{
@@ -320,12 +403,13 @@ export default function Map(props) {
                         onClick={() => {
                           const arrPlaces = [...places];
                           const arrChosenPlaces = [...chosenPlaces];
-                          arrPlaces[indexPlaces][indexPlace].isChosen = true;
-                          arrPlaces[indexPlaces][indexPlace].chosenIndex =
+                          arrPlaces[indexPlaces].isChosen = true;
+                          arrPlaces[indexPlaces].chosenIndex =
                             chosenPlaces.length;
-                          arrPlaces[indexPlaces][indexPlace].isSelected = false;
+                          arrPlaces[indexPlaces].isSelected = false;
+                          arrPlaces[indexPlaces].type = "google";
                           arrChosenPlaces.push(
-                            arrPlaces[indexPlaces][indexPlace]
+                            arrPlaces[indexPlaces]
                           );
                           setChosenPlaces(arrChosenPlaces);
                           setPlaces(arrPlaces);
@@ -349,10 +433,86 @@ export default function Map(props) {
                 </div>
               </div>
             </InfoWindow>
-          )
-        );
-      });
+          ));
     });
+    if(events)
+    events.forEach((event, index)  => 
+      {
+        if((event.isSelected !== undefined ? event.isSelected : false))
+        arrInfoWindows.push(<InfoWindow
+          key={`${event.place_id}InfoWindow`}
+          onCloseClick={() => 
+            {
+              const allEvents = [...events];
+              allEvents[index].isSelected = false;
+              setEvents(allEvents);
+            }}
+          position={{
+            lat: event.lat,
+            lng: event.lng,
+          }}
+        >
+          <div>
+            <h4>Event</h4>
+            <span>{`Name: ${event.name}`}</span>
+            <br />
+            <span>{`Description: ${event.description}`}</span>
+            <br />
+            <span>{`Price: ${event.price} $`}</span>
+            <br />
+            <span>{`Start Date: ${dateString(event.start_date)}`}</span>
+            <br />
+            <span>{`End Date: ${dateString(event.end_date)}`}</span>
+            <br />
+            <span>{`Address: ${addressString({
+              settlement: event.settlement,
+              street: event.street,
+              street_number: event.street_number
+               })}`}</span>
+            <br />
+            <br />
+            <div className="text-center">
+              {!isFinished &&
+                ((!(event.isChosen !== undefined
+                  ? event.isChosen
+                  : false) && (
+                  <button
+                    type="button"
+                    className="btn btn-success btn-sm"
+                    onClick={() => {
+                      const arrEvents = [...events];
+                      const arrChosenPlaces = [...chosenPlaces];
+                      arrEvents[index].isChosen = true;
+                      arrEvents[index].chosenIndex =
+                        chosenPlaces.length;
+                      arrEvents[index].isSelected = false;
+                      arrEvents[index].type = "event";
+                      arrChosenPlaces.push(
+                        arrEvents[index]
+                      );
+                      setChosenPlaces(arrChosenPlaces);
+                      setEvents(arrEvents);
+                      getRoute(arrChosenPlaces, radioValue, "events");
+                    }}
+                  >
+                    Select
+                  </button>
+                )) || (
+                  <button
+                    type="button"
+                    className="btn btn-danger btn-sm"
+                    onClick={() => {
+                      event.isSelected = false;
+                      removeChosenPlace(event.chosenIndex);
+                    }}
+                  >
+                    Remove
+                  </button>
+                ))}
+            </div>
+          </div>
+        </InfoWindow>);
+      });
     return arrInfoWindows;
   };
 
@@ -368,7 +528,7 @@ export default function Map(props) {
         >
           <Removable
             list={chosenPlaces}
-            dragg={draggPlace}
+            drag={dragPlace}
             removeItem={removeChosenPlace}
           ></Removable>
         </DropDown>
@@ -403,10 +563,10 @@ export default function Map(props) {
             scaledSize: new window.google.maps.Size(14, 14),
           }}
         ></Marker>
-
         {getMarkers()}
-
+        {getEventsMarkers()}
         {getInfoWindows()}
+        {getBusinessesMarkers()}
       </GoogleMap>
     </React.Fragment>
   );

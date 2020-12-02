@@ -88,7 +88,7 @@ const AddEventModal = ({ event, handleExitModal, setAddress, handleOnChange, cli
                       onChange={e=>{handleOnChange(e)}}
                       value={start_date}
                       disabled={loading}
-                      type="datetime-local" 
+                      type="date" 
                       className="form-control"
                       name="start_date"
                     />
@@ -104,7 +104,7 @@ const AddEventModal = ({ event, handleExitModal, setAddress, handleOnChange, cli
                   onChange={e=>{handleOnChange(e)}}
                   value={end_date}
                   name="end_date"
-                  type="datetime-local" 
+                  type="date" 
                   className="form-control"
                 />
               </td>

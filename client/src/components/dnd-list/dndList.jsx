@@ -42,7 +42,7 @@ export default function Removable(props) {
           <List
             values={items}
             onChange={({ oldIndex, newIndex }) => {
-              props.dragg(oldIndex, newIndex);
+              props.drag(oldIndex, newIndex);
             }}
             renderList={({ children, props, isDragged }) => (
               <ul

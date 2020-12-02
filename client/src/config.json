@@ -3,7 +3,7 @@
   "nearBySearchUrl": "https://maps.googleapis.com/maps/api/place/nearbysearch/json",
   "textSearchUrl": "https://maps.googleapis.com/maps/api/place/textsearch/json",
   "googleIconBaseUrl":"http://maps.google.com/mapfiles/ms/icons/",
-  "radius": 1500,
+  "radius": 4000,
   "API_URL_Dev": "https://localhost:44300/api",
   "facebookConfig": {
     "appId": "222056919203332",

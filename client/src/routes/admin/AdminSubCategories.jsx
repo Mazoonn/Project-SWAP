@@ -148,7 +148,7 @@ useEffect(()=>
 
   if(loading) return(
     <React.Fragment>
-    <h3>Categories</h3>
+    <h4>Categories</h4>
     <div className="text-center">
       <div className="spinner-border text-primary">
       <span className="sr-only">Loading...</span>

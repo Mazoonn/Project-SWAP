@@ -53,8 +53,8 @@
           </Key>
           <Property Name="place_id" Type="nvarchar" MaxLength="120" Nullable="false" />
           <Property Name="price" Type="float" Nullable="false" />
-          <Property Name="end_date" Type="datetime" Nullable="false" />
-          <Property Name="start_date" Type="datetime" Nullable="false" />
+          <Property Name="end_date" Type="date" Nullable="false" />
+          <Property Name="start_date" Type="date" Nullable="false" />
         </EntityType>
         <EntityType Name="google_value">
           <Key>
@@ -173,7 +173,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__Event__event_id__2CBDA3B5">
-          <End Role="place" Type="Self.place" Multiplicity="1" />
+          <End Role="place" Type="Self.place" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Event" Type="Self.Event" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="place">
@@ -529,8 +531,8 @@
           </Key>
           <Property Name="place_id" Type="String" Nullable="false" MaxLength="120" FixedLength="false" Unicode="true" />
           <Property Name="price" Type="Double" Nullable="false" />
-          <Property Name="end_date" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="start_date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="end_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="start_date" Type="DateTime" Nullable="false" Precision="0" />
           <NavigationProperty Name="place" Relationship="SwapModel.FK__Event__event_id__2CBDA3B5" FromRole="Event" ToRole="place" />
         </EntityType>
         <EntityType Name="google_value">
@@ -736,7 +738,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__Event__event_id__2CBDA3B5">
-          <End Type="SwapModel.place" Role="place" Multiplicity="1" />
+          <End Type="SwapModel.place" Role="place" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Type="SwapModel.Event" Role="Event" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="place">
@@ -825,7 +829,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>

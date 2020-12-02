@@ -349,6 +349,7 @@
     <Compile Include="Controllers\Category\GoogleValueController.cs" />
     <Compile Include="Controllers\Category\MainCategoryController.cs" />
     <Compile Include="Controllers\Category\SubCategoryController.cs" />
+    <Compile Include="Controllers\place\events\EventsController.cs" />
     <Compile Include="Controllers\place\PlaceController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\business\BusinessController.cs" />

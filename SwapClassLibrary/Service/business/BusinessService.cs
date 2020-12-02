@@ -32,6 +32,54 @@ namespace SwapClassLibrary.Service
             return bussinesses;
         }
 
+        public static List<MapBusinessDTO> GetFilteredBusinessesAround(PointDTO position, CategoriesIdsDTO ids, double radius)
+        {
+            SwapDbConnection db = new SwapDbConnection();
+            PointDTO point = new PointDTO();
+            List<MapBusinessDTO> FilteredEvents = new List<MapBusinessDTO>();
+            List<business> businesees = db.businesses.Include(b => b.products).Where(b => b.is_active &&
+            b.approve_by_admin &&
+            b.place.r_place_sub_and_main_category.Any(r => r.main_id == ids.mainId &&
+            ids.subIds.Any(id => r.sub_id == id))).ToList();
+
+            foreach (business b in businesees)
+            {
+                point.lat = (double)b.place.latitude;
+                point.lng = (double)b.place.longitude;
+                if (PlaceService.GetDistance(point, position) <= radius) FilteredEvents.Add(new MapBusinessDTO
+                {
+                    closing_hours = b.closing_hours,
+                    description = b.place.description,
+                    lat = b.place.latitude,
+                    lng = b.place.longitude,
+                    name = b.place.name,
+                    opening_hours = b.opening_hours,
+                    place_id = b.place_id,
+                    rating = b.rating,
+                    settlement = b.place.settlement,
+                    street = b.place.street,
+                    street_number = b.place.street_number ?? "",
+                    producs = b.products.Select(product => new productDTO
+                    {
+                        business_id = product.business_id,
+                        creation_date = product.creation_date,
+                        description = product.description,
+                        discount = product.discount,
+                        discount_end_date = product.discount_end_date,
+                        discount_start_date = product.discount_start_date,
+                        is_active = product.is_active,
+                        name = product.name,
+                        price = product.price,
+                        product_id = product.product_id
+
+                    }).ToList()
+                });
+            }
+
+
+            return FilteredEvents;
+        }
+
         public static bool AddBusiness(bussinessDTO bussiness)
         {
 

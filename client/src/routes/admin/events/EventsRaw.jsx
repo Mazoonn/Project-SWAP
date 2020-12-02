@@ -19,7 +19,7 @@ const zeroPrefixNumber = number =>
 const dateString = date =>
 {
     const d = new Date(date);
-    const string = `${zeroPrefixNumber(d.getHours())}:${zeroPrefixNumber(d.getMinutes())} ${zeroPrefixNumber(d.getDate())}/${zeroPrefixNumber(d.getMonth() + 1)}/${d.getFullYear()}`;
+    const string = `${zeroPrefixNumber(d.getDate())}/${zeroPrefixNumber(d.getMonth() + 1)}/${d.getFullYear()}`;
     return string;
 };
 
