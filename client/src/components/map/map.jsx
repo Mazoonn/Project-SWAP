@@ -219,6 +219,49 @@ export default function Map(props) {
     return markers;
   }, [places, isFinished]);
 
+
+  const getEventsMarkers = () => 
+  {
+    let markers = [];
+
+      if(events)
+      events.forEach((event, index) => 
+      {
+          markers.push(
+            <Marker
+              visible={
+                isFinished ? event.isChosen !== undefined
+                    ? event.isChosen
+                    : false
+                  : true
+              }
+              onClick={() => {
+                const allEvents = [...events];
+                allEvents[index].isSelected = true;
+                setEvents(allEvents);
+              }}
+              key={`${event.place_id}Marker`}
+              label={
+                ((event.isChosen !== undefined ? event.isChosen : false) && {
+                  color: "white",
+                  fontSize: "25px",
+                  text: (event.chosenIndex + 1).toString(),
+                }) || {
+                  fontSize: "17px",
+                  fontWeight: "bold",
+                  text: event.name,
+                }
+              }
+              position={{
+                lat: event.lat,
+                lng: event.lng,
+              }}
+              title={event.name}
+            ></Marker>);
+      });
+    return markers;
+  }
+
   const getLocation = () => {
     navigator.geolocation.getCurrentPosition((pos) => {
       setPosition({ lat: pos.coords.latitude, lng: pos.coords.longitude });
