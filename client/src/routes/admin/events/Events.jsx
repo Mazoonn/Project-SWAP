@@ -3,7 +3,7 @@ import { getEvents, paginate, deleteEvent, editEvent, editEventDescription, addE
 import EventRaw from './EventsRaw';
 import EventDescriptionModal from './EventDescriptionModal';
 import FilterInput from './FilterInput';
-import AdminPagination from "../AdminPagination";
+import Pagination from "../AdminPagination";
 import AddEventModal from './AddEventModal';
 
 
@@ -452,7 +452,7 @@ class AdminEvents extends Component {
                 handleExitModal={this.handleExitDescriptionModal}
                 handleOnChange={this.handleOnChangeModal}
                />
-            <AdminPagination
+            <Pagination
                 currentPage={currentPage}
                 itemsCount={itemCount}
                 onPageChange={this.handlePageChange}

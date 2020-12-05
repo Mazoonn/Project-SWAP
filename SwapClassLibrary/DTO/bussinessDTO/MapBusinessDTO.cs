@@ -19,6 +19,6 @@ namespace SwapClassLibrary.DTO
         public string settlement { get; set; }
         public decimal lat { get; set; }
         public decimal lng { get; set; }
-        public List<productDTO> producs { get; set; }
+        public List<productDTO> products { get; set; }
     }
 }

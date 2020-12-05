@@ -48,9 +48,6 @@ namespace api.Controllers
             }
         }
 
-
-
-
         //Post api/business/AddBusinessOwner
         [Route("AddBusinessOwner")]
         [HttpPost]

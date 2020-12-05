@@ -325,7 +325,13 @@ namespace SwapClassLibrary.Service
 
             if (myEvent != null) return null;
             place = db.places.FirstOrDefault(p => p.place_id == eventToAdd.place.place_id);
-            if (place != null && place.business != null) return null;
+            if (place != null)
+            {
+                if(place.business != null) return null;
+                place.name = eventToAdd.place.name;
+                place.description = eventToAdd.place.description;
+            }
+
             myEvent = new Event
             {
                 end_date = eventToAdd.end_date,

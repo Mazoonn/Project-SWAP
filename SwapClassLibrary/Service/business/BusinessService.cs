@@ -59,7 +59,7 @@ namespace SwapClassLibrary.Service
                     settlement = b.place.settlement,
                     street = b.place.street,
                     street_number = b.place.street_number ?? "",
-                    producs = b.products.Select(product => new productDTO
+                    products = b.products.Where(p=> p.is_active && p.discount_end_date >= DateTime.Now).Select(product => new productDTO
                     {
                         business_id = product.business_id,
                         creation_date = product.creation_date,
@@ -71,7 +71,6 @@ namespace SwapClassLibrary.Service
                         name = product.name,
                         price = product.price,
                         product_id = product.product_id
-
                     }).ToList()
                 });
             }

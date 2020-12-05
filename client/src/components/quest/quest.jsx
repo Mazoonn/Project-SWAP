@@ -9,6 +9,24 @@ import { radius } from "../../config.json";
 import { fetchCoordinates } from "../../Utils/httpRequest/GoogleRequest";
 import { getBusinessesByCategories } from "../../services/BusinessService";
 
+const removeGooglePlaces = (google, businesses, events) =>
+{
+  const obj = {};
+
+  google.forEach(googleItem => 
+    { 
+      googleItem.places.forEach(place => 
+        {
+          place.ids = googleItem.ids;
+          obj[place.place_id] = place; 
+        });
+    });
+  businesses.forEach(business => { delete obj[business.place_id]; });
+  events.forEach(event => { delete obj[event.place_id]; });
+
+  return Object.values(obj);
+};
+
 const isNotHidden = categories =>
 {
   let result = false;
@@ -66,7 +84,8 @@ class Quest extends Component {
     const events = await getEvents(eventsReq);
     const data = await Promise.all(businessesRequests.map(req => getBusinessesByCategories(req)));
     const businesses = data.reduce((arr, row) => arr.concat(row), []);
-    const google = await getPlaces(places, location, true);
+    let google = await getPlaces(places, location, true);
+    google = removeGooglePlaces(google, businesses, events.data);
     keysToRemove.forEach((key) => {
       window.localStorage.removeItem(key);
     });

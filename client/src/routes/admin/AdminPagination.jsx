@@ -9,7 +9,7 @@ const Pagination = ({ itemsCount, pageSize, currentPage, onPageChange }) =>
     
     return (
         <nav>
-        <ul className="pagination">
+        <ul className="pagination mb-0">
          {pages.map(page => (
              <li
                 key={page}
