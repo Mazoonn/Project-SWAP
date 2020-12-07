@@ -52,12 +52,12 @@ namespace SwapClassLibrary.Service
                     description = b.place.description,
                     lat = b.place.latitude,
                     lng = b.place.longitude,
-                    name = b.place.name,
+                    name = b.place.name ?? "",
                     opening_hours = b.opening_hours,
                     place_id = b.place_id,
                     rating = b.rating,
-                    settlement = b.place.settlement,
-                    street = b.place.street,
+                    settlement = b.place.settlement ?? "",
+                    street = b.place.street ?? "",
                     street_number = b.place.street_number ?? "",
                     products = b.products.Where(p=> p.is_active && p.discount_end_date >= DateTime.Now).Select(product => new productDTO
                     {

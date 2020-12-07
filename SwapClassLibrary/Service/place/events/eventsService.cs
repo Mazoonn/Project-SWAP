@@ -32,8 +32,8 @@ namespace SwapClassLibrary.Service
                     start_date = e.start_date,
                     lat = e.place.latitude,
                     lng = e.place.longitude,
-                    settlement = e.place.settlement,
-                    street = e.place.street,
+                    settlement = e.place.settlement ?? "",
+                    street = e.place.street ?? "",
                     street_number = e.place.street_number ?? ""
                 }); 
             }

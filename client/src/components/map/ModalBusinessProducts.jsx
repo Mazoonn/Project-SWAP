@@ -59,7 +59,6 @@ const ModalBusinessProducts = ({ business, closeModal }) =>
                         {paginateProducts.map(product => <ProductRaw key={product.product_id} product={product} />)}
                     </tbody>
                 </table>
-
             </div>
             <div className="modal-footer d-block">
                 <div className="float-left">                

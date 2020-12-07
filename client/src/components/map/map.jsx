@@ -1,5 +1,7 @@
 import React from "react";
 import "../../css/compass.css";
+import { addQuest } from "../../services/QuestService" 
+import { getCurrentUser } from './../../services/authService';
 import { arrayMove, arrayRemove } from "react-movable";
 import Removable from "../dnd-list/dndList";
 import DropDown from "./../dnd-list/dropDown";
@@ -15,6 +17,30 @@ import {
   BicyclingLayer,
   TrafficLayer
 } from "@react-google-maps/api";
+import { getPlaceAddress } from "../../Utils/httpRequest/GoogleRequest";
+
+const getGooglePlaceDTO = async place =>
+{
+  const date = new Date();
+  const googlePlaceDTO = 
+  {
+    main_id: place.ids.main_id,
+    sub_id: place.ids.sub_id,
+  };
+  googlePlaceDTO.googlePlace = 
+  {
+    place_id: place.place_id,
+    creation_date: date,
+    latitude: place.geometry.location.lat,
+    longitude: place.geometry.location.lng,
+    name: place.name,
+  };
+  const address = await getPlaceAddress(place.place_id);
+
+  googlePlaceDTO.googlePlace = Object.assign(googlePlaceDTO.googlePlace, address);
+
+  return googlePlaceDTO;
+};
 
 const zeroPrefixNumber = number =>
 {
@@ -55,27 +81,6 @@ const setPlacesFromChosenPlaces = (places, setGooglePlaces, setEventsPlaces) =>
     });
     setGooglePlaces(google);
     setEventsPlaces(events);
-};
-
-const removeDuplicates = (array) => {
-  const arrayOfPlaces = [];
-  let obj = {};
-  let withoutDuplicates = [];
-  if (array.length !== 0) {
-    for (let item of array) {
-      if (item.places) {
-        for (let place of item.places) {
-          place.ids = item.ids;
-          arrayOfPlaces.push(place);
-        }
-      }
-    }
-    for (const place of arrayOfPlaces) {
-      obj[place.place_id] = place;
-    }
-  }
-  withoutDuplicates = Object.values(obj);
-  return withoutDuplicates;
 };
 
 
@@ -124,14 +129,42 @@ const Map = (props) => {
     mapRef.current = map;
   }, []);
 
-  
-  const handleFinish = () => {
+
+  const handleFinish = async () => {
     const storage = window.localStorage;
-    storage.setItem("radioValue", radioValue);
-    storage.setItem("isFinished", true);
-    storage.setItem("places", JSON.stringify(chosenPlaces));
-    storage.setItem("route", JSON.stringify(route));
-    setIsFinished(true);
+    const user = getCurrentUser();
+    const request = {};
+
+    if(user)
+    {
+      request.userId = user["user-id"];
+      request.eventsIds = [];
+      request.googlePlaces = [];
+      request.businessesIds = [];
+      for(const place of chosenPlaces)
+      {
+        switch(place.type)
+        {
+          case "event":
+            request.eventsIds.push(place.place_id);
+            break;
+          case "business":
+            request.businessesIds.push(place.place_id);
+            break;
+          case "google":
+            const googlePlace = await getGooglePlaceDTO(place);
+            request.googlePlaces.push(googlePlace);
+            break;
+          default: 
+        }
+      }
+      addQuest(request);   
+      storage.setItem("radioValue", radioValue);
+      storage.setItem("isFinished", true);
+      storage.setItem("places", JSON.stringify(chosenPlaces));
+      storage.setItem("route", JSON.stringify(route));
+      setIsFinished(true);
+    }
   };
 
   const handleRadioOnChange = (changeEvent) => {

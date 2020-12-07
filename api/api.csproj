@@ -354,6 +354,7 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\business\BusinessController.cs" />
     <Compile Include="Controllers\ClientController.cs" />
+    <Compile Include="Controllers\quest\QuestController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

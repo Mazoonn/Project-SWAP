@@ -272,10 +272,10 @@ namespace SwapClassLibrary.Service
                 end_date = e.end_date,
                 start_date = e.start_date,
                 price = e.price,
-                country = e.place.country,
-                settlement = e.place.settlement,
+                country = e.place.country ?? "",
+                settlement = e.place.settlement ?? "",
                 state = e.place.state ?? "",
-                street = e.place.street,
+                street = e.place.street ?? "",
                 street_number = e.place.street_number ?? "",
                 post_code = e.place.post_code ?? "",
             }).ToList();

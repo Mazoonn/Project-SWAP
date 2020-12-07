@@ -35,7 +35,6 @@ namespace SwapClassLibrary.EF
         public virtual DbSet<place> places { get; set; }
         public virtual DbSet<product> products { get; set; }
         public virtual DbSet<quest> quests { get; set; }
-        public virtual DbSet<r_place_quest> r_place_quest { get; set; }
         public virtual DbSet<r_place_sub_and_main_category> r_place_sub_and_main_category { get; set; }
         public virtual DbSet<r_sub_and_main_category> r_sub_and_main_category { get; set; }
         public virtual DbSet<sub_category> sub_category { get; set; }

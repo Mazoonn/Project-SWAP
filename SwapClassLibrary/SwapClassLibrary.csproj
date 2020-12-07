@@ -81,6 +81,7 @@
     <Compile Include="DTO\eventDTO\EventDTO.cs" />
     <Compile Include="DTO\eventDTO\MapEventDTO.cs" />
     <Compile Include="DTO\eventDTO\NewEventDTO.cs" />
+    <Compile Include="DTO\placeDTO\GooglePlaceDTO.cs" />
     <Compile Include="DTO\placeDTO\NewPlaceDTO.cs" />
     <Compile Include="DTO\placeDTO\placeToCategoryDTO.cs" />
     <Compile Include="DTO\placeDTO\placeDTO.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="DTO\categoryDTO\requestValueDTO.cs" />
     <Compile Include="DTO\clientDTO\loginDTO.cs" />
     <Compile Include="DTO\clientDTO\registerDTO.cs" />
+    <Compile Include="DTO\questDTO\QuestDTO.cs" />
     <Compile Include="EF\admin.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -139,9 +141,6 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="EF\quest.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EF\r_place_quest.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="EF\r_place_sub_and_main_category.cs">

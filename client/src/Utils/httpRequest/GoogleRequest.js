@@ -1,7 +1,7 @@
-//nearby Search request
-import { googleKey, nearBySearchUrl, textSearchUrl, radius } from "../../config.json";
-import http from "./httpRequest";
+import { resolve } from "dns";
+import {  radius } from "../../config.json";
 import Logger from "../loggerServices";
+import getAddress from './../../services/Address';
 
 export const getPlaces = async function (places, location, openNow) {
   const requests = [];
@@ -45,11 +45,29 @@ export const getPlaces = async function (places, location, openNow) {
   return results;
 };
 
+export const getPlaceAddress = async function (placeId) {
+  const service = new window.google.maps.places.PlacesService(document.createElement("div"));
+  const request = 
+  {
+    placeId,
+    fields: ["address_component"] 
+  };
+  return new Promise((resolve) => 
+  {
+    service.getDetails(request, function(PlaceResult, PlacesServiceStatus) 
+    {
+      resolve(getAddress(PlaceResult));
+    });
+  });
+};
+
+
 function getCurrentPosition(options = {}) {
   return new Promise((resolve, reject) => {
     navigator.geolocation.getCurrentPosition(resolve, reject, options);
   });
 }
+
 export const fetchCoordinates = async () => {
   try {
     const { coords } = await getCurrentPosition();
@@ -62,30 +80,3 @@ export const fetchCoordinates = async () => {
   }
 };
 
-const getNearbyPlaces = async (request) => {
-  try {
-    const list_of_places = await http.get("https://cors-anywhere.herokuapp.com/" + nearBySearchUrl, {
-      params: request,
-    });
-    return list_of_places.data.results;
-  } catch (err) {
-    Logger.log(err);
-  }
-};
-
-export const getTextSearch = async (query) => {
-  try {
-    if (!query) {
-      throw Error("Did Not enter a text to search");
-    }
-    const list_of_places = await http.get(`${textSearchUrl}?query=${query}&key=${googleKey}`);
-    // if (list_of_places.next_page_token) {
-    //   const next_page_request = getTextSearch(list_of_places.next_page_token);
-    //   list_of_places = { ...list_of_places, ...next_page_request };
-    // }
-    //filtering the results
-    return list_of_places;
-  } catch (err) {
-    Logger.log(err);
-  }
-};

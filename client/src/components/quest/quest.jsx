@@ -8,6 +8,7 @@ import { getEvents } from './../../services/EventsService';
 import { radius } from "../../config.json";
 import { fetchCoordinates } from "../../Utils/httpRequest/GoogleRequest";
 import { getBusinessesByCategories } from "../../services/BusinessService";
+import NoResults from './NoResults';
 
 const removeGooglePlaces = (google, businesses, events) =>
 {
@@ -44,7 +45,8 @@ class Quest extends Component {
     columnsInSubCategories: 3,
     columnsOfSubcategories: 2,
     isLoading: false,
-    loadingPage: false
+    loadingPage: false,
+    noResults: false
   };
 
   getPlaces = async () => {
@@ -86,6 +88,11 @@ class Quest extends Component {
     const businesses = data.reduce((arr, row) => arr.concat(row), []);
     let google = await getPlaces(places, location, true);
     google = removeGooglePlaces(google, businesses, events.data);
+    if(google.length === 0 && businesses.length === 0) 
+    {
+      this.setState( { isLoading: false, noResults: true} );
+      return;
+    }
     keysToRemove.forEach((key) => {
       window.localStorage.removeItem(key);
     });
@@ -93,6 +100,11 @@ class Quest extends Component {
     localStorage.setItem("questBusinesses", JSON.stringify(businesses));
     localStorage.setItem("questEvents", JSON.stringify(events.data));
     this.props.history.push("/");
+  };
+
+  handleCloseNoResults = () =>
+  {
+    this.setState({ noResults: false });
   };
 
   handleGetCategories = async () => {
@@ -167,7 +179,7 @@ class Quest extends Component {
     this.handleGetCategories();
   }
   render() {
-    const { isLoading, categoryList, loadingPage } = this.state;
+    const { isLoading, categoryList, loadingPage, noResults } = this.state;
 
     if(loadingPage) return <React.Fragment>
     <div className="text-center">
@@ -204,6 +216,7 @@ class Quest extends Component {
           </div>
         </div>
         <div className="container">{this.handleDivideSubCategories()}</div>
+        <NoResults noResults={noResults} handleClose={this.handleCloseNoResults} />
       </React.Fragment>
     );
   }
