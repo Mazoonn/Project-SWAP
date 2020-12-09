@@ -17,10 +17,10 @@ class NavBar extends Component {
     const { user } = this.props;
     return (
       <nav id="navbar">
-        <h3 id="head-text">Smart Walk</h3>
         <BrowserRouter>
           <div>
             <div className="header">
+            <h3 id="head-text" className="d-inline text-primary">Smart Walk</h3>
               <NavLink exact activeClassName="active" to="/">
                 Home
               </NavLink>
