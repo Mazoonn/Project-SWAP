@@ -8,3 +8,24 @@ export function clientRegister(body) {
 export function clientLogin(body) {
   return http.post(`${API_URL_Dev}/client/login`, body);
 }
+
+export function clientInfo(id) {
+  return http.get(`${API_URL_Dev}/client/getInfo/${id}`,
+  {
+    headers:{'Authorization': `Bearer ${localStorage.getItem("token")}`}
+  });
+}
+
+export function changePassword(id, password) {
+  return http.post(`${API_URL_Dev}/client/changePassword/${id}`,{ password }, 
+  {
+    headers:{'Authorization': `Bearer ${localStorage.getItem("token")}`},   
+  });
+}
+
+export function requestBusinessOwner(id) {
+  return http.post(`${API_URL_Dev}/client/requestBusinessOwner/${id}`, null, 
+  {
+    headers:{'Authorization': `Bearer ${localStorage.getItem("token")}`},   
+  });
+}

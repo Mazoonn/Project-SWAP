@@ -7,6 +7,8 @@ using System.Web.Http;
 using SwapClassLibrary.DTO;
 using SwapClassLibrary.EF;
 using SwapClassLibrary.Service;
+using api.Authorization;
+
 namespace api.Controllers
 {
     [RoutePrefix("api/client")]
@@ -70,56 +72,56 @@ namespace api.Controllers
 
         }
 
-        // לא מחייב רק אופציה
-        [Route("collectingData")]
+        [Route("getInfo/{userId}")]
+        [HttpGet]
+        [SelfAuthorization()]
+        public HttpResponseMessage GetInfo(string userId)
+        {
+            try
+            {
+                clientInfoDTO user = clientService.GetClientInfo(userId);
+                if (user == null) return Request.CreateResponse(HttpStatusCode.NotFound, "User not found");
+                return Request.CreateResponse(HttpStatusCode.OK, user);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
+        }
+
+
+        [Route("changePassword/{userId}")]
         [HttpPost]
-        public int collectingData()
+        [SelfAuthorization()]
+        public HttpResponseMessage ChangePassword(string userId, [FromBody] dynamic password)
         {
-            return 0;
+            try
+            {
+                bool result = clientService.ChangePassword(userId, (string) password.password);
+                if (!result) return Request.CreateResponse(HttpStatusCode.BadRequest, "Bad Request");
+                return Request.CreateResponse(HttpStatusCode.OK, result);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
         }
 
-        [Route("DeleteClient")]
+        [Route("requestBusinessOwner/{userId}")]
         [HttpPost]
-        public int DeleteClient()
+        [SelfAuthorization()]
+        public HttpResponseMessage RequestBusinessOwner(string userId)
         {
-            return 0;
-        }
-
-
-        [Route("EditClient")]
-        [HttpPost]
-        public int EditClient()
-        {
-            return 0;
-        }
-
-
-        [Route("ChangeActiveClient")]
-        [HttpPost]
-        public int ChangeActiveClient()
-        {
-            return 0;
-        }
-
-        //start / Edit / remove Mission
-        [Route("StartQuest")]
-        [HttpPost]
-        public int StartQuest()
-        {
-            return 0;
-        }
-        [Route("ContinueQuest")]
-        [HttpPut]
-        public int ContinueQuest()
-        {
-            return 0;
-        }
-
-        [Route("RemoveContinueQuest")]
-        [HttpDelete]
-        public int RemoveContinueQuest()
-        {
-            return 0;
+            try
+            {
+                bool result = clientService.RequestBusinessOwner(userId);
+                if (!result) return Request.CreateResponse(HttpStatusCode.BadRequest, "Bad Request");
+                return Request.CreateResponse(HttpStatusCode.OK, result);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
         }
     }
 }

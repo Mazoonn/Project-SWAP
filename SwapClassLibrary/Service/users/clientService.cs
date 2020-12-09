@@ -123,6 +123,55 @@ namespace SwapClassLibrary.Service
             }
             return "client";
         }
+
+        public static clientInfoDTO GetClientInfo(string clientId)
+        {
+            SwapDbConnection db = new SwapDbConnection();
+            return db.clients.Select(c => new clientInfoDTO
+            {
+                actor = c.BusinessOwner != null ? (c.BusinessOwner.admin != null ? "admin" : "business") : "client",
+                client_id = c.client_id,
+                birthday_date = c.birthday_date ?? "",
+                email = c.email,
+                first_name = c.first_name,
+                last_login = c.last_login,
+                last_name = c.last_name,
+                phone = c.phone,
+                platform = c.platform,
+                request = c.business_owner_request ?? false,
+                sex = c.sex ?? ""
+            }).FirstOrDefault(c => c.client_id == clientId);
+        }
+
+        public static bool ChangePassword(string clientId, string password)
+        {
+            SwapDbConnection db = new SwapDbConnection();
+            HashSalt newPasswordSalt;
+            client user = db.clients.FirstOrDefault(c => c.client_id == clientId);
+
+            if (user == null) return false;
+            if (user.platform != "local") return false;
+
+            newPasswordSalt = HashSalt.GenerateSaltedHash(password);
+            user.salt = newPasswordSalt.Salt;
+            user.password = newPasswordSalt.Hash;
+            db.SaveChanges();
+
+            return true;
+        }
+
+        public static bool RequestBusinessOwner(string clientId)
+        {
+            SwapDbConnection db = new SwapDbConnection();
+            client user = db.clients.FirstOrDefault(c => c.client_id == clientId);
+
+            if (user == null) return false;
+            if (user.business_owner_request ?? false) return false;
+            user.business_owner_request = true;
+            db.SaveChanges();
+
+            return true;
+        }
     }
 
 }

@@ -596,7 +596,7 @@ const Map = (props) => {
 
   return (
     <React.Fragment>
-      {places.length !== 0 && (
+      {(places.length !== 0 || events.length !== 0 || businesses.length !== 0) && (
         <DropDown
           handleFinish={handleFinish}
           handleRadioChange={handleRadioOnChange}

@@ -3,7 +3,7 @@ import Login from "../routes/login";
 import Register from "../routes/register";
 import Admin from "../routes/admin/AdminPage";
 import Business from "../routes/business/businessPage";
-import Profile from "../routes/profile/profilePage";
+import Profile from "../routes/profile/profile";
 import Home from "../routes/HomePage";
 import { BrowserRouter, Switch, Route, NavLink } from "react-router-dom";
 import Quest from "./quest/quest";

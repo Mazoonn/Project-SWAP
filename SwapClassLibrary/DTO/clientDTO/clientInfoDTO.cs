@@ -17,7 +17,7 @@ namespace SwapClassLibrary.DTO
         public System.DateTime last_login ;
         public string phone;
         public string actor;
-        public bool request;
+        public bool? request;
         public string platform;
     }
 }

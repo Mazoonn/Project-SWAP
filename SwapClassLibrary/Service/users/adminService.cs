@@ -130,6 +130,7 @@ namespace SwapClassLibrary.Service
         {
             if (currentRole == "client")
             {
+                user.business_owner_request = false;
                 user.BusinessOwner = new BusinessOwner()
                 {
                     business_owner_id = user.client_id,
@@ -157,6 +158,7 @@ namespace SwapClassLibrary.Service
         {
             if (currentRole == "client")
             {
+                user.business_owner_request = false;
                 user.BusinessOwner = new BusinessOwner()
                 {
                     business_owner_id = user.client_id

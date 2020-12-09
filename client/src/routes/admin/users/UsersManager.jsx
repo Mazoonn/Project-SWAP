@@ -69,6 +69,8 @@ class UsersManager extends Component
         const users = [...this.state.users];
         const index = users.indexOf(user);
         users[index]["actor"] = user["actor_new"];
+        if(user["actor_new"] === "admin" || user["actor_new"] === "business")
+        users[index].request = false;
         this.setState({users, loading: false});
       }  
       catch(err)
