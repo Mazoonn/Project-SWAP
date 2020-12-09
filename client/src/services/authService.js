@@ -9,12 +9,12 @@ export function getCurrentUser()
     try 
     {
      decoded = jwt.verify(token, key["public-key"]);
+     return decoded;
     } 
     catch(err) 
     {
     return null;
     }
-    return decoded;
 }
 
 export function isAdmin() 

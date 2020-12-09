@@ -3,8 +3,9 @@ import { getEvents, paginate, deleteEvent, editEvent, editEventDescription, addE
 import EventRaw from './EventsRaw';
 import EventDescriptionModal from './EventDescriptionModal';
 import FilterInput from './FilterInput';
-import AdminPagination from "../AdminPagination";
+import Pagination from "../AdminPagination";
 import AddEventModal from './AddEventModal';
+import getAddress from "../../../services/Address"
 
 
 const filterEvents = (events ,name, country, settlement, street) =>
@@ -38,38 +39,6 @@ const addressValidate = address =>
         return "Address must contain Country, Settlement and Street Name";
     return ""
 }
-
-const getAddress = place =>
-{
-    const componentForm = {
-        street_number: "short_name",
-        route: "long_name",
-        locality: "long_name",
-        administrative_area_level_1: "short_name",
-        country: "long_name",
-        postal_code: "short_name",
-      };
-    const addressForm =
-    {
-        street_number: "street_number",
-        country: "country",
-        postal_code: "post_code",
-        locality: "settlement",
-        administrative_area_level_1: "state",
-        route: "street"
-    };
-    const newPlace = {};
-
-    for (const component of place.address_components) 
-    {
-        const addressType = component.types[0];
-
-    if (componentForm[addressType]) 
-     newPlace[addressForm[addressType]] = component[componentForm[addressType]];
-    }
-
-     return newPlace;
-};
 
 const getPlace = address =>
 {
@@ -452,7 +421,7 @@ class AdminEvents extends Component {
                 handleExitModal={this.handleExitDescriptionModal}
                 handleOnChange={this.handleOnChangeModal}
                />
-            <AdminPagination
+            <Pagination
                 currentPage={currentPage}
                 itemsCount={itemCount}
                 onPageChange={this.handlePageChange}

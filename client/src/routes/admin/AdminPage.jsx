@@ -6,25 +6,25 @@ import UsersManager from './users/UsersManager';
 import AdminBusinesses from './businesses/AdminBusinesses';
 import AdminEvents from './events/Events';
 
+
 const data = {
-name: ["Categories", "Sub Categories", "Manage Users", "Businesses", "Events"],
+name: ["Categories", "Sub Categories", "Manage Users", "Businesses", "Events" ],
 component: [<AdminCategories />, <AdminSubCategories />, <UsersManager />,<AdminBusinesses />, <AdminEvents/> ]
 } 
 
 class AdminPage extends Component {
   state = {
-    selected: -1
+    selected: 0
   };
 
-  handleClick = (index) => 
+  handleClick = index => 
   {
-    const selected = this.state.selected !== index ? index : -1;
-    this.setState({selected});
+    if(this.state.selected !== index) this.setState({ selected: index });
   };
 
   render() {
     const { selected } = this.state;
-    const { name, component} = data;
+    const { name, component } = data;
 
     return (
       <React.Fragment>
@@ -37,9 +37,7 @@ class AdminPage extends Component {
             />
           </div>
           <div className="col">
-            {
-              (selected !== -1) && component[selected]
-            }
+            {component[selected]}
           </div>
         </div>
       </React.Fragment>

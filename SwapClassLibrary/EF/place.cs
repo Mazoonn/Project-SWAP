@@ -17,28 +17,28 @@ namespace SwapClassLibrary.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public place()
         {
-            this.r_place_quest = new HashSet<r_place_quest>();
             this.r_place_sub_and_main_category = new HashSet<r_place_sub_and_main_category>();
+            this.quests = new HashSet<quest>();
         }
     
         public string place_id { get; set; }
         public System.DateTime creation_date { get; set; }
         public decimal latitude { get; set; }
         public decimal longitude { get; set; }
-        public string country { get; set; }
-        public string street { get; set; }
-        public string street_number { get; set; }
         public string state { get; set; }
         public string post_code { get; set; }
-        public string settlement { get; set; }
-        public string name { get; set; }
         public string description { get; set; }
+        public string name { get; set; }
+        public string settlement { get; set; }
+        public string street_number { get; set; }
+        public string street { get; set; }
+        public string country { get; set; }
     
         public virtual business business { get; set; }
         public virtual Event Event { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<r_place_quest> r_place_quest { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<r_place_sub_and_main_category> r_place_sub_and_main_category { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<quest> quests { get; set; }
     }
 }

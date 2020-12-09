@@ -185,7 +185,7 @@ class UsersManager extends Component
                 </tr>
               </thead>
               <tbody>
-                {newUsers.map(user=><UserRaw
+                {newUsers.map(user => <UserRaw
                   key={user["client_id"]} 
                   user={user}
                   handelSelectOnChange={this.handelSelectOnChange}

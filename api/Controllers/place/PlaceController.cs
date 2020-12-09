@@ -14,7 +14,6 @@ namespace api.Controllers
     [RoutePrefix("api/place")]
     public class PlaceController : ApiController
     {
-        
         [Route("GetPlace/{place_id}")]
         [HttpGet]
         public HttpResponseMessage GetPlace(string place_id ,bool test = false)

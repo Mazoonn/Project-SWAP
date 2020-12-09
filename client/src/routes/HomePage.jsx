@@ -7,7 +7,18 @@ class HomePage extends Component {
     return (
       <React.Fragment>
         <Map
-          places={JSON.parse(localStorage.getItem("questPlaces")) || []}
+          places=
+          {
+            JSON.parse(localStorage.getItem("questPlaces")) || [] 
+          }
+          events=
+          {
+            JSON.parse(localStorage.getItem("questEvents")) || []
+          }
+          businesses=
+          {
+            JSON.parse(localStorage.getItem("questBusinesses")) || []
+          }
         ></Map>
       </React.Fragment>
     );

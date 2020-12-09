@@ -17,18 +17,17 @@ namespace SwapClassLibrary.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public quest()
         {
-            this.r_place_quest = new HashSet<r_place_quest>();
+            this.places = new HashSet<place>();
         }
     
         public string quest_id { get; set; }
         public System.DateTime creation_date { get; set; }
-        public string name { get; set; }
-        public string descrition { get; set; }
-        public Nullable<decimal> been_used { get; set; }
         public string client_id { get; set; }
+        public string name { get; set; }
+        public string description { get; set; }
     
         public virtual client client { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<r_place_quest> r_place_quest { get; set; }
+        public virtual ICollection<place> places { get; set; }
     }
 }
