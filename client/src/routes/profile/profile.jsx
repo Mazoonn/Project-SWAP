@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { getCurrentUser } from './../../services/authService';
-import { clientInfo, changePassword, requestBusinessOwner } from "../../services/client"
+import { clientInfo, changePassword, requestBusinessOwner } from "../../services/client";
+import { dateString } from './../../services/date';
+import UserBirthdayModal from './userBirthdayModal';
 
 const roles =
     {
-        client:"Client",
+        client: "Client",
         business: "Business Owner",
         admin: "Admin"
     };
@@ -17,15 +19,15 @@ const getFullName = (firstName, LastName) =>
     return `${First_Name} ${Last_Name}`;
 };
 
-const getAge = dateString =>
+const getAge = userDateString =>
 {
-        const date = new Date(dateString);
+        const date = new Date(userDateString);
         if(date != "Invalid Date")
         {
         const timeNow = new Date().getTime();
         const timeDate = date.getTime();
         const timeAge = timeNow - timeDate;
-        return  Math.floor(timeAge/(1000 * 60 * 60 * 24 * 365.25));
+        return  `${Math.floor(timeAge/(1000 * 60 * 60 * 24 * 365.25))} years (${dateString(userDateString)})`;
         }
         return "";
 };
@@ -43,30 +45,26 @@ const getClientInfo = async () =>
         catch(err)
         {
             console.log(err);
+            return {};
         }
     }
     return null;
 };
 
+
 class Profile extends Component {
     state = 
     {
-        user: 
+        user: {},
+        newValues:
         {
-            clientId: "",          
-            actor: "",   
-            birthday_date: "",
-            email: "",
-            first_name: "",
-            last_login: "",
-            last_name: "",
+            password: "",
+            sex: "male",
             phone: "",
-            platform: "",
-            request: false,
-            sex: "",
+            birthday_date: "",
         },
-        password: "",
-        loadingPage: false      
+        loadingPage: false,
+        allowBirthdayModal: false     
     }
 
     componentDidMount() 
@@ -77,24 +75,32 @@ class Profile extends Component {
     handleGetUser = async () =>
     {
         this.setState({ loadingPage: true });
+        const newValues = { ...this.state.newValues };
         const user = await getClientInfo();
-        if(user) this.setState({ user, loadingPage: false });
+        user.phone && (newValues.phone = user.phone);
+        user.sex && (newValues.sex = user.sex);
+        user.birthday_date && (newValues.birthday_date = user.birthday_date);      
+        if(user) this.setState({ user, newValues, loadingPage: false });
     }
 
     handlePasswordOnChange = event =>
     {
-        this.setState({ password: event.target.value });
+        const newValues = { ...this.state.newValues };
+        newValues.password = event.target.value;
+        this.setState({ newValues });
     }
 
-    handleChangePassword = async ()=>
+    handleChangePassword = async () =>
     {
         this.setState({ loadingPage: true });
         try
         {
             const { client_id } = this.state.user;
-            const { password } = this.state;
+            const newValues = { ...this.state.newValues };
+            const { password } = newValues;
             await changePassword(client_id, password);
-            this.setState({ password: "", loadingPage: false });
+            newValues.password = "";
+            this.setState({ newValues, loadingPage: false });
         }
         catch(err)
         {
@@ -121,9 +127,54 @@ class Profile extends Component {
         }
     }
 
+    handleDateOnChange = event =>
+    {
+        const newValues = { ...this.state.newValues };
+        newValues.birthday_date = event.target.value;
+        this.setState({ newValues });
+    }
+
+    handleOnChangeNewValues = event =>
+    {
+        const newValues = { ...this.state.newValues };
+        const { name, value } = event.target;
+        if(name === "phone" && value.match(/^(\s*|\d+)$/) == null) return;
+        newValues[name] = value;
+        this.setState({ newValues });
+    }
+
+    areChanges = () =>
+    {
+        const names = ["phone", "sex"];
+        const { newValues, user } = this.state;
+        return names.some(name => newValues[name] !== user[name]) &&
+        !names.some(name => !newValues[name]);
+    }
+
+    handleAllowModal = () =>
+    {
+        this.setState({ allowBirthdayModal: true });
+    }
+
+    handleCloseModal = () =>
+    {
+        const newValues = { ...this.state.newValues };
+        const { birthday_date } = this.state.user;
+        newValues.birthday_date = birthday_date;
+        this.setState({ newValues, allowBirthdayModal: false });
+    }
+
+    isDateChanges = () =>
+    {
+        const { birthday_date: originalDate } = this.state.user;
+        const { birthday_date: newDate } = this.state.newValues;
+        return (originalDate !== newDate) && newDate;
+    }
+
     render() 
     { 
-        const { password, loadingPage } = this.state;
+        const noUser = Object.keys(this.state.user).length === 0;
+        const { loadingPage, allowBirthdayModal } = this.state;
         if(loadingPage) return <React.Fragment>
         <div className="text-center">
           <div className="spinner-border text-primary">
@@ -132,60 +183,93 @@ class Profile extends Component {
         </div>
         </React.Fragment>;
 
-        const { actor, birthday_date, email, first_name, last_login, last_name,
-            phone, platform, request, sex } = this.state.user;
+        const { actor, birthday_date, email, first_name, last_name,
+         platform, request } = this.state.user;
         const requestBusinessOwner = (actor === "client") && !request;
+        const { password, sex, phone, birthday_date: newBirthday } = this.state.newValues;
 
-        return (<div>
+        return (<React.Fragment><div>
                 <div className="card m-auto w-25">
         <h5 className="card-header">Account</h5>
         <div className="card-body">
-            <h5 className="text-primary">{getFullName(first_name, last_name)}</h5>
+            <h5 className="text-primary">{getFullName(first_name || "", last_name || "")}</h5>
             <span><p>{roles[actor]}</p></span>   
             <table>
             <tbody>
             <tr>
-              <td className="pb-2 pt-2 pr-4"><b>First name:</b></td>
-              <td className="pb-2 pt-2">{first_name}</td>
+              <td className="pb-2 pt-2 pr-4"><b>First name</b></td>
+              <td className="pb-2 pt-2">{first_name || ""}</td>
             </tr>
             <tr>
-              <td className="pb-2 pt-2"><b>Last name:</b></td>
-              <td className="pb-2 pt-2">{last_name}</td>
+              <td className="pb-2 pt-2"><b>Last name</b></td>
+              <td className="pb-2 pt-2">{last_name|| ""}</td>
             </tr>
             <tr>
-              <td className="pb-2 pt-2"><b>Email:</b></td>
-              <td className="pb-2 pt-2">{email}</td>
+              <td className="pb-2 pt-2"><b>Email</b></td>
+              <td className="pb-2 pt-2">{email|| ""}</td>
             </tr>
              <tr hidden={platform !== "local"}>
-                <td className="pb-2 pt-2 pr-2"><b>New password:</b></td>
+                <td className="pb-2 pt-2 pr-2">
+                    <label htmlFor="password">
+                        <b>New password</b>
+                    </label>
+                </td>
                 <td className="pb-2 pt-2">
-                  <input onChange={event => {this.handlePasswordOnChange(event)}} value={password} type="text" className="form-control" />
+                  <input id="password" onChange={this.handlePasswordOnChange} value={password} type="text" className="form-control" />
                 </td>
                 <td>
                     <button onClick={this.handleChangePassword} disabled={password.length < 6} className="btn btn-primary">Save</button>
                 </td>
             </tr>
             <tr>
-              <td className="pb-2 pt-2"><b>Phone:</b></td>
-              <td className="pb-2 pt-2">{phone}</td>
+              <td className="pb-2 pt-2"><b>Age</b></td>
+              <td className="pb-2 pt-2">{getAge(birthday_date || "")}</td>
+              <td className="pb-2 pt-2"><button onClick={this.handleAllowModal} disabled={noUser} className="btn btn-primary">Change</button></td>
+            </tr>
+            <tr className="border-top">
+              <td className="pb-2 pt-2">
+                    <label htmlFor="phone">
+                      <b>Phone</b>
+                    </label>                  
+              </td>
+              <td className="pb-2 pt-2">
+                  <input id="phone" onChange={this.handleOnChangeNewValues} name="phone" type="text" className="form-control" value={phone}/>
+              </td>
+              <td></td>
             </tr>
             <tr>
-              <td className="pb-2 pt-2"><b>Age:</b></td>
-              <td className="pb-2 pt-2">{getAge(birthday_date)}</td>
-            </tr>
-            <tr>
-              <td className="pb-2 pt-2"><b>Sex:</b></td>
-              <td className="pb-2 pt-2">{sex}</td>
+                <td className="pb-2 pt-2">
+                    <label htmlFor="sex">
+                        <b>Sex</b>
+                    </label>
+                </td>
+              <td className="pb-2 pt-2">
+                <select id="sex" onChange={this.handleOnChangeNewValues} className="form-control" name="sex" value={sex}>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+             </td>
             </tr>                      
             </tbody> 
             </table>
+            <div className="text-center">
+                <button disabled={!this.areChanges() || noUser} className="btn btn-primary">Save Changes</button>
+            </div>
         </div>
         <div hidden={!requestBusinessOwner} className="card-footer">
             <b>Ask to become a business owner</b>
             <button onClick={this.handleRequestBusinessOwner} className="btn btn-primary ml-2">Request</button>
         </div>
       </div>
-        </div>);
+        </div>
+        <UserBirthdayModal 
+            allowModal={allowBirthdayModal} 
+            handleClose={this.handleCloseModal}
+            birthday={newBirthday}
+            onChange={this.handleDateOnChange}
+            isDateChanges={this.isDateChanges}
+        />
+        </React.Fragment>);
     }
 }
  

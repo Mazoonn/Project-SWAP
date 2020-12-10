@@ -1,4 +1,5 @@
 import React from 'react';
+import { dateString } from "../../../services/date";
 
 const values = ["name", "price"];
 
@@ -8,19 +9,6 @@ const dateExpired = date =>
     const timeDate = new Date(date).getTime();
     
     return timeDate < timeNow; 
-};
-
-const zeroPrefixNumber = number =>
-{
-    if(number < 10 && number >= 0) return `0${number}`;
-    return number;
-};
-
-const dateString = date =>
-{
-    const d = new Date(date);
-    const string = `${zeroPrefixNumber(d.getDate())}/${zeroPrefixNumber(d.getMonth() + 1)}/${d.getFullYear()}`;
-    return string;
 };
 
 const areChanged = event =>
