@@ -3,7 +3,7 @@ import Login from "../routes/login";
 import Register from "../routes/register";
 import Admin from "../routes/admin/AdminPage";
 import Business from "../routes/business/businessPage";
-import Profile from "../routes/profile/profilePage";
+import Profile from "../routes/profile/profile";
 import Home from "../routes/HomePage";
 import { BrowserRouter, Switch, Route, NavLink } from "react-router-dom";
 import Quest from "./quest/quest";
@@ -17,43 +17,43 @@ class NavBar extends Component {
     const { user } = this.props;
     return (
       <nav id="navbar">
-        <h3 id="head-text">Smart Walk</h3>
         <BrowserRouter>
           <div>
             <div className="header">
-              <NavLink exact activeClassName="active" to="/">
+            <h3 id="head-text" className="d-inline text-primary">Smart Walk</h3>
+              <NavLink exact activeClassName="active font-weight-bold" to="/">
                 Home
               </NavLink>
               {!user && (
                 <React.Fragment>
-                  <NavLink activeClassName="active" to="/login">
+                  <NavLink exact activeClassName="active font-weight-bold" to="/login">
                     Login
                   </NavLink>
-                  <NavLink activeClassName="active" to="/register">
+                  <NavLink exact activeClassName="active font-weight-bold" to="/register">
                     Register
                   </NavLink>
                 </React.Fragment>
               )}
               {user && (
                 <React.Fragment>
-                  <NavLink activeClassName="active" to="/quest">
+                  <NavLink exact activeClassName="active font-weight-bold" to="/quest">
                     Quest
                   </NavLink>
-                  <NavLink activeClassName="active" to="/logout">
+                  <NavLink exact activeClassName="active font-weight-bold" to="/logout">
                     Logout
                   </NavLink>
-                  <NavLink activeClassName="active" to="/profile">
+                  <NavLink exact activeClassName="active font-weight-bold" to="/profile">
                     Profile
                   </NavLink>
                 </React.Fragment>
               )}
               {user && (user["role"] === "business" || user["role"] === "admin") && (
-                <NavLink activeClassName="active" to="/business">
+                <NavLink exact activeClassName="active font-weight-bold" to="/business">
                   Business Owner Page
                 </NavLink>
               )}
               {user && user["role"] === "admin" && (
-                <NavLink activeClassName="active" to="/admin">
+                <NavLink exact activeClassName="active font-weight-bold" to="/admin">
                   Admin
                 </NavLink>
               )}

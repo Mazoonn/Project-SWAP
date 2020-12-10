@@ -7,6 +7,8 @@ using System.Web.Http;
 using SwapClassLibrary.DTO;
 using SwapClassLibrary.EF;
 using SwapClassLibrary.Service;
+using api.Authorization;
+
 namespace api.Controllers
 {
     [RoutePrefix("api/client")]
@@ -70,41 +72,16 @@ namespace api.Controllers
 
         }
 
-        // לא מחייב רק אופציה
-        [Route("collectingData")]
-        [HttpPost]
-        public int collectingData()
-        {
-            return 0;
-        }
-
-        [Route("getClientInfo")]
-        [HttpPost]
-        public HttpResponseMessage getClientInfo([FromBody]string client_Id)
+        [Route("getInfo/{userId}")]
+        [HttpGet]
+        [SelfAuthorization()]
+        public HttpResponseMessage GetInfo(string userId)
         {
             try
             {
-                clientInfoDTO client_info = clientService.getClientInfo(client_Id);
-                if (client_info==null)
-                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is no client with this ID");
-                return Request.CreateResponse(HttpStatusCode.OK, client_info);
-            }
-            catch (Exception e)
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
-            }
-        }
-        
-        [Route("EditClient")]
-        [HttpPost]
-        public HttpResponseMessage EditClient([FromBody]clientInfoDTO client_info)
-        {
-            try
-            {
-                bool is_change = clientService.EditClient(client_info);
-                if (is_change == null)
-                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is no client with this ID");
-                return Request.CreateResponse(HttpStatusCode.OK, is_change);
+                clientInfoDTO user = clientService.GetClientInfo(userId);
+                if (user == null) return Request.CreateResponse(HttpStatusCode.NotFound, "User not found");
+                return Request.CreateResponse(HttpStatusCode.OK, user);
             }
             catch (Exception e)
             {
@@ -113,16 +90,16 @@ namespace api.Controllers
         }
 
 
-        [Route("DeleteClient")]
-        [HttpDelete]
-        public HttpResponseMessage DeleteClient([FromBody]string client_Id)
+        [Route("changePassword/{userId}")]
+        [HttpPost]
+        [SelfAuthorization()]
+        public HttpResponseMessage ChangePassword(string userId, [FromBody] dynamic password)
         {
             try
             {
-                bool is_deleted = clientService.DeleteClient(client_Id);
-                if (!is_deleted)
-                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is no client with this ID");
-                return Request.CreateResponse(HttpStatusCode.OK, is_deleted);
+                bool result = clientService.ChangePassword(userId, (string) password.password);
+                if (!result) return Request.CreateResponse(HttpStatusCode.BadRequest, "Bad Request");
+                return Request.CreateResponse(HttpStatusCode.OK, result);
             }
             catch (Exception e)
             {
@@ -130,27 +107,21 @@ namespace api.Controllers
             }
         }
 
-
-      
-        //start / Edit / remove Mission
-        [Route("StartQuest")]
+        [Route("requestBusinessOwner/{userId}")]
         [HttpPost]
-        public int StartQuest()
+        [SelfAuthorization()]
+        public HttpResponseMessage RequestBusinessOwner(string userId)
         {
-            return 0;
-        }
-        [Route("ContinueQuest")]
-        [HttpPut]
-        public int ContinueQuest()
-        {
-            return 0;
-        }
-
-        [Route("RemoveContinueQuest")]
-        [HttpDelete]
-        public int RemoveContinueQuest()
-        {
-            return 0;
+            try
+            {
+                bool result = clientService.RequestBusinessOwner(userId);
+                if (!result) return Request.CreateResponse(HttpStatusCode.BadRequest, "Bad Request");
+                return Request.CreateResponse(HttpStatusCode.OK, result);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
         }
     }
 }

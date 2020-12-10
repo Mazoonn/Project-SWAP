@@ -130,6 +130,7 @@ namespace SwapClassLibrary.Service
         {
             if (currentRole == "client")
             {
+                user.business_owner_request = false;
                 user.BusinessOwner = new BusinessOwner()
                 {
                     business_owner_id = user.client_id,
@@ -157,6 +158,7 @@ namespace SwapClassLibrary.Service
         {
             if (currentRole == "client")
             {
+                user.business_owner_request = false;
                 user.BusinessOwner = new BusinessOwner()
                 {
                     business_owner_id = user.client_id
@@ -320,14 +322,12 @@ namespace SwapClassLibrary.Service
         static public EventDTO AddEvent(NewEventDTO eventToAdd)
         {
             SwapDbConnection db = new SwapDbConnection();
-            Event myEvent = db.Events.FirstOrDefault(e => e.place_id == eventToAdd.place.place_id);
-            place place;
-
-            if (myEvent != null) return null;
-            place = db.places.FirstOrDefault(p => p.place_id == eventToAdd.place.place_id);
+            Event myEvent;
+            place place = db.places.FirstOrDefault(p => p.place_id == eventToAdd.place.place_id);
+      
             if (place != null)
             {
-                if(place.business != null) return null;
+                if(place.business != null || place.Event != null) return null;
                 place.name = eventToAdd.place.name;
                 place.description = eventToAdd.place.description;
             }
@@ -341,7 +341,7 @@ namespace SwapClassLibrary.Service
                 place = place ?? new place
                 {
                     place_id = eventToAdd.place.place_id,
-                    country = eventToAdd.place.country,
+                    country = eventToAdd.place.country ?? "",
                     creation_date = DateTime.Now,
                     description = eventToAdd.place.description,
                     name = eventToAdd.place.name,
@@ -359,17 +359,17 @@ namespace SwapClassLibrary.Service
 
             return new EventDTO
             {
-                country = myEvent.place.country,
+                country = myEvent.place.country ?? "",
                 description = myEvent.place.description ?? "",
                 end_date = myEvent.end_date,
                 name = myEvent.place.name ?? "",
                 place_id = myEvent.place_id,
                 post_code = myEvent.place.post_code ?? "",
                 price = myEvent.price,
-                settlement = myEvent.place.settlement,
+                settlement = myEvent.place.settlement ?? "",
                 start_date = myEvent.start_date,
                 state = myEvent.place.state ?? "",
-                street = myEvent.place.street,
+                street = myEvent.place.street ?? "",
                 street_number = myEvent.place.street_number ?? ""
             };
         }
