@@ -220,15 +220,5 @@ namespace api.Controllers.admin
             }
         }
 
-
-        //TODO add in the DB
-        ////approve / Edit / remove Business
-        //[Route("ApproveBusiness")]
-        //[HttpPut]
-        //public HttpResponseMessage ApproveBusiness()
-        //{
-        //    return 0;
-        //}
-
     }
 }

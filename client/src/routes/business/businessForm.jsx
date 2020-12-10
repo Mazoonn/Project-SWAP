@@ -1,34 +1,67 @@
 import React, { Component } from "react";
 import { getAllMainCategoriesAdmin } from "../../services/Categories";
 import * as BusinessService from "../../services/Business";
-import * as PlaceService from "../../services/place";
+import SearchLocation from "../admin/events/searchLocation";
 import { getSubCategoriesId } from "../../services/SubCategory";
-import LocationSearchInput from "../../components/LocationSearchInput";
-import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
+import getAddress from "../../services/Address";
+import { getCurrentUser } from "../../services/authService";
 
+const isDisable = (formDataInfo) => {
+  //is active not needed
+  const values = ["name", "description", "opening_hours", "closing_hours", "address", "main_id", "sub_id"];
+  let isEmptyAddress = false;
+  values.forEach((value) => {
+    if (!formDataInfo[value]) isEmptyAddress = true;
+  });
+  return isEmptyAddress;
+};
 class BusinessForm extends Component {
   state = {
-    formData: { business_owner_id: this.props.business_owner_id },
+    formData: {},
     mainCategoryList: [],
     subCategoryList: [],
     mainCategorySelectedIndex: 0,
-
     place: {},
     address: "",
   };
 
   async componentDidMount() {
+    const user = getCurrentUser();
+    this.setState({ formData: { business_owner_id: user[`user-id`] } });
     const mainCategoryList = await getAllMainCategoriesAdmin();
     this.setState({ mainCategoryList });
   }
 
-  handleAddBusiness = async () => {
-    const data = this.state.formData;
-    const place_id = await PlaceService.AddPlace(this.state.place);
-    if (place_id) {
-      await BusinessService.addBusiness({ ...data, place_id });
-      await PlaceService.addOrEditPlaceToCategory({ main_id: data.main_id, sub_id: data.sub_id, place_id });
+  setAddress = (place) => {
+    const formData = { ...this.state.formData };
+    formData.address = {};
+    if (place.address_components) {
+      formData.address = getAddress(place);
+      formData.address.place_id = place.place_id;
+      formData.address.place_id = place.place_id;
+      formData.address.latitude = place.geometry.location.lat();
+      formData.address.longitude = place.geometry.location.lng();
+      formData.address.name = formData.name;
+      formData.address.description = formData.description;
     }
+    this.setState({ formData });
+  };
+
+  handleAddBusiness = async () => {
+    const formData = this.state.formData;
+    const business = {
+      business_owner_id: this.state.formData.business_owner_id,
+      business_id: formData.address.place_id,
+      is_active: formData.is_active,
+      opening_hours: formData.opening_hours,
+      closing_hours: formData.closing_hours,
+      place_id: formData.address.place_id,
+    };
+    await BusinessService.addBusiness(business, formData.address, {
+      main_id: formData.main_id,
+      sub_id: formData.sub_id,
+      place_id: formData.address.place_id,
+    });
   };
 
   handleChangeSearch = (address) => {
@@ -60,45 +93,6 @@ class BusinessForm extends Component {
     }
   };
 
-  getPlaceClass = async (GooglePlaceObject) => {
-    let LatLng = await getLatLng(GooglePlaceObject);
-    let place = {
-      place_id: GooglePlaceObject.place_id,
-      latitude: LatLng.lat,
-      longitude: LatLng.lng,
-      city: "",
-      country: "",
-      street: "",
-      street_number: "",
-      post_code: "",
-    };
-
-    const AddressArray = GooglePlaceObject.formatted_address.split(",");
-
-    switch (AddressArray.length) {
-      case 4:
-        place.post_code = GooglePlaceObject[AddressArray.length - 2];
-      case 3:
-        place.street = AddressArray[0]
-          .match(/[a-zA-Z\s]/g)
-          .join("")
-          .trim();
-        place.street_number = AddressArray[0].match(/\d/g) ? AddressArray[0].match(/\d/g).join("") : "";
-        place.city = AddressArray[1].trim();
-        place.country = AddressArray[AddressArray.length - 1];
-        break;
-    }
-    return place;
-  };
-
-  handleSelectSearch = async (address) => {
-    let GooglePlaceObject = await geocodeByAddress(address);
-    if (GooglePlaceObject[0].formatted_address.split(",").length >= 3) {
-      const place = await this.getPlaceClass(GooglePlaceObject[0]);
-      this.setState({ address, place });
-    }
-  };
-
   handleOnChangeSelectSub = async (event) => {
     const index = event.target.value;
     if (index !== "default") {
@@ -107,18 +101,6 @@ class BusinessForm extends Component {
     }
   };
 
-  isDisable = (formDataInfo) => {
-    //is active not needed
-    const values = ["name", "description", "opening_hours", "closing_hours", "location", "main_id", "sub_id"];
-    const length = Object.keys(formDataInfo).length;
-    if (length >= Object.keys(values).length + 1) {
-      for (var i = 0; i < length; i++) {
-        if (formDataInfo[`${values[i]}`] === "" || formDataInfo[`${values[i]}`] === undefined) return false;
-      }
-    }
-
-    return true;
-  };
   render() {
     let { formData, mainCategoryList, address, place, mainCategorySelectedIndex, subCategoryList } = this.state;
     return (
@@ -147,13 +129,7 @@ class BusinessForm extends Component {
           <div class="form-row">
             <div className="col">
               <h3 className="">Location:</h3>
-              <LocationSearchInput
-                AddPlace={this.AddPlace}
-                place={place}
-                address={address}
-                handleSelectSearch={this.handleSelectSearch}
-                handleChangeSearch={this.handleChangeSearch}
-              />
+              <SearchLocation setAddress={this.setAddress} error={false} disabled={false} />
             </div>
           </div>
           <div class="form-row">
@@ -218,7 +194,12 @@ class BusinessForm extends Component {
         <br />
         <br />
         <div class="col-auto my-1">
-          <button type="submit" class="btn btn-primary" onClick={this.handleAddBusiness} disabled={this.isDisable(formData)}>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            onClick={this.handleAddBusiness}
+            disabled={isDisable(this.state.formData)}
+          >
             Add
           </button>
         </div>

@@ -71,7 +71,7 @@ namespace api.Controllers
             }
 
         }
-
+        
         [Route("getInfo/{userId}")]
         [HttpGet]
         [SelfAuthorization()]

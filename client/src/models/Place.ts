@@ -1,5 +1,6 @@
 export class Place {
   place_id: string;
+  name: string;
   creation_date: string;
   latitude: number;
   longitude: number;
@@ -8,17 +9,20 @@ export class Place {
   street_number: string;
   post_code: string;
   city: string;
+  description: string;
 
   constructor(place: Place) {
     this.place_id = place.place_id ? place.place_id : "";
     this.creation_date = place.creation_date ? place.creation_date : "";
     this.latitude = place.latitude ? place.latitude : 0;
     this.longitude = place.longitude ? place.longitude : 0;
+    this.name = place.name ? place.name : "";
     this.country = place.country ? place.country : "";
     this.street = place.street ? place.street : "";
     this.street_number = place.street_number ? place.street_number : "";
     this.post_code = place.post_code ? place.post_code : "";
     this.city = place.city ? place.city : "";
+    this.description = place.description ? place.description : "";
   }
 }
 

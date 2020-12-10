@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import BusinessButtons from "./businessButtons";
-import { getAllBusiness } from "../../services/Business";
 import BusinessForm from "./businessForm";
 import ListOfProducts from "./ListOfProducts";
 import ListOfBusiness from "./ListOfBusiness";
@@ -9,7 +8,6 @@ import { getCurrentUser } from "../../services/authService";
 class BusinessPage extends Component {
   state = {
     selected: -1,
-    business: [],
     index_business_id: "",
     business_owner_id: "",
     isAddBusiness: false,
@@ -21,16 +19,12 @@ class BusinessPage extends Component {
   data = {
     name: ["Add Business", "List Of Business", "Products"],
     component: [
-      <BusinessForm business_owner_id={this.state.business_owner_id} />,
-      <ListOfBusiness
-        AreChanges={this.AreChanges}
-        handleOnChangeIsActiveBusiness={this.handleOnChangeIsActiveBusiness}
-        isAddBusiness={this.state.isAddBusiness}
-        loading={this.state.loading}
-        business={this.state.business}
-        businessOwnerId={this.state.business_owner_id}
+      <BusinessForm />,
+      <ListOfBusiness AreChanges={this.AreChanges} handleOnChangeIsActiveBusiness={this.handleOnChangeIsActiveBusiness} />,
+      <ListOfProducts
+        business_owner_id={this.state.business_owner_id}
+        // business={this.state.business}
       />,
-      <ListOfProducts business_owner_id={this.state.business_owner_id} business={this.state.business} />,
     ],
   };
 
@@ -38,7 +32,6 @@ class BusinessPage extends Component {
     const user = getCurrentUser();
     if (user) {
       this.setState({ business_owner_id: user[`user-id`] });
-      this.handleGetBusiness();
     }
   }
 
@@ -56,13 +49,6 @@ class BusinessPage extends Component {
     business.is_active = !business.is_active;
     business.is_change = business.is_change === undefined ? true : !business.is_change;
     this.setState({ businesses });
-  };
-
-  handleGetBusiness = async () => {
-    const business = await getAllBusiness(this.state.business_owner_id);
-    this.setState({
-      business,
-    });
   };
 
   AreChanges = () => {

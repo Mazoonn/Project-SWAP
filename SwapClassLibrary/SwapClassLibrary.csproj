@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DTO\bussinessDTO\BusinessInfoDTO.cs" />
+    <Compile Include="DTO\bussinessDTO\bussinessRequestDTO.cs" />
     <Compile Include="DTO\bussinessDTO\MapBusinessDTO.cs" />
     <Compile Include="DTO\categoryDTO\CategoriesIdsDTO.cs" />
     <Compile Include="DTO\clientDTO\clientInfoDTO.cs" />

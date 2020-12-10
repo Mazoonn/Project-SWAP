@@ -89,12 +89,12 @@ namespace api.Controllers
         //Discount add/change/request to Approve/delete
         [Route("AddBusiness")]
         [HttpPost]
-        public HttpResponseMessage AddBusiness([FromBody]bussinessDTO bussiness)
+        public HttpResponseMessage AddBusiness([FromBody]bussinessRequestDTO businessRequest)
         {
             try
             {
-                bool place_id = BusinessService.AddBusiness(bussiness);
-                if (!place_id)
+                string place_id = BusinessService.AddBusiness(businessRequest.business, businessRequest.place, businessRequest.placeCategory);
+                if (place_id =="")
                     return Request.CreateResponse(HttpStatusCode.NotFound, "There is no business id as this in db");
                 return Request.CreateResponse(HttpStatusCode.OK, "The Business was add");
             }

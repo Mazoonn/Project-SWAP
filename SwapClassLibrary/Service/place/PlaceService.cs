@@ -34,6 +34,10 @@ namespace SwapClassLibrary.Service
                 creation_date = x.creation_date,
                 latitude = x.latitude,
                 longitude = x.longitude,
+                description = x.description,
+                name = x.name,
+                settlement =x.settlement,
+                state =x.state,
                 country = x.country,
                 street = x.street,
                 street_number = x.street_number,
@@ -53,6 +57,10 @@ namespace SwapClassLibrary.Service
                 place_id = place.place_id,
                 creation_date = DateTime.Now,
                 latitude = place.latitude,
+                description = place.description,
+                state = place.state,
+                settlement = place.settlement,
+                name = place.name,
                 longitude = place.longitude,
                 country = place.country,
                 street = place.street,
@@ -80,9 +88,12 @@ namespace SwapClassLibrary.Service
             SwapDbConnection db = new SwapDbConnection();
             place place_obj = db.places.FirstOrDefault(p => p.place_id == place.place_id);
             if (place_obj == null) return false;
-
-            if (place.longitude != null) place_obj.longitude = place.longitude;
-            if (place.latitude != null) place_obj.latitude = place.latitude;
+            if (place.longitude != 0) place_obj.longitude = place.longitude;
+            if (place.latitude != 0) place_obj.latitude = place.latitude;
+            if (place.description != null ) place_obj.description = place.description;
+            if (place.state != null ) place_obj.state = place.state;
+            if (place.name != null ) place_obj.name = place.name;
+            if (place.settlement != null ) place_obj.settlement = place.settlement;
             if (place.post_code != null) place_obj.post_code = place.post_code;
             if (place.street != null) place_obj.street = place.street;
             if (place.street_number != null) place_obj.street_number = place.street_number;
@@ -111,12 +122,6 @@ namespace SwapClassLibrary.Service
                 db.SaveChanges();
                 return true;
             }
-
-            place_obj.main_id = place.main_id;
-            place_obj.sub_id = place.sub_id;
-            place_obj.place_id = place.place_id;
-            db.SaveChanges();
-            return true;
         }
 
     }

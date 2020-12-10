@@ -2,6 +2,7 @@ import http from "../Utils/httpRequest/httpRequest";
 import { API_URL_Dev } from "../config.json";
 import { AxiosResponse } from "axios";
 import { Business, Business_owner_is_active } from "../models/Business";
+import { Place, PlaceCategory } from "../models/Place";
 
 export async function getAllBusiness(business_owner_id: string): Promise<any> {
   try {
@@ -32,9 +33,14 @@ export async function deleteBusinessOwner(business_owner_id: string): Promise<an
   }
 }
 
-export async function addBusiness(req: Business): Promise<any> {
+export async function addBusiness(business: Business, place: Place, placeCategory: PlaceCategory): Promise<any> {
   try {
-    const response: AxiosResponse<any> = await http.post(`${API_URL_Dev}/business/AddBusiness`, req);
+    const businessRequest = {
+      business,
+      place,
+      placeCategory,
+    };
+    const response: AxiosResponse<any> = await http.post(`${API_URL_Dev}/business/AddBusiness`, businessRequest);
     return response.data;
   } catch (e) {
     console.log("Check your connection , error:", e);

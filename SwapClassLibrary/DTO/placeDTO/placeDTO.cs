@@ -9,6 +9,10 @@ namespace SwapClassLibrary.DTO
     public class placeDTO
     {
         public string place_id ;
+        public string state;
+        public string name;
+        public string settlement;
+        public string description;
         public System.DateTime creation_date ;
         public decimal latitude ;
         public decimal longitude ;

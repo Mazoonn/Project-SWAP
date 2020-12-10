@@ -11,6 +11,5 @@ namespace SwapClassLibrary.DTO
         public string sub_id;
         public string main_id;
         public string place_id;
-
     }
 }

@@ -23,11 +23,14 @@ namespace SwapClassLibrary.Service
                 place_id = b.place_id,
                 business_owner_id = b.business_owner_id,
                 is_active = b.is_active,
-                name = b.place.name,
-                description = b.place.description,
                 rating =  b.rating,
                 opening_hours = b.opening_hours,
                 closing_hours = b.closing_hours,
+                approve_by_admin = b.approve_by_admin,
+                place_info = new placeDTO { name = b.place.name,
+                description= b.place.description,
+                }
+               
             }).Where(b => b.business_owner_id == business_owner_id).ToList();
             return bussinesses;
         }
@@ -79,46 +82,49 @@ namespace SwapClassLibrary.Service
             return FilteredEvents;
         }
 
-        public static bool AddBusiness(bussinessDTO bussiness)
+        public static string AddBusiness(bussinessDTO bussiness, placeDTO place, placeToCategoryDTO placeToCategory)
         {
-
             SwapDbConnection db = new SwapDbConnection();
-            if (bussiness.place_id == null)
-                bussiness.place_id = IdService.generateID("place_id");
-            business business_obj = db.businesses.FirstOrDefault(b => b.business_owner_id == bussiness.business_owner_id && b.place_id == bussiness.place_id);
+            business business_obj = db.businesses.FirstOrDefault(b => b.place_id == bussiness.place_id);
             if (business_obj == null)
             {
-                business business_to_add = new business()
+                //add place
+                string place_id = PlaceService.AddPlace(place);
+                //add to main and sub category table
+                bool is_add = PlaceService.addOrEditPlaceToCategory(placeToCategory);
+                if (place_id != null && is_add==true)
                 {
-                    place_id = bussiness.place_id,
-                    business_owner_id = bussiness.business_owner_id,
-                    is_active = bussiness.is_active,
-                    rating = 0 ,
-                    opening_hours = bussiness.opening_hours,
-                    closing_hours = bussiness.closing_hours,
-                    approve_by_admin = false,
-                    //place = new place()
-                    //{
-                    //    place_id = bussiness.place_id,
+                    
 
-                    //}
-                };
-                db.businesses.Add(business_to_add);
-                db.SaveChanges();
-                return true;
+                    //add business
+                    business business_to_add = new business()
+                    {
+                        place_id = place_id,
+                        business_owner_id = bussiness.business_owner_id,
+                        is_active = bussiness.is_active,
+                        rating = 0,
+                        opening_hours = bussiness.opening_hours,
+                        closing_hours = bussiness.closing_hours,
+                        approve_by_admin = false,
+                    };
+                    db.businesses.Add(business_to_add);
+                    db.SaveChanges();
+                    return place_id;
+                }
             }
-            return false;
+            return "";
         }
 
         public static bool EditBusiness(bussinessDTO business)
         {
             SwapDbConnection  db = new SwapDbConnection();
             business business_to_edit = db.businesses.FirstOrDefault(b => b.business_owner_id == business.business_owner_id && b.place_id == business.place_id);
+            place place_to_edit= db.places.FirstOrDefault(p=> p.place_id == business.place_id);
             if (business_to_edit == null ) return false;
-            business_to_edit.place.name= business.name;
-            business_to_edit.place.description = business.description;
-            business_to_edit.opening_hours = business.opening_hours;
-            business_to_edit.closing_hours = business.closing_hours;
+            if (business.place_info.description != null) place_to_edit.description = business.place_info.description;
+            if (business.place_info.name != null) place_to_edit.name= business.place_info.name;
+            if (business.opening_hours != null) business_to_edit.opening_hours = business.opening_hours;
+            if (business.closing_hours != null) business_to_edit.closing_hours = business.closing_hours;
             db.SaveChanges();
             return true;
         }
@@ -137,22 +143,9 @@ namespace SwapClassLibrary.Service
         public static bool DeleteBusiness(string business_owner_id, string place_id)
         {
             SwapDbConnection db = new SwapDbConnection();
-            business Business = db.businesses.Where(b => b.business_owner_id == business_owner_id&&b.place_id == place_id).FirstOrDefault();
+            business Business = db.businesses.FirstOrDefault(b => b.business_owner_id == business_owner_id && b.place_id == place_id);
             if (Business != null)
             {
-                List<product> products = db.products.Where(p => p.business_id == place_id).ToList();
-                if(products!=null)
-                {
-                    for (int i = 0; i < products.Count(); i++)
-                        db.products.Remove(products[i]);
-                }
-                Event event_obj = db.Events.FirstOrDefault(e => e.place_id == place_id);
-                if(event_obj!= null) db.Events.Remove(event_obj);
-                r_place_sub_and_main_category r_object = db.r_place_sub_and_main_category.FirstOrDefault(r => r.place_id == place_id);
-                if (r_object != null) db.r_place_sub_and_main_category.Remove(r_object);
-                place place_obj = db.places.FirstOrDefault(p => p.place_id == place_id);
-                if (place_obj!=null)
-                 db.places.Remove(place_obj);
                 db.businesses.Remove(Business);
                 db.SaveChanges();
                 return true;
