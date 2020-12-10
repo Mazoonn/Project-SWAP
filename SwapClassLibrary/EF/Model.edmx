@@ -37,7 +37,6 @@
           <Property Name="creation_date" Type="date" Nullable="false" />
           <Property Name="first_name" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="last_name" Type="nvarchar" MaxLength="20" Nullable="false" />
-          <Property Name="birthday_date" Type="nvarchar" MaxLength="20" />
           <Property Name="email" Type="nvarchar" MaxLength="30" Nullable="false" />
           <Property Name="sex" Type="nvarchar" MaxLength="8" />
           <Property Name="last_login" Type="date" Nullable="false" />
@@ -46,6 +45,7 @@
           <Property Name="password" Type="nvarchar" MaxLength="128" />
           <Property Name="business_owner_request" Type="bit" />
           <Property Name="platform" Type="nvarchar" MaxLength="20" />
+          <Property Name="birthday_date" Type="date" />
         </EntityType>
         <EntityType Name="Event">
           <Key>
@@ -504,7 +504,6 @@
           <Property Name="creation_date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="first_name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="last_name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="birthday_date" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="email" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="sex" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
           <Property Name="last_login" Type="DateTime" Nullable="false" Precision="0" />
@@ -513,6 +512,7 @@
           <Property Name="password" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="business_owner_request" Type="Boolean" />
           <Property Name="platform" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="birthday_date" Type="DateTime" Precision="0" />
           <NavigationProperty Name="BusinessOwner" Relationship="SwapModel.FK_BusinessOwner_client" FromRole="client" ToRole="BusinessOwner" />
           <NavigationProperty Name="quests" Relationship="SwapModel.FK_quest_client" FromRole="client" ToRole="quest" />
         </EntityType>
@@ -820,6 +820,7 @@
           <EntitySetMapping Name="clients">
             <EntityTypeMapping TypeName="SwapModel.client">
               <MappingFragment StoreEntitySet="client">
+                <ScalarProperty Name="birthday_date" ColumnName="birthday_date" />
                 <ScalarProperty Name="platform" ColumnName="platform" />
                 <ScalarProperty Name="business_owner_request" ColumnName="business_owner_request" />
                 <ScalarProperty Name="password" ColumnName="password" />
@@ -828,7 +829,6 @@
                 <ScalarProperty Name="last_login" ColumnName="last_login" />
                 <ScalarProperty Name="sex" ColumnName="sex" />
                 <ScalarProperty Name="email" ColumnName="email" />
-                <ScalarProperty Name="birthday_date" ColumnName="birthday_date" />
                 <ScalarProperty Name="last_name" ColumnName="last_name" />
                 <ScalarProperty Name="first_name" ColumnName="first_name" />
                 <ScalarProperty Name="creation_date" ColumnName="creation_date" />

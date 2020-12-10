@@ -2,11 +2,11 @@ import React from 'react';
 import "../admin/users/UserModal.css";
 
 
-const UserBirthdayModal = ({ allowModal, handleClose, birthday, onChange, isDateChanges })=>
+const UserBirthdayModal = ({ allowModal, handleClose, birthday, onChange, isDateChanges, isUpdating, handleSaveDate })=>
 {
 
     if(!allowModal) return null;
-
+    
     return (   
     <div className="user-modal modal" tabIndex="-1">
     <div className="modal-dialog">
@@ -36,7 +36,15 @@ const UserBirthdayModal = ({ allowModal, handleClose, birthday, onChange, isDate
             </div>
         </div>
         <div className="modal-footer">
-        <button disabled={!isDateChanges()} className="btn btn-primary">Save</button>
+        <button
+          onClick={handleSaveDate} 
+          disabled={!isDateChanges() || isUpdating} 
+          className="btn btn-primary">
+            {!isUpdating && "Save" ||(<React.Fragment>
+              <span className="spinner-grow spinner-grow-sm"></span>
+                <span> Loading...</span>
+                </React.Fragment>)}
+        </button>
           <button 
             className="btn btn-secondary"
             onClick={handleClose}

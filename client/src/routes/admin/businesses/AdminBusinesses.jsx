@@ -79,7 +79,7 @@ class AdminBusinesses extends Component
     {
         const filter = {...this.state.filter};
         filter["approves"] = !filter["approves"];
-        this.setState({filter});
+        this.setState({ filter, currentPage: 1 });
     }
 
     handleOnChangeApprove = business =>

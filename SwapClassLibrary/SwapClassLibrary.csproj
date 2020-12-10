@@ -73,6 +73,7 @@
     <Compile Include="DTO\bussinessDTO\bussinessRequestDTO.cs" />
     <Compile Include="DTO\bussinessDTO\MapBusinessDTO.cs" />
     <Compile Include="DTO\categoryDTO\CategoriesIdsDTO.cs" />
+    <Compile Include="DTO\clientDTO\ClientDatePhoneSexDTO.cs" />
     <Compile Include="DTO\clientDTO\clientInfoDTO.cs" />
     <Compile Include="DTO\clientDTO\PasswordDTO.cs" />
     <Compile Include="DTO\clientDTO\responseLoginDTO.cs" />

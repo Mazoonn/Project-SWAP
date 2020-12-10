@@ -74,7 +74,6 @@ namespace SwapClassLibrary.Service
                     first_name = body.first_name,
                     last_login = DateTime.Now,
                     last_name = body.last_name,
-                    birthday_date = "",
                     password = "",
                     phone = "",
                     sex = "",
@@ -131,7 +130,7 @@ namespace SwapClassLibrary.Service
             {
                 actor = c.BusinessOwner != null ? (c.BusinessOwner.admin != null ? "admin" : "business") : "client",
                 client_id = c.client_id,
-                birthday_date = c.birthday_date ?? "",
+                birthday_date = c.birthday_date,
                 email = c.email,
                 first_name = c.first_name,
                 last_login = c.last_login,
@@ -168,6 +167,20 @@ namespace SwapClassLibrary.Service
             if (user == null) return false;
             if (user.business_owner_request ?? false) return false;
             user.business_owner_request = true;
+            db.SaveChanges();
+
+            return true;
+        }
+
+        public static bool UpdateInformation(ClientDatePhoneSexDTO client, string clientId)
+        {
+            SwapDbConnection db = new SwapDbConnection();
+            client user = db.clients.FirstOrDefault(c => c.client_id == clientId);
+
+            if (user == null) return false;
+            user.birthday_date = client.birthday_date ?? user.birthday_date;
+            user.phone = client.phone ?? user.phone;
+            user.sex = client.sex ?? user.sex;
             db.SaveChanges();
 
             return true;

@@ -10,7 +10,7 @@ namespace SwapClassLibrary.DTO
     {
         public string first_name;
         public string last_name;
-        public string birthday;
+        public Nullable<System.DateTime> birthday;
         public string email;
         public string sex;
         public string phone;

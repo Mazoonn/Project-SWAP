@@ -109,7 +109,7 @@ class UsersManager extends Component
   {
     let { request } = this.state;
     request = !request;
-    this.setState({request});
+    this.setState({ request, currentPage: 1 });
   }
 
   handleDeleteUser = async (user)=>

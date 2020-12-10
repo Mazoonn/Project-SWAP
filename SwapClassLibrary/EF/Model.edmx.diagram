@@ -5,19 +5,19 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="227e1ae27c504b5fa024a8bbe034d04f" Name="Diagram1" ZoomLevel="86">
-        <EntityTypeShape EntityType="SwapModel.admin" Width="1.5" PointX="6" PointY="24.375" />
-        <EntityTypeShape EntityType="SwapModel.business" Width="1.5" PointX="6" PointY="6.625" />
-        <EntityTypeShape EntityType="SwapModel.BusinessOwner" Width="1.5" PointX="3.75" PointY="24.25" />
-        <EntityTypeShape EntityType="SwapModel.client" Width="1.5" PointX="1.5" PointY="23.125" />
-        <EntityTypeShape EntityType="SwapModel.Event" Width="1.5" PointX="3" PointY="17" />
-        <EntityTypeShape EntityType="SwapModel.google_value" Width="1.5" PointX="2.75" PointY="1.5" />
-        <EntityTypeShape EntityType="SwapModel.main_category" Width="1.5" PointX="1.5" PointY="12" />
-        <EntityTypeShape EntityType="SwapModel.place" Width="1.5" PointX="0.75" PointY="6.125" />
-        <EntityTypeShape EntityType="SwapModel.product" Width="1.5" PointX="8.25" PointY="6.5" />
-        <EntityTypeShape EntityType="SwapModel.quest" Width="1.5" PointX="3" PointY="7" />
-        <EntityTypeShape EntityType="SwapModel.r_place_sub_and_main_category" Width="1.5" PointX="3" PointY="4" />
-        <EntityTypeShape EntityType="SwapModel.r_sub_and_main_category" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="SwapModel.sub_category" Width="1.5" PointX="1.5" PointY="20" />
+        <EntityTypeShape EntityType="SwapModel.admin" Width="1.5" PointX="6" PointY="10" />
+        <EntityTypeShape EntityType="SwapModel.business" Width="1.5" PointX="6" PointY="6.25" />
+        <EntityTypeShape EntityType="SwapModel.BusinessOwner" Width="1.5" PointX="3.75" PointY="9.75" />
+        <EntityTypeShape EntityType="SwapModel.client" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="SwapModel.Event" Width="1.5" PointX="3" PointY="16.625" />
+        <EntityTypeShape EntityType="SwapModel.google_value" Width="1.5" PointX="2.75" PointY="1.125" />
+        <EntityTypeShape EntityType="SwapModel.main_category" Width="1.5" PointX="1.5" PointY="23.125" />
+        <EntityTypeShape EntityType="SwapModel.place" Width="1.5" PointX="0.75" PointY="5.625" />
+        <EntityTypeShape EntityType="SwapModel.product" Width="1.5" PointX="8.25" PointY="6.125" />
+        <EntityTypeShape EntityType="SwapModel.quest" Width="1.5" PointX="3" PointY="3.5" />
+        <EntityTypeShape EntityType="SwapModel.r_place_sub_and_main_category" Width="1.5" PointX="3" PointY="6.625" />
+        <EntityTypeShape EntityType="SwapModel.r_sub_and_main_category" Width="1.5" PointX="0.75" PointY="12.375" />
+        <EntityTypeShape EntityType="SwapModel.sub_category" Width="1.5" PointX="1.5" PointY="20.125" />
         <AssociationConnector Association="SwapModel.FK_admin_BusinessOwner" />
         <AssociationConnector Association="SwapModel.FK__business__place___324172E1" />
         <AssociationConnector Association="SwapModel.FK__product__busines__29E1370A" />

@@ -123,5 +123,25 @@ namespace api.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
             }
         }
+
+        [Route("updateInformation/{userId}")]
+        [HttpPost]
+        [SelfAuthorization()]
+        public HttpResponseMessage UpdateInformation(string userId, ClientDatePhoneSexDTO client)
+        {
+            try
+            {
+                if (client == null || (client.birthday_date == null
+                    && string.IsNullOrEmpty(client.phone)
+                    && string.IsNullOrEmpty(client.sex))) return Request.CreateResponse(HttpStatusCode.BadRequest, "Illegal Prameters");
+                bool result = clientService.UpdateInformation(client, userId);
+                if (!result) return Request.CreateResponse(HttpStatusCode.NotFound, "Client not found");
+                return Request.CreateResponse(HttpStatusCode.OK, result);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+            }
+        }
     }
 }

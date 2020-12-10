@@ -11,7 +11,7 @@ namespace SwapClassLibrary.DTO
         public string client_id;
         public string first_name;
         public string last_name;
-        public string birthday_date;
+        public Nullable<System.DateTime> birthday_date;
         public string email;
         public string sex;
         public System.DateTime last_login ;
