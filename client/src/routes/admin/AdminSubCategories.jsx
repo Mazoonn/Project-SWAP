@@ -148,7 +148,7 @@ const AdminSubCategories = () => {
     return (
       <React.Fragment>
         <div className="card m-auto">
-          <h5 className="card-header">Sub Categories Handle</h5>
+          <h5 className="card-header">Sub Categories</h5>
           <div className="card-body">
             <div className="text-center">
               <div className="spinner-border text-primary">
@@ -163,7 +163,7 @@ const AdminSubCategories = () => {
   return (
     <div>
       <div className="card m-auto">
-        <h5 className="card-header">Sub Categories Handle</h5>
+        <h5 className="card-header">Sub Categories</h5>
         <div className="card-body">
           <h4>Categories</h4>
           <select

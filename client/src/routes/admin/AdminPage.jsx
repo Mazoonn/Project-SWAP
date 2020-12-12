@@ -22,6 +22,11 @@ class AdminPage extends Component {
     if(this.state.selected !== index) this.setState({ selected: index });
   };
 
+  componentDidMount()
+  {
+    document.title = "Admin";
+  };
+
   render() {
     const { selected } = this.state;
     const { name, component } = data;

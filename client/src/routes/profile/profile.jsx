@@ -67,6 +67,7 @@ class Profile extends Component {
   };
 
   componentDidMount() {
+    document.title = "Profile";
     this.handleGetUser();
   };
 

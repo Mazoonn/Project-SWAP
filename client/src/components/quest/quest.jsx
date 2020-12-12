@@ -168,6 +168,7 @@ class Quest extends Component {
   };
 
   componentDidMount() {
+    document.title = "Quest";
     this.handleGetCategories();
   }
   render() {

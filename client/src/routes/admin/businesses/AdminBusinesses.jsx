@@ -66,7 +66,7 @@ class AdminBusinesses extends Component {
   handleOnClickApproveFilter = () => {
     const filter = { ...this.state.filter };
     filter["approves"] = !filter["approves"];
-    this.setState({ filter });
+    this.setState({ filter, currentPage: 1 });
   };
 
   handleOnChangeApprove = (business) => {
@@ -146,7 +146,7 @@ class AdminBusinesses extends Component {
       return (
         <React.Fragment>
           <div className="card m-auto">
-            <h5 className="card-header">Approve Businesses</h5>
+            <h5 className="card-header">Businesses</h5>
             <div className="card-body">
               <div className="text-center">
                 <div className="spinner-border text-primary">
@@ -161,7 +161,7 @@ class AdminBusinesses extends Component {
     return (
       <React.Fragment>
         <div className="card m-auto">
-          <h5 className="card-header">Approve Businesses</h5>
+          <h5 className="card-header">Businesses</h5>
           <div className="card-body">
             <div className="input-group w-75 mb-2">
               <input

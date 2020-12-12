@@ -3,6 +3,12 @@ import Map from "../components/map/map";
 
 class HomePage extends Component {
   state = {};
+
+  componentDidMount()
+  {
+    document.title = "Swap";
+  };
+
   render() {
     return (
       <React.Fragment>
