@@ -119,6 +119,7 @@ namespace SwapClassLibrary.Service
         {
             SwapDbConnection  db = new SwapDbConnection();
             business business_to_edit = db.businesses.FirstOrDefault(b => b.business_owner_id == business.business_owner_id && b.place_id == business.place_id);
+            
             place place_to_edit= db.places.FirstOrDefault(p=> p.place_id == business.place_id);
             if (business_to_edit == null ) return false;
             if (business.place_info.description != null) place_to_edit.description = business.place_info.description;

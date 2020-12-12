@@ -17,14 +17,11 @@ class BusinessPage extends Component {
   };
 
   data = {
-    name: ["Add Business", "List Of Business", "Products"],
+    name: ["Add Business", "My Business", "Products"],
     component: [
       <BusinessForm />,
       <ListOfBusiness AreChanges={this.AreChanges} handleOnChangeIsActiveBusiness={this.handleOnChangeIsActiveBusiness} />,
-      <ListOfProducts
-        business_owner_id={this.state.business_owner_id}
-        // business={this.state.business}
-      />,
+      <ListOfProducts />,
     ],
   };
 

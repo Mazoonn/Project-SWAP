@@ -96,114 +96,115 @@ class BusinessForm extends Component {
   handleOnChangeSelectSub = async (event) => {
     const index = event.target.value;
     if (index !== "default") {
+      //TODO multipult select
       const sub_category_id = this.state.subCategoryList[index].sub_id;
-      this.setState({ formData: { ...this.state.formData, sub_id: sub_category_id } });
+      this.setState({
+        formData: { ...this.state.formData, sub_id: { ...this.state.formData.sub_id, [`${sub_category_id}`]: sub_category_id } },
+      });
     }
   };
 
   render() {
     let { formData, mainCategoryList, address, place, mainCategorySelectedIndex, subCategoryList } = this.state;
+
     return (
-      <React.Fragment>
-        <form>
-          <div class="form-row">
-            <div className="col">
-              <h3 className="">Name:</h3>
-              <input type="text" className="form-control" name="name" onBlur={this.handelOnChangeForm} />
-            </div>
-            <div className="col">
-              <h3 className="">Description:</h3>
-              <input type="text" className="form-control" name="description" onBlur={this.handelOnChangeForm} />
-            </div>
-          </div>
-          <div class="form-row">
-            <div className="col">
-              <h3 className="">Opening Hours:</h3>
-              <input type="time" className="form-control" name="opening_hours" onBlur={this.handelOnChangeForm} />
-            </div>
-            <div className="col">
-              <h3 className="">Closing Hours:</h3>
-              <input type="time" className="form-control" name="closing_hours" onBlur={this.handelOnChangeForm} />
-            </div>
-          </div>
-          <div class="form-row">
-            <div className="col">
-              <h3 className="">Location:</h3>
-              <SearchLocation setAddress={this.setAddress} error={false} disabled={false} />
-            </div>
-          </div>
-          <div class="form-row">
-            <div className="col">
-              <h3 className="">Main category:</h3>
-              <select
-                name="main_categories"
-                onChange={this.handleOnChangeSelectMain}
-                className="custom-select mb-4"
-                style={{ width: "200px" }}
-              >
-                <option value={"default"} defaultValue>
-                  Main Category...
-                </option>
-                {mainCategoryList &&
-                  mainCategoryList.map((category, index) => {
-                    return (
-                      <option key={category.id} value={index}>
-                        {category.name}
-                      </option>
-                    );
-                  })}
-              </select>
-            </div>
-            <div className="col">
-              <h3 className="">Sub category:</h3>
-              <select
-                name="sub_categories"
-                onChange={this.handleOnChangeSelectSub}
-                className="custom-select mb-4"
-                style={{ width: "200px" }}
-              >
-                <option value={"default"} defaultValue>
-                  Sub Category...
-                </option>
-                {subCategoryList &&
-                  subCategoryList.map((category, index) => {
-                    return (
-                      <option key={category.sub_id} value={index}>
-                        {category.sub_name}
-                      </option>
-                    );
-                  })}
-              </select>
-            </div>
-          </div>
-          <div>
-            <div className="form-row">
-              <div>
-                <h3 className="">Active:</h3>
-                <input
-                  type="checkbox"
-                  className="form-control"
-                  placeholder=""
-                  name="is_active"
-                  onChange={this.handelOnChangeForm}
-                />
+      <div className="card m-auto">
+        <h5 className="card-header">Business Information</h5>
+        <div className="card-body">
+          <form>
+            <div class="form-row">
+              <div className="col">
+                <h6 className="">Name:</h6>
+                <input type="text" className="form-control" name="name" onBlur={this.handelOnChangeForm} />
+              </div>
+              <div className="col">
+                <h6 className="">Description:</h6>
+                <input type="text" className="form-control" name="description" onBlur={this.handelOnChangeForm} />
               </div>
             </div>
-          </div>
-        </form>
-        <br />
-        <br />
-        <div class="col-auto my-1">
-          <button
-            type="submit"
-            class="btn btn-primary"
-            onClick={this.handleAddBusiness}
-            disabled={isDisable(this.state.formData)}
-          >
-            Add
-          </button>
+            <div class="form-row">
+              <div className="col">
+                <h6 className="">Opening Hours:</h6>
+                <input type="time" className="form-control" name="opening_hours" onBlur={this.handelOnChangeForm} />
+              </div>
+              <div className="col">
+                <h6 className="">Closing Hours:</h6>
+                <input type="time" className="form-control" name="closing_hours" onBlur={this.handelOnChangeForm} />
+              </div>
+            </div>
+            <div class="form-row">
+              <div className="col">
+                <h6 className="">Location:</h6>
+                <SearchLocation setAddress={this.setAddress} error={false} disabled={false} />
+              </div>
+              <div>
+                <div className="col">
+                  <div>
+                    <h6 className="">Active:</h6>
+                    <input
+                      type="checkbox"
+                      className="form-control"
+                      placeholder=""
+                      name="is_active"
+                      onChange={this.handelOnChangeForm}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div className="col">
+                <h6 className="">Main category:</h6>
+                <select name="main_categories" onChange={this.handleOnChangeSelectMain} className="custom-select mb-4">
+                  <option value={"default"} defaultValue>
+                    Main Category...
+                  </option>
+                  {mainCategoryList &&
+                    mainCategoryList.map((category, index) => {
+                      return (
+                        <option key={category.id} value={index}>
+                          {category.name}
+                        </option>
+                      );
+                    })}
+                </select>
+              </div>
+              <div className="col">
+                <h6 className="">Sub category:</h6>
+                <select
+                  onClick={this.handleOnChangeSelectSub}
+                  name="sub_categories"
+                  className="custom-select mb-4 colorful-select dropdown-primary md-form"
+                  multiple
+                  searchable="Search here.."
+                >
+                  <option value="" disabled selected>
+                    Multiple Select of Sub Categories (ctrl + Command)
+                  </option>
+                  {subCategoryList &&
+                    subCategoryList.map((category, index) => {
+                      return (
+                        <option key={category.sub_id} value={index}>
+                          {category.sub_name}
+                        </option>
+                      );
+                    })}
+                </select>
+              </div>
+            </div>
+            <div class="col-auto my-1">
+              <button
+                type="submit"
+                class="btn btn-primary"
+                onClick={this.handleAddBusiness}
+                disabled={isDisable(this.state.formData)}
+              >
+                Add
+              </button>
+            </div>
+          </form>
         </div>
-      </React.Fragment>
+      </div>
     );
   }
 }

@@ -106,118 +106,121 @@ class ListOfBusiness extends Component {
     const { business } = this.state;
 
     return (
-      <React.Fragment>
-        <table className="table table-bordered table-sm">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Opening Hours</th>
-              <th>Opening Closing</th>
-              <th>Approved by Admin</th>
-              <th>Active</th>
-              <th className="text-center">Save</th>
-              <th className="text-center">Delete</th>
-            </tr>
-          </thead>
-          <tbody>
-            {business &&
-              business.map((business, index) => {
-                return (
-                  <React.Fragment>
-                    <tr key={business.place_id}>
-                      <td>
-                        <input
-                          onChange={(event) => {
-                            this.handleOnChangeBusiness(event, index);
-                          }}
-                          name="name_new"
-                          type="text"
-                          className="form-control"
-                          value={business.place_info[`name_new`]}
-                        />
-                      </td>
-
-                      <td>
-                        <input
-                          onChange={(event) => {
-                            this.handleOnChangeBusiness(event, index);
-                          }}
-                          name="description_new"
-                          type="text"
-                          className="form-control"
-                          value={business.place_info[`description_new`]}
-                        />
-                      </td>
-                      <td>
-                        <input
-                          onChange={(event) => {
-                            this.handleOnChangeBusiness(event, index);
-                          }}
-                          name="opening_hours_new"
-                          type="time"
-                          className="form-control"
-                          value={business[`opening_hours_new`]}
-                        />
-                      </td>
-                      <td>
-                        <input
-                          onChange={(event) => {
-                            this.handleOnChangeBusiness(event, index);
-                          }}
-                          name="closing_hours_new"
-                          type="time"
-                          className="form-control"
-                          value={business[`closing_hours_new`]}
-                        />
-                      </td>
-                      <td>
-                        <div>
-                          <h4 className="text-center">{business.approve_by_admin ? "Yes" : "No"}</h4>
-                        </div>
-                      </td>
-                      <td className="text-center">
-                        <div>
+      <div className="card m-auto">
+        <h5 className="card-header">Businesses</h5>
+        <div className="card-body">
+          <table className="table table-bordered table-sm">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Opening Hours</th>
+                <th>Opening Closing</th>
+                <th>Approved by Admin</th>
+                <th>Active</th>
+                <th className="text-center">Save</th>
+                <th className="text-center">Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              {business &&
+                business.map((business, index) => {
+                  return (
+                    <React.Fragment>
+                      <tr key={business.place_id}>
+                        <td>
                           <input
                             onChange={(event) => {
                               this.handleOnChangeBusiness(event, index);
                             }}
-                            type="checkbox"
-                            name="is_active_new"
-                            checked={business[`is_active_new`]}
+                            name="name_new"
+                            type="text"
+                            className="form-control"
+                            value={business.place_info[`name_new`]}
                           />
-                        </div>
-                      </td>
-                      <td className="text-center">
-                        <button
-                          type="button"
-                          className="btn btn-success btn-sm"
-                          onClick={() => {
-                            this.handleOnClickSaveBusiness(index);
-                          }}
-                          disabled={!this.isBusinessChange(index)}
-                        >
-                          Save
-                        </button>
-                      </td>
-                      <td className="text-center">
-                        <button
-                          onClick={() => {
-                            this.handleDeleteBusiness(index);
-                          }}
-                          type="button"
-                          className="btn btn-danger btn-sm"
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  </React.Fragment>
-                );
-              })}
-          </tbody>
-        </table>
-      </React.Fragment>
+                        </td>
+
+                        <td>
+                          <input
+                            onChange={(event) => {
+                              this.handleOnChangeBusiness(event, index);
+                            }}
+                            name="description_new"
+                            type="text"
+                            className="form-control"
+                            value={business.place_info[`description_new`]}
+                          />
+                        </td>
+                        <td>
+                          <input
+                            onChange={(event) => {
+                              this.handleOnChangeBusiness(event, index);
+                            }}
+                            name="opening_hours_new"
+                            type="time"
+                            className="form-control"
+                            value={business[`opening_hours_new`]}
+                          />
+                        </td>
+                        <td>
+                          <input
+                            onChange={(event) => {
+                              this.handleOnChangeBusiness(event, index);
+                            }}
+                            name="closing_hours_new"
+                            type="time"
+                            className="form-control"
+                            value={business[`closing_hours_new`]}
+                          />
+                        </td>
+                        <td>
+                          <div>
+                            <h4 className="text-center">{business.approve_by_admin ? "Yes" : "No"}</h4>
+                          </div>
+                        </td>
+                        <td className="text-center">
+                          <div>
+                            <input
+                              onChange={(event) => {
+                                this.handleOnChangeBusiness(event, index);
+                              }}
+                              type="checkbox"
+                              name="is_active_new"
+                              checked={business[`is_active_new`]}
+                            />
+                          </div>
+                        </td>
+                        <td className="text-center">
+                          <button
+                            type="button"
+                            className="btn btn-success btn-sm"
+                            onClick={() => {
+                              this.handleOnClickSaveBusiness(index);
+                            }}
+                            disabled={!this.isBusinessChange(index)}
+                          >
+                            Save
+                          </button>
+                        </td>
+                        <td className="text-center">
+                          <button
+                            onClick={() => {
+                              this.handleDeleteBusiness(index);
+                            }}
+                            type="button"
+                            className="btn btn-danger btn-sm"
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    </React.Fragment>
+                  );
+                })}
+            </tbody>
+          </table>
+        </div>
+      </div>
     );
   }
 }
