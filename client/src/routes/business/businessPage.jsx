@@ -69,7 +69,26 @@ class BusinessPage extends Component {
           <div className="col-">
             <BusinessButtons handleClick={this.handleClick} data={name} selected={selected} />
           </div>
-          <div className="col">{selected !== -1 && component[selected]}</div>
+
+          <div className="col" hidden={selected === -1}>
+            {component[selected]}
+          </div>
+          <div className="col" hidden={selected !== -1}>
+            <div className="card m-auto">
+              <h5 className="card-header">Business Owner Page Information</h5>
+              <div className="card-body">
+                <h6>Add Business</h6>
+                <br />
+                <br />
+                <h6>My Business</h6>
+                <br />
+                <br />
+                <h6>Products</h6>
+                <br />
+                <br />
+              </div>
+            </div>
+          </div>
         </div>
       </React.Fragment>
     );

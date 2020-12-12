@@ -4,39 +4,38 @@ import Category from "./category";
 import { getSubCategoriesId } from "../../services/SubCategory";
 import SubCategory from "./subCategory";
 import { getPlaces } from "./../../Utils/httpRequest/GoogleRequest";
-import { getEvents } from './../../services/EventsService';
+import { getEvents } from "./../../services/EventsService";
 import { radius } from "../../config.json";
 import { fetchCoordinates } from "../../Utils/httpRequest/GoogleRequest";
 import { getBusinessesByCategories } from "../../services/BusinessService";
-import NoResults from './NoResults';
+import NoResults from "./NoResults";
 
-const removeGooglePlaces = (google, businesses, events) =>
-{
+const removeGooglePlaces = (google, businesses, events) => {
   const obj = {};
 
-  google.forEach(googleItem => 
-    { 
-      googleItem.places.forEach(place => 
-        {
-          place.ids = googleItem.ids;
-          obj[place.place_id] = place; 
-        });
+  google.forEach((googleItem) => {
+    googleItem.places.forEach((place) => {
+      place.ids = googleItem.ids;
+      obj[place.place_id] = place;
     });
-  businesses.forEach(business => { delete obj[business.place_id]; });
-  events.forEach(event => { delete obj[event.place_id]; });
+  });
+  businesses.forEach((business) => {
+    delete obj[business.place_id];
+  });
+  events.forEach((event) => {
+    delete obj[event.place_id];
+  });
 
   return Object.values(obj);
 };
 
-const isNotHidden = categories =>
-{
+const isNotHidden = (categories) => {
   let result = false;
-  categories.some(category => 
-    {
-      if(category.isCurrentlySelected) result = result || category.subCategory.some(sub => sub.isSelected);
-    });
+  categories.some((category) => {
+    if (category.isCurrentlySelected) result = result || category.subCategory.some((sub) => sub.isSelected);
+  });
 
-    return result;
+  return result;
 };
 
 class Quest extends Component {
@@ -46,7 +45,7 @@ class Quest extends Component {
     columnsOfSubcategories: 2,
     isLoading: false,
     loadingPage: false,
-    noResults: false
+    noResults: false,
   };
 
   getPlaces = async () => {
@@ -54,21 +53,17 @@ class Quest extends Component {
     const keysToRemove = ["isFinished", "route", "radioValue", "places"];
     const businessesRequests = [];
     const location = await fetchCoordinates();
-    const eventsReq = 
-    {
+    const eventsReq = {
       radius,
-      lat:location.latitude,
-      lng:location.longitude
+      lat: location.latitude,
+      lng: location.longitude,
     };
     const places = [];
     this.state.categoryList.forEach((category) => {
-      if (category.isCurrentlySelected) 
-      {
+      if (category.isCurrentlySelected) {
         const businessReq = { ...eventsReq, subIds: [], mainId: category.id };
-        category.subCategory.forEach((sub) => 
-        {
-          if (sub.isSelected) 
-          {
+        category.subCategory.forEach((sub) => {
+          if (sub.isSelected) {
             const categoryObj = {};
             businessReq.subIds.push(sub.sub_id);
             categoryObj.sub_id = sub.sub_id;
@@ -77,20 +72,18 @@ class Quest extends Component {
             categoryObj.main_value = category.google_value || category.name;
             places.push(categoryObj);
           }
-        }
-        );
-        if(businessReq.subIds.length > 0) businessesRequests.push(businessReq);
+        });
+        if (businessReq.subIds.length > 0) businessesRequests.push(businessReq);
       }
     });
 
     const events = await getEvents(eventsReq);
-    const data = await Promise.all(businessesRequests.map(req => getBusinessesByCategories(req)));
+    const data = await Promise.all(businessesRequests.map((req) => getBusinessesByCategories(req)));
     const businesses = data.reduce((arr, row) => arr.concat(row), []);
     let google = await getPlaces(places, location, true);
     google = removeGooglePlaces(google, businesses, events.data);
-    if(google.length === 0 && businesses.length === 0) 
-    {
-      this.setState( { isLoading: false, noResults: true} );
+    if (google.length === 0 && businesses.length === 0) {
+      this.setState({ isLoading: false, noResults: true });
       return;
     }
     keysToRemove.forEach((key) => {
@@ -102,8 +95,7 @@ class Quest extends Component {
     this.props.history.push("/");
   };
 
-  handleCloseNoResults = () =>
-  {
+  handleCloseNoResults = () => {
     this.setState({ noResults: false });
   };
 
@@ -115,9 +107,9 @@ class Quest extends Component {
         category.isFirstSelected = false;
         category.isCurrentlySelected = false;
       });
-      this.setState({ categoryList: categories, loadingPage:false });
+      this.setState({ categoryList: categories, loadingPage: false });
     } catch (e) {
-      this.setState({loadingPage: false});
+      this.setState({ loadingPage: false });
       console.log(e);
     }
   };
@@ -181,22 +173,21 @@ class Quest extends Component {
   render() {
     const { isLoading, categoryList, loadingPage, noResults } = this.state;
 
-    if(loadingPage) return <React.Fragment>
-    <div className="text-center">
-      <div className="spinner-border text-primary">
-      <span className="sr-only">Loading...</span>
-      </div>
-    </div>
-    </React.Fragment>;
+    if (loadingPage)
+      return (
+        <React.Fragment>
+          <div className="text-center">
+            <div className="spinner-border text-primary">
+              <span className="sr-only">Loading...</span>
+            </div>
+          </div>
+        </React.Fragment>
+      );
 
     return (
       <React.Fragment>
         <div className="float-left">
-          <Category
-            isLoading={isLoading}
-            handleOnClickCategory={this.handleOnClickCategory}
-            categoryList={categoryList}
-          />
+          <Category isLoading={isLoading} handleOnClickCategory={this.handleOnClickCategory} categoryList={categoryList} />
           <div className="text-center p-3">
             {(!isLoading && (
               <button
