@@ -1,35 +1,41 @@
 import React, { Component } from "react";
-import { getAllMainCategoriesAdmin } from "../../services/Categories";
-import * as BusinessService from "../../services/Business";
+import { getAllMainCategories } from "../../services/Categories";
+import { addBusiness } from "../../services/BusinessService";
 import SearchLocation from "../admin/events/searchLocation";
 import { getSubCategoriesId } from "../../services/SubCategory";
 import getAddress from "../../services/Address";
 import { getCurrentUser } from "../../services/authService";
+import Select from 'react-select';
+
+const addressValidate = (address) => {
+  const schema = ["country", "settlement", "street"];
+
+  if (schema.some((value) => !address[value])) return "Address must contain Country, Settlement and Street Name";
+  return "";
+};
 
 const isDisable = (formDataInfo) => {
-  //is active not needed
-  const values = ["name", "description", "opening_hours", "closing_hours", "address", "main_id", "sub_id"];
-  let isEmptyAddress = false;
-  values.forEach((value) => {
-    if (!formDataInfo[value]) isEmptyAddress = true;
-  });
-  return isEmptyAddress;
+  const values = ["name", "description", "opening_hours", "address", "closing_hours", "main_id"];
+  const b1 = values.some(value => !formDataInfo[value]);
+  const b2 = formDataInfo.sub_ids ? formDataInfo.sub_ids.length === 0 : true;
+  return b1 || b2;
 };
+
+
 class BusinessForm extends Component {
   state = {
     formData: {},
     mainCategoryList: [],
     subCategoryList: [],
-    mainCategorySelectedIndex: 0,
-    place: {},
-    address: "",
+    mainCategorySelectedIndex: "default",
+    validation: {}
   };
 
   async componentDidMount() {
     const user = getCurrentUser();
     this.setState({ formData: { business_owner_id: user[`user-id`] } });
-    const mainCategoryList = await getAllMainCategoriesAdmin();
-    this.setState({ mainCategoryList });
+    const mainCategoryList = await getAllMainCategories();
+    if(mainCategoryList) this.setState({ mainCategoryList });
   }
 
   setAddress = (place) => {
@@ -38,110 +44,144 @@ class BusinessForm extends Component {
     if (place.address_components) {
       formData.address = getAddress(place);
       formData.address.place_id = place.place_id;
-      formData.address.place_id = place.place_id;
       formData.address.latitude = place.geometry.location.lat();
       formData.address.longitude = place.geometry.location.lng();
-      formData.address.name = formData.name;
-      formData.address.description = formData.description;
     }
     this.setState({ formData });
   };
 
-  handleAddBusiness = async () => {
-    const formData = this.state.formData;
-    const business = {
-      business_owner_id: this.state.formData.business_owner_id,
-      business_id: formData.address.place_id,
-      is_active: formData.is_active,
-      opening_hours: formData.opening_hours,
-      closing_hours: formData.closing_hours,
-      place_id: formData.address.place_id,
+  handleAddBusiness = async (event) => {
+    event.preventDefault();
+    const { formData } = this.state;
+    const { address } = formData;
+    const error = addressValidate(address);
+    const { validation } = this.state;
+    validation.address = error;
+    this.setState({ validation });
+    if(error) return null;
+    const 
+    { 
+      business_owner_id, 
+      closing_hours, 
+      description, 
+      is_active, 
+      main_id, 
+      name, 
+      opening_hours,
+      sub_ids
+    } = formData;
+    const business = 
+    {
+      business_owner_id,
+      is_active: is_active !== undefined ? is_active : false,
+      opening_hours,
+      closing_hours
     };
-    await BusinessService.addBusiness(business, formData.address, {
-      main_id: formData.main_id,
-      sub_id: formData.sub_id,
-      place_id: formData.address.place_id,
+    const placeCategory = 
+    {
+      mainId: main_id,
+      subIds: sub_ids.map(sub => sub.value)
+    };
+    const place = Object.assign(address, 
+    {
+      name,
+      description,
     });
-  };
-
-  handleChangeSearch = (address) => {
-    this.setState({ address });
+    const request = { place, placeCategory, business };
+    await addBusiness(request);
   };
 
   handelOnChangeForm = (event) => {
     const formData = { ...this.state.formData };
-    const input = event.target.name;
-    if (input === "is_active") {
-      formData[`${input}`] = event.target.checked;
+    const { name } = event.target;
+    if (name === "is_active") {
+      formData[name] = event.target.checked;
     } else {
-      formData[`${input}`] = event.target.value;
+      formData[name] = event.target.value;
     }
-    this.setState({ formData: { ...formData } });
+    this.setState({ formData });
   };
 
   handleOnChangeSelectMain = async (event) => {
-    const index = event.target.value;
-    this.setState({ subCategoryList: [] });
-    if (index !== "default") {
-      const category_id = this.state.mainCategoryList[index].id;
-      const newSubCategories = await getSubCategoriesId(category_id);
-      this.setState({
-        subCategoryList: newSubCategories,
-        mainCategorySelectedIndex: index,
-        formData: { ...this.state.formData, main_id: category_id },
-      });
+    const mainCategorySelectedIndex = event.target.value;
+    const formData = { ...this.state.formData };
+    let subCategoryList = [];
+    formData.sub_ids = [];
+
+    if (mainCategorySelectedIndex !== "default") {
+      const category_id = this.state.mainCategoryList[mainCategorySelectedIndex].id;
+      subCategoryList = await getSubCategoriesId(category_id);
+      formData.main_id = category_id;
     }
+    else {
+      formData.main_id = "";
+    }
+    this.setState({ mainCategorySelectedIndex, formData, subCategoryList });
   };
 
-  handleOnChangeSelectSub = async (event) => {
-    const index = event.target.value;
-    if (index !== "default") {
-      //TODO multipult select
-      const sub_category_id = this.state.subCategoryList[index].sub_id;
-      this.setState({
-        formData: { ...this.state.formData, sub_id: { ...this.state.formData.sub_id, [`${sub_category_id}`]: sub_category_id } },
-      });
-    }
+  handleOnChangeSelectSub = selectedOption  => 
+  { 
+    const formData = { ...this.state.formData };
+    formData.sub_ids = selectedOption;
+    this.setState({ formData });
   };
 
   render() {
-    let { formData, mainCategoryList, address, place, mainCategorySelectedIndex, subCategoryList } = this.state;
+    const { formData, mainCategoryList, mainCategorySelectedIndex, subCategoryList, validation } = this.state;
+    const { address } = validation;
+    const { sub_ids } = formData;
 
     return (
       <div className="card m-auto">
         <h5 className="card-header">Business Information</h5>
         <div className="card-body">
           <form>
-            <div class="form-row">
+            <div className="form-row">
               <div className="col">
-                <h6 className="">Name:</h6>
-                <input type="text" className="form-control" name="name" onBlur={this.handelOnChangeForm} />
+                <label htmlFor="name"><h6>Name:</h6>
+                </label>
+                <input placeholder="Enter business name" id="name" type="text" className="form-control" name="name" onChange={this.handelOnChangeForm} />
               </div>
               <div className="col">
-                <h6 className="">Description:</h6>
-                <input type="text" className="form-control" name="description" onBlur={this.handelOnChangeForm} />
-              </div>
-            </div>
-            <div class="form-row">
-              <div className="col">
-                <h6 className="">Opening Hours:</h6>
-                <input type="time" className="form-control" name="opening_hours" onBlur={this.handelOnChangeForm} />
-              </div>
-              <div className="col">
-                <h6 className="">Closing Hours:</h6>
-                <input type="time" className="form-control" name="closing_hours" onBlur={this.handelOnChangeForm} />
+                <label htmlFor="description">
+                  <h6>Description:</h6>
+                </label>
+                <input type="text" placeholder="Enter business description" id="description" className="form-control" name="description" onChange={this.handelOnChangeForm} />
               </div>
             </div>
-            <div class="form-row">
+            <div className="form-row">
               <div className="col">
-                <h6 className="">Location:</h6>
-                <SearchLocation setAddress={this.setAddress} error={false} disabled={false} />
+                <label htmlFor="opening_hours">
+                <h6>Opening Hours:</h6>
+                </label>               
+                <input id="opening_hours" type="time" className="form-control" name="opening_hours" onChange={this.handelOnChangeForm} />
+              </div>
+              <div className="col">
+                <label htmlFor="closing_hours">
+                  <h6>Closing Hours:</h6>
+                </label>
+                <input id="closing_hours" type="time" className="form-control" name="closing_hours" onChange={this.handelOnChangeForm} />
+              </div>
+            </div>
+            <div className="form-row">
+              <div className="col">
+                <label htmlFor="location">
+                  <h6>Location:</h6>
+                </label>              
+                <SearchLocation 
+                  id="location" 
+                  setAddress={this.setAddress} 
+                  error={address} 
+                  disabled={false} />
               </div>
               <div>
                 <div className="col">
                   <div>
-                    <h6 className="">Active:</h6>
+                    <label htmlFor="is_active">
+                      <h6>Active:</h6>
+                    </label>           
                     <input
+                      id="is_active"
                       type="checkbox"
                       className="form-control"
                       placeholder=""
@@ -152,10 +192,12 @@ class BusinessForm extends Component {
                 </div>
               </div>
             </div>
-            <div class="form-row">
+            <div className="form-row">
               <div className="col">
-                <h6 className="">Main category:</h6>
-                <select name="main_categories" onChange={this.handleOnChangeSelectMain} className="custom-select mb-4">
+                <label htmlFor="main_categories">
+                  <h6>Main category:</h6>
+                </label>             
+                <select value={mainCategorySelectedIndex} id="main_categories" name="main_categories" onChange={this.handleOnChangeSelectMain} className="custom-select mb-4">
                   <option value={"default"} defaultValue>
                     Main Category...
                   </option>
@@ -170,34 +212,27 @@ class BusinessForm extends Component {
                 </select>
               </div>
               <div className="col">
-                <h6 className="">Sub category:</h6>
-                <select
-                  onClick={this.handleOnChangeSelectSub}
-                  name="sub_categories"
-                  className="custom-select mb-4 colorful-select dropdown-primary md-form"
-                  multiple
-                  searchable="Search here.."
-                >
-                  <option value="" disabled selected>
-                    Multiple Select of Sub Categories (ctrl + Command)
-                  </option>
-                  {subCategoryList &&
-                    subCategoryList.map((category, index) => {
-                      return (
-                        <option key={category.sub_id} value={index}>
-                          {category.sub_name}
-                        </option>
-                      );
-                    })}
-                </select>
+                <label htmlFor="sub_categories"><h6>Subcategories:</h6></label>
+                <div >
+                  <Select
+                    value={sub_ids}
+                    onChange={this.handleOnChangeSelectSub}
+                    closeMenuOnSelect={false}
+                    inputId="sub_categories"
+                    isSearchable 
+                    isMulti
+                    placeholder="Select subcategories"
+                    options={subCategoryList.map(category => { return { value:category.sub_id, label:category.sub_name } })}
+                  />
+                </div> 
               </div>
             </div>
-            <div class="col-auto my-1">
+            <div className="col-auto my-1 text-center">
               <button
                 type="submit"
-                class="btn btn-primary"
+                className="btn btn-primary"
                 onClick={this.handleAddBusiness}
-                disabled={isDisable(this.state.formData)}
+                disabled={isDisable(formData)}
               >
                 Add
               </button>

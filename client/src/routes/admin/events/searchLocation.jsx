@@ -18,7 +18,7 @@ async function handlePlaceSelect(updateAddress) {
   updateAddress(addressObject);
 }
 
-function SearchLocationInput({ setAddress, error, disabled }) 
+function SearchLocationInput({ setAddress, error, disabled, id }) 
 {
   const autoCompleteRef = useRef(null);
 
@@ -29,6 +29,7 @@ function SearchLocationInput({ setAddress, error, disabled })
   return (
     <div className="search-location-input">
       <input
+        id={id}
         disabled = {disabled}
         className="form-control"
         ref={autoCompleteRef}

@@ -82,37 +82,81 @@ namespace SwapClassLibrary.Service
             return FilteredEvents;
         }
 
-        public static string AddBusiness(bussinessDTO bussiness, placeDTO place, placeToCategoryDTO placeToCategory)
+        public static bool AddBusiness(NewBusinessDTO business, NewPlaceDTO place, CategoriesIdsDTO categories)
         {
             SwapDbConnection db = new SwapDbConnection();
-            business business_obj = db.businesses.FirstOrDefault(b => b.place_id == bussiness.place_id);
-            if (business_obj == null)
-            {
-                //add place
-                string place_id = PlaceService.AddPlace(place);
-                //add to main and sub category table
-                bool is_add = PlaceService.addOrEditPlaceToCategory(placeToCategory);
-                if (place_id != null && is_add==true)
-                {
-                    
+            r_place_sub_and_main_category categoriedPlace;
+            place placeInDb = db.places.FirstOrDefault(p => p.place_id == place.place_id);
+            business newBusiness;
+            List<r_place_sub_and_main_category> listOfPlacesCategories = new List<r_place_sub_and_main_category>();
 
-                    //add business
-                    business business_to_add = new business()
+            newBusiness = new business
+            {
+                business_owner_id = business.business_owner_id,
+                approve_by_admin = false,
+                closing_hours = business.closing_hours,
+                place_id = place.place_id,
+                is_active = business.is_active,
+                rating = 0,
+                opening_hours = business.opening_hours
+            };
+
+            if (placeInDb == null)
+            {
+                foreach (string subId in categories.subIds)
+                {
+                    listOfPlacesCategories.Add(new r_place_sub_and_main_category
                     {
-                        place_id = place_id,
-                        business_owner_id = bussiness.business_owner_id,
-                        is_active = bussiness.is_active,
-                        rating = 0,
-                        opening_hours = bussiness.opening_hours,
-                        closing_hours = bussiness.closing_hours,
-                        approve_by_admin = false,
-                    };
-                    db.businesses.Add(business_to_add);
-                    db.SaveChanges();
-                    return place_id;
+                        creation_date = DateTime.Now,
+                        place_id = place.place_id,
+                        main_id = categories.mainId,
+                        sub_id = subId
+                    });
                 }
+
+                db.places.Add(new place
+                {
+                    latitude = place.latitude,
+                    longitude = place.longitude,
+                    description = place.description,
+                    name = place.name,
+                    country = place.country,
+                    creation_date = DateTime.Now,
+                    place_id = place.place_id,
+                    post_code = place.post_code ?? "",
+                    settlement = place.settlement,
+                    state = place.state ?? "",
+                    street = place.street,
+                    street_number = place.street_number ?? "",
+                    business = newBusiness,
+                    r_place_sub_and_main_category = listOfPlacesCategories, 
+                });
             }
-            return "";
+            else
+            {
+                if (placeInDb.business != null || placeInDb.Event != null) return false;
+
+                foreach (string subId in categories.subIds)
+                {
+                    categoriedPlace = placeInDb.r_place_sub_and_main_category.FirstOrDefault(r => r.main_id == categories.mainId && r.sub_id == subId);
+
+                    if (categoriedPlace == null)
+                        placeInDb.r_place_sub_and_main_category.Add(new r_place_sub_and_main_category
+                    {
+                        creation_date = DateTime.Now,
+                        place_id = place.place_id,
+                        main_id = categories.mainId,
+                        sub_id = subId
+                    });
+                }
+                placeInDb.description = place.description;
+                placeInDb.name = place.name;
+                placeInDb.business = newBusiness;
+            }
+
+            db.SaveChanges();
+
+            return true;
         }
 
         public static bool EditBusiness(bussinessDTO business)

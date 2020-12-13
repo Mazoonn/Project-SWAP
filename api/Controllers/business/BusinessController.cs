@@ -10,7 +10,6 @@ using SwapClassLibrary.Service;
 
 namespace api.Controllers
 {
-    //[Authorize]
     [RoutePrefix("api/business")]
     public class BusinessController : ApiController
     {
@@ -93,10 +92,10 @@ namespace api.Controllers
         {
             try
             {
-                string place_id = BusinessService.AddBusiness(businessRequest.business, businessRequest.place, businessRequest.placeCategory);
-                if (place_id =="")
-                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is no business id as this in db");
-                return Request.CreateResponse(HttpStatusCode.OK, "The Business was add");
+                bool result = BusinessService.AddBusiness(businessRequest.business, businessRequest.place, businessRequest.placeCategory);
+                if (!result)
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "The business exist in db");
+                return Request.CreateResponse(HttpStatusCode.OK, "The business was added");
             }
             catch (Exception e)
             {
