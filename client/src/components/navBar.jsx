@@ -49,7 +49,7 @@ class NavBar extends Component {
               )}
               {user && (user["role"] === "business" || user["role"] === "admin") && (
                 <NavLink exact activeClassName="active font-weight-bold" to="/business">
-                  Business Owner Page
+                  Business Owner
                 </NavLink>
               )}
               {user && user["role"] === "admin" && (

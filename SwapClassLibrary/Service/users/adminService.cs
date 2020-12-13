@@ -220,16 +220,16 @@ namespace SwapClassLibrary.Service
                 .Select(business => new BusinessInfoDTO
                 {
                     businessId = business.place_id,
-                    country = business.place.country,
+                    country = business.place.country ?? "",
                     creation_date = business.place.creation_date,
                     description = business.place.description ?? "",
                     name = business.place.name ?? "",
                     post_code = business.place.post_code?? "",
                     state = business.place.state?? "",
-                    street = business.place.street,
-                    street_number = business.place.street_number,
+                    street = business.place.street ?? "",
+                    street_number = business.place.street_number ?? "",
                     approve = business.approve_by_admin,
-                    settlement = business.place.settlement,
+                    settlement = business.place.settlement ?? "",
                     user = new clientInfoDTO
                                 {
                                       birthday_date = business.BusinessOwner.client.birthday_date,

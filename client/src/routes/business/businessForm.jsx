@@ -6,6 +6,7 @@ import { getSubCategoriesId } from "../../services/SubCategory";
 import getAddress from "../../services/Address";
 import { getCurrentUser } from "../../services/authService";
 import Select from 'react-select';
+import AddedBusinessModal from './addedBusinessModal';
 
 const addressValidate = (address) => {
   const schema = ["country", "settlement", "street"];
@@ -28,7 +29,10 @@ class BusinessForm extends Component {
     mainCategoryList: [],
     subCategoryList: [],
     mainCategorySelectedIndex: "default",
-    validation: {}
+    validation: {},
+    isSaving: false,
+    saved: false,
+    businessExist: false
   };
 
   async componentDidMount() {
@@ -59,6 +63,7 @@ class BusinessForm extends Component {
     validation.address = error;
     this.setState({ validation });
     if(error) return null;
+    this.setState({ isSaving: true });
     const 
     { 
       business_owner_id, 
@@ -88,17 +93,26 @@ class BusinessForm extends Component {
       description,
     });
     const request = { place, placeCategory, business };
-    await addBusiness(request);
+    try
+    {
+      await addBusiness(request);
+    }
+    catch(err)
+    {
+      if (err.response && err.response.status === 400)
+        this.setState({ businessExist: true });
+    }
+    finally
+    {
+      this.setState({ isSaving: false, saved: true });
+    }
   };
 
   handelOnChangeForm = (event) => {
     const formData = { ...this.state.formData };
+    const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
     const { name } = event.target;
-    if (name === "is_active") {
-      formData[name] = event.target.checked;
-    } else {
-      formData[name] = event.target.value;
-    }
+    formData[name] = value;
     this.setState({ formData });
   };
 
@@ -126,12 +140,18 @@ class BusinessForm extends Component {
     this.setState({ formData });
   };
 
+  handleCloseBusinessAddedModal = () =>
+  {
+    this.setState({ saved: false, formData: {sub_ids: null}, mainCategorySelectedIndex: "default" });
+  };
+
   render() {
-    const { formData, mainCategoryList, mainCategorySelectedIndex, subCategoryList, validation } = this.state;
+    const { formData, mainCategoryList, mainCategorySelectedIndex, subCategoryList, validation, isSaving, saved, businessExist } = this.state;
     const { address } = validation;
-    const { sub_ids } = formData;
+    const { sub_ids, name, description, opening_hours, closing_hours, is_active } = formData;
 
     return (
+      <React.Fragment>
       <div className="card m-auto">
         <h5 className="card-header">Business Information</h5>
         <div className="card-body">
@@ -140,13 +160,13 @@ class BusinessForm extends Component {
               <div className="col">
                 <label htmlFor="name"><h6>Name:</h6>
                 </label>
-                <input placeholder="Enter business name" id="name" type="text" className="form-control" name="name" onChange={this.handelOnChangeForm} />
+                <input value={name || ""} placeholder="Enter business name" id="name" type="text" className="form-control" name="name" onChange={this.handelOnChangeForm} />
               </div>
               <div className="col">
                 <label htmlFor="description">
                   <h6>Description:</h6>
                 </label>
-                <input type="text" placeholder="Enter business description" id="description" className="form-control" name="description" onChange={this.handelOnChangeForm} />
+                <input value={description || ""} type="text" placeholder="Enter business description" id="description" className="form-control" name="description" onChange={this.handelOnChangeForm} />
               </div>
             </div>
             <div className="form-row">
@@ -154,13 +174,13 @@ class BusinessForm extends Component {
                 <label htmlFor="opening_hours">
                 <h6>Opening Hours:</h6>
                 </label>               
-                <input id="opening_hours" type="time" className="form-control" name="opening_hours" onChange={this.handelOnChangeForm} />
+                <input value={opening_hours || ""} id="opening_hours" type="time" className="form-control" name="opening_hours" onChange={this.handelOnChangeForm} />
               </div>
               <div className="col">
                 <label htmlFor="closing_hours">
                   <h6>Closing Hours:</h6>
                 </label>
-                <input id="closing_hours" type="time" className="form-control" name="closing_hours" onChange={this.handelOnChangeForm} />
+                <input value={closing_hours || ""} id="closing_hours" type="time" className="form-control" name="closing_hours" onChange={this.handelOnChangeForm} />
               </div>
             </div>
             <div className="form-row">
@@ -169,6 +189,7 @@ class BusinessForm extends Component {
                   <h6>Location:</h6>
                 </label>              
                 <SearchLocation 
+                  reset={saved}
                   id="location" 
                   setAddress={this.setAddress} 
                   error={address} 
@@ -181,6 +202,7 @@ class BusinessForm extends Component {
                       <h6>Active:</h6>
                     </label>           
                     <input
+                      checked={is_active || false}
                       id="is_active"
                       type="checkbox"
                       className="form-control"
@@ -232,14 +254,22 @@ class BusinessForm extends Component {
                 type="submit"
                 className="btn btn-primary"
                 onClick={this.handleAddBusiness}
-                disabled={isDisable(formData)}
+                disabled={isDisable(formData) || isSaving}
               >
-                Add
-              </button>
+              {!isSaving && "Add" ||(<React.Fragment>
+              <span className="spinner-grow spinner-grow-sm"></span>
+                <span> Loading...</span>
+                </React.Fragment>)}</button>
             </div>
           </form>
         </div>
       </div>
+      <AddedBusinessModal
+        error={businessExist}
+        isOpen={saved}
+        handleClose={this.handleCloseBusinessAddedModal} 
+      />  
+      </React.Fragment>
     );
   }
 }
