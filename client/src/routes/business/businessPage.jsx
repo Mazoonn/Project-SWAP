@@ -17,7 +17,7 @@ class BusinessPage extends Component {
   };
 
   data = {
-    name: ["Add Business", "My Business", "Products"],
+    name: ["Add Business", "My Businesses", "Products"],
     component: [
       <BusinessForm />,
       <ListOfBusiness AreChanges={this.AreChanges} handleOnChangeIsActiveBusiness={this.handleOnChangeIsActiveBusiness} />,
@@ -26,6 +26,7 @@ class BusinessPage extends Component {
   };
 
   componentDidMount() {
+    document.title = "Business Page"
     const user = getCurrentUser();
     if (user) {
       this.setState({ business_owner_id: user[`user-id`] });
@@ -70,11 +71,8 @@ class BusinessPage extends Component {
             <BusinessButtons handleClick={this.handleClick} data={name} selected={selected} />
           </div>
 
-          <div className="col" hidden={selected === -1}>
-            {component[selected]}
-          </div>
-          <div className="col" hidden={selected !== -1}>
-            <div className="card m-auto">
+          <div className="col">
+            {selected !== -1  && component[selected] || <div className="card m-auto">
               <h5 className="card-header">Business Owner Page Information</h5>
               <div className="card-body">
                 <h6>Add Business</h6>
@@ -87,8 +85,9 @@ class BusinessPage extends Component {
                 <br />
                 <br />
               </div>
-            </div>
+            </div>}
           </div>
+
         </div>
       </React.Fragment>
     );

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { GetAllProduct, deleteProduct, updateProduct, ChangeProductToActive } from "../../services/Products";
 import { AddProduct } from "../../services/Products";
 import { getCurrentUser } from "../../services/authService";
-import { getAllBusiness } from "../../services/Business";
+import { getAllBusinesses } from "../../services/Business";
 class ListOfProducts extends Component {
   state = {
     products: [],
@@ -18,7 +18,7 @@ class ListOfProducts extends Component {
 
   getState = async () => {
     const user = getCurrentUser();
-    const business = await getAllBusiness(user[`user-id`]);
+    const business = await getAllBusinesses(user[`user-id`]);
     this.setState({ business, formData: { business_owner_id: user[`user-id`] }, business_owner_id: user[`user-id`] });
   };
   handleOnChangeProduct = (event, index) => {

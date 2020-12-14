@@ -13,15 +13,13 @@ namespace api.Controllers
     [RoutePrefix("api/business")]
     public class BusinessController : ApiController
     {
-        [Route("GetAllBusiness/{business_owner}")]
+        [Route("GetAllBusinesses/{business_owner}")]
         [HttpGet]
-        public HttpResponseMessage GetAllBusiness(string business_owner)
+        public HttpResponseMessage GetAllBusinesses(string business_owner)
         {
             try
             {
                 List<bussinessDTO> list = BusinessService.GetAllBusinesses(business_owner);
-                if (list == null)
-                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is no business");
                 return Request.CreateResponse(HttpStatusCode.OK, list);
 
             }
@@ -102,9 +100,9 @@ namespace api.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
             }
         }
-        [Route("EditBusiness")]
+        [Route("EditBusiness/{clientId}")]
         [HttpPut]
-        public HttpResponseMessage EditBusiness([FromBody]bussinessDTO bussiness)
+        public HttpResponseMessage EditBusiness([FromBody]bussinessDTO bussiness, string clientId)
         {
             try
             {
@@ -120,13 +118,13 @@ namespace api.Controllers
         }
 
 
-        [Route("ChangeActiveBusiness")]
+        [Route("ChangeActiveBusiness/{userId}")]
         [HttpPut]
-        public HttpResponseMessage ChangeActiveBusiness([FromBody]bussinessDTO bussiness)
+        public HttpResponseMessage ChangeActiveBusiness([FromBody]bussinessDTO bussiness, string userId)
         {
             try
             {
-                bool is_edit = BusinessService.ChangeActiveBusiness(bussiness);
+                bool is_edit = BusinessService.ChangeActiveBusiness(bussiness.place_id, userId, bussiness.is_active);
                 if (!is_edit)
                     return Request.CreateResponse(HttpStatusCode.NotFound, "There is no business id as this in db");
                 return Request.CreateResponse(HttpStatusCode.OK, "The business was active");
@@ -138,15 +136,15 @@ namespace api.Controllers
         }
 
 
-        [Route("RemoveBusiness")]
+        [Route("RemoveBusiness/{userId}")]
         [HttpDelete]
-        public HttpResponseMessage RemoveBusiness([FromBody]bussinessDTO bussiness)
+        public HttpResponseMessage RemoveBusiness([FromBody]bussinessDTO bussiness, string userId)
         {
             try
             {
-                if (bussiness.place_id != null || bussiness.business_owner_id != null)
+                if (bussiness.place_id != null)
                 {
-                    bool is_deleted = BusinessService.DeleteBusiness(bussiness.business_owner_id, bussiness.place_id);
+                    bool is_deleted = BusinessService.DeleteBusiness(userId, bussiness.place_id);
                     if (!is_deleted)
                         return Request.CreateResponse(HttpStatusCode.NotFound, "There is no business id as this in db");
                     return Request.CreateResponse(HttpStatusCode.OK, "The bussiness is removed");

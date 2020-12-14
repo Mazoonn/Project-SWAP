@@ -36,6 +36,7 @@ class BusinessForm extends Component {
   };
 
   async componentDidMount() {
+    document.title = "Add business"
     const user = getCurrentUser();
     this.setState({ formData: { business_owner_id: user[`user-id`] } });
     const mainCategoryList = await getAllMainCategories();
@@ -54,7 +55,7 @@ class BusinessForm extends Component {
     this.setState({ formData });
   };
 
-  handleAddBusiness = async (event) => {
+  handleAddBusiness = async event => {
     event.preventDefault();
     const { formData } = this.state;
     const { address } = formData;

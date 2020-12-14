@@ -12,27 +12,31 @@ namespace SwapClassLibrary.Service
 {
     public class BusinessService
     {
-        public static List<bussinessDTO> GetAllBusinesses(string business_owner_id, bool test = false)
+        public static List<bussinessDTO> GetAllBusinesses(string business_owner_id)
         {
             SwapDbConnection db = new SwapDbConnection();
-            int count = db.businesses.Where(b => b.business_owner_id == business_owner_id).Count();
-            if (count == 0 || test)
-                return null;
-            List<bussinessDTO> bussinesses = db.businesses.Select(b => new bussinessDTO()
+            return db.businesses.Select(business => new bussinessDTO
             {
-                place_id = b.place_id,
-                business_owner_id = b.business_owner_id,
-                is_active = b.is_active,
-                rating =  b.rating,
-                opening_hours = b.opening_hours,
-                closing_hours = b.closing_hours,
-                approve_by_admin = b.approve_by_admin,
-                place_info = new placeDTO { name = b.place.name,
-                description= b.place.description,
+                place_id = business.place_id,
+                business_owner_id = business.business_owner_id,
+                is_active = business.is_active,
+                rating = business.rating,
+                opening_hours = business.opening_hours,
+                closing_hours = business.closing_hours,
+                approve_by_admin = business.approve_by_admin,
+                place_info = new placeDTO
+                {
+                    name = business.place.name ?? "",
+                    description = business.place.description ?? "",
+                    country = business.place.country ?? "",
+                    post_code = business.place.post_code ?? "",
+                    settlement = business.place.settlement ?? "",
+                    state = business.place.state ?? "",
+                    street = business.place.street ?? "",
+                    street_number = business.place.street_number ?? ""
                 }
-               
-            }).Where(b => b.business_owner_id == business_owner_id).ToList();
-            return bussinesses;
+            }
+            ).Where(business => business.business_owner_id == business_owner_id).ToList();
         }
 
         public static List<MapBusinessDTO> GetFilteredBusinessesAround(PointDTO position, CategoriesIdsDTO ids, double radius)
@@ -163,24 +167,24 @@ namespace SwapClassLibrary.Service
         {
             SwapDbConnection  db = new SwapDbConnection();
             business business_to_edit = db.businesses.FirstOrDefault(b => b.business_owner_id == business.business_owner_id && b.place_id == business.place_id);
-            
-            place place_to_edit= db.places.FirstOrDefault(p=> p.place_id == business.place_id);
-            if (business_to_edit == null ) return false;
-            if (business.place_info.description != null) place_to_edit.description = business.place_info.description;
-            if (business.place_info.name != null) place_to_edit.name= business.place_info.name;
-            if (business.opening_hours != null) business_to_edit.opening_hours = business.opening_hours;
-            if (business.closing_hours != null) business_to_edit.closing_hours = business.closing_hours;
+            if (business_to_edit == null) return false;
+
+            business_to_edit.place.description = business.place_info.description ?? business_to_edit.place.description;
+            business_to_edit.place.name = business.place_info.name ?? business_to_edit.place.name;
+            business_to_edit.opening_hours = business.opening_hours ?? business_to_edit.opening_hours;
+            business_to_edit.closing_hours = business.closing_hours ?? business_to_edit.closing_hours;
             db.SaveChanges();
+
             return true;
         }
 
-        public static bool ChangeActiveBusiness(bussinessDTO business)
+        public static bool ChangeActiveBusiness(string placeId, string userId, bool isActive)
         {
             SwapDbConnection db = new SwapDbConnection();
-            business business_to_edit = db.businesses.FirstOrDefault(b => b.place_id == business.place_id);
+            business business_to_edit = db.businesses.FirstOrDefault(b => b.place_id == placeId && b.business_owner_id == userId);
 
             if (business_to_edit == null) return false;
-            business_to_edit.is_active = business.is_active;
+            business_to_edit.is_active = isActive;
             db.SaveChanges();
             return true;
         }

@@ -26,18 +26,13 @@ function SearchLocationInput({ setAddress, error, disabled, id, reset })
     handleScriptLoad(setAddress, autoCompleteRef);
   }, []);
 
-  const resetValue = () =>
-  {
-    autoCompleteRef.current.value = "";
-  };
-
-  if(reset) resetValue();
+  if(reset) autoCompleteRef.current.value = "";
 
   return (
     <div className="search-location-input">
       <input
         id={id}
-        disabled={disabled}
+        disabled = {disabled}
         className="form-control"
         ref={autoCompleteRef}
         placeholder="Enter Address"

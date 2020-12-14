@@ -20,7 +20,15 @@ export async function getBusinessesByCategories(req)
 
 export async function addBusiness(req) 
 {
-    return await http.post(`${API_URL_Dev}/business/AddBusiness`,req);
+    try
+    {
+        const request = await http.post(`${API_URL_Dev}/business/AddBusiness`,req);
+        return request.data
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
 }
 
 
