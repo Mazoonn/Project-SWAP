@@ -16,17 +16,14 @@ namespace api.Controllers
     {
         // GET: api/MainCategory
 
-        [Route("GetAllMainCategory")]
+        [Route("GetAllMainCategories")]
         [HttpGet]
-        public HttpResponseMessage GetAllMainCategory(bool test = false)
+        public HttpResponseMessage GetAllMainCategories(bool test = false)
         {
             try
             {
-                List<categoryDTO> list = MainCategoryService.GetAllMainCategorys().Where(x => x.is_active).ToList();
-                if (list == null || test)
-                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is no Main Categoy value in the db");
+                List<categoryDTO> list = MainCategoryService.GetAllMainCategories().Where(x => x.is_active).ToList();
                 return Request.CreateResponse(HttpStatusCode.OK, list);
-
             }
             catch (Exception e)
             {
@@ -41,11 +38,8 @@ namespace api.Controllers
         {
             try
             {
-                List<categoryDTO> list = MainCategoryService.GetAllMainCategorys().ToList();
-                if (list == null || test)
-                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is no Main Categoy value in the db");
+                List<categoryDTO> list = MainCategoryService.GetAllMainCategories();
                 return Request.CreateResponse(HttpStatusCode.OK, list);
-
             }
             catch (Exception e)
             {

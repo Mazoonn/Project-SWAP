@@ -26,7 +26,7 @@ class UsersManager extends Component {
     user: {},
     email: "",
     name: "",
-    pageSize: 3,
+    pageSize: 20,
     currentPage: 1,
     request: false,
     loading: false,

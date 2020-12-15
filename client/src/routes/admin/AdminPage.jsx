@@ -34,7 +34,7 @@ class AdminPage extends Component {
     return (
       <React.Fragment>
         <div className="row ml-2">
-          <div className="col-">
+          <div>
             <AdminButtons
               handleClick= {this.handleClick}
               data={name}

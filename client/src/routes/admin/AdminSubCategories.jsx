@@ -48,22 +48,35 @@ const AdminSubCategories = () => {
 
   const handleOnChangeSelect = async (event) => {
     const index = event.target.value;
+    setSubCategory({});
+    setSelectValue(index);
 
-    if (index !== "default") {
+    if (index !== "default") 
+    {
       setLoading(true);
-      const category_id = categories[index].id;
-      const newSubCategories = await getSubCategoriesId(category_id);
-      addNewValuesToSubCategories(newSubCategories);
-      setSubCategories(newSubCategories);
       setIndexCategory(index);
-      setLoading(false);
       setIsDefault(false);
-    } else {
+      const category_id = categories[index].id;
+      try
+      {
+        const newSubCategories = await getSubCategoriesId(category_id);
+        addNewValuesToSubCategories(newSubCategories.data);
+        setSubCategories(newSubCategories.data);
+      }
+      catch(err)
+      {
+        console.log(err);
+      }
+      finally
+      {
+        setLoading(false);
+      }
+    } 
+    else 
+    {
       setSubCategories([]);
       setIsDefault(true);
     }
-    setSubCategory({});
-    setSelectValue(index);
   };
 
   const handleOnChangeSubCategory = (event, index) => {

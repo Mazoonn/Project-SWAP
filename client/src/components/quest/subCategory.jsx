@@ -3,17 +3,15 @@ import React, { Component } from "react";
 class SubCategory extends Component {
   render() {
     return (
-      <div className="col mb-4">
+      <div className="col">
         <div className="card h-100">
+        <h6 className="card-header text-center">{this.props.category.name}</h6>
           <div className="card-body text-center">
-            <div className="card-title">
-              <p className="font-weight-bold">{this.props.category.name}</p>
-            </div>
             <div className="card-text">
               <div className="container">
                 <div className={`row row-cols-${this.props.columns}`}>
                   {this.props.category.subCategory.map((sub) => {
-                    let className = "btn btn-outline-info btn-sm";
+                    let className = "btn btn-outline-primary btn-sm";
                     if (sub.isSelected) className = className + " active";
                     return (
                       <button

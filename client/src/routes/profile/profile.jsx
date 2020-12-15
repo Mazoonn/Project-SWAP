@@ -252,7 +252,7 @@ class Profile extends Component {
                     </td>
                     <td className="pb-2 pt-2">{email || ""}</td>
                   </tr>
-                  <tr hidden={platform !== "local"}>
+                  {platform === "local" && <tr>
                     <td className="pb-2 pt-2 pr-2">
                       <label htmlFor="password">
                         <b>New password</b>
@@ -272,7 +272,7 @@ class Profile extends Component {
                         Save
                       </button>
                     </td>
-                  </tr>
+                  </tr>}
                   <tr>
                     <td className="pb-2 pt-2">
                       <b>Age</b>
@@ -323,12 +323,12 @@ class Profile extends Component {
                 </button>
               </div>
             </div>
-            <div hidden={!requestBusinessOwner} className="card-footer text-center">
+            {requestBusinessOwner && <div className="card-footer text-center">
               <b>Ask to become a business owner</b>
               <button onClick={this.handleRequestBusinessOwner} className="btn btn-primary ml-2">
                 Request
               </button>
-            </div>
+            </div>}
           </div>
         </div>
         <UserBirthdayModal

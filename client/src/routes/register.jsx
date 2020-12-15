@@ -80,10 +80,13 @@ class RegisterForm extends Component {
       return null;
     }
     return (
+      <div className="card m-auto">
+      <h5 className="card-header">Register</h5>
+      <div className="card-body">
       <form>
         <div className="form-row">
           <div className="form-group col-md-6">
-            <label htmlFor="first_name">First Name</label>
+            <label htmlFor="first_name"><b>First Name</b></label>
             <input
               autoFocus
               type="text"
@@ -100,7 +103,7 @@ class RegisterForm extends Component {
             )}
           </div>
           <div className="form-group col-md-6">
-            <label htmlFor="last_name">Last Name</label>
+            <label htmlFor="last_name"><b>Last Name</b></label>
             <input
               type="text"
               className="form-control"
@@ -116,7 +119,7 @@ class RegisterForm extends Component {
             )}
           </div>
           <div className="form-group col-md-6">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email"><b>Email</b></label>
             <input
               type="email"
               className="form-control"
@@ -132,7 +135,7 @@ class RegisterForm extends Component {
             )}
           </div>
           <div className="form-group col-md-6">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password"><b>Password</b></label>
             <input
               type="password"
               className="form-control"
@@ -148,7 +151,7 @@ class RegisterForm extends Component {
             )}
           </div>
           <div className="form-group col-md-6">
-            <label htmlFor="confirm_password">Confirm password</label>
+            <label htmlFor="confirm_password"><b>Confirm password</b></label>
             <input
               type="password"
               className="form-control"
@@ -164,7 +167,7 @@ class RegisterForm extends Component {
             )}
           </div>
           <div className="form-group col-md-6">
-            <label htmlFor="phone">Phone Number</label>
+            <label htmlFor="phone"><b>Phone Number</b></label>
             <input
               type="text"
               className="form-control"
@@ -180,7 +183,7 @@ class RegisterForm extends Component {
             )}
           </div>
           <div className="form-group col-md-6">
-            <label htmlFor="birthday">Birthday</label>
+            <label htmlFor="birthday"><b>Birthday</b></label>
             <input
               type="date"
               className="form-control"
@@ -190,7 +193,7 @@ class RegisterForm extends Component {
             />
           </div>
           <div className="form-group col-md-6">
-            <label htmlFor="sex">Sex</label>
+            <label htmlFor="sex"><b>Sex</b></label>
             <select id="sex" className="form-control" onBlur={this.handleChange}>
               <option value="male" defaultValue>
                 Male
@@ -209,7 +212,7 @@ class RegisterForm extends Component {
           <br />
           <button
             type="submit"
-            disabled={this.state.loading || Object.values(this.state.user).some((attr) => attr === "")}
+            disabled={this.state.loading || Object.values(this.state.user).some((attr) => !attr)}
             onClick={this.handleSubmit}
             className="btn btn-primary mt-4"
             value={this.state.loading ? "Loading..." : "Login"}
@@ -218,6 +221,8 @@ class RegisterForm extends Component {
           </button>
         </div>
       </form>
+      </div>
+      </div>
     );
   }
 }

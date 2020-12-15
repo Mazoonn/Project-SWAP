@@ -32,15 +32,29 @@ class BusinessForm extends Component {
     validation: {},
     isSaving: false,
     saved: false,
-    businessExist: false
+    businessExist: false,
+    pageLoading: false,
+    loadingSubcategories: false
   };
 
-  async componentDidMount() {
+  async componentDidMount() 
+  {
     document.title = "Add business"
     const user = getCurrentUser();
-    this.setState({ formData: { business_owner_id: user[`user-id`] } });
-    const mainCategoryList = await getAllMainCategories();
-    if(mainCategoryList) this.setState({ mainCategoryList });
+    this.setState({ formData: { business_owner_id: user[`user-id`] }, pageLoading: true });
+    try
+    {
+      const mainCategoryList = await getAllMainCategories();
+      this.setState({ mainCategoryList: mainCategoryList.data });
+    }
+    catch(err)
+    {
+      console.log(err)
+    }
+    finally
+    {
+      this.setState({ pageLoading: false });
+    }
   }
 
   setAddress = (place) => {
@@ -117,21 +131,37 @@ class BusinessForm extends Component {
     this.setState({ formData });
   };
 
-  handleOnChangeSelectMain = async (event) => {
+  handleOnChangeSelectMain = async event => {
     const mainCategorySelectedIndex = event.target.value;
     const formData = { ...this.state.formData };
-    let subCategoryList = [];
     formData.sub_ids = [];
 
-    if (mainCategorySelectedIndex !== "default") {
+    this.setState({ mainCategorySelectedIndex, formData });
+    if (mainCategorySelectedIndex !== "default")
+     {
       const category_id = this.state.mainCategoryList[mainCategorySelectedIndex].id;
-      subCategoryList = await getSubCategoriesId(category_id);
-      formData.main_id = category_id;
+      this.setState({ loadingSubcategories: true });
+      try
+      {
+        const subCategoryList = await getSubCategoriesId(category_id);
+        formData.main_id = category_id;
+        this.setState({ subCategoryList: subCategoryList.data });
+      }
+      catch(err)
+      {
+        console.log(err);
+      }
+      finally
+      {
+        this.setState({ loadingSubcategories: false });
+      }
     }
-    else {
+    else 
+    {
       formData.main_id = "";
+      this.setState({ subCategoryList: [] });
     }
-    this.setState({ mainCategorySelectedIndex, formData, subCategoryList });
+    this.setState({ formData });
   };
 
   handleOnChangeSelectSub = selectedOption  => 
@@ -147,9 +177,20 @@ class BusinessForm extends Component {
   };
 
   render() {
-    const { formData, mainCategoryList, mainCategorySelectedIndex, subCategoryList, validation, isSaving, saved, businessExist } = this.state;
+    const { formData, mainCategoryList, mainCategorySelectedIndex, subCategoryList, validation, isSaving, saved, businessExist, pageLoading, loadingSubcategories } = this.state;
     const { address } = validation;
     const { sub_ids, name, description, opening_hours, closing_hours, is_active } = formData;
+
+    if(pageLoading) return (<div className="card m-auto">
+    <h5 className="card-header">Business Information</h5>
+    <div className="card-body">
+      <div className="text-center">
+        <div className="spinner-border text-primary">
+          <span className="sr-only">Loading...</span>
+        </div>
+      </div>
+    </div>
+  </div>);
 
     return (
       <React.Fragment>
@@ -239,13 +280,14 @@ class BusinessForm extends Component {
                 <div >
                   <Select
                     value={sub_ids}
+                    isDisable={loadingSubcategories}
                     onChange={this.handleOnChangeSelectSub}
                     closeMenuOnSelect={false}
                     inputId="sub_categories"
                     isSearchable 
                     isMulti
-                    placeholder="Select subcategories"
-                    options={subCategoryList.map(category => { return { value:category.sub_id, label:category.sub_name } })}
+                    placeholder={!loadingSubcategories ? "Select subcategories" : "Loading..."}
+                    options={!loadingSubcategories ? subCategoryList.map(category => { return { value:category.sub_id, label:category.sub_name } }) : []}
                   />
                 </div> 
               </div>

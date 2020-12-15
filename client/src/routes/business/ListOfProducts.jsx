@@ -22,16 +22,30 @@ class ListOfProducts extends Component {
     businessOwnerId: "",
     indexBusinessId: "default",
     productToAdd: {},
+    loading: false
   };
 
   componentDidMount() {
+    document.title = "Products"
     this.getState();
   }
 
   getState = async () => {
     const user = getCurrentUser();
-    const businesses = await getAllBusinesses(user[`user-id`]);
-    this.setState({ businesses, businessOwnerId: user[`user-id`] });
+    this.setState({ loading: true, businessOwnerId: user[`user-id`] })
+    try
+    {
+      const businesses = await getAllBusinesses(user[`user-id`]);
+      this.setState({ businesses: businesses.data } );
+    }
+    catch(err)
+    {
+      console.log(err);
+    }
+    finally
+    {
+      this.setState({ loading: false });
+    }
   };
 
   handleOnChangeProduct = (event, index) => {
@@ -55,9 +69,21 @@ class ListOfProducts extends Component {
   handleDeleteProduct = async (indexProduct) => {
     const { businessOwnerId: client_id } = this.state;
     const product = this.state.products[indexProduct];
-    await deleteProduct({ business_id: product.business_id, product_id: product.product_id, client_id });
-    const products = this.state.products.filter(p => p !== product);
-    this.setState({ products });
+    this.setState({ loading: true });
+    try
+    {
+      await deleteProduct({ business_id: product.business_id, product_id: product.product_id, client_id });
+      const products = this.state.products.filter(p => p !== product);
+      this.setState({ products });
+    }
+    catch(err)
+    {
+      console.log(err);
+    }
+    finally
+    {
+      this.setState({ loading: false });
+    }
   };
 
   addNewValuesToProduct = product =>
@@ -101,11 +127,23 @@ class ListOfProducts extends Component {
       business_id: business_selected_id,
       ...productToAdd,
     };
-    const newProduct = await AddProduct(product, businessOwnerId);
-    const products = [ ...this.state.products ];
-    this.addNewValuesToProduct(newProduct);
-    products.push(newProduct);
-    this.setState({ products, productToAdd: {} });
+    this.setState({ loading: true });
+    try
+    {
+      const newProduct = await AddProduct(product, businessOwnerId);
+      const products = [ ...this.state.products ];
+      this.addNewValuesToProduct(newProduct.data);
+      products.push(newProduct.data);
+      this.setState({ products, productToAdd: {} });
+    }
+    catch(err)
+    {
+      console.log(err);
+    }
+    finally
+    {
+      this.setState({ loading: false });
+    }
   };
 
   handleOnClickSaveProduct = async (index) => {
@@ -132,14 +170,26 @@ class ListOfProducts extends Component {
       discount_end_date,
       discount_start_date,
     };
-    await ChangeProductActive({
-      product_id,
-      business_id,
-      is_active,
-    }, businessOwnerId);
-    await updateProduct(req, businessOwnerId);
-    copyNewValues(products[index]);
-    this.setState({ products });
+    this.setState({ loading: true });
+    try
+    {
+      await ChangeProductActive({
+        product_id,
+        business_id,
+        is_active,
+      }, businessOwnerId);
+      await updateProduct(req, businessOwnerId);
+      copyNewValues(products[index]);
+      this.setState({ products });
+    }
+    catch(err)
+    {
+      console.log(err);
+    }
+    finally
+    {
+      this.setState({ loading: false });
+    }
   };
 
   handleOnChangeSelect = async event => {
@@ -148,11 +198,20 @@ class ListOfProducts extends Component {
     {
       const { businessOwnerId } = this.state;
       const business_selected_id = this.state.businesses[indexBusinessId].place_id;
-      const products = await GetAllProducts(business_selected_id, businessOwnerId);
-      if (products) 
+      this.setState({ loading: true });
+      try
       {
-        this.addNewValuesToProducts(products);
-        this.setState({ products });
+        const products = await GetAllProducts(business_selected_id, businessOwnerId);
+        this.addNewValuesToProducts(products.data);
+        this.setState({ products:products.data });
+      }
+      catch(err)
+      {
+        console.log(err);
+      }
+      finally
+      {
+        this.setState({ loading: false });
       }
     }
     else
@@ -198,7 +257,19 @@ class ListOfProducts extends Component {
   };
 
   render() {
-    const { products, businesses , indexBusinessId, productToAdd } = this.state;
+    const { products, businesses , indexBusinessId, productToAdd, loading } = this.state;
+
+    if(loading) return (
+    <div className="card m-auto">
+      <h5 className="card-header">Products by selected business</h5>
+      <div className="card-body">
+        <div className="text-center">
+          <div className="spinner-border text-primary">
+            <span className="sr-only">Loading...</span>
+          </div>
+        </div>
+      </div>
+    </div>);
 
     return (
       <React.Fragment>

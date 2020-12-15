@@ -103,14 +103,17 @@ class Quest extends Component {
     this.setState({ loadingPage: true });
     try {
       const categories = await getAllMainCategories();
-      categories.forEach((category) => {
+      categories.data.forEach((category) => {
         category.isFirstSelected = false;
         category.isCurrentlySelected = false;
       });
-      this.setState({ categoryList: categories, loadingPage: false });
-    } catch (e) {
+      this.setState({ categoryList: categories.data });
+    } catch (err) {
+      console.log(err);
+    }
+    finally
+    {
       this.setState({ loadingPage: false });
-      console.log(e);
     }
   };
 
@@ -139,17 +142,37 @@ class Quest extends Component {
     this.setState({ categoryList });
   };
 
-  handleGetSubCategories = async (id) => {
-    const subCategory = await getSubCategoriesId(id);
-    subCategory.forEach((category) => {
-      category.isSelected = false;
-    });
-
-    return subCategory;
+  handleGetSubCategories = async (id) => 
+  {
+    try
+    {
+      const subCategory = await getSubCategoriesId(id);
+      subCategory.data.forEach((category) => {
+        category.isSelected = false;
+      });
+      return subCategory.data;
+    }
+    catch(err)
+    {
+      console.log(err);
+      return [];
+    }
   };
 
   handleDivideSubCategories = () => {
     const categories = this.state.categoryList.filter((category) => category.isCurrentlySelected);
+    console.log(categories.length);
+
+    if(categories.length == 0)
+    return (<div className="card">
+    <div className="card-body">
+      <h5 className="card-title">Instructions</h5>
+      <p className="card-text">Please select at least one main category and at least one subcategory</p>
+    </div>
+  </div>);
+
+
+    
     return (
       <div className={`row row-cols-${this.state.columnsOfSubcategories}`}>
         {categories.map((category) => {
@@ -187,13 +210,14 @@ class Quest extends Component {
 
     return (
       <React.Fragment>
-        <div className="float-left">
+        <div className="row ml-2">
+        <div>
           <Category isLoading={isLoading} handleOnClickCategory={this.handleOnClickCategory} categoryList={categoryList} />
           <div className="text-center p-3">
             {(!isLoading && (
               <button
                 onClick={this.getPlaces}
-                hidden={!isNotHidden(categoryList)}
+                disabled={!isNotHidden(categoryList)}
                 type="button"
                 className="btn btn-primary btn-md"
               >
@@ -207,7 +231,17 @@ class Quest extends Component {
             )}
           </div>
         </div>
-        <div className="container">{this.handleDivideSubCategories()}</div>
+        <div className="col">
+        <div>
+        <div className="card m-auto">
+          <h5 className="card-header text-center">Categories</h5>
+          {this.handleDivideSubCategories()}
+          <div className="card-body">
+          </div>
+        </div>
+          </div>
+        </div>
+        </div>    
         <NoResults noResults={noResults} handleClose={this.handleCloseNoResults} />
       </React.Fragment>
     );

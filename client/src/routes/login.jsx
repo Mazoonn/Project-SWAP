@@ -4,6 +4,7 @@ import LoginGoF from "./loginGoF";
 import { clientLogin } from "../services/client.ts";
 import Joi from "joi-browser";
 import { getCurrentUser } from "../services/authService";
+import "./profile/widthFit.css"
 
 function Login(props) {
   const [loading, setLoading] = useState(false);
@@ -55,9 +56,12 @@ function Login(props) {
     return null;
   }
   return (
+    <div className="card m-auto fit-content">
+    <h5 className="card-header">Login</h5>
+    <div className="card-body">
     <div className="text-center">
       <div className="d-inline-block pt-4">
-        <LoginGoF loading={setLoading} />
+        <LoginGoF loading={setLoading} isDisabled={loading} />
         <br />
         <form>
           <div className="form-group">
@@ -116,6 +120,8 @@ function Login(props) {
         </form>
       </div>
     </div>
+  </div>
+</div>
   );
 }
 

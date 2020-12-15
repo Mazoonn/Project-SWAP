@@ -13,21 +13,17 @@ namespace SwapClassLibrary.Service
     public class MainCategoryService
     {
         //get all main category
-        public static List<categoryDTO> GetAllMainCategorys() 
+        public static List<categoryDTO> GetAllMainCategories() 
         {
             SwapDbConnection db = new SwapDbConnection();
-            int count = db.main_category.Count();
-            if (count == 0)
-                return null;
-            List<categoryDTO> mainCategory = db.main_category.Select(x => new categoryDTO(){
+            List<categoryDTO> mainCategories = db.main_category.Select(x => new categoryDTO(){
             creation_date = x.creation_date,
             name = x.name,
             id = x.main_id,
             google_value = x.google_value,
             is_active =x.is_active,
             }).ToList();
-            return mainCategory;
-           
+            return mainCategories;  
         }
 
         //get  main category by id

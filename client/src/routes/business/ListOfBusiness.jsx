@@ -8,7 +8,8 @@ class ListOfBusiness extends Component {
   state = {
     businesses: [],
     business_owner_id: "",
-    address: {}
+    address: {},
+    loading: false
   };
 
   componentDidMount() {
@@ -31,19 +32,43 @@ class ListOfBusiness extends Component {
   };
 
   handleGetBusinesses = async business_owner_id => {
-    const businesses = await getAllBusinesses(business_owner_id);
-    this.addNewValuesToBusiness(businesses);
-    this.setState({ businesses });
+    this.setState({ loading: true });
+    try
+    {
+      const businesses = await getAllBusinesses(business_owner_id);
+      this.addNewValuesToBusiness(businesses.data);
+      this.setState({ businesses: businesses.data });
+    }
+    catch(err)
+    {
+      console.log(err);
+    }
+    finally
+    {
+      this.setState({ loading: false });
+    }
   };
 
   handleDeleteBusiness = async (indexBusiness) => {
     const stateBusinesses = this.state.businesses;
-    await BusinessService.deleteBusiness({
-      business_owner_id: this.state.business_owner_id,
-      place_id: stateBusinesses[indexBusiness].place_id,
-    });
-    const businesses = stateBusinesses.filter(business => business !== stateBusinesses[indexBusiness]);
-    this.setState({ businesses });
+    this.setState({ loading: true });
+    try
+    {
+      await BusinessService.deleteBusiness({
+        business_owner_id: this.state.business_owner_id,
+        place_id: stateBusinesses[indexBusiness].place_id,
+      });
+      const businesses = stateBusinesses.filter(business => business !== stateBusinesses[indexBusiness]);
+      this.setState({ businesses });
+    }
+    catch(err)
+    {
+      console.log(err);
+    }
+    finally
+    {
+      this.setState({ loading: false });
+    }
   };
 
   addNewValuesToBusiness = (businesses) => {
@@ -77,21 +102,33 @@ class ListOfBusiness extends Component {
       closing_hours,
       opening_hours,
     };
-    await BusinessService.changeActiveBusiness({
-      business_owner_id,
-      place_id,
-      is_active,
-    });
-    await BusinessService.editBusiness(req);
-    const businesses = [ ...this.state.businesses ];
-    businesses[index] = Object.assign(businesses[index], 
-      {
+    this.setState({ loading: true });
+    try
+    {
+      await BusinessService.changeActiveBusiness({
+        business_owner_id,
+        place_id,
         is_active,
-        closing_hours,
-        opening_hours,
-        place_info: Object.assign(businesses[index].place_info, { name, description })
       });
-    this.setState({ businesses });
+      await BusinessService.editBusiness(req);
+      const businesses = [ ...this.state.businesses ];
+      businesses[index] = Object.assign(businesses[index], 
+        {
+          is_active,
+          closing_hours,
+          opening_hours,
+          place_info: Object.assign(businesses[index].place_info, { name, description })
+        });
+      this.setState({ businesses });
+    }
+    catch(err)
+    {
+      console.log(err);
+    }
+    finally
+    {
+      this.setState({ loading: false });
+    }
   };
 
   isBusinessDisabled = index => {
@@ -128,7 +165,19 @@ class ListOfBusiness extends Component {
   };
 
   render() {
-    const { businesses, address } = this.state;
+    const { businesses, address, loading } = this.state;
+
+    if(loading) return (
+      <div className="card m-auto">
+        <h5 className="card-header">Businesses</h5>
+        <div className="card-body">
+          <div className="text-center">
+            <div className="spinner-border text-primary">
+              <span className="sr-only">Loading...</span>
+            </div>
+          </div>
+        </div>
+      </div>);
 
     return (
       <React.Fragment>
