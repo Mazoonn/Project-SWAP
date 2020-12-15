@@ -40,10 +40,10 @@ namespace SwapClassLibrary.Service
         }
 
         //add sub category
-        public static bool AddSubCategory(string value, string google_value)
+        public static sub_category AddSubCategory(string value, string google_value)
         {
             SwapDbConnection db = new SwapDbConnection();
-            if (db.sub_category.FirstOrDefault(c => c.name == value && c.google_value == google_value) != null) return false;
+            if (db.sub_category.FirstOrDefault(c => c.name == value && c.google_value == google_value) != null) return null;
 
             sub_category sub_object = new sub_category()
             {
@@ -55,7 +55,7 @@ namespace SwapClassLibrary.Service
             };
             db.sub_category.Add(sub_object);
             db.SaveChanges();
-            return true;
+            return sub_object;
         }
 
         public static bool deleteSubCategory(string id)

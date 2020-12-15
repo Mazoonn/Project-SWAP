@@ -75,6 +75,7 @@ const setPlacesFromChosenPlaces = (places, setGooglePlaces, setEventsPlaces, set
         break;
         case "event" :
           events.push(place);
+        break;
         case "business" :
           businesses.push(place);
         break;
@@ -94,7 +95,7 @@ const mapContainerStyle = {
 };
 
 const options = {
-  styles: [{ featureType: "poi", stylers: [{ visibility: "off" }] }],
+  styles: [{featureType: "transit" , stylers: [{ visibility: "off" }]} ,{ featureType: "poi", stylers: [{ visibility: "off" }] }],
   disableDefaultUI: true,
   zoomControl: true,
 };
