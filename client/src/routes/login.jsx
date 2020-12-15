@@ -15,6 +15,11 @@ function Login(props) {
     password: Joi.string().required().min(6).label("Password"),
   };
 
+  React.useEffect(() => 
+  {
+    document.title = "Login";
+  }, []);
+
   const validate = () => {
     const { error } = Joi.validate(user, schema, { abortEarly: false });
     if (!error) return null;

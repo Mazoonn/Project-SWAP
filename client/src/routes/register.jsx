@@ -28,6 +28,11 @@ class RegisterForm extends Component {
     phone: Joi.number().label("Phone"),
   };
 
+  componentDidMount()
+  {
+    document.title = "Register";
+  };
+
   handleChange = (event) => {
     const user = { ...this.state.user };
     user[event.target.id] = event.target.value;
