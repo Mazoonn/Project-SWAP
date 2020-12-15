@@ -196,9 +196,16 @@ class Quest extends Component {
   };
 
   componentDidMount() {
+    this.mounted = true;
     document.title = "Quest";
-    this.handleGetCategories();
+    if(this.mounted) this.handleGetCategories();
   }
+
+  componentWillUnmount()
+  {
+    this.mounted = false;
+  }
+
   render() {
     const { isLoading, categoryList, loadingPage, noResults } = this.state;
 

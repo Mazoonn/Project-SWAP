@@ -111,9 +111,11 @@ namespace api.Controllers.Category
             try
             {
                 SwapDbConnection db = new SwapDbConnection();
-                bool is_change = ProductService.updateProduct(req, clientId);
-                if (!is_change)
-                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is product with that id :" + req.product_id);
+                string response = ProductService.updateProduct(req, clientId);
+                if (response == "same")
+                    return Request.CreateResponse(HttpStatusCode.Conflict, "There is a product with that name :" + req.name);
+                if (response == "notExists")
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "There no product with that id :" + req.product_id);
                 return Request.CreateResponse(HttpStatusCode.OK, "The product was changed");
             }
             catch (Exception e)

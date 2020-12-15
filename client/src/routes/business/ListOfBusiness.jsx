@@ -13,10 +13,16 @@ class ListOfBusiness extends Component {
   };
 
   componentDidMount() {
+    this.mounted = true;
     document.title = "My businesses";
     const user = getCurrentUser();
     this.setState({ business_owner_id: user[`user-id`] });
-    this.handleGetBusinesses(user[`user-id`]);
+    if(this.mounted) this.handleGetBusinesses(user[`user-id`]);
+  }
+
+  componentWillUnmount()
+  {
+    this.mounted = false;
   }
 
   handleOnChangeBusiness = (event, index) => {

@@ -102,11 +102,14 @@ namespace SwapClassLibrary.Service
             return true;
         }
 
-        public static bool updateProduct(productDTO product_req, string clientId)
+        public static string updateProduct(productDTO product_req, string clientId)
         {
             SwapDbConnection db = new SwapDbConnection();
+            product sameName = db.products.FirstOrDefault(p => p.name == product_req.name && p.business_id == product_req.business_id 
+            && p.business.business_owner_id == clientId && p.product_id != product_req.product_id);
+            if (sameName != null) return "same";
             product product = db.products.FirstOrDefault(p => p.business_id == product_req.business_id && p.product_id == product_req.product_id && p.business.business_owner_id == clientId);
-            if (product == null) return false;
+            if (product == null) return "notExists";
             product.price = product_req.price;
             product.name = product_req.name;
             product.description = product_req.description;
@@ -114,7 +117,7 @@ namespace SwapClassLibrary.Service
             product.discount_end_date = product_req.discount_end_date;
             product.discount_start_date = product_req.discount_start_date;
             db.SaveChanges();
-            return true;
+            return "ok";
         }
     }
 }

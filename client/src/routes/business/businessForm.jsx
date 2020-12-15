@@ -39,9 +39,12 @@ class BusinessForm extends Component {
 
   async componentDidMount() 
   {
+    this.mounted = true;
     document.title = "Add business"
     const user = getCurrentUser();
     this.setState({ formData: { business_owner_id: user[`user-id`] }, pageLoading: true });
+    if(this.mounted)
+    {
     try
     {
       const mainCategoryList = await getAllMainCategories();
@@ -56,6 +59,11 @@ class BusinessForm extends Component {
       this.setState({ pageLoading: false });
     }
   }
+  };
+
+  componentWillUnmount(){
+    this.mounted = false;
+  };
 
   setAddress = (place) => {
     const formData = { ...this.state.formData };

@@ -67,9 +67,15 @@ class Profile extends Component {
   };
 
   componentDidMount() {
+    this.mounted = true;
     document.title = "Profile";
-    this.handleGetUser();
+    if(this.mounted) this.handleGetUser();
   };
+
+  componentWillUnmount()
+  {
+    this.mounted = false;
+  }
 
   handleGetUser = async () => {
     this.setState({ loadingPage: true });

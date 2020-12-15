@@ -4,6 +4,7 @@ import { getAllBusinesses } from "../../services/Business";
 import { deleteProduct, GetAllProducts, AddProduct, ChangeProductActive, updateProduct } from "../../services/productService";
 import ProductRaw from './ProductRaw';
 import NewProductRaw from './newProductRaw';
+import ExistProductModal from './ExistsProductModal';
 
 const copyNewValues = product =>
 {
@@ -22,12 +23,19 @@ class ListOfProducts extends Component {
     businessOwnerId: "",
     indexBusinessId: "default",
     productToAdd: {},
-    loading: false
+    loading: false,
+    error: { productExists :false, name: "" }
   };
 
   componentDidMount() {
+    this.mounted = true;
     document.title = "Products"
-    this.getState();
+    if(this.mounted) this.getState();
+  }
+
+  componentWillUnmount()
+  {
+    this.mounted = false;
   }
 
   getState = async () => {
@@ -138,7 +146,8 @@ class ListOfProducts extends Component {
     }
     catch(err)
     {
-      console.log(err);
+      if (err.response && err.response.status === 409)
+      this.setState({ error: { productExists: true, name: product.name } });
     }
     finally
     {
@@ -184,7 +193,8 @@ class ListOfProducts extends Component {
     }
     catch(err)
     {
-      console.log(err);
+      if (err.response && err.response.status === 409)
+      this.setState({ error: { productExists: true, name } });
     }
     finally
     {
@@ -256,8 +266,14 @@ class ListOfProducts extends Component {
     return values.some(value => !productToAdd[value]);
   };
 
+  handleCloseErrorModal = () =>
+  {
+    this.setState({ error: { productExists: false, name: "" } });
+  };
+
   render() {
     const { products, businesses , indexBusinessId, productToAdd, loading } = this.state;
+    const { productExists, name } = this.state.error;
 
     if(loading) return (
     <div className="card m-auto">
@@ -347,6 +363,11 @@ class ListOfProducts extends Component {
             </div>
           </div>
         </div>
+        <ExistProductModal
+          isActive={productExists}
+          name={name} 
+          handleClose={this.handleCloseErrorModal}
+        />
       </React.Fragment>
     );
   }
