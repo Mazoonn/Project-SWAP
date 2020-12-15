@@ -7,6 +7,7 @@ using System.Web.Http;
 using SwapClassLibrary.DTO;
 using SwapClassLibrary.EF;
 using SwapClassLibrary.Service;
+using api.Authorization;
 
 namespace api.Controllers
 {
@@ -14,6 +15,7 @@ namespace api.Controllers
     public class BusinessController : ApiController
     {
         [Route("GetAllBusinesses/{business_owner}")]
+        [SelfAuthorization()]
         [HttpGet]
         public HttpResponseMessage GetAllBusinesses(string business_owner)
         {
@@ -30,6 +32,7 @@ namespace api.Controllers
         }
 
         [Route("GetFilteredBusinesses")]
+        [MyAuthorize("admin", "business", "client")]
         [HttpGet]
         public HttpResponseMessage GetFilteredBusinesses([FromUri] PointDTO position , [FromUri] CategoriesIdsDTO ids, double radius)
         {
@@ -85,6 +88,7 @@ namespace api.Controllers
 
         //Discount add/change/request to Approve/delete
         [Route("AddBusiness")]
+        [MyAuthorize("business", "admin")]
         [HttpPost]
         public HttpResponseMessage AddBusiness([FromBody]bussinessRequestDTO businessRequest)
         {
@@ -101,6 +105,7 @@ namespace api.Controllers
             }
         }
         [Route("EditBusiness/{clientId}")]
+        [SelfAuthorization()]
         [HttpPut]
         public HttpResponseMessage EditBusiness([FromBody]bussinessDTO bussiness, string clientId)
         {
@@ -119,6 +124,7 @@ namespace api.Controllers
 
 
         [Route("ChangeActiveBusiness/{userId}")]
+        [SelfAuthorization()]
         [HttpPut]
         public HttpResponseMessage ChangeActiveBusiness([FromBody]bussinessDTO bussiness, string userId)
         {
@@ -137,6 +143,7 @@ namespace api.Controllers
 
 
         [Route("RemoveBusiness/{userId}")]
+        [SelfAuthorization()]
         [HttpDelete]
         public HttpResponseMessage RemoveBusiness([FromBody]bussinessDTO bussiness, string userId)
         {

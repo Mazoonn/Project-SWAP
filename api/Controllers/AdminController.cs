@@ -7,7 +7,7 @@ using System.Web.Http;
 using SwapClassLibrary.DTO;
 using SwapClassLibrary.EF;
 using SwapClassLibrary.Service;
-using api.Authoriztion;
+using api.Authorization;
 
 namespace api.Controllers.admin
 {
@@ -139,6 +139,7 @@ namespace api.Controllers.admin
         }
 
         [Route("GetEvents")]
+        [MyAuthorize("admin", "business", "client")]
         [HttpGet]
         public HttpResponseMessage GetEvents()
         {

@@ -4,10 +4,11 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using api.Authoriztion;
+using api.Authorization;
 using SwapClassLibrary.DTO;
 using SwapClassLibrary.EF;
 using SwapClassLibrary.Service;
+using api.Authorization;
 
 namespace api.Controllers
 {
@@ -17,6 +18,7 @@ namespace api.Controllers
         // GET: api/MainCategory
 
         [Route("GetAllMainCategories")]
+        [MyAuthorize("admin", "client", "business")]
         [HttpGet]
         public HttpResponseMessage GetAllMainCategories(bool test = false)
         {
@@ -81,7 +83,7 @@ namespace api.Controllers
                 return Request.CreateResponse(HttpStatusCode.NotFound, "There is no main category value with id - " + id);
             slected_main_category.is_active = req.is_active;
             db.SaveChanges();
-            return Request.CreateResponse(HttpStatusCode.OK, slected_main_category);
+            return Request.CreateResponse(HttpStatusCode.OK, true);
             }
             catch (Exception e)
             {

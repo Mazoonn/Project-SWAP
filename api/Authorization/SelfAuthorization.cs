@@ -6,7 +6,6 @@ using System.Web.Http;
 using System.Web.Http.Controllers;
 using SwapClassLibrary.Models;
 using SwapClassLibrary.Service;
-
 namespace api.Authorization
 {
     public class SelfAuthorization : AuthorizeAttribute

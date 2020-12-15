@@ -120,13 +120,20 @@ class Quest extends Component {
   handleOnClickCategory = async (key) => {
     const categories = [...this.state.categoryList];
     const indexCategories = categories.findIndex((category) => category.id === key);
-    if (!categories[indexCategories].isFirstSelected) {
+    if (!categories[indexCategories].isFirstSelected) 
+    {
       this.setState({ loadingPage: true });
       categories[indexCategories].isFirstSelected = true;
       categories[indexCategories].isCurrentlySelected = true;
       categories[indexCategories].subCategory = await this.handleGetSubCategories(key);
       this.setState({ loadingPage: false });
-    } else categories[indexCategories].isCurrentlySelected = !categories[indexCategories].isCurrentlySelected;
+    } 
+    else
+    {
+      categories[indexCategories].isCurrentlySelected = !categories[indexCategories].isCurrentlySelected;
+      if(categories[indexCategories].isCurrentlySelected)
+       categories[indexCategories].subCategory.forEach(category => { category.isSelected = false });
+    }
     this.setState({ categoryList: categories });
   };
 
@@ -161,13 +168,11 @@ class Quest extends Component {
 
   handleDivideSubCategories = () => {
     const categories = this.state.categoryList.filter((category) => category.isCurrentlySelected);
-    console.log(categories.length);
-
     if(categories.length == 0)
     return (<div className="card">
     <div className="card-body">
       <h5 className="card-title">Instructions</h5>
-      <p className="card-text">Please select at least one main category and at least one subcategory</p>
+      <p className="card-text">Please select at least one main category and at least one subcategory to get to the next stage</p>
     </div>
   </div>);
 

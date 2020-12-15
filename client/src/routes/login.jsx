@@ -112,7 +112,7 @@ function Login(props) {
           <button
             type="submit"
             onClick={handleLogin}
-            disabled={loading || Object.values(user).some((attr) => attr === "")}
+            disabled={loading || Object.values(user).some((attr) => !attr)}
             className="btn btn-primary"
           >
             {loading ? "Loading..." : "Login"}

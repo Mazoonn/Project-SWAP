@@ -7,6 +7,7 @@ using System.Web.Http;
 using SwapClassLibrary.DTO;
 using SwapClassLibrary.EF;
 using SwapClassLibrary.Service;
+using api.Authorization;
 
 namespace api.Controllers.Category
 {
@@ -16,6 +17,7 @@ namespace api.Controllers.Category
 
         // GET: api/business/product/GetAllProduct/:businness_id/{clientId}
         [Route("GetAllProducts/{business_id}/{clientId}")]
+        [SelfAuthorization()]
         [HttpGet]
         public HttpResponseMessage GetAllProducts(string business_id, string clientId)
         {
@@ -32,6 +34,7 @@ namespace api.Controllers.Category
 
         // POST: api/business/product/AddProduct/{clientId}/
         [Route("AddProduct/{clientId}")]
+        [SelfAuthorization()]
         [HttpPost]
         public HttpResponseMessage AddProduct([FromBody]productDTO req, string clientId)
         {
@@ -54,6 +57,7 @@ namespace api.Controllers.Category
         }
 
         [Route("ChangeProductActive/{clientId}")]
+        [SelfAuthorization()]
         [HttpPost]
         // PUT: api/business/product/ChangeProductActive/{clientId}
         //need to send type : id,name 
@@ -78,6 +82,7 @@ namespace api.Controllers.Category
 
         // Delete:api/business/product/DeleteProduct/{businness_id}/{product_id}/{clientId}
         [Route("DeleteProduct/{business_id}/{product_id}/{clientId}")]
+        [SelfAuthorization()]
         [HttpDelete]
         public HttpResponseMessage DeleteProduct([FromUri]string business_id, [FromUri]string product_id, string clientId)
         {
@@ -96,6 +101,7 @@ namespace api.Controllers.Category
         }
 
         [Route("UpdateProduct/{clientId}")]
+        [SelfAuthorization()]
         [HttpPut]
         // PUT:   api/business/product/UpdateProduct/{clientId}
         //need to send type : id,name 

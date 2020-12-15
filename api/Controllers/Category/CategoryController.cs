@@ -7,7 +7,7 @@ using System.Web.Http;
 using SwapClassLibrary.DTO;
 using SwapClassLibrary.EF;
 using SwapClassLibrary.Service;
-using api.Authoriztion;
+using api.Authorization;
 
 namespace api.Controllers
 {
@@ -37,6 +37,7 @@ namespace api.Controllers
 
         // GET: api/Category/GetMainAndSubRelationship/{main_id}
         [Route("GetMainAndSubRelationship/{main_id}")]
+        [MyAuthorize("admin", "business", "client")]
         [HttpGet]
         public HttpResponseMessage GetMainAndSubRelationship(string main_id)
         {

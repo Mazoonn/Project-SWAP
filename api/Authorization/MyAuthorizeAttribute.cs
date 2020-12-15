@@ -8,7 +8,7 @@ using System.Web.Http.Controllers;
 using SwapClassLibrary.Models;
 using SwapClassLibrary.Service;
 
-namespace api.Authoriztion
+namespace api.Authorization
 {
     public class MyAuthorizeAttribute : AuthorizeAttribute
     {

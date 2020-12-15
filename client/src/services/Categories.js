@@ -2,7 +2,11 @@ import http from "../Utils/httpRequest/httpRequest";
 import { API_URL_Dev } from "../config.json";
 
 export async function getAllMainCategories() {
-    return await http.get(`${API_URL_Dev}/MainCategory/GetAllMainCategories`);
+    return await http.get(`${API_URL_Dev}/MainCategory/GetAllMainCategories`,
+    {
+      headers: {
+      'Authorization': `Bearer ${localStorage.getItem("token")}`
+    }});
 }
 
 export async function postSubCategory(req) {

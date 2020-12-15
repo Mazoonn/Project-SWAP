@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using SwapClassLibrary.Service;
 using SwapClassLibrary.DTO;
-using api.Authoriztion;
+using api.Authorization;
 
 namespace api.Controllers.quest
 {

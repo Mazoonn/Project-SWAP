@@ -5,7 +5,11 @@ import { Business, Business_owner_is_active } from "../models/Business";
 import { Place, PlaceCategory } from "../models/Place";
 
 export async function getAllBusinesses(business_owner_id: string): Promise<any> {
-    return await http.get(`${API_URL_Dev}/business/GetAllBusinesses/${business_owner_id}`);
+    return await http.get(`${API_URL_Dev}/business/GetAllBusinesses/${business_owner_id}`,
+    {
+      headers: {
+      'Authorization': `Bearer ${localStorage.getItem("token")}`
+    }});
 }
 
 export async function addBusinessOwner(business_owner_id: string): Promise<any> {
@@ -43,19 +47,25 @@ export async function addBusiness(business: Business, place: Place, placeCategor
 }
 export async function editBusiness(req: Business): Promise<any> 
 {
-  return await http.put(`${API_URL_Dev}/business/EditBusiness/${req.business_owner_id}`, req);
+  return await http.put(`${API_URL_Dev}/business/EditBusiness/${req.business_owner_id}`, req,
+  {
+    headers: {
+    'Authorization': `Bearer ${localStorage.getItem("token")}`
+  }});
 }
 
 export async function changeActiveBusiness(req: Business_owner_is_active): Promise<any> {
-  try {
-    const response = await http.put(`${API_URL_Dev}/business/ChangeActiveBusiness/${req.business_owner_id}`, req);
-    return response.data;
-  } catch (e) {
-    console.log("Check your connection , error:", e);
-  }
+    return await http.put(`${API_URL_Dev}/business/ChangeActiveBusiness/${req.business_owner_id}`, req,
+    {
+      headers: {
+      'Authorization': `Bearer ${localStorage.getItem("token")}`
+    }});
+
 }
 
 export async function deleteBusiness(req: Business_owner_is_active): Promise<any> 
 {
-  return await http.delete(`${API_URL_Dev}/business/RemoveBusiness/${req.business_owner_id}`, { data: req });
+  return await http.delete(`${API_URL_Dev}/business/RemoveBusiness/${req.business_owner_id}`, { data: req, headers: {
+    'Authorization': `Bearer ${localStorage.getItem("token")}`
+  } });
 }

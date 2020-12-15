@@ -39,9 +39,6 @@ class NavBar extends Component {
                   <NavLink exact activeClassName="active font-weight-bold" to="/quest">
                     Quest
                   </NavLink>
-                  <NavLink exact activeClassName="active font-weight-bold" to="/logout">
-                    Logout
-                  </NavLink>
                   <NavLink exact activeClassName="active font-weight-bold" to="/profile">
                     Profile
                   </NavLink>
@@ -57,6 +54,9 @@ class NavBar extends Component {
                   Admin
                 </NavLink>
               )}
+              {user && <NavLink exact activeClassName="active font-weight-bold" to="/logout">
+                Logout
+              </NavLink>}
             </div>
             <div className="content">
               <Switch>

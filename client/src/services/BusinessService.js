@@ -7,7 +7,10 @@ export async function getBusinessesByCategories(req)
     {
         const request = await http.get(`${API_URL_Dev}/business/GetFilteredBusinesses`, 
         { 
-            params:req,     
+            params:req,
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem("token")}`
+              }     
         });
         return request.data
     }
@@ -20,15 +23,11 @@ export async function getBusinessesByCategories(req)
 
 export async function addBusiness(req) 
 {
-    try
+    return await http.post(`${API_URL_Dev}/business/AddBusiness`, req, 
     {
-        const request = await http.post(`${API_URL_Dev}/business/AddBusiness`,req);
-        return request.data
-    }
-    catch(err)
-    {
-        console.log(err);
-    }
+        headers: {
+        'Authorization': `Bearer ${localStorage.getItem("token")}`
+      }});
 }
 
 
