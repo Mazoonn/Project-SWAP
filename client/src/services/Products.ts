@@ -13,10 +13,10 @@ export async function GetAllProduct(business_id: string): Promise<any> {
   }
 }
 
-export async function AddProduct(product: Product): Promise<any> {
+export async function AddProduct(product: Product, clientId: string): Promise<any> {
   try {
-    const is_Product_owner: AxiosResponse<any> = await http.post(`${API_URL_Dev}/business/product/AddProduct/`, product);
-    return is_Product_owner.data;
+    const newProduct: AxiosResponse<any> = await http.post(`${API_URL_Dev}/business/product/AddProduct/${clientId}`, product);
+    return newProduct.data;
   } catch (e) {
     console.log("Check you connection , error:", e);
   }
@@ -33,7 +33,7 @@ export async function ChangeProductToActive(product: Product_is_active): Promise
 
 export async function deleteProduct(req: Product_business_ids): Promise<any> {
   try {
-    const response = await axios.delete(`${API_URL_Dev}/business/product/DeleteProduct/${req.business_id}/${req.product_id}`, {
+    const response = await axios.delete(`${API_URL_Dev}/business/product/DeleteProduct/${req.business_id}/${req.product_id}/${req.product_id}`, {
       params: req,
     });
     return response.data;

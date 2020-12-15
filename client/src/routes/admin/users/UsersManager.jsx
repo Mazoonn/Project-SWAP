@@ -35,6 +35,7 @@ class UsersManager extends Component {
   };
 
   componentDidMount() {
+    document.title = "Users";
     this.getUsers();
   }
 

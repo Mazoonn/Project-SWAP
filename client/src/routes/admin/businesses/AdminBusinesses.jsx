@@ -39,6 +39,7 @@ class AdminBusinesses extends Component {
   };
 
   componentDidMount() {
+    document.title = "Businesses";
     this.getBusinesses();
   }
 

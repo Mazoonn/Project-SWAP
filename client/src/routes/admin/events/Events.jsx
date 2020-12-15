@@ -140,6 +140,7 @@ class AdminEvents extends Component {
   };
 
   componentDidMount() {
+    document.title = "Events";
     this.getEvents();
   }
 

@@ -29,6 +29,7 @@ const AdminSubCategories = () => {
   const [selectValue, setSelectValue] = React.useState("default");
 
   useEffect(() => {
+    document.title = "Subcategories";
     let isMounted = true;
 
     const fetchData = async () => {
@@ -61,6 +62,7 @@ const AdminSubCategories = () => {
       setSubCategories([]);
       setIsDefault(true);
     }
+    setSubCategory({});
     setSelectValue(index);
   };
 
@@ -273,6 +275,7 @@ const AdminSubCategories = () => {
                         name="sub_name"
                         type="text"
                         className="form-control"
+                        placeholder="Enter category name"
                       />
                     </td>
                     <td>
@@ -284,6 +287,7 @@ const AdminSubCategories = () => {
                         name="descrition"
                         type="text"
                         className="form-control"
+                        placeholder="Enter description"
                       />
                     </td>
                     <td>
@@ -295,6 +299,7 @@ const AdminSubCategories = () => {
                         name="google_value"
                         type="text"
                         className="form-control"
+                        placeholder="Enter google value"
                       />
                     </td>
                     <td colSpan={2} className="text-center">

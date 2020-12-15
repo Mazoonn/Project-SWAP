@@ -15,7 +15,7 @@ namespace SwapClassLibrary.Service
         public static List<bussinessDTO> GetAllBusinesses(string business_owner_id)
         {
             SwapDbConnection db = new SwapDbConnection();
-            return db.businesses.Select(business => new bussinessDTO
+            return db.businesses.Where(business => business.business_owner_id == business_owner_id).Select(business => new bussinessDTO
             {
                 place_id = business.place_id,
                 business_owner_id = business.business_owner_id,
@@ -36,7 +36,7 @@ namespace SwapClassLibrary.Service
                     street_number = business.place.street_number ?? ""
                 }
             }
-            ).Where(business => business.business_owner_id == business_owner_id).ToList();
+            ).ToList();
         }
 
         public static List<MapBusinessDTO> GetFilteredBusinessesAround(PointDTO position, CategoriesIdsDTO ids, double radius)

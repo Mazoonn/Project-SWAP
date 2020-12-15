@@ -1,15 +1,27 @@
 import React, { Component } from "react";
-import { GetAllProduct, deleteProduct, updateProduct, ChangeProductToActive } from "../../services/Products";
-import { AddProduct } from "../../services/Products";
 import { getCurrentUser } from "../../services/authService";
 import { getAllBusinesses } from "../../services/Business";
+import { deleteProduct, GetAllProducts, AddProduct, ChangeProductActive, updateProduct } from "../../services/productService";
+import ProductRaw from './ProductRaw';
+import NewProductRaw from './newProductRaw';
+
+const copyNewValues = product =>
+{
+  const values = [ "name", "is_active", "description", "discount_start_date", "discount_end_date", "discount", "price" ];
+  values.forEach(value => 
+    {
+      product[value] = product[`${value}_new`];
+    });
+};
+
+
 class ListOfProducts extends Component {
   state = {
     products: [],
-    business: [],
-    business_owner_id: "",
-    isDefault: true,
-    products_to_add: {},
+    businesses: [],
+    businessOwnerId: "",
+    indexBusinessId: "default",
+    productToAdd: {},
   };
 
   componentDidMount() {
@@ -18,92 +30,98 @@ class ListOfProducts extends Component {
 
   getState = async () => {
     const user = getCurrentUser();
-    const business = await getAllBusinesses(user[`user-id`]);
-    this.setState({ business, formData: { business_owner_id: user[`user-id`] }, business_owner_id: user[`user-id`] });
+    const businesses = await getAllBusinesses(user[`user-id`]);
+    this.setState({ businesses, businessOwnerId: user[`user-id`] });
   };
+
   handleOnChangeProduct = (event, index) => {
-    const value = event.target.value;
-    const name = event.target.name;
+    const { name, value } = event.target;
+    if(name === "price" && value < 0) return;
+    if(name === "discount" && (value < 0 || value > 100)) return;
     if (index !== this.state.products.length) {
-      const products_to_change = this.state.products;
-      products_to_change[index][`${name}`] = value;
-      this.setState({ products: products_to_change });
+      const products = [ ...this.state.products ];
+      products[index][`${name}_new`] = value;
+      this.setState({ products });
     } else {
-      let products_to_add = this.state.products_to_add;
-      if (name === "is_active") products_to_add[`${name}`] = event.target.checked;
+      const productToAdd = { ...this.state.productToAdd };
+      if (name === "is_active") productToAdd[name] = event.target.checked;
       else {
-        products_to_add[`${name}`] = value;
-        this.setState({ products_to_add });
+        productToAdd[name] = value;
       }
+      this.setState({ productToAdd });
     }
   };
 
   handleDeleteProduct = async (indexProduct) => {
-    const business_id = this.state.business[this.state.index_business_id].place_id;
-    const products = this.state.products;
-    await deleteProduct({ business_id: business_id, product_id: products[indexProduct].product_id });
-    delete products[indexProduct];
-    this.addNewValuesToProducts(products);
+    const { businessOwnerId: client_id } = this.state;
+    const product = this.state.products[indexProduct];
+    await deleteProduct({ business_id: product.business_id, product_id: product.product_id, client_id });
+    const products = this.state.products.filter(p => p !== product);
     this.setState({ products });
   };
 
-  addNewValuesToProducts = (Products) => {
+  addNewValuesToProduct = product =>
+  {
     const values = [
       "name",
-      "description",
-      "price",
-      "creation_date",
-      "discount",
-      "discount_start_date",
-      "discount_end_date",
       "is_active",
+      "description",
     ];
-    Products.forEach((Products) => {
-      !Products["name"] && (Products["name"] = "");
-      !Products["description"] && (Products["description"] = "");
-      !Products["price"] && (Products["price"] = "");
-      !Products["discount"] && (Products["discount"] = "");
-      !Products["discount_start_date"] && (Products["discount_start_date"] = "");
-      !Products["discount_end_date"] && (Products["discount_end_date"] = "");
-      !Products["is_active"] && (Products["is_active"] = "");
+    const dates = [ "discount_start_date", "discount_end_date" ];
+    const numbers = [ "discount", "price" ];
 
-      values.forEach((value) => {
-        Products[`${value}_new`] = Products[value];
-      });
+    values.forEach((value) => {
+      !product[value] && (product[value] = "")
+      product[`${value}_new`] = product[value];
     });
+    dates.forEach(date => 
+      {
+        product[date] = product[date].slice(0, product[date].length - 9);
+        product[`${date}_new`] = product[date];
+      });
+    numbers.forEach(value => 
+      {
+        product[value] = product[value].toString();
+        product[`${value}_new`] = product[value];
+      });
+  };
+
+  addNewValuesToProducts = products => {
+    products.forEach(product => 
+      {
+        this.addNewValuesToProduct(product);
+      });
   };
 
   handleAddNewProduct = async () => {
-    const { products_to_add, products, index_business_id } = this.state;
-    const business_selected_id = this.state.business[index_business_id].place_id;
+    const { productToAdd, indexBusinessId, businessOwnerId } = this.state;
+    const business_selected_id = this.state.businesses[indexBusinessId].place_id;
     const product = {
-      business_owner_id: this.state.business_owner_id,
-      business_id: this.state.business[index_business_id].place_id,
-      ...products_to_add,
+      businessOwnerId,
+      business_id: business_selected_id,
+      ...productToAdd,
     };
-    this.setState({ products: [...products, product] });
-    await AddProduct(product);
-
-    const newListProducts = await GetAllProduct(business_selected_id);
-
-    this.setState({
-      products: newListProducts,
-    });
-    this.addNewValuesToProducts(products);
+    const newProduct = await AddProduct(product, businessOwnerId);
+    const products = [ ...this.state.products ];
+    this.addNewValuesToProduct(newProduct);
+    products.push(newProduct);
+    this.setState({ products, productToAdd: {} });
   };
 
   handleOnClickSaveProduct = async (index) => {
+    const { businessOwnerId } = this.state;
+    const products = [...this.state.products];
     const {
-      name,
-      price,
-      is_active,
+      name_new: name,
+      price_new: price,
+      is_active_new: is_active,
       product_id,
       business_id,
-      description,
-      discount,
-      discount_end_date,
-      discount_start_date,
-    } = this.state.products[index];
+      description_new: description,
+      discount_new: discount,
+      discount_end_date_new: discount_end_date,
+      discount_start_date_new: discount_start_date,
+    } = products[index];
     const req = {
       name,
       price,
@@ -114,104 +132,93 @@ class ListOfProducts extends Component {
       discount_end_date,
       discount_start_date,
     };
-    await ChangeProductToActive({
+    await ChangeProductActive({
       product_id,
       business_id,
       is_active,
-    });
-    await updateProduct(req);
-    const newListProducts = await GetAllProduct(business_id);
-    this.addNewValuesToProducts(newListProducts);
-    this.setState({
-      products: newListProducts,
-    });
+    }, businessOwnerId);
+    await updateProduct(req, businessOwnerId);
+    copyNewValues(products[index]);
+    this.setState({ products });
   };
 
-  handleOnChangeSelect = async (event) => {
-    this.setState({ products: [] });
-    const index = event.target.value;
-    if (index !== "default") {
-      const business_selected_id = this.state.business[index].place_id;
-      const products = await GetAllProduct(business_selected_id);
-      if (products) {
+  handleOnChangeSelect = async event => {
+    const indexBusinessId = event.target.value;
+    if (indexBusinessId !== "default") 
+    {
+      const { businessOwnerId } = this.state;
+      const business_selected_id = this.state.businesses[indexBusinessId].place_id;
+      const products = await GetAllProducts(business_selected_id, businessOwnerId);
+      if (products) 
+      {
         this.addNewValuesToProducts(products);
-        this.setState({ products, isDefault: false, index_business_id: index });
-      } else {
-        this.setState({ isDefault: false, index_business_id: index });
+        this.setState({ products });
       }
-    } else this.setState({ isDefault: true });
+    }
+    else
+    this.setState({ products: [] });
+    this.setState({ indexBusinessId, productToAdd: {} })
   };
 
-  isProductChange = (index) => {
-    let result = false;
+  isProductChanged = index => {
     const product = this.state.products[index];
     const values = [
       "name",
       "description",
       "price",
-      "creation_date",
       "discount",
       "discount_start_date",
       "discount_end_date",
-      "is_active",
     ];
-    values.forEach((value) => {
-      if (product[value] !== product[`${value}_new`]) result = true;
-    });
-    return result;
+
+    return ((values.some(value => product[value] !== product[`${value}_new`]) || product.is_active !== product.is_active_new) &&
+    !values.some(value => !product[`${value}_new`]));
   };
 
-  handleOnChangeIsActiveProducts = async (index) => {
+  handleOnChangeIsActiveProducts = index => {
     const products = [...this.state.products];
     const product = products[index];
-    product.is_active = !product.is_active;
-    product.is_change = product.is_change === undefined ? true : !product.is_change;
+    product.is_active_new = !product.is_active_new;
     this.setState({ products });
   };
 
-  isValidProduct = () => {
-    const { products_to_add } = this.state;
-    let isValidProduct = this.isEmptyParam([products_to_add[`name`], products_to_add[`description`], products_to_add[`price`]]);
+  isNotValidProduct = () => 
+  {
+    const { productToAdd } = this.state;
+    const values = [
+      "name",
+      "description",
+      "price",
+      "discount",
+      "discount_start_date",
+      "discount_end_date",
+    ];
 
-    if (!isValidProduct && products_to_add[`discount`] && products_to_add[`discount`] !== "")
-      isValidProduct = this.isEmptyParam([
-        products_to_add[`discount`],
-        products_to_add[`discount_start_date`],
-        products_to_add[`discount_end_date`],
-      ]);
-
-    return isValidProduct;
-  };
-
-  isEmptyParam = (arrayOfValues) => {
-    let flag = false;
-    arrayOfValues.forEach((value) => {
-      flag = value === "" || value === undefined ? true : false;
-      if (flag) return flag;
-    });
-    return flag;
+    return values.some(value => !productToAdd[value]);
   };
 
   render() {
-    const { products } = this.state;
+    const { products, businesses , indexBusinessId, productToAdd } = this.state;
+
     return (
       <React.Fragment>
         <div className="card m-auto">
-          <h5 className="card-header">Products By Selected Business</h5>
+          <h5 className="card-header">Products by selected business</h5>
           <div className="card-body">
             <div>
-              <h4>Choose A Business</h4>
+              <h4>Choose a business</h4>
               <select
+                value={indexBusinessId}
                 id="business"
                 onChange={this.handleOnChangeSelect}
                 className="custom-select mb-4"
                 style={{ width: "200px" }}
               >
-                <option value={"default"} defaultValue>
+                <option value={"default"}>
                   Business...
                 </option>
-                {this.state.business &&
-                  this.state.business.map((business, index) => {
+                {businesses &&
+                  businesses.map((business, index) => {
                     return (
                       <option key={business.place_id} value={index}>
                         {business.place_info.name}
@@ -219,14 +226,14 @@ class ListOfProducts extends Component {
                     );
                   })}
               </select>
-              {!this.state.isDefault && (
+              {indexBusinessId !== "default" && (
                 <div>
                   <h3>Products</h3>
                   <table className="table table-bordered table-sm mt-4">
                     <thead>
                       <tr>
                         <th colSpan={9} className="text-center">
-                          {this.state.business[this.state.index_business_id].name}
+                          {businesses[indexBusinessId].place_info.name}
                         </th>
                       </tr>
                       <tr>
@@ -242,216 +249,26 @@ class ListOfProducts extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      {this.state.products.map((products, index) => {
+                      {products.map((product, index) => {
                         return (
-                          <tr key={products.place_id}>
-                            <td>
-                              <input
-                                onChange={(event) => {
-                                  this.handleOnChangeProduct(event, index);
-                                }}
-                                name="name"
-                                type="text"
-                                className="form-control"
-                                value={products.name}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                onChange={(event) => {
-                                  this.handleOnChangeProduct(event, index);
-                                }}
-                                name="description"
-                                type="text"
-                                className="form-control"
-                                value={products.description}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                onChange={(event) => {
-                                  this.handleOnChangeProduct(event, index);
-                                }}
-                                name="price"
-                                type="text"
-                                className="form-control"
-                                value={products.price}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                onChange={(event) => {
-                                  this.handleOnChangeProduct(event, index);
-                                }}
-                                name="discount"
-                                type="text"
-                                className="form-control"
-                                value={products.discount === 0 ? "" : products.discount}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                onChange={(event) => {
-                                  this.handleOnChangeProduct(event, index);
-                                }}
-                                name="discount_start_date"
-                                type="date"
-                                className="form-control"
-                                value={
-                                  products.discount_start_date.slice(0, 10) === `0001-01-01`
-                                    ? ""
-                                    : products.discount_start_date.slice(0, 10)
-                                }
-                              />
-                            </td>
-                            <td>
-                              <input
-                                onChange={(event) => {
-                                  this.handleOnChangeProduct(event, index);
-                                }}
-                                name="discount_end_date"
-                                type="date"
-                                className="form-control"
-                                value={
-                                  products.discount_end_date.slice(0, 10) === `0001-01-01`
-                                    ? ""
-                                    : products.discount_end_date.slice(0, 10)
-                                }
-                              />
-                            </td>
-                            <td className="text-center">
-                              <div>
-                                <input
-                                  onChange={() => {
-                                    this.handleOnChangeIsActiveProducts(index);
-                                  }}
-                                  type="checkbox"
-                                  checked={products.is_active}
-                                />
-                              </div>
-                            </td>
-                            <td className="text-center">
-                              <button
-                                type="button"
-                                className="btn btn-success btn-sm"
-                                onClick={() => {
-                                  this.handleOnClickSaveProduct(index);
-                                }}
-                                disabled={!this.isProductChange(index)}
-                              >
-                                Save
-                              </button>
-                            </td>
-                            <td className="text-center">
-                              <button
-                                onClick={() => {
-                                  this.handleDeleteProduct(index);
-                                }}
-                                type="button"
-                                className="btn btn-danger btn-sm"
-                              >
-                                Delete
-                              </button>
-                            </td>
-                          </tr>
-                        );
+                        <ProductRaw
+                        key={index}
+                        index={index}
+                        handleDeleteProduct={this.handleDeleteProduct}
+                        handleOnChangeIsActiveProducts={this.handleOnChangeIsActiveProducts}
+                        handleOnChangeProduct={this.handleOnChangeProduct}
+                        handleOnClickSaveProduct={this.handleOnClickSaveProduct}
+                        isProductChanged={this.isProductChanged}
+                        product={product}
+                        />);
                       })}
-                      <tr>
-                        <td>
-                          <input
-                            value={(products && products.name) || ""}
-                            onChange={(event) => {
-                              this.handleOnChangeProduct(event, this.state.products.length);
-                            }}
-                            name="name"
-                            type="text"
-                            className="form-control"
-                            value={products.name}
-                          />
-                        </td>
-                        <td>
-                          <input
-                            value={(products && products.description) || ""}
-                            onChange={(event) => {
-                              this.handleOnChangeProduct(event, this.state.products.length);
-                            }}
-                            name="description"
-                            type="text"
-                            className="form-control"
-                            value={products.description}
-                          />
-                        </td>
-                        <td>
-                          <input
-                            value={(products && products.price) || ""}
-                            onChange={(event) => {
-                              this.handleOnChangeProduct(event, this.state.products.length);
-                            }}
-                            name="price"
-                            type="text"
-                            className="form-control"
-                            value={products.price}
-                          />
-                        </td>
-                        <td>
-                          <input
-                            value={(products && products.discount) || ""}
-                            onChange={(event) => {
-                              this.handleOnChangeProduct(event, this.state.products.length);
-                            }}
-                            name="discount"
-                            type="text"
-                            className="form-control"
-                            value={products.discount}
-                          />
-                        </td>
-                        <td>
-                          <input
-                            value={(products && products.discount_start_date) || ""}
-                            onChange={(event) => {
-                              this.handleOnChangeProduct(event, this.state.products.length);
-                            }}
-                            name="discount_start_date"
-                            type="date"
-                            className="form-control"
-                            value={products.discount_start_date}
-                          />
-                        </td>
-                        <td>
-                          <input
-                            value={(products && products.discount_end_date) || ""}
-                            onChange={(event) => {
-                              this.handleOnChangeProduct(event, this.state.products.length);
-                            }}
-                            name="discount_end_date"
-                            type="date"
-                            className="form-control"
-                            value={products.discount_end_date}
-                          />
-                        </td>
-                        <td className="text-center">
-                          <div>
-                            <input
-                              onChange={(event) => {
-                                this.handleOnChangeProduct(event, this.state.products.length);
-                              }}
-                              type="checkbox"
-                              checked={products.is_active}
-                              name="is_active"
-                            />
-                          </div>
-                        </td>
-                        <td colSpan={2} className="text-center">
-                          <button
-                            disabled={this.isValidProduct()}
-                            onClick={this.handleAddNewProduct}
-                            type="button"
-                            className="btn btn-primary btn-sm"
-                          >
-                            Add new product
-                          </button>
-                        </td>
-                      </tr>
+                        <NewProductRaw
+                          handleAddNewProduct={this.handleAddNewProduct}
+                          handleOnChangeProduct={this.handleOnChangeProduct}
+                          isNotValidProduct={this.isNotValidProduct}
+                          length={products.length}
+                          product={productToAdd}
+                         />
                     </tbody>
                   </table>
                 </div>

@@ -10,6 +10,7 @@ const AdminCategories = (props) => {
     let isMounted = true;
 
     const fetchData = async () => {
+      document.title = "Categories";
       setLoadingPage(true);
       const data = await getAllMainCategoriesAdmin();
       if (!isMounted) return;

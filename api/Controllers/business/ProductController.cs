@@ -10,21 +10,18 @@ using SwapClassLibrary.Service;
 
 namespace api.Controllers.Category
 {
-    //[Authorize(Roles = "admin")]
     [RoutePrefix("api/business/product")]
     public class ProductController : ApiController
     {
 
-        // GET: api/business/product/GetAllProduct/:businness_id/
-        [Route("GetAllProduct/{business_id}")]
+        // GET: api/business/product/GetAllProduct/:businness_id/{clientId}
+        [Route("GetAllProducts/{business_id}/{clientId}")]
         [HttpGet]
-        public HttpResponseMessage GetAllProduct([FromUri]string business_id, bool test = false)
+        public HttpResponseMessage GetAllProducts(string business_id, string clientId)
         {
             try
             {
-                List<productDTO> list = ProductService.GetAllProduct(business_id);
-                if (list == null || test)
-                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is no product fot this businness");
+                List<productDTO> list = ProductService.GetAllProducts(business_id, clientId);
                 return Request.CreateResponse(HttpStatusCode.OK, list);
             }
             catch (Exception e)
@@ -33,22 +30,22 @@ namespace api.Controllers.Category
             }
         }
 
-        // POST: api/business/product/AddProduct/
-        [Route("AddProduct/")]
+        // POST: api/business/product/AddProduct/{clientId}/
+        [Route("AddProduct/{clientId}")]
         [HttpPost]
-        public HttpResponseMessage AddProduct([FromBody]productDTO req)
+        public HttpResponseMessage AddProduct([FromBody]productDTO req, string clientId)
         {
             try
             {
-                if (req.name != null && req.description != null && req.price != null)
+                if (req.name != null && req.description != null)
                 {
-                    product product = ProductService.AddProduct(req);
+                    productDTO product = ProductService.AddProduct(req, clientId);
                     if (product != null)
                         return Request.CreateResponse(HttpStatusCode.OK, product);
-                    return Request.CreateResponse(HttpStatusCode.BadRequest, "There is a prodect with this name:" + req.name);
+                    return Request.CreateResponse(HttpStatusCode.Conflict, "There is a product with this name:" + req.name);
                 }
 
-                return Request.CreateResponse(HttpStatusCode.BadRequest, "Missing prames in your request");
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Missing prameters in your request");
             }
             catch (Exception e)
             {
@@ -56,20 +53,19 @@ namespace api.Controllers.Category
             }
         }
 
-        [Route("ChangeProductToActive/")]
-        [HttpPut]
-        // PUT: api/business/product/ChangeProductToActive/{businness_id}/{product_id}
+        [Route("ChangeProductActive/{clientId}")]
+        [HttpPost]
+        // PUT: api/business/product/ChangeProductActive/{clientId}
         //need to send type : id,name 
         //body : true
-        public HttpResponseMessage ChangeProductToActive([FromBody]productDTO products)
+        public HttpResponseMessage ChangeProducActive([FromBody]productDTO products, string clientId)
         {
             try
             {
                 SwapDbConnection db = new SwapDbConnection();
-                product slected_products = db.products.Select(x => x)
-                    .FirstOrDefault(x => x.business_id == products.business_id && x.product_id == products.product_id); ;
+                product slected_products = db.products.FirstOrDefault(x => x.business_id == products.business_id && x.product_id == products.product_id && x.business.business_owner_id == clientId); ;
                 if (slected_products == null)
-                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is prodect with that id :" + products.product_id);
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is no product with that id :" + products.product_id);
                 slected_products.is_active = products.is_active;
                 db.SaveChanges();
                 return Request.CreateResponse(HttpStatusCode.OK, true);
@@ -80,18 +76,18 @@ namespace api.Controllers.Category
             }
         }
 
-        // Delete:api/business/product/DeleteProduct/{businness_id}/{product_id}
-        [Route("DeleteProduct/{business_id}/{product_id}")]
+        // Delete:api/business/product/DeleteProduct/{businness_id}/{product_id}/{clientId}
+        [Route("DeleteProduct/{business_id}/{product_id}/{clientId}")]
         [HttpDelete]
-        public HttpResponseMessage DeleteProduct([FromUri]string business_id, [FromUri]string product_id)
+        public HttpResponseMessage DeleteProduct([FromUri]string business_id, [FromUri]string product_id, string clientId)
         {
             try
             {
                 bool is_deleted;
-                is_deleted = ProductService.deleteProduct(business_id, product_id);
+                is_deleted = ProductService.deleteProduct(business_id, product_id, clientId);
                 if (!is_deleted)
-                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is no prodect with the id :" + product_id);
-                return Request.CreateResponse(HttpStatusCode.OK, "the prodect had been deleted ");
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is no product with this id :" + product_id);
+                return Request.CreateResponse(HttpStatusCode.OK, "the product has been deleted");
             }
             catch (Exception e)
             {
@@ -99,19 +95,19 @@ namespace api.Controllers.Category
             }
         }
 
-        [Route("UpdateProduct")]
+        [Route("UpdateProduct/{clientId}")]
         [HttpPut]
-        // PUT:   api/business/product/UpdateProduct/{businness_id}/{product_id}
+        // PUT:   api/business/product/UpdateProduct/{clientId}
         //need to send type : id,name 
         //body : true
-        public HttpResponseMessage UpdateProduct( [FromBody]productDTO req)
+        public HttpResponseMessage UpdateProduct([FromBody]productDTO req, string clientId)
         {
             try
             {
                 SwapDbConnection db = new SwapDbConnection();
-                bool is_change = ProductService.updateProduct(req);
+                bool is_change = ProductService.updateProduct(req, clientId);
                 if (!is_change)
-                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is prodect with that id :" + req.product_id);
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is product with that id :" + req.product_id);
                 return Request.CreateResponse(HttpStatusCode.OK, "The product was changed");
             }
             catch (Exception e)
