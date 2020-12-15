@@ -8,7 +8,6 @@ using api.Authorization;
 using SwapClassLibrary.DTO;
 using SwapClassLibrary.EF;
 using SwapClassLibrary.Service;
-using api.Authorization;
 
 namespace api.Controllers
 {
@@ -49,22 +48,22 @@ namespace api.Controllers
             }
         }
 
-        // POST: api/MainCategory/AddMainCategory
-        [Route("AddMainCategory")]
-        [HttpPost]
-        public HttpResponseMessage AddMainCategory([FromBody]requestValueDTO req)
-        {
-            try
-            {
-                if (req.google_value != null && req.name != null)
-                    return Request.CreateResponse(HttpStatusCode.OK, MainCategoryService.AddMainCategory(req.name, req.google_value));
-                return Request.CreateResponse(HttpStatusCode.BadRequest, "there is no name value in the body");
-            }
-            catch (Exception e)
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
-            }
-        }
+        ////// POST: api/MainCategory/AddMainCategory
+        ////[Route("AddMainCategory")]
+        ////[HttpPost]
+        ////public HttpResponseMessage AddMainCategory([FromBody]requestValueDTO req)
+        ////{
+        ////    try
+        ////    {
+        ////        if (req.google_value != null && req.name != null)
+        ////            return Request.CreateResponse(HttpStatusCode.OK, MainCategoryService.AddMainCategory(req.name, req.google_value));
+        ////        return Request.CreateResponse(HttpStatusCode.BadRequest, "there is no name value in the body");
+        ////    }
+        ////    catch (Exception e)
+        ////    {
+        ////        return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
+        ////    }
+        ////}
 
         [Route("ChangeActiveMainCategory/{id}")]
         [HttpPut]

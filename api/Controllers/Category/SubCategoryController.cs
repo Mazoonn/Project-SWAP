@@ -41,7 +41,10 @@ namespace api.Controllers.Category
             try
             {
                 if (req.google_value != null && req.name != null)
-                    return Request.CreateResponse(HttpStatusCode.OK, SubCategoryService.AddSubCategory(req.name, req.google_value));
+                {
+                    bool result = SubCategoryService.AddSubCategory(req.name, req.google_value);
+                    return Request.CreateResponse(HttpStatusCode.OK, result);
+                }
                 return Request.CreateResponse(HttpStatusCode.BadRequest, "there is no 'value':'' in the body");
             }
             catch (Exception e)
@@ -61,13 +64,13 @@ namespace api.Controllers.Category
             {
                 sub_category slected_Sub_category;
                 SwapDbConnection db = new SwapDbConnection();
-                slected_Sub_category = db.sub_category.Select(x => x)
+                slected_Sub_category = db.sub_category
                     .FirstOrDefault(x => x.sub_id == id); ;
                 if (slected_Sub_category == null)
                     return Request.CreateResponse(HttpStatusCode.NotFound, "There is not Sub category value with id - " + id);
                 slected_Sub_category.is_active = req;
                 db.SaveChanges();
-                return Request.CreateResponse(HttpStatusCode.OK, slected_Sub_category);
+                return Request.CreateResponse(HttpStatusCode.OK, true);
             }
             catch (Exception e)
             {

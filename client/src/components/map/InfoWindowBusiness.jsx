@@ -7,7 +7,8 @@ const InfoWindowBusiness = (
     handleSelectBusiness,
     removeChosenPlace,
     index,
-    openModal
+    openModal,
+    isFinished
     }
 ) =>
 {
@@ -19,7 +20,6 @@ const InfoWindowBusiness = (
     street, 
     street_number, 
     settlement,
-    isFinished,
     isChosen,
     chosenIndex,
    } = business 

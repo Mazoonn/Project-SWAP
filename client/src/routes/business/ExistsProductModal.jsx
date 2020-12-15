@@ -1,4 +1,5 @@
 import React from 'react';
+import "../admin/users/UserModal.css";
 
 const ExistsProductModal = ({ name, isActive, handleClose }) =>
 {

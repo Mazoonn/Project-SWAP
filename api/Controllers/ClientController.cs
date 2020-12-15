@@ -33,7 +33,7 @@ namespace api.Controllers
                         break;
                     case "local":
                         if (body.password == null || body.email == null)
-                            return Request.CreateResponse(HttpStatusCode.BadRequest, "Client params illigel");
+                            return Request.CreateResponse(HttpStatusCode.BadRequest, "Illegal pramaters");
                         user = clientService.checkUserLogin(body);
                         if (user == null)
                             return Request.CreateResponse(HttpStatusCode.Unauthorized, "Email or password is incorrect");                  

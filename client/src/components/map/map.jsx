@@ -60,10 +60,11 @@ const addressString = ({settlement, street, street_number}) =>
   return `${street} ${street_number}, ${settlement}`;
 };
 
-const setPlacesFromChosenPlaces = (places, setGooglePlaces, setEventsPlaces) =>
+const setPlacesFromChosenPlaces = (places, setGooglePlaces, setEventsPlaces, setBusinesses) =>
 {
   const google = [];
   const events = [];
+  const businesses = [];
 
   places.forEach(place =>
     {
@@ -74,6 +75,8 @@ const setPlacesFromChosenPlaces = (places, setGooglePlaces, setEventsPlaces) =>
         break;
         case "event" :
           events.push(place);
+        case "business" :
+          businesses.push(place);
         break;
         default :
         break;
@@ -81,6 +84,7 @@ const setPlacesFromChosenPlaces = (places, setGooglePlaces, setEventsPlaces) =>
     });
     setGooglePlaces(google);
     setEventsPlaces(events);
+    setBusinesses(businesses);
 };
 
 
@@ -391,7 +395,7 @@ const Map = (props) => {
       setRoute(JSON.parse(window.localStorage.getItem("route")));
       setChosenPlaces(chosenPlaces);
       setIsFinished(true);
-      setPlacesFromChosenPlaces(chosenPlaces, setPlaces, setEvents);
+      setPlacesFromChosenPlaces(chosenPlaces, setPlaces, setEvents,setBusinesses);
     }
     getLocation();
   }, []);
@@ -546,7 +550,8 @@ const Map = (props) => {
           lng: business.lng,
         }}
       >
-        <InfoWindowBusiness 
+        <InfoWindowBusiness
+          isFinished={isFinished}
           addressString={addressString}
           business={business}
           handleSelectBusiness={handleSelectBusiness}
