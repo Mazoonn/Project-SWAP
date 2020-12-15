@@ -20,7 +20,7 @@ class BusinessPage extends Component {
     name: ["Add Business", "My Businesses", "Products"],
     component: [
       <BusinessForm />,
-      <ListOfBusiness AreChanges={this.AreChanges} handleOnChangeIsActiveBusiness={this.handleOnChangeIsActiveBusiness} />,
+      <ListOfBusiness />,
       <ListOfProducts />,
     ],
   };
@@ -33,41 +33,18 @@ class BusinessPage extends Component {
     }
   }
 
-  handleClickAddBusiness = async () => {
-    let isAddBusiness = !this.state.isAddBusiness;
-    if (isAddBusiness) {
-      this.setState({ isAddBusiness: false });
-    }
-    this.setState({ isAddBusiness });
-  };
-
-  handleOnChangeIsActiveBusiness = (index) => {
-    const businesses = [...this.state.business];
-    const business = businesses[index];
-    business.is_active = !business.is_active;
-    business.is_change = business.is_change === undefined ? true : !business.is_change;
-    this.setState({ businesses });
-  };
-
-  AreChanges = () => {
-    let result = false;
-    result = this.state.business.some((business) => (business.is_change === undefined ? false : business.is_change));
-    return result;
-  };
-
   handleClick = (index) => {
     const selected = this.state.selected !== index ? index : -1;
     this.setState({ selected });
   };
 
   render() {
-    const { isAddBusiness, loading, business, business_owner_id, isProducts: isListOfProducts, isListOfBusiness } = this.state;
     const { selected } = this.state;
     const { name, component } = this.data;
     return (
       <React.Fragment>
         <div className="row ml-2">
-          <div className="col-">
+          <div>
             <BusinessButtons handleClick={this.handleClick} data={name} selected={selected} />
           </div>
 
@@ -75,15 +52,7 @@ class BusinessPage extends Component {
             {selected !== -1  && component[selected] || <div className="card m-auto">
               <h5 className="card-header">Business Owner Page Information</h5>
               <div className="card-body">
-                <h6>Add Business</h6>
-                <br />
-                <br />
-                <h6>My Business</h6>
-                <br />
-                <br />
-                <h6>Products</h6>
-                <br />
-                <br />
+                
               </div>
             </div>}
           </div>
