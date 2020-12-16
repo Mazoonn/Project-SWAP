@@ -169,12 +169,26 @@ class Quest extends Component {
   handleDivideSubCategories = () => {
     const categories = this.state.categoryList.filter((category) => category.isCurrentlySelected);
     if(categories.length == 0)
-    return (<div className="card">
-    <div className="card-body">
-      <h5 className="card-title">Instructions</h5>
-      <p className="card-text">Please select at least one main category and at least one subcategory to get to the next stage</p>
-    </div>
-  </div>);
+    return (
+      <React.Fragment>
+        <div className="card-body">
+          <h5>Instructions</h5>
+          <p className="card-text">
+            <span>Please select the desired activity on the main left bar in order to see the options.</span>
+            <br/> 
+            <span>
+              Choose one or multiple options for further directions and recommendations the closest places will be reviled to you on the map.
+            </span>
+            <br/> 
+            <span>You can build our route by selecting the places and organize them.</span>
+            <br/>
+            <span>There is an option to choose your transport by Route.</span>
+            <br/>
+            <span>Events are marked on the map with a Star and it is only for limited time.</span>
+            </p>
+         </div>
+     </React.Fragment>
+  );
 
 
     
@@ -246,7 +260,7 @@ class Quest extends Component {
         <div className="col">
         <div>
         <div className="card m-auto">
-          <h5 className="card-header text-center">Categories</h5>
+          <h5 className="card-header text-center">Quest</h5>
           {this.handleDivideSubCategories()}
           <div className="card-body">
           </div>

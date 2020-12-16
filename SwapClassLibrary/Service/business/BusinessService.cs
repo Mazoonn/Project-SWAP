@@ -42,18 +42,25 @@ namespace SwapClassLibrary.Service
         public static List<MapBusinessDTO> GetFilteredBusinessesAround(PointDTO position, CategoriesIdsDTO ids, double radius)
         {
             SwapDbConnection db = new SwapDbConnection();
-            PointDTO point = new PointDTO();
-            List<MapBusinessDTO> FilteredEvents = new List<MapBusinessDTO>();
-            List<business> businesees = db.businesses.Include(b => b.products).Where(b => b.is_active &&
+            PointDTO point;
+            List<business> businesees;
+            List<MapBusinessDTO> filteredBusinesses = new List<MapBusinessDTO>();
+            main_category mainCategory = db.main_category.FirstOrDefault(category => category.main_id == ids.mainId);
+            string iconCategory;
+
+            if (mainCategory == null) return filteredBusinesses;
+            point = new PointDTO();
+            businesees = db.businesses.Include(b => b.products).Where(b => b.is_active &&
             b.approve_by_admin &&
             b.place.r_place_sub_and_main_category.Any(r => r.main_id == ids.mainId &&
             ids.subIds.Any(id => r.sub_id == id))).ToList();
+            iconCategory = mainCategory.google_value;
 
             foreach (business b in businesees)
             {
                 point.lat = (double)b.place.latitude;
                 point.lng = (double)b.place.longitude;
-                if (PlaceService.GetDistance(point, position) <= radius) FilteredEvents.Add(new MapBusinessDTO
+                if (PlaceService.GetDistance(point, position) <= radius) filteredBusinesses.Add(new MapBusinessDTO
                 {
                     closing_hours = b.closing_hours,
                     description = b.place.description,
@@ -66,6 +73,7 @@ namespace SwapClassLibrary.Service
                     settlement = b.place.settlement ?? "",
                     street = b.place.street ?? "",
                     street_number = b.place.street_number ?? "",
+                    icon = iconCategory ?? "",
                     products = b.products.Where(p=> p.is_active && p.discount_end_date >= DateTime.Now).Select(product => new productDTO
                     {
                         business_id = product.business_id,
@@ -83,7 +91,7 @@ namespace SwapClassLibrary.Service
             }
 
 
-            return FilteredEvents;
+            return filteredBusinesses;
         }
 
         public static bool AddBusiness(NewBusinessDTO business, NewPlaceDTO place, CategoriesIdsDTO categories)

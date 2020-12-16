@@ -50,9 +50,19 @@ class BusinessPage extends Component {
 
           <div className="col">
             {selected !== -1  && component[selected] || <div className="card m-auto">
-              <h5 className="card-header">Business Owner Page Information</h5>
+              <h5 className="card-header">Business owner page information</h5>
               <div className="card-body">
-                
+                <p>
+                  <span>Join our application so we can find you and recommend you to our seekers.</span>
+                  <br/>
+                  <span>Once you joined us please add your accurate info to be best categorized.</span>
+                  <br/>
+                  <span>After you have added all the info we will approve your business.</span>
+                  <br/>
+                  <span>You can add your products for our seekers to get more engaged</span>
+                  <br/>
+                  <span>You will be happily looked for by our seekers.</span>
+                </p>
               </div>
             </div>}
           </div>

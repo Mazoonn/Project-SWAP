@@ -20,5 +20,6 @@ namespace SwapClassLibrary.DTO
         public decimal lat { get; set; }
         public decimal lng { get; set; }
         public List<productDTO> products { get; set; }
+        public string icon { get; set; }
     }
 }

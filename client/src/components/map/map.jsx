@@ -134,7 +134,6 @@ const Map = (props) => {
     mapRef.current = map;
   }, []);
 
-
   const handleFinish = async () => {
     const storage = window.localStorage;
     const user = getCurrentUser();
@@ -312,6 +311,12 @@ const Map = (props) => {
                     : false
                   : true
               }
+              icon={!(event.isChosen !== undefined ? event.isChosen : false) && {
+                url: "/icons/event.png",
+                origin: new window.google.maps.Point(0, 0),
+                anchor: new window.google.maps.Point(15, 15),
+                labelOrigin: new window.google.maps.Point(16, 45),
+                } || undefined }
               onMouseDown={() => {onClickEventMarker(index)}}
               key={`${event.place_id}Marker`}
               label={
@@ -349,6 +354,12 @@ const Map = (props) => {
                     : false
                   : true
               }
+              icon={!(business.isChosen !== undefined ? business.isChosen : false) && {
+                url: `/icons/${business.icon}.png`,
+                origin: new window.google.maps.Point(0, 0),
+                anchor: new window.google.maps.Point(15, 15),
+                labelOrigin: new window.google.maps.Point(16, 45),
+                } || undefined }
               onMouseDown={() => {onClickBusinessMarker(index)}}
               key={`${business.place_id}Marker`}
               label={
@@ -643,7 +654,7 @@ const Map = (props) => {
             url: "/img/bluecircle.png",
             origin: new window.google.maps.Point(0, 0),
             anchor: new window.google.maps.Point(7, 7),
-            scaledSize: new window.google.maps.Size(14, 14),
+            scaledSize: new window.google.maps.Size(15, 15),
             }}
           ></Marker>
             {getMarkers()}
