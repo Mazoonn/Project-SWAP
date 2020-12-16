@@ -213,7 +213,6 @@ namespace SwapClassLibrary.Service
             return "ok";
         }
 
-
         public static List<BusinessInfoDTO> GetNotApprovedBusinesses()
         {
             return new SwapDbConnection().businesses.Where(b => !b.approve_by_admin)
@@ -282,7 +281,6 @@ namespace SwapClassLibrary.Service
                 post_code = e.place.post_code ?? "",
             }).ToList();
         }
-
 
         public static bool DeleteEvent(string id)
         {

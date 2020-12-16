@@ -12,23 +12,6 @@ namespace SwapClassLibrary.Service
 
     public class CategoryService
     {
-        //main and sub category relationship
-        /******************************************************************************************/
-        //get all main and sub category relationship
-        public static List<MainAndSubRelationshipDTO> GetAllMainAndSubRelationship()
-        {
-            SwapDbConnection db = new SwapDbConnection();
-            List<MainAndSubRelationshipDTO> r_main_google_object = db.r_sub_and_main_category.Where(x => x.is_active).Select(x => new MainAndSubRelationshipDTO() { 
-            clicked =  (int)x.clicked,
-            is_active = x.is_active,
-            descrition = x.descrition,
-            main_name = x.main_category.name,
-            sub_name = x.sub_category.name,
-            main_id = x.main_id,
-            sub_id = x.sub_id
-            }).ToList();
-                return r_main_google_object;
-        }
         //get main and sub category relationship by ids
         public static List<MainAndSubRelationshipDTO> GetMainAndSubRelationship(string main_id)
         {

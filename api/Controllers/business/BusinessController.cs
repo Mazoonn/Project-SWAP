@@ -48,44 +48,6 @@ namespace api.Controllers
             }
         }
 
-        //Post api/business/AddBusinessOwner
-        [Route("AddBusinessOwner")]
-        [HttpPost]
-        public HttpResponseMessage AddBusinessOwner([FromBody]string business_owner_id)
-        {
-            try
-            {
-                bool is_add = BusinessOwnersService.AddBusinessOwners(business_owner_id);
-                if (!is_add)
-                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is not client id in the db");
-                return Request.CreateResponse(HttpStatusCode.OK, "The client is a Bussnes owner now");
-            }
-            catch (Exception e)
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
-            }
-
-        }
-
-        //Post api/business/DeleteBusinessOwner
-        [Route("DeleteBusinessOwner")]
-        [HttpDelete]
-        public HttpResponseMessage DeleteBusinessOwner([FromBody]string business_owner_id)
-        {
-            try
-            {
-                bool is_deleted = BusinessOwnersService.DeleteBusinessOwners(business_owner_id);
-                if (!is_deleted)
-                    return Request.CreateResponse(HttpStatusCode.NotFound, "There is no business owner id as this in db");
-                return Request.CreateResponse(HttpStatusCode.OK, "The business owner is now client now");
-            }
-            catch (Exception e)
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
-            }
-
-        }
-
         //Discount add/change/request to Approve/delete
         [Route("AddBusiness")]
         [MyAuthorize("business", "admin")]

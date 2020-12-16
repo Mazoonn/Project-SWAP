@@ -45,12 +45,6 @@ namespace SwapClassLibrary.Service
             return id;
         }
 
-        public static bool registerClientfacebook(loginDTO body)
-        {
-
-            return false;
-        }
-
         private static void SetUser(loginDTO user,string role, string id, string email)
         {
             user.role = role;
@@ -60,8 +54,6 @@ namespace SwapClassLibrary.Service
 
         public static client registerClientgoogle(loginDTO body)
         {
-            //try
-            //{
             SwapDbConnection db = new SwapDbConnection();
             client client = db.clients.FirstOrDefault(u => u.email == body.email);
             if (client == null)
@@ -86,20 +78,8 @@ namespace SwapClassLibrary.Service
             db.SaveChanges();
 
             return client;
-            //}
-            //catch (DbEntityValidationException ex)
-            //{
-            //    foreach (var entityValidationErrors in ex.EntityValidationErrors)
-            //    {
-            //        foreach (var validationError in entityValidationErrors.ValidationErrors)
-            //        {
-            //            Console.WriteLine("Property: " + validationError.PropertyName + " Error: " + validationError.ErrorMessage);
-            //        }
-            //    }
-            //}
-
-
         }
+
         public static client checkUserLogin(loginDTO body)
         {
             SwapDbConnection db = new SwapDbConnection();
@@ -186,5 +166,4 @@ namespace SwapClassLibrary.Service
             return true;
         }
     }
-
 }

@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using SwapClassLibrary.Service;
 using SwapClassLibrary.DTO;
+using api.Authorization;
 
 
 namespace api.Controllers.place.events
@@ -15,6 +16,7 @@ namespace api.Controllers.place.events
     {
         [Route("GetEvents")]
         [HttpGet]
+        [MyAuthorize("admin", "business", "client")]
         public HttpResponseMessage GetEvents([FromUri] PointDTO point, double radius)
         {
             try

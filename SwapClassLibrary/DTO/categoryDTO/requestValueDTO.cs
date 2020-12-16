@@ -10,6 +10,5 @@ namespace SwapClassLibrary.DTO
     {
         public string name;
         public string google_value;
-
     }
 }

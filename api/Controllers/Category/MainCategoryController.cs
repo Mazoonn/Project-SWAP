@@ -48,23 +48,6 @@ namespace api.Controllers
             }
         }
 
-        ////// POST: api/MainCategory/AddMainCategory
-        ////[Route("AddMainCategory")]
-        ////[HttpPost]
-        ////public HttpResponseMessage AddMainCategory([FromBody]requestValueDTO req)
-        ////{
-        ////    try
-        ////    {
-        ////        if (req.google_value != null && req.name != null)
-        ////            return Request.CreateResponse(HttpStatusCode.OK, MainCategoryService.AddMainCategory(req.name, req.google_value));
-        ////        return Request.CreateResponse(HttpStatusCode.BadRequest, "there is no name value in the body");
-        ////    }
-        ////    catch (Exception e)
-        ////    {
-        ////        return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
-        ////    }
-        ////}
-
         [Route("ChangeActiveMainCategory/{id}")]
         [HttpPut]
         // PUT: api/MainCategory/ChangeActiveMainCategory/id
@@ -88,28 +71,6 @@ namespace api.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
             }
-        }
-         
-
-        // Delete:api/googleValue/DeleteGoogleValue/{type}/{req}
-        [Route("DeleteMainCategory/{id}")]
-        [HttpDelete]
-        public HttpResponseMessage DeleteMainCategory(string id)
-        {
-            try
-            {
-            bool is_deleted;
-            is_deleted = MainCategoryService.deleteMainCategory(id);
-            if (!is_deleted)
-                return Request.CreateResponse(HttpStatusCode.NotFound, "There is not main category with id - " + id);
-            return Request.CreateResponse(HttpStatusCode.OK, "the object had been deleted ");
-            }
-            catch (Exception e)
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
-            }
-        }
-
+        }       
     }
-   
 }

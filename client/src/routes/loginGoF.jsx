@@ -1,7 +1,4 @@
 import React, { Component } from "react";
-//import ReactModalLogin from "react-modal-login";
-
-// import FacebookLogin from "react-facebook-login";
 import GoogleLogin from "react-google-login";
 import { clientLogin } from "../services/client.ts";
 import { setUserSession } from "../Utils/Common";
@@ -9,10 +6,6 @@ import { googleConfig, facebookConfig } from "../config.json";
 
 class LoginGoF extends Component {
   render() {
-    // const responseFacebook = (response) => {
-    //   console.log(response);
-    //   setUserSession(response.accessToken, response.profileObj.email);
-    // };
 
     const responseGoogle = async (response) => {
       const { email, givenName, familyName, googleId } = response.profileObj;
@@ -20,7 +13,6 @@ class LoginGoF extends Component {
       const token = await clientLogin({
         email: email,
         platform: "google",
-        // client: client_id,
         first_name: givenName,
         last_name: familyName,
         user_id: googleId,
@@ -31,15 +23,6 @@ class LoginGoF extends Component {
 
     return (
       <div className="App text-center">
-        {/* <FacebookLogin
-          className="btn btn-primary btn-lg"
-          appId={facebookConfig.appId}
-          fields="name,email,picture"
-          buttonText="Login with facebook"
-          callback={responseFacebook}
-        />
-        <br />
-        <br /> */}
         <GoogleLogin
           disabled={this.props.isDisabled}
           className="btn-primary btn-lg"

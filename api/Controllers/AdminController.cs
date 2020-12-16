@@ -139,7 +139,6 @@ namespace api.Controllers.admin
         }
 
         [Route("GetEvents")]
-        [MyAuthorize("admin", "business", "client")]
         [HttpGet]
         public HttpResponseMessage GetEvents()
         {

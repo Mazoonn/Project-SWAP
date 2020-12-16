@@ -25,9 +25,6 @@ namespace api.Controllers
 
                 switch (body.platform)
                 {
-                    case "facebook":
-                        clientService.registerClientfacebook(body);
-                        break;
                     case "google":
                         user = clientService.registerClientgoogle(body);
                         break;

@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DTO\bussinessDTO\BusinessInfoDTO.cs" />
+    <Compile Include="DTO\bussinessDTO\bussinessDTO.cs" />
     <Compile Include="DTO\bussinessDTO\bussinessRequestDTO.cs" />
     <Compile Include="DTO\bussinessDTO\MapBusinessDTO.cs" />
     <Compile Include="DTO\bussinessDTO\NewBusinessDTO.cs" />
@@ -90,7 +91,6 @@
     <Compile Include="DTO\placeDTO\placeDTO.cs" />
     <Compile Include="DTO\productDTO\productReqDTO.cs" />
     <Compile Include="DTO\productDTO\productDTO.cs" />
-    <Compile Include="DTO\bussinessDTO\bussinessDTO.cs" />
     <Compile Include="DTO\categoryDTO\MainAndSubRelationshipDTO.cs" />
     <Compile Include="DTO\categoryDTO\categoryAddGoogleDTO.cs" />
     <Compile Include="DTO\categoryDTO\categoryAddGoogleResponseDTO.cs" />
@@ -159,6 +159,7 @@
     <Compile Include="Models\IAuthModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\business\BusinessService.cs" />
+    <Compile Include="Service\category\SubCategoryService.cs" />
     <Compile Include="Service\place\events\eventsService.cs" />
     <Compile Include="Service\HashSalt\HashSalt.cs" />
     <Compile Include="Service\place\PlaceService.cs" />
@@ -167,15 +168,13 @@
     <Compile Include="Service\category\CategoryService.cs" />
     <Compile Include="Service\category\googleValueService.cs" />
     <Compile Include="Service\category\MainCategoryService.cs" />
-    <Compile Include="Service\category\SubCategoryService.cs" />
-    <Compile Include="Service\Authenticate service\JWTGetToken.cs" />
-    <Compile Include="Service\Authenticate service\IAuthService.cs" />
-    <Compile Include="Service\business\BusinessOwnerService.cs" />
+    <Compile Include="Service\authentication\JWTGetToken.cs" />
+    <Compile Include="Service\authentication\IAuthService.cs" />
     <Compile Include="Service\quest\QuestService.cs" />
     <Compile Include="Service\users\adminService.cs" />
     <Compile Include="Service\users\clientService.cs" />
     <Compile Include="Service\IdService.cs" />
-    <Compile Include="Service\Authenticate service\JWTService.cs" />
+    <Compile Include="Service\authentication\JWTService.cs" />
     <Compile Include="DTO\placeDTO\PointDTO.cs" />
   </ItemGroup>
   <ItemGroup>

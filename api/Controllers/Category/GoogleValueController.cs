@@ -7,10 +7,11 @@ using System.Web.Http;
 using SwapClassLibrary.DTO;
 using SwapClassLibrary.EF;
 using SwapClassLibrary.Service;
+using api.Authorization;
 
 namespace api.Controllers
 {
-   //[Authorize(Roles = "admin")]
+    [MyAuthorize("admin")]
     [RoutePrefix("api/GoogleValue")]
     public class GoogleValueController : ApiController
     {
