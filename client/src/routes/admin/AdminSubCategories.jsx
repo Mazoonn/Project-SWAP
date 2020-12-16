@@ -51,29 +51,21 @@ const AdminSubCategories = () => {
     setSubCategory({});
     setSelectValue(index);
 
-    if (index !== "default") 
-    {
+    if (index !== "default") {
       setLoading(true);
       setIndexCategory(index);
       setIsDefault(false);
       const category_id = categories[index].id;
-      try
-      {
+      try {
         const newSubCategories = await getSubCategoriesId(category_id);
         addNewValuesToSubCategories(newSubCategories.data);
         setSubCategories(newSubCategories.data);
-      }
-      catch(err)
-      {
+      } catch (err) {
         console.log(err);
-      }
-      finally
-      {
+      } finally {
         setLoading(false);
       }
-    } 
-    else 
-    {
+    } else {
       setSubCategories([]);
       setIsDefault(true);
     }
@@ -152,11 +144,16 @@ const AdminSubCategories = () => {
     const category = { ...subCategory };
     setSubCategory({});
     category.main_id = main_id;
-    await postSubCategory(category);
-    const newSubCategories = await getSubCategoriesId(main_id);
-    addNewValuesToSubCategories(newSubCategories);
-    setSubCategories(newSubCategories);
-    setLoading(false);
+    try {
+      await postSubCategory(category);
+      const newSubCategories = await getSubCategoriesId(main_id);
+      addNewValuesToSubCategories(newSubCategories.data);
+      setSubCategories(newSubCategories.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (loading)
