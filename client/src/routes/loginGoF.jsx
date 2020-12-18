@@ -19,7 +19,6 @@ class LoginGoF extends Component {
       });
       setUserSession(token.data, email);
       window.location = "/";
-      window.location.reload();
     };
 
     return (

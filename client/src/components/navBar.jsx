@@ -11,10 +11,21 @@ import ClientRoute from "./../Utils/ClientRoute";
 import Logout from "./../routes/logout";
 import AdminRoute from "./../Utils/AdminRoute";
 import BusinessRoute from "../Utils/BusinessRoute";
+import { getCurrentUser } from './../services/authService';
 
 class NavBar extends Component {
+  state = { user: null };
+
+  componentDidMount()
+  {
+    const user = getCurrentUser();
+    if(user)
+    this.setState({ user });
+  };
+
   render() {
-    const { user } = this.props;
+    const { user } = this.state;
+
     return (
       <nav id="navbar">
         <BrowserRouter>

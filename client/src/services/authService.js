@@ -1,5 +1,6 @@
-import jwt from 'jsonwebtoken';
-import key from '../key/key.json'
+// import jwt from 'jsonwebtoken';
+//import key from '../key/key.json'
+import jwtDecode from "jwt-decode"
 
 export function getCurrentUser() 
 {
@@ -8,8 +9,8 @@ export function getCurrentUser()
 
     try 
     {
-     decoded = jwt.verify(token, key["public-key"]);
-     return decoded;
+        decoded = jwtDecode(token);
+        return decoded;
     } 
     catch(err) 
     {

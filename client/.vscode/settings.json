@@ -1,3 +1,5 @@
 {
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "appService.defaultWebAppToDeploy": "/subscriptions/bf269371-96d3-4c4a-9c61-69273a20da78/resourceGroups/Client/providers/Microsoft.Web/sites/swap-client",
+    "appService.deploySubpath": "build"
 }

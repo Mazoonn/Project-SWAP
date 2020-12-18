@@ -55,7 +55,6 @@ function Login(props) {
       });
       setUserSession(token.data, user.email);
       window.location = "/";
-      window.location.reload();
     } catch (error) {
       if (error.response && (error.response.status >= 400 || error.response.status < 500))
         setErrors({ server: error.response.data });
@@ -103,6 +102,7 @@ function Login(props) {
             <label htmlFor="exampleInputPassword1" className="text-left" style={{ width: "280px" }}>
               Password
               <input
+                autocomplete="on"
                 value={user.password}
                 onChange={handleOnChange}
                 name="password"
