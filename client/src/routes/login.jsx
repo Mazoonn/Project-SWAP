@@ -25,8 +25,13 @@ function Login(props) {
     if (!error) return null;
 
     const errorsState = {};
-    for (let item of error.details) errorsState[item.path[0]] = item.message;
+    for (const item of error.details) errorsState[item.path[0]] = item.message;
     return errorsState;
+  };
+
+  const failureGoogle = () =>
+  {
+    setErrors({ server: "Sorry google authentication failed" });
   };
 
   const handleOnChange = (e) => {
@@ -50,10 +55,14 @@ function Login(props) {
       });
       setUserSession(token.data, user.email);
       window.location = "/";
+      window.location.reload();
     } catch (error) {
-      setLoading(false);
       if (error.response && (error.response.status >= 400 || error.response.status < 500))
         setErrors({ server: error.response.data });
+    }
+    finally
+    {
+      setLoading(false);
     }
   };
   if (getCurrentUser()) {
@@ -66,7 +75,7 @@ function Login(props) {
     <div className="card-body">
     <div className="text-center">
       <div className="d-inline-block pt-4">
-        <LoginGoF loading={setLoading} isDisabled={loading} />
+        <LoginGoF loading={setLoading} isDisabled={loading} onFailure = {failureGoogle} />
         <br />
         <form>
           <div className="form-group">
@@ -109,7 +118,7 @@ function Login(props) {
               )}
             </label>
           </div>
-          {errors.server && (
+          {(errors.server) && (
             <div className="alert alert-danger">
               <small>{errors.server}</small>
             </div>

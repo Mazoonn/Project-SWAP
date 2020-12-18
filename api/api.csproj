@@ -398,6 +398,7 @@
     <Content Include="libman.json" />
     <Content Include="Keys\private-key.pem" />
     <Content Include="Keys\public-key.pem" />
+    <None Include="Properties\PublishProfiles\SmartWalkAPI - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

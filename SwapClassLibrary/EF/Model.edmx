@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="SwapModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="SwapdbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="admin">
           <Key>
             <PropertyRef Name="admin_id" />
@@ -15,7 +15,7 @@
           <Key>
             <PropertyRef Name="place_id" />
           </Key>
-          <Property Name="place_id" Type="nvarchar" MaxLength="120" Nullable="false" />
+          <Property Name="place_id" Type="varchar" MaxLength="400" Nullable="false" />
           <Property Name="business_owner_id" Type="nvarchar" MaxLength="40" Nullable="false" />
           <Property Name="is_active" Type="bit" Nullable="false" />
           <Property Name="opening_hours" Type="time" Precision="6" />
@@ -51,7 +51,7 @@
           <Key>
             <PropertyRef Name="place_id" />
           </Key>
-          <Property Name="place_id" Type="nvarchar" MaxLength="120" Nullable="false" />
+          <Property Name="place_id" Type="varchar" MaxLength="400" Nullable="false" />
           <Property Name="price" Type="float" Nullable="false" />
           <Property Name="end_date" Type="date" Nullable="false" />
           <Property Name="start_date" Type="date" Nullable="false" />
@@ -77,18 +77,18 @@
           <Key>
             <PropertyRef Name="place_id" />
           </Key>
-          <Property Name="place_id" Type="nvarchar" MaxLength="120" Nullable="false" />
+          <Property Name="place_id" Type="varchar" MaxLength="400" Nullable="false" />
           <Property Name="creation_date" Type="date" Nullable="false" />
           <Property Name="latitude" Type="decimal" Precision="11" Scale="8" Nullable="false" />
           <Property Name="longitude" Type="decimal" Precision="11" Scale="8" Nullable="false" />
-          <Property Name="state" Type="nvarchar" MaxLength="100" />
+          <Property Name="state" Type="nvarchar" MaxLength="300" />
           <Property Name="post_code" Type="nvarchar" MaxLength="20" />
           <Property Name="description" Type="text" />
-          <Property Name="name" Type="nvarchar" MaxLength="50" />
-          <Property Name="settlement" Type="nvarchar" MaxLength="60" />
+          <Property Name="name" Type="nvarchar" MaxLength="300" />
+          <Property Name="settlement" Type="nvarchar" MaxLength="300" />
           <Property Name="street_number" Type="nvarchar" MaxLength="20" />
-          <Property Name="street" Type="nvarchar" MaxLength="100" />
-          <Property Name="country" Type="nvarchar" MaxLength="80" />
+          <Property Name="street" Type="nvarchar" MaxLength="300" />
+          <Property Name="country" Type="nvarchar" MaxLength="300" />
         </EntityType>
         <EntityType Name="product">
           <Key>
@@ -103,7 +103,7 @@
           <Property Name="discount_start_date" Type="date" Nullable="false" />
           <Property Name="discount_end_date" Type="date" Nullable="false" />
           <Property Name="is_active" Type="bit" Nullable="false" />
-          <Property Name="business_id" Type="nvarchar" MaxLength="120" Nullable="false" />
+          <Property Name="business_id" Type="varchar" MaxLength="400" Nullable="false" />
         </EntityType>
         <EntityType Name="quest">
           <Key>
@@ -120,7 +120,7 @@
             <PropertyRef Name="place_id" />
             <PropertyRef Name="quest_id" />
           </Key>
-          <Property Name="place_id" Type="nvarchar" MaxLength="120" Nullable="false" />
+          <Property Name="place_id" Type="varchar" MaxLength="400" Nullable="false" />
           <Property Name="quest_id" Type="nvarchar" MaxLength="40" Nullable="false" />
         </EntityType>
         <EntityType Name="r_place_sub_and_main_category">
@@ -131,7 +131,7 @@
           </Key>
           <Property Name="sub_id" Type="nvarchar" MaxLength="40" Nullable="false" />
           <Property Name="main_id" Type="nvarchar" MaxLength="40" Nullable="false" />
-          <Property Name="place_id" Type="nvarchar" MaxLength="120" Nullable="false" />
+          <Property Name="place_id" Type="varchar" MaxLength="400" Nullable="false" />
           <Property Name="creation_date" Type="date" Nullable="false" />
         </EntityType>
         <EntityType Name="r_sub_and_main_category">
@@ -156,7 +156,7 @@
           <Property Name="is_active" Type="bit" Nullable="false" />
           <Property Name="google_value" Type="nvarchar" MaxLength="20" />
         </EntityType>
-        <Association Name="FK__business__place___324172E1">
+        <Association Name="FK__business__place___123EB7A3">
           <End Role="place" Type="Self.place" Multiplicity="1" />
           <End Role="business" Type="Self.business" Multiplicity="0..1" />
           <ReferentialConstraint>
@@ -168,10 +168,8 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Event__event_id__2CBDA3B5">
-          <End Role="place" Type="Self.place" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
+        <Association Name="FK__Event__place_id__1332DBDC">
+          <End Role="place" Type="Self.place" Multiplicity="1" />
           <End Role="Event" Type="Self.Event" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="place">
@@ -182,10 +180,8 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__product__busines__29E1370A">
-          <End Role="business" Type="Self.business" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
+        <Association Name="FK__product__busines__151B244E">
+          <End Role="business" Type="Self.business" Multiplicity="1" />
           <End Role="product" Type="Self.product" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="business">
@@ -193,6 +189,42 @@
             </Principal>
             <Dependent Role="product">
               <PropertyRef Name="business_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__r_place_q__place__160F4887">
+          <End Role="place" Type="Self.place" Multiplicity="1" />
+          <End Role="r_place_quest" Type="Self.r_place_quest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="place">
+              <PropertyRef Name="place_id" />
+            </Principal>
+            <Dependent Role="r_place_quest">
+              <PropertyRef Name="place_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__r_place_q__quest__17036CC0">
+          <End Role="quest" Type="Self.quest" Multiplicity="1" />
+          <End Role="r_place_quest" Type="Self.r_place_quest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="quest">
+              <PropertyRef Name="quest_id" />
+            </Principal>
+            <Dependent Role="r_place_quest">
+              <PropertyRef Name="quest_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__r_place_s__place__17F790F9">
+          <End Role="place" Type="Self.place" Multiplicity="1" />
+          <End Role="r_place_sub_and_main_category" Type="Self.r_place_sub_and_main_category" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="place">
+              <PropertyRef Name="place_id" />
+            </Principal>
+            <Dependent Role="r_place_sub_and_main_category">
+              <PropertyRef Name="place_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -252,44 +284,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_r_place_quest_place">
-          <End Role="place" Type="Self.place" Multiplicity="1" />
-          <End Role="r_place_quest" Type="Self.r_place_quest" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="place">
-              <PropertyRef Name="place_id" />
-            </Principal>
-            <Dependent Role="r_place_quest">
-              <PropertyRef Name="place_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_r_place_quest_quest">
-          <End Role="quest" Type="Self.quest" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="r_place_quest" Type="Self.r_place_quest" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="quest">
-              <PropertyRef Name="quest_id" />
-            </Principal>
-            <Dependent Role="r_place_quest">
-              <PropertyRef Name="quest_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_r_place_sub_and_main_category_place">
-          <End Role="place" Type="Self.place" Multiplicity="1" />
-          <End Role="r_place_sub_and_main_category" Type="Self.r_place_sub_and_main_category" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="place">
-              <PropertyRef Name="place_id" />
-            </Principal>
-            <Dependent Role="r_place_sub_and_main_category">
-              <PropertyRef Name="place_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_r_place_sub_and_main_category_r_sub_and_main_category">
           <End Role="r_sub_and_main_category" Type="Self.r_sub_and_main_category" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -330,7 +324,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="SwapModelStoreContainer">
+        <EntityContainer Name="SwapdbModelStoreContainer">
           <EntitySet Name="admin" EntityType="Self.admin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="business" EntityType="Self.business" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BusinessOwner" EntityType="Self.BusinessOwner" Schema="dbo" store:Type="Tables" />
@@ -345,17 +339,29 @@
           <EntitySet Name="r_place_sub_and_main_category" EntityType="Self.r_place_sub_and_main_category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="r_sub_and_main_category" EntityType="Self.r_sub_and_main_category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sub_category" EntityType="Self.sub_category" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__business__place___324172E1" Association="Self.FK__business__place___324172E1">
+          <AssociationSet Name="FK__business__place___123EB7A3" Association="Self.FK__business__place___123EB7A3">
             <End Role="place" EntitySet="place" />
             <End Role="business" EntitySet="business" />
           </AssociationSet>
-          <AssociationSet Name="FK__Event__event_id__2CBDA3B5" Association="Self.FK__Event__event_id__2CBDA3B5">
+          <AssociationSet Name="FK__Event__place_id__1332DBDC" Association="Self.FK__Event__place_id__1332DBDC">
             <End Role="place" EntitySet="place" />
             <End Role="Event" EntitySet="Event" />
           </AssociationSet>
-          <AssociationSet Name="FK__product__busines__29E1370A" Association="Self.FK__product__busines__29E1370A">
+          <AssociationSet Name="FK__product__busines__151B244E" Association="Self.FK__product__busines__151B244E">
             <End Role="business" EntitySet="business" />
             <End Role="product" EntitySet="product" />
+          </AssociationSet>
+          <AssociationSet Name="FK__r_place_q__place__160F4887" Association="Self.FK__r_place_q__place__160F4887">
+            <End Role="place" EntitySet="place" />
+            <End Role="r_place_quest" EntitySet="r_place_quest" />
+          </AssociationSet>
+          <AssociationSet Name="FK__r_place_q__quest__17036CC0" Association="Self.FK__r_place_q__quest__17036CC0">
+            <End Role="quest" EntitySet="quest" />
+            <End Role="r_place_quest" EntitySet="r_place_quest" />
+          </AssociationSet>
+          <AssociationSet Name="FK__r_place_s__place__17F790F9" Association="Self.FK__r_place_s__place__17F790F9">
+            <End Role="place" EntitySet="place" />
+            <End Role="r_place_sub_and_main_category" EntitySet="r_place_sub_and_main_category" />
           </AssociationSet>
           <AssociationSet Name="FK_admin_BusinessOwner" Association="Self.FK_admin_BusinessOwner">
             <End Role="BusinessOwner" EntitySet="BusinessOwner" />
@@ -373,18 +379,6 @@
             <End Role="client" EntitySet="client" />
             <End Role="quest" EntitySet="quest" />
           </AssociationSet>
-          <AssociationSet Name="FK_r_place_quest_place" Association="Self.FK_r_place_quest_place">
-            <End Role="place" EntitySet="place" />
-            <End Role="r_place_quest" EntitySet="r_place_quest" />
-          </AssociationSet>
-          <AssociationSet Name="FK_r_place_quest_quest" Association="Self.FK_r_place_quest_quest">
-            <End Role="quest" EntitySet="quest" />
-            <End Role="r_place_quest" EntitySet="r_place_quest" />
-          </AssociationSet>
-          <AssociationSet Name="FK_r_place_sub_and_main_category_place" Association="Self.FK_r_place_sub_and_main_category_place">
-            <End Role="place" EntitySet="place" />
-            <End Role="r_place_sub_and_main_category" EntitySet="r_place_sub_and_main_category" />
-          </AssociationSet>
           <AssociationSet Name="FK_r_place_sub_and_main_category_r_sub_and_main_category" Association="Self.FK_r_place_sub_and_main_category_r_sub_and_main_category">
             <End Role="r_sub_and_main_category" EntitySet="r_sub_and_main_category" />
             <End Role="r_place_sub_and_main_category" EntitySet="r_place_sub_and_main_category" />
@@ -398,113 +392,51 @@
             <End Role="r_sub_and_main_category" EntitySet="r_sub_and_main_category" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="SwapModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityContainer Name="SwapDbConnection" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="admins" EntityType="SwapModel.admin" />
-          <EntitySet Name="businesses" EntityType="SwapModel.business" />
-          <EntitySet Name="BusinessOwners" EntityType="SwapModel.BusinessOwner" />
-          <EntitySet Name="clients" EntityType="SwapModel.client" />
-          <EntitySet Name="Events" EntityType="SwapModel.Event" />
-          <EntitySet Name="google_value" EntityType="SwapModel.google_value" />
-          <EntitySet Name="main_category" EntityType="SwapModel.main_category" />
-          <EntitySet Name="places" EntityType="SwapModel.place" />
-          <EntitySet Name="products" EntityType="SwapModel.product" />
-          <EntitySet Name="quests" EntityType="SwapModel.quest" />
-          <EntitySet Name="r_place_sub_and_main_category" EntityType="SwapModel.r_place_sub_and_main_category" />
-          <EntitySet Name="r_sub_and_main_category" EntityType="SwapModel.r_sub_and_main_category" />
-          <EntitySet Name="sub_category" EntityType="SwapModel.sub_category" />
-          <AssociationSet Name="FK_admin_BusinessOwner" Association="SwapModel.FK_admin_BusinessOwner">
-            <End Role="BusinessOwner" EntitySet="BusinessOwners" />
-            <End Role="admin" EntitySet="admins" />
-          </AssociationSet>
-          <AssociationSet Name="FK__business__place___324172E1" Association="SwapModel.FK__business__place___324172E1">
-            <End Role="place" EntitySet="places" />
-            <End Role="business" EntitySet="businesses" />
-          </AssociationSet>
-          <AssociationSet Name="FK__product__busines__29E1370A" Association="SwapModel.FK__product__busines__29E1370A">
-            <End Role="business" EntitySet="businesses" />
-            <End Role="product" EntitySet="products" />
-          </AssociationSet>
-          <AssociationSet Name="FK_business_BusinessOwner" Association="SwapModel.FK_business_BusinessOwner">
-            <End Role="BusinessOwner" EntitySet="BusinessOwners" />
-            <End Role="business" EntitySet="businesses" />
-          </AssociationSet>
-          <AssociationSet Name="FK_BusinessOwner_client" Association="SwapModel.FK_BusinessOwner_client">
-            <End Role="client" EntitySet="clients" />
-            <End Role="BusinessOwner" EntitySet="BusinessOwners" />
-          </AssociationSet>
-          <AssociationSet Name="FK_quest_client" Association="SwapModel.FK_quest_client">
-            <End Role="client" EntitySet="clients" />
-            <End Role="quest" EntitySet="quests" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Event__event_id__2CBDA3B5" Association="SwapModel.FK__Event__event_id__2CBDA3B5">
-            <End Role="place" EntitySet="places" />
-            <End Role="Event" EntitySet="Events" />
-          </AssociationSet>
-          <AssociationSet Name="FK_r_sub_and_main_category_main_category" Association="SwapModel.FK_r_sub_and_main_category_main_category">
-            <End Role="main_category" EntitySet="main_category" />
-            <End Role="r_sub_and_main_category" EntitySet="r_sub_and_main_category" />
-          </AssociationSet>
-          <AssociationSet Name="FK_r_place_sub_and_main_category_place" Association="SwapModel.FK_r_place_sub_and_main_category_place">
-            <End Role="place" EntitySet="places" />
-            <End Role="r_place_sub_and_main_category" EntitySet="r_place_sub_and_main_category" />
-          </AssociationSet>
-          <AssociationSet Name="FK_r_place_sub_and_main_category_r_sub_and_main_category" Association="SwapModel.FK_r_place_sub_and_main_category_r_sub_and_main_category">
-            <End Role="r_sub_and_main_category" EntitySet="r_sub_and_main_category" />
-            <End Role="r_place_sub_and_main_category" EntitySet="r_place_sub_and_main_category" />
-          </AssociationSet>
-          <AssociationSet Name="FK_r_sub_and_main_category_sub_category" Association="SwapModel.FK_r_sub_and_main_category_sub_category">
-            <End Role="sub_category" EntitySet="sub_category" />
-            <End Role="r_sub_and_main_category" EntitySet="r_sub_and_main_category" />
-          </AssociationSet>
-          <AssociationSet Name="r_place_quest" Association="SwapModel.r_place_quest">
-            <End Role="place" EntitySet="places" />
-            <End Role="quest" EntitySet="quests" />
-          </AssociationSet>
-        </EntityContainer>
+      <Schema Namespace="SwapdbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="admin">
           <Key>
             <PropertyRef Name="admin_id" />
           </Key>
-          <Property Name="admin_id" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="BusinessOwner" Relationship="SwapModel.FK_admin_BusinessOwner" FromRole="admin" ToRole="BusinessOwner" />
+          <Property Name="admin_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="BusinessOwner" Relationship="Self.FK_admin_BusinessOwner" FromRole="admin" ToRole="BusinessOwner" />
         </EntityType>
         <EntityType Name="business">
           <Key>
             <PropertyRef Name="place_id" />
           </Key>
-          <Property Name="place_id" Type="String" Nullable="false" MaxLength="120" FixedLength="false" Unicode="true" />
-          <Property Name="business_owner_id" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="place_id" Type="String" MaxLength="400" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="business_owner_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="is_active" Type="Boolean" Nullable="false" />
           <Property Name="opening_hours" Type="Time" Precision="6" />
           <Property Name="closing_hours" Type="Time" Precision="6" />
           <Property Name="rating" Type="Int32" Nullable="false" />
           <Property Name="approve_by_admin" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="place" Relationship="SwapModel.FK__business__place___324172E1" FromRole="business" ToRole="place" />
-          <NavigationProperty Name="products" Relationship="SwapModel.FK__product__busines__29E1370A" FromRole="business" ToRole="product" />
-          <NavigationProperty Name="BusinessOwner" Relationship="SwapModel.FK_business_BusinessOwner" FromRole="business" ToRole="BusinessOwner" />
+          <NavigationProperty Name="place" Relationship="Self.FK__business__place___123EB7A3" FromRole="business" ToRole="place" />
+          <NavigationProperty Name="products" Relationship="Self.FK__product__busines__151B244E" FromRole="business" ToRole="product" />
+          <NavigationProperty Name="BusinessOwner" Relationship="Self.FK_business_BusinessOwner" FromRole="business" ToRole="BusinessOwner" />
         </EntityType>
         <EntityType Name="BusinessOwner">
           <Key>
             <PropertyRef Name="business_owner_id" />
           </Key>
-          <Property Name="business_owner_id" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="admin" Relationship="SwapModel.FK_admin_BusinessOwner" FromRole="BusinessOwner" ToRole="admin" />
-          <NavigationProperty Name="businesses" Relationship="SwapModel.FK_business_BusinessOwner" FromRole="BusinessOwner" ToRole="business" />
-          <NavigationProperty Name="client" Relationship="SwapModel.FK_BusinessOwner_client" FromRole="BusinessOwner" ToRole="client" />
+          <Property Name="business_owner_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="admin" Relationship="Self.FK_admin_BusinessOwner" FromRole="BusinessOwner" ToRole="admin" />
+          <NavigationProperty Name="businesses" Relationship="Self.FK_business_BusinessOwner" FromRole="BusinessOwner" ToRole="business" />
+          <NavigationProperty Name="client" Relationship="Self.FK_BusinessOwner_client" FromRole="BusinessOwner" ToRole="client" />
         </EntityType>
         <EntityType Name="client">
           <Key>
             <PropertyRef Name="client_id" />
           </Key>
-          <Property Name="client_id" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="client_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="creation_date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="first_name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="last_name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="email" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="first_name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="last_name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="sex" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
           <Property Name="last_login" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
@@ -513,85 +445,85 @@
           <Property Name="business_owner_request" Type="Boolean" />
           <Property Name="platform" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="birthday_date" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="BusinessOwner" Relationship="SwapModel.FK_BusinessOwner_client" FromRole="client" ToRole="BusinessOwner" />
-          <NavigationProperty Name="quests" Relationship="SwapModel.FK_quest_client" FromRole="client" ToRole="quest" />
+          <NavigationProperty Name="BusinessOwner" Relationship="Self.FK_BusinessOwner_client" FromRole="client" ToRole="BusinessOwner" />
+          <NavigationProperty Name="quests" Relationship="Self.FK_quest_client" FromRole="client" ToRole="quest" />
         </EntityType>
         <EntityType Name="Event">
           <Key>
             <PropertyRef Name="place_id" />
           </Key>
-          <Property Name="place_id" Type="String" Nullable="false" MaxLength="120" FixedLength="false" Unicode="true" />
+          <Property Name="place_id" Type="String" MaxLength="400" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="price" Type="Double" Nullable="false" />
           <Property Name="end_date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="start_date" Type="DateTime" Nullable="false" Precision="0" />
-          <NavigationProperty Name="place" Relationship="SwapModel.FK__Event__event_id__2CBDA3B5" FromRole="Event" ToRole="place" />
+          <NavigationProperty Name="place" Relationship="Self.FK__Event__place_id__1332DBDC" FromRole="Event" ToRole="place" />
         </EntityType>
         <EntityType Name="google_value">
           <Key>
             <PropertyRef Name="google_value_id" />
           </Key>
-          <Property Name="google_value_id" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="value" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="google_value_id" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="value" Type="String" MaxLength="25" FixedLength="false" Unicode="true" Nullable="false" />
         </EntityType>
         <EntityType Name="main_category">
           <Key>
             <PropertyRef Name="main_id" />
           </Key>
-          <Property Name="main_id" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="main_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="creation_date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="google_value" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="is_active" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="r_sub_and_main_category" Relationship="SwapModel.FK_r_sub_and_main_category_main_category" FromRole="main_category" ToRole="r_sub_and_main_category" />
+          <NavigationProperty Name="r_sub_and_main_category" Relationship="Self.FK_r_sub_and_main_category_main_category" FromRole="main_category" ToRole="r_sub_and_main_category" />
         </EntityType>
         <EntityType Name="place">
           <Key>
             <PropertyRef Name="place_id" />
           </Key>
-          <Property Name="place_id" Type="String" Nullable="false" MaxLength="120" FixedLength="false" Unicode="true" />
+          <Property Name="place_id" Type="String" MaxLength="400" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="creation_date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="latitude" Type="Decimal" Nullable="false" Precision="11" Scale="8" />
-          <Property Name="longitude" Type="Decimal" Nullable="false" Precision="11" Scale="8" />
-          <Property Name="state" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="latitude" Type="Decimal" Precision="11" Scale="8" Nullable="false" />
+          <Property Name="longitude" Type="Decimal" Precision="11" Scale="8" Nullable="false" />
+          <Property Name="state" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
           <Property Name="post_code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="settlement" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="name" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="settlement" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
           <Property Name="street_number" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="street" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="country" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="business" Relationship="SwapModel.FK__business__place___324172E1" FromRole="place" ToRole="business" />
-          <NavigationProperty Name="Event" Relationship="SwapModel.FK__Event__event_id__2CBDA3B5" FromRole="place" ToRole="Event" />
-          <NavigationProperty Name="r_place_sub_and_main_category" Relationship="SwapModel.FK_r_place_sub_and_main_category_place" FromRole="place" ToRole="r_place_sub_and_main_category" />
-          <NavigationProperty Name="quests" Relationship="SwapModel.r_place_quest" FromRole="place" ToRole="quest" />
+          <Property Name="street" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="country" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="business" Relationship="Self.FK__business__place___123EB7A3" FromRole="place" ToRole="business" />
+          <NavigationProperty Name="Event" Relationship="Self.FK__Event__place_id__1332DBDC" FromRole="place" ToRole="Event" />
+          <NavigationProperty Name="r_place_sub_and_main_category" Relationship="Self.FK__r_place_s__place__17F790F9" FromRole="place" ToRole="r_place_sub_and_main_category" />
+          <NavigationProperty Name="quests" Relationship="Self.r_place_quest" FromRole="place" ToRole="quest" />
         </EntityType>
         <EntityType Name="product">
           <Key>
             <PropertyRef Name="product_id" />
           </Key>
-          <Property Name="product_id" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
-          <Property Name="name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="description" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="product_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="price" Type="Double" Nullable="false" />
           <Property Name="discount" Type="Double" Nullable="false" />
           <Property Name="creation_date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="discount_start_date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="discount_end_date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="is_active" Type="Boolean" Nullable="false" />
-          <Property Name="business_id" Type="String" Nullable="false" MaxLength="120" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="business" Relationship="SwapModel.FK__product__busines__29E1370A" FromRole="product" ToRole="business" />
+          <Property Name="business_id" Type="String" MaxLength="400" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="business" Relationship="Self.FK__product__busines__151B244E" FromRole="product" ToRole="business" />
         </EntityType>
         <EntityType Name="quest">
           <Key>
             <PropertyRef Name="quest_id" />
           </Key>
-          <Property Name="quest_id" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="quest_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="creation_date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="client_id" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="client_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="description" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="client" Relationship="SwapModel.FK_quest_client" FromRole="quest" ToRole="client" />
-          <NavigationProperty Name="places" Relationship="SwapModel.r_place_quest" FromRole="quest" ToRole="place" />
+          <NavigationProperty Name="client" Relationship="Self.FK_quest_client" FromRole="quest" ToRole="client" />
+          <NavigationProperty Name="places" Relationship="Self.r_place_quest" FromRole="quest" ToRole="place" />
         </EntityType>
         <EntityType Name="r_place_sub_and_main_category">
           <Key>
@@ -599,44 +531,44 @@
             <PropertyRef Name="main_id" />
             <PropertyRef Name="place_id" />
           </Key>
-          <Property Name="sub_id" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
-          <Property Name="main_id" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
-          <Property Name="place_id" Type="String" Nullable="false" MaxLength="120" FixedLength="false" Unicode="true" />
+          <Property Name="sub_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="main_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="place_id" Type="String" MaxLength="400" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="creation_date" Type="DateTime" Nullable="false" Precision="0" />
-          <NavigationProperty Name="place" Relationship="SwapModel.FK_r_place_sub_and_main_category_place" FromRole="r_place_sub_and_main_category" ToRole="place" />
-          <NavigationProperty Name="r_sub_and_main_category" Relationship="SwapModel.FK_r_place_sub_and_main_category_r_sub_and_main_category" FromRole="r_place_sub_and_main_category" ToRole="r_sub_and_main_category" />
+          <NavigationProperty Name="place" Relationship="Self.FK__r_place_s__place__17F790F9" FromRole="r_place_sub_and_main_category" ToRole="place" />
+          <NavigationProperty Name="r_sub_and_main_category" Relationship="Self.FK_r_place_sub_and_main_category_r_sub_and_main_category" FromRole="r_place_sub_and_main_category" ToRole="r_sub_and_main_category" />
         </EntityType>
         <EntityType Name="r_sub_and_main_category">
           <Key>
             <PropertyRef Name="sub_id" />
             <PropertyRef Name="main_id" />
           </Key>
-          <Property Name="sub_id" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
-          <Property Name="main_id" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="sub_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="main_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="creation_date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="descrition" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="clicked" Type="Decimal" Precision="5" Scale="0" />
           <Property Name="is_active" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="main_category" Relationship="SwapModel.FK_r_sub_and_main_category_main_category" FromRole="r_sub_and_main_category" ToRole="main_category" />
-          <NavigationProperty Name="r_place_sub_and_main_category" Relationship="SwapModel.FK_r_place_sub_and_main_category_r_sub_and_main_category" FromRole="r_sub_and_main_category" ToRole="r_place_sub_and_main_category" />
-          <NavigationProperty Name="sub_category" Relationship="SwapModel.FK_r_sub_and_main_category_sub_category" FromRole="r_sub_and_main_category" ToRole="sub_category" />
+          <NavigationProperty Name="main_category" Relationship="Self.FK_r_sub_and_main_category_main_category" FromRole="r_sub_and_main_category" ToRole="main_category" />
+          <NavigationProperty Name="r_place_sub_and_main_category" Relationship="Self.FK_r_place_sub_and_main_category_r_sub_and_main_category" FromRole="r_sub_and_main_category" ToRole="r_place_sub_and_main_category" />
+          <NavigationProperty Name="sub_category" Relationship="Self.FK_r_sub_and_main_category_sub_category" FromRole="r_sub_and_main_category" ToRole="sub_category" />
         </EntityType>
         <EntityType Name="sub_category">
           <Key>
             <PropertyRef Name="sub_id" />
           </Key>
-          <Property Name="sub_id" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="sub_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="creation_date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="is_active" Type="Boolean" Nullable="false" />
           <Property Name="google_value" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="r_sub_and_main_category" Relationship="SwapModel.FK_r_sub_and_main_category_sub_category" FromRole="sub_category" ToRole="r_sub_and_main_category" />
+          <NavigationProperty Name="r_sub_and_main_category" Relationship="Self.FK_r_sub_and_main_category_sub_category" FromRole="sub_category" ToRole="r_sub_and_main_category" />
         </EntityType>
         <Association Name="FK_admin_BusinessOwner">
-          <End Type="SwapModel.BusinessOwner" Role="BusinessOwner" Multiplicity="1">
+          <End Role="BusinessOwner" Type="Self.BusinessOwner" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="SwapModel.admin" Role="admin" Multiplicity="0..1" />
+          <End Role="admin" Type="Self.admin" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="BusinessOwner">
               <PropertyRef Name="business_owner_id" />
@@ -646,9 +578,9 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__business__place___324172E1">
-          <End Type="SwapModel.place" Role="place" Multiplicity="1" />
-          <End Type="SwapModel.business" Role="business" Multiplicity="0..1" />
+        <Association Name="FK__business__place___123EB7A3">
+          <End Role="place" Type="Self.place" Multiplicity="1" />
+          <End Role="business" Type="Self.business" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="place">
               <PropertyRef Name="place_id" />
@@ -658,11 +590,9 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__product__busines__29E1370A">
-          <End Type="SwapModel.business" Role="business" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="SwapModel.product" Role="product" Multiplicity="*" />
+        <Association Name="FK__product__busines__151B244E">
+          <End Role="business" Type="Self.business" Multiplicity="1" />
+          <End Role="product" Type="Self.product" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="business">
               <PropertyRef Name="place_id" />
@@ -673,10 +603,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_business_BusinessOwner">
-          <End Type="SwapModel.BusinessOwner" Role="BusinessOwner" Multiplicity="1">
+          <End Role="BusinessOwner" Type="Self.BusinessOwner" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="SwapModel.business" Role="business" Multiplicity="*" />
+          <End Role="business" Type="Self.business" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="BusinessOwner">
               <PropertyRef Name="business_owner_id" />
@@ -687,10 +617,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_BusinessOwner_client">
-          <End Type="SwapModel.client" Role="client" Multiplicity="1">
+          <End Role="client" Type="Self.client" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="SwapModel.BusinessOwner" Role="BusinessOwner" Multiplicity="0..1" />
+          <End Role="BusinessOwner" Type="Self.BusinessOwner" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="client">
               <PropertyRef Name="client_id" />
@@ -701,10 +631,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_quest_client">
-          <End Type="SwapModel.client" Role="client" Multiplicity="1">
+          <End Role="client" Type="Self.client" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="SwapModel.quest" Role="quest" Multiplicity="*" />
+          <End Role="quest" Type="Self.quest" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="client">
               <PropertyRef Name="client_id" />
@@ -714,11 +644,9 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Event__event_id__2CBDA3B5">
-          <End Type="SwapModel.place" Role="place" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="SwapModel.Event" Role="Event" Multiplicity="0..1" />
+        <Association Name="FK__Event__place_id__1332DBDC">
+          <End Role="place" Type="Self.place" Multiplicity="1" />
+          <End Role="Event" Type="Self.Event" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="place">
               <PropertyRef Name="place_id" />
@@ -729,8 +657,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_r_sub_and_main_category_main_category">
-          <End Type="SwapModel.main_category" Role="main_category" Multiplicity="1" />
-          <End Type="SwapModel.r_sub_and_main_category" Role="r_sub_and_main_category" Multiplicity="*" />
+          <End Role="main_category" Type="Self.main_category" Multiplicity="1" />
+          <End Role="r_sub_and_main_category" Type="Self.r_sub_and_main_category" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="main_category">
               <PropertyRef Name="main_id" />
@@ -740,9 +668,9 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_r_place_sub_and_main_category_place">
-          <End Type="SwapModel.place" Role="place" Multiplicity="1" />
-          <End Type="SwapModel.r_place_sub_and_main_category" Role="r_place_sub_and_main_category" Multiplicity="*" />
+        <Association Name="FK__r_place_s__place__17F790F9">
+          <End Role="place" Type="Self.place" Multiplicity="1" />
+          <End Role="r_place_sub_and_main_category" Type="Self.r_place_sub_and_main_category" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="place">
               <PropertyRef Name="place_id" />
@@ -753,10 +681,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_r_place_sub_and_main_category_r_sub_and_main_category">
-          <End Type="SwapModel.r_sub_and_main_category" Role="r_sub_and_main_category" Multiplicity="1">
+          <End Role="r_sub_and_main_category" Type="Self.r_sub_and_main_category" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="SwapModel.r_place_sub_and_main_category" Role="r_place_sub_and_main_category" Multiplicity="*" />
+          <End Role="r_place_sub_and_main_category" Type="Self.r_place_sub_and_main_category" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="r_sub_and_main_category">
               <PropertyRef Name="sub_id" />
@@ -769,8 +697,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_r_sub_and_main_category_sub_category">
-          <End Type="SwapModel.sub_category" Role="sub_category" Multiplicity="1" />
-          <End Type="SwapModel.r_sub_and_main_category" Role="r_sub_and_main_category" Multiplicity="*" />
+          <End Role="sub_category" Type="Self.sub_category" Multiplicity="1" />
+          <End Role="r_sub_and_main_category" Type="Self.r_sub_and_main_category" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="sub_category">
               <PropertyRef Name="sub_id" />
@@ -781,174 +709,237 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="r_place_quest">
-          <End Type="SwapModel.place" Role="place" Multiplicity="*" />
-          <End Type="SwapModel.quest" Role="quest" Multiplicity="*" />
+          <End Role="place" Type="Self.place" Multiplicity="*" />
+          <End Role="quest" Type="Self.quest" Multiplicity="*" />
         </Association>
-        </Schema>
+        <EntityContainer Name="SwapDbConnection" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="admins" EntityType="Self.admin" />
+          <EntitySet Name="businesses" EntityType="Self.business" />
+          <EntitySet Name="BusinessOwners" EntityType="Self.BusinessOwner" />
+          <EntitySet Name="clients" EntityType="Self.client" />
+          <EntitySet Name="Events" EntityType="Self.Event" />
+          <EntitySet Name="google_value" EntityType="Self.google_value" />
+          <EntitySet Name="main_category" EntityType="Self.main_category" />
+          <EntitySet Name="places" EntityType="Self.place" />
+          <EntitySet Name="products" EntityType="Self.product" />
+          <EntitySet Name="quests" EntityType="Self.quest" />
+          <EntitySet Name="r_place_sub_and_main_category" EntityType="Self.r_place_sub_and_main_category" />
+          <EntitySet Name="r_sub_and_main_category" EntityType="Self.r_sub_and_main_category" />
+          <EntitySet Name="sub_category" EntityType="Self.sub_category" />
+          <AssociationSet Name="FK_admin_BusinessOwner" Association="Self.FK_admin_BusinessOwner">
+            <End Role="BusinessOwner" EntitySet="BusinessOwners" />
+            <End Role="admin" EntitySet="admins" />
+          </AssociationSet>
+          <AssociationSet Name="FK__business__place___123EB7A3" Association="Self.FK__business__place___123EB7A3">
+            <End Role="place" EntitySet="places" />
+            <End Role="business" EntitySet="businesses" />
+          </AssociationSet>
+          <AssociationSet Name="FK__product__busines__151B244E" Association="Self.FK__product__busines__151B244E">
+            <End Role="business" EntitySet="businesses" />
+            <End Role="product" EntitySet="products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_business_BusinessOwner" Association="Self.FK_business_BusinessOwner">
+            <End Role="BusinessOwner" EntitySet="BusinessOwners" />
+            <End Role="business" EntitySet="businesses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BusinessOwner_client" Association="Self.FK_BusinessOwner_client">
+            <End Role="client" EntitySet="clients" />
+            <End Role="BusinessOwner" EntitySet="BusinessOwners" />
+          </AssociationSet>
+          <AssociationSet Name="FK_quest_client" Association="Self.FK_quest_client">
+            <End Role="client" EntitySet="clients" />
+            <End Role="quest" EntitySet="quests" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Event__place_id__1332DBDC" Association="Self.FK__Event__place_id__1332DBDC">
+            <End Role="place" EntitySet="places" />
+            <End Role="Event" EntitySet="Events" />
+          </AssociationSet>
+          <AssociationSet Name="FK_r_sub_and_main_category_main_category" Association="Self.FK_r_sub_and_main_category_main_category">
+            <End Role="main_category" EntitySet="main_category" />
+            <End Role="r_sub_and_main_category" EntitySet="r_sub_and_main_category" />
+          </AssociationSet>
+          <AssociationSet Name="FK__r_place_s__place__17F790F9" Association="Self.FK__r_place_s__place__17F790F9">
+            <End Role="place" EntitySet="places" />
+            <End Role="r_place_sub_and_main_category" EntitySet="r_place_sub_and_main_category" />
+          </AssociationSet>
+          <AssociationSet Name="FK_r_place_sub_and_main_category_r_sub_and_main_category" Association="Self.FK_r_place_sub_and_main_category_r_sub_and_main_category">
+            <End Role="r_sub_and_main_category" EntitySet="r_sub_and_main_category" />
+            <End Role="r_place_sub_and_main_category" EntitySet="r_place_sub_and_main_category" />
+          </AssociationSet>
+          <AssociationSet Name="FK_r_sub_and_main_category_sub_category" Association="Self.FK_r_sub_and_main_category_sub_category">
+            <End Role="sub_category" EntitySet="sub_category" />
+            <End Role="r_sub_and_main_category" EntitySet="r_sub_and_main_category" />
+          </AssociationSet>
+          <AssociationSet Name="r_place_quest" Association="Self.r_place_quest">
+            <End Role="place" EntitySet="places" />
+            <End Role="quest" EntitySet="quests" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="SwapModelStoreContainer" CdmEntityContainer="SwapDbConnection">
+        <EntityContainerMapping StorageEntityContainer="SwapdbModelStoreContainer" CdmEntityContainer="SwapDbConnection">
           <EntitySetMapping Name="admins">
-            <EntityTypeMapping TypeName="SwapModel.admin">
+            <EntityTypeMapping TypeName="SwapdbModel.admin">
               <MappingFragment StoreEntitySet="admin">
                 <ScalarProperty Name="admin_id" ColumnName="admin_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="businesses">
-            <EntityTypeMapping TypeName="SwapModel.business">
+            <EntityTypeMapping TypeName="SwapdbModel.business">
               <MappingFragment StoreEntitySet="business">
-                <ScalarProperty Name="approve_by_admin" ColumnName="approve_by_admin" />
-                <ScalarProperty Name="rating" ColumnName="rating" />
-                <ScalarProperty Name="closing_hours" ColumnName="closing_hours" />
-                <ScalarProperty Name="opening_hours" ColumnName="opening_hours" />
-                <ScalarProperty Name="is_active" ColumnName="is_active" />
-                <ScalarProperty Name="business_owner_id" ColumnName="business_owner_id" />
                 <ScalarProperty Name="place_id" ColumnName="place_id" />
+                <ScalarProperty Name="business_owner_id" ColumnName="business_owner_id" />
+                <ScalarProperty Name="is_active" ColumnName="is_active" />
+                <ScalarProperty Name="opening_hours" ColumnName="opening_hours" />
+                <ScalarProperty Name="closing_hours" ColumnName="closing_hours" />
+                <ScalarProperty Name="rating" ColumnName="rating" />
+                <ScalarProperty Name="approve_by_admin" ColumnName="approve_by_admin" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="BusinessOwners">
-            <EntityTypeMapping TypeName="SwapModel.BusinessOwner">
+            <EntityTypeMapping TypeName="SwapdbModel.BusinessOwner">
               <MappingFragment StoreEntitySet="BusinessOwner">
                 <ScalarProperty Name="business_owner_id" ColumnName="business_owner_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="clients">
-            <EntityTypeMapping TypeName="SwapModel.client">
+            <EntityTypeMapping TypeName="SwapdbModel.client">
               <MappingFragment StoreEntitySet="client">
-                <ScalarProperty Name="birthday_date" ColumnName="birthday_date" />
-                <ScalarProperty Name="platform" ColumnName="platform" />
-                <ScalarProperty Name="business_owner_request" ColumnName="business_owner_request" />
-                <ScalarProperty Name="password" ColumnName="password" />
-                <ScalarProperty Name="salt" ColumnName="salt" />
-                <ScalarProperty Name="phone" ColumnName="phone" />
-                <ScalarProperty Name="last_login" ColumnName="last_login" />
-                <ScalarProperty Name="sex" ColumnName="sex" />
-                <ScalarProperty Name="email" ColumnName="email" />
-                <ScalarProperty Name="last_name" ColumnName="last_name" />
-                <ScalarProperty Name="first_name" ColumnName="first_name" />
-                <ScalarProperty Name="creation_date" ColumnName="creation_date" />
                 <ScalarProperty Name="client_id" ColumnName="client_id" />
+                <ScalarProperty Name="creation_date" ColumnName="creation_date" />
+                <ScalarProperty Name="first_name" ColumnName="first_name" />
+                <ScalarProperty Name="last_name" ColumnName="last_name" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="sex" ColumnName="sex" />
+                <ScalarProperty Name="last_login" ColumnName="last_login" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="salt" ColumnName="salt" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="business_owner_request" ColumnName="business_owner_request" />
+                <ScalarProperty Name="platform" ColumnName="platform" />
+                <ScalarProperty Name="birthday_date" ColumnName="birthday_date" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Events">
-            <EntityTypeMapping TypeName="SwapModel.Event">
+            <EntityTypeMapping TypeName="SwapdbModel.Event">
               <MappingFragment StoreEntitySet="Event">
-                <ScalarProperty Name="start_date" ColumnName="start_date" />
-                <ScalarProperty Name="end_date" ColumnName="end_date" />
-                <ScalarProperty Name="price" ColumnName="price" />
                 <ScalarProperty Name="place_id" ColumnName="place_id" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="end_date" ColumnName="end_date" />
+                <ScalarProperty Name="start_date" ColumnName="start_date" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="google_value">
-            <EntityTypeMapping TypeName="SwapModel.google_value">
+            <EntityTypeMapping TypeName="SwapdbModel.google_value">
               <MappingFragment StoreEntitySet="google_value">
-                <ScalarProperty Name="value" ColumnName="value" />
                 <ScalarProperty Name="google_value_id" ColumnName="google_value_id" />
+                <ScalarProperty Name="value" ColumnName="value" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="main_category">
-            <EntityTypeMapping TypeName="SwapModel.main_category">
+            <EntityTypeMapping TypeName="SwapdbModel.main_category">
               <MappingFragment StoreEntitySet="main_category">
-                <ScalarProperty Name="is_active" ColumnName="is_active" />
-                <ScalarProperty Name="google_value" ColumnName="google_value" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="creation_date" ColumnName="creation_date" />
                 <ScalarProperty Name="main_id" ColumnName="main_id" />
+                <ScalarProperty Name="creation_date" ColumnName="creation_date" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="google_value" ColumnName="google_value" />
+                <ScalarProperty Name="is_active" ColumnName="is_active" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="places">
-            <EntityTypeMapping TypeName="SwapModel.place">
+            <EntityTypeMapping TypeName="SwapdbModel.place">
               <MappingFragment StoreEntitySet="place">
-                <ScalarProperty Name="country" ColumnName="country" />
-                <ScalarProperty Name="street" ColumnName="street" />
-                <ScalarProperty Name="street_number" ColumnName="street_number" />
-                <ScalarProperty Name="settlement" ColumnName="settlement" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="post_code" ColumnName="post_code" />
-                <ScalarProperty Name="state" ColumnName="state" />
-                <ScalarProperty Name="longitude" ColumnName="longitude" />
-                <ScalarProperty Name="latitude" ColumnName="latitude" />
-                <ScalarProperty Name="creation_date" ColumnName="creation_date" />
                 <ScalarProperty Name="place_id" ColumnName="place_id" />
+                <ScalarProperty Name="creation_date" ColumnName="creation_date" />
+                <ScalarProperty Name="latitude" ColumnName="latitude" />
+                <ScalarProperty Name="longitude" ColumnName="longitude" />
+                <ScalarProperty Name="state" ColumnName="state" />
+                <ScalarProperty Name="post_code" ColumnName="post_code" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="settlement" ColumnName="settlement" />
+                <ScalarProperty Name="street_number" ColumnName="street_number" />
+                <ScalarProperty Name="street" ColumnName="street" />
+                <ScalarProperty Name="country" ColumnName="country" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="products">
-            <EntityTypeMapping TypeName="SwapModel.product">
+            <EntityTypeMapping TypeName="SwapdbModel.product">
               <MappingFragment StoreEntitySet="product">
-                <ScalarProperty Name="business_id" ColumnName="business_id" />
-                <ScalarProperty Name="is_active" ColumnName="is_active" />
-                <ScalarProperty Name="discount_end_date" ColumnName="discount_end_date" />
-                <ScalarProperty Name="discount_start_date" ColumnName="discount_start_date" />
-                <ScalarProperty Name="creation_date" ColumnName="creation_date" />
-                <ScalarProperty Name="discount" ColumnName="discount" />
-                <ScalarProperty Name="price" ColumnName="price" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="product_id" ColumnName="product_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="discount" ColumnName="discount" />
+                <ScalarProperty Name="creation_date" ColumnName="creation_date" />
+                <ScalarProperty Name="discount_start_date" ColumnName="discount_start_date" />
+                <ScalarProperty Name="discount_end_date" ColumnName="discount_end_date" />
+                <ScalarProperty Name="is_active" ColumnName="is_active" />
+                <ScalarProperty Name="business_id" ColumnName="business_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="quests">
-            <EntityTypeMapping TypeName="SwapModel.quest">
+            <EntityTypeMapping TypeName="SwapdbModel.quest">
               <MappingFragment StoreEntitySet="quest">
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="client_id" ColumnName="client_id" />
-                <ScalarProperty Name="creation_date" ColumnName="creation_date" />
                 <ScalarProperty Name="quest_id" ColumnName="quest_id" />
+                <ScalarProperty Name="creation_date" ColumnName="creation_date" />
+                <ScalarProperty Name="client_id" ColumnName="client_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="r_place_sub_and_main_category">
-            <EntityTypeMapping TypeName="SwapModel.r_place_sub_and_main_category">
+            <EntityTypeMapping TypeName="SwapdbModel.r_place_sub_and_main_category">
               <MappingFragment StoreEntitySet="r_place_sub_and_main_category">
-                <ScalarProperty Name="creation_date" ColumnName="creation_date" />
-                <ScalarProperty Name="place_id" ColumnName="place_id" />
-                <ScalarProperty Name="main_id" ColumnName="main_id" />
                 <ScalarProperty Name="sub_id" ColumnName="sub_id" />
+                <ScalarProperty Name="main_id" ColumnName="main_id" />
+                <ScalarProperty Name="place_id" ColumnName="place_id" />
+                <ScalarProperty Name="creation_date" ColumnName="creation_date" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="r_sub_and_main_category">
-            <EntityTypeMapping TypeName="SwapModel.r_sub_and_main_category">
+            <EntityTypeMapping TypeName="SwapdbModel.r_sub_and_main_category">
               <MappingFragment StoreEntitySet="r_sub_and_main_category">
-                <ScalarProperty Name="is_active" ColumnName="is_active" />
-                <ScalarProperty Name="clicked" ColumnName="clicked" />
-                <ScalarProperty Name="descrition" ColumnName="descrition" />
-                <ScalarProperty Name="creation_date" ColumnName="creation_date" />
-                <ScalarProperty Name="main_id" ColumnName="main_id" />
                 <ScalarProperty Name="sub_id" ColumnName="sub_id" />
+                <ScalarProperty Name="main_id" ColumnName="main_id" />
+                <ScalarProperty Name="creation_date" ColumnName="creation_date" />
+                <ScalarProperty Name="descrition" ColumnName="descrition" />
+                <ScalarProperty Name="clicked" ColumnName="clicked" />
+                <ScalarProperty Name="is_active" ColumnName="is_active" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="sub_category">
-            <EntityTypeMapping TypeName="SwapModel.sub_category">
+            <EntityTypeMapping TypeName="SwapdbModel.sub_category">
               <MappingFragment StoreEntitySet="sub_category">
-                <ScalarProperty Name="google_value" ColumnName="google_value" />
-                <ScalarProperty Name="is_active" ColumnName="is_active" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="creation_date" ColumnName="creation_date" />
                 <ScalarProperty Name="sub_id" ColumnName="sub_id" />
+                <ScalarProperty Name="creation_date" ColumnName="creation_date" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="is_active" ColumnName="is_active" />
+                <ScalarProperty Name="google_value" ColumnName="google_value" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="r_place_quest" TypeName="SwapModel.r_place_quest" StoreEntitySet="r_place_quest">
-            <EndProperty Name="quest">
-              <ScalarProperty Name="quest_id" ColumnName="quest_id" />
-            </EndProperty>
+          <AssociationSetMapping Name="r_place_quest" TypeName="SwapdbModel.r_place_quest" StoreEntitySet="r_place_quest">
             <EndProperty Name="place">
               <ScalarProperty Name="place_id" ColumnName="place_id" />
+            </EndProperty>
+            <EndProperty Name="quest">
+              <ScalarProperty Name="quest_id" ColumnName="quest_id" />
             </EndProperty>
           </AssociationSetMapping>
         </EntityContainerMapping>

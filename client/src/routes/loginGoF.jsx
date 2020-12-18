@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import GoogleLogin from "react-google-login";
 import { clientLogin } from "../services/client.ts";
 import { setUserSession } from "../Utils/Common";
-import { googleConfig, facebookConfig } from "../config.json";
+import { googleConfig } from "../config.json";
 
 class LoginGoF extends Component {
   render() {
@@ -19,6 +19,7 @@ class LoginGoF extends Component {
       });
       setUserSession(token.data, email);
       window.location = "/";
+      window.location.reload();
     };
 
     return (
@@ -29,7 +30,7 @@ class LoginGoF extends Component {
           clientId={googleConfig.client_id}
           buttonText="Login with Google"
           onSuccess={responseGoogle}
-          onFailure={responseGoogle}
+          onFailure={this.props.onFailure}
         />
       </div>
     );

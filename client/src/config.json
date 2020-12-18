@@ -4,7 +4,7 @@
   "textSearchUrl": "https://maps.googleapis.com/maps/api/place/textsearch/json",
   "googleIconBaseUrl":"http://maps.google.com/mapfiles/ms/icons/",
   "radius": 4000,
-  "API_URL_Dev": "https://localhost:44300/api",
+  "API_URL_Dev": "https://smartwalkapi.azurewebsites.net/api",
   "facebookConfig": {
     "appId": "222056919203332",
     "cookie": true,
