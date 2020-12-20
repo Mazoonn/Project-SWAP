@@ -1,6 +1,6 @@
 import React from 'react';
 
-const calculateSalePrice = (price, discount) => price*(1 - discount/100);
+const calculateSalePrice = (price, discount) => Math.round((price*(1 - discount/100)*100))/100;
 
 const zeroPrefixNumber = number =>
 {
