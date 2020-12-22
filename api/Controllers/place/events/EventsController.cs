@@ -14,6 +14,9 @@ namespace api.Controllers.place.events
     [RoutePrefix("api/events")]
     public class EventsController : ApiController
     {
+        //Get all events near by
+        //Input: radius, PointDTO
+        //Output: List of MapEventDTO
         [Route("GetEvents")]
         [HttpGet]
         [MyAuthorize("admin", "business", "client")]

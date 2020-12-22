@@ -15,7 +15,9 @@ namespace api.Controllers.Category
     public class ProductController : ApiController
     {
 
-        // GET: api/business/product/GetAllProduct/:businness_id/{clientId}
+        //Get All Products
+        //Input: businessOwnerId, businessId
+        //Return: List of productDTO
         [Route("GetAllProducts/{business_id}/{clientId}")]
         [SelfAuthorization()]
         [HttpGet]
@@ -32,7 +34,8 @@ namespace api.Controllers.Category
             }
         }
 
-        // POST: api/business/product/AddProduct/{clientId}/
+        //Add Product
+        //Input: businessOwnerId, productDTO
         [Route("AddProduct/{clientId}")]
         [SelfAuthorization()]
         [HttpPost]
@@ -56,12 +59,13 @@ namespace api.Controllers.Category
             }
         }
 
+
+        //Change Product Activity
+        //Input: businessOwnerId, productDTO
         [Route("ChangeProductActive/{clientId}")]
         [SelfAuthorization()]
         [HttpPost]
-        // PUT: api/business/product/ChangeProductActive/{clientId}
-        //need to send type : id,name 
-        //body : true
+
         public HttpResponseMessage ChangeProducActive([FromBody]productDTO products, string clientId)
         {
             try
@@ -80,7 +84,8 @@ namespace api.Controllers.Category
             }
         }
 
-        // Delete:api/business/product/DeleteProduct/{businness_id}/{product_id}/{clientId}
+        //Delete product
+        //Input: businessOwnerId, businessId, productId        
         [Route("DeleteProduct/{business_id}/{product_id}/{clientId}")]
         [SelfAuthorization()]
         [HttpDelete]
@@ -100,12 +105,11 @@ namespace api.Controllers.Category
             }
         }
 
+        //Update product
+        //Input: businessOwnerId, productDTO     
         [Route("UpdateProduct/{clientId}")]
         [SelfAuthorization()]
         [HttpPut]
-        // PUT:   api/business/product/UpdateProduct/{clientId}
-        //need to send type : id,name 
-        //body : true
         public HttpResponseMessage UpdateProduct([FromBody]productDTO req, string clientId)
         {
             try

@@ -2,6 +2,8 @@
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 
+
+//Not in used
 namespace api.Models
 {
     // Models used as parameters to AccountController actions.

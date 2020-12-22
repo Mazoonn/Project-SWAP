@@ -84,6 +84,9 @@ namespace SwapClassLibrary.Service
             return true;
         }
 
+        //Update description subcategory of main category 
+        //Input: main_id, sub_id, description
+        //Output: boolean if succeed or not
         public static bool UpdateDescription(string main_id, string sub_id, string description)
         {
             SwapDbConnection db = new SwapDbConnection();
@@ -93,6 +96,10 @@ namespace SwapClassLibrary.Service
             db.SaveChanges();
             return true;
         }
+
+        //Update status subcategory of main category
+        //Input: main_id, sub_id, is_active
+        //Output: boolean if succeed or not
         public static bool UpdatStatusIsActive(string main_id, string sub_id, bool is_active)
         {
             SwapDbConnection db = new SwapDbConnection();

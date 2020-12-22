@@ -14,6 +14,9 @@ namespace api.Controllers
     [RoutePrefix("api/business")]
     public class BusinessController : ApiController
     {
+        //Get all businesses of business owner
+        //Input: businessOwnerId
+        //Output: List of bussinessDTO
         [Route("GetAllBusinesses/{business_owner}")]
         [SelfAuthorization()]
         [HttpGet]
@@ -31,6 +34,10 @@ namespace api.Controllers
             }
         }
 
+
+        //Get all businesses of business owner
+        //Input: businessOwnerId
+        //Output: List of bussinessDTO
         [Route("GetFilteredBusinesses")]
         [MyAuthorize("admin", "business", "client")]
         [HttpGet]
@@ -48,7 +55,8 @@ namespace api.Controllers
             }
         }
 
-        //Discount add/change/request to Approve/delete
+        //Add new business
+        //Input: bussinessRequestDTO
         [Route("AddBusiness")]
         [MyAuthorize("business", "admin")]
         [HttpPost]
@@ -66,6 +74,9 @@ namespace api.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, "There was an InternalServerError: " + e);
             }
         }
+
+        //Edit businesses
+        //Input: businessOwnerId, bussinessDTO
         [Route("EditBusiness/{clientId}")]
         [SelfAuthorization()]
         [HttpPut]
@@ -85,6 +96,8 @@ namespace api.Controllers
         }
 
 
+        //Change business activity status
+        //Input: businessOwnerId, bussinessDTO
         [Route("ChangeActiveBusiness/{userId}")]
         [SelfAuthorization()]
         [HttpPut]
@@ -104,6 +117,8 @@ namespace api.Controllers
         }
 
 
+        //Remove business
+        //Input: businessOwnerId, bussinessDTO
         [Route("RemoveBusiness/{userId}")]
         [SelfAuthorization()]
         [HttpDelete]

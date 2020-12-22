@@ -9,6 +9,7 @@ namespace SwapClassLibrary.Service
 {
     public static class IdService
     {
+        //Generate Id
         public static string generateID(string class_name)
         {
             string name_for_id = class_name.Split('_')[0] + "_";

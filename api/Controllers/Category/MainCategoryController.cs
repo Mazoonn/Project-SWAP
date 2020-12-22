@@ -14,8 +14,9 @@ namespace api.Controllers
     [RoutePrefix("api/MainCategory")]
     public class MainCategoryController : ApiController
     {
-        // GET: api/MainCategory
 
+        //Get all active main categories
+        //Output: List of categoryDTO
         [Route("GetAllMainCategories")]
         [MyAuthorize("admin", "client", "business")]
         [HttpGet]
@@ -32,6 +33,8 @@ namespace api.Controllers
             }
         }
 
+        //Get all main categories
+        //Output: List of categoryDTO
         [MyAuthorize("admin")]
         [Route("GetAllMainCategoriesAdmin")]
         [HttpGet]
@@ -48,10 +51,11 @@ namespace api.Controllers
             }
         }
 
+        //Change activity of main category
+        //Input: categoryId, object with is_active key boolean value
+        //Output: List of categoryDTO
         [Route("ChangeActiveMainCategory/{id}")]
         [HttpPut]
-        // PUT: api/MainCategory/ChangeActiveMainCategory/id
-        //body : "is_active":true
         [MyAuthorize("admin")]
         public HttpResponseMessage ChangeActiveMainCategory([FromUri]string id,[FromBody] dynamic req)
         {

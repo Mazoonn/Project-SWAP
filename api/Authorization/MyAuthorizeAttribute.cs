@@ -10,6 +10,7 @@ using SwapClassLibrary.Service;
 
 namespace api.Authorization
 {
+    //Role authorization
     public class MyAuthorizeAttribute : AuthorizeAttribute
     {
         private readonly string[] AllowedRoles;
@@ -19,6 +20,7 @@ namespace api.Authorization
             AllowedRoles = roles;
         }
 
+        //Check JWT digital signature and role claim
         protected override bool IsAuthorized(HttpActionContext actionContext)
         {
             JWTModel model = new JWTModel();

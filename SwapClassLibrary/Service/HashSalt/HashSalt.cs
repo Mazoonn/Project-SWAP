@@ -12,6 +12,9 @@ namespace SwapClassLibrary.Service
         public string Hash { get; set; }
         public string Salt { get; set; }
 
+        //Generate SaltedHash
+        //Input: password
+        //Output: HashSalt object
         public static HashSalt GenerateSaltedHash(string password)
         {
             var saltBytes = new byte[16];
@@ -26,6 +29,7 @@ namespace SwapClassLibrary.Service
             return hashSalt;
         }
 
+        //Verify password
         public static bool VerifyPassword(string enteredPassword, string storedHash, string storedSalt)
         {
             bool result;

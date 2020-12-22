@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
+//Not in used
 namespace api.Models
 {
     // Models returned by AccountController actions.

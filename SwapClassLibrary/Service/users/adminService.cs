@@ -15,6 +15,7 @@ namespace SwapClassLibrary.Service
 {
     public class AdminService
     {
+        //Not in used
         public static List<clientInfoDTO> GetAllAdmins(bool test = false)
         {
             SwapDbConnection db = new SwapDbConnection();
@@ -36,6 +37,9 @@ namespace SwapClassLibrary.Service
 
         }
 
+        //Get all users
+        //Input: void
+        //Output: List of clientInfoDTO
         public static List<clientInfoDTO> GetAllUsers(bool test = false)
         {
             SwapDbConnection db = new SwapDbConnection();
@@ -59,6 +63,7 @@ namespace SwapClassLibrary.Service
             return users;
         }
 
+        //Not in used
         public static bool AddAdmin(string client_id)
         {
             SwapDbConnection db = new SwapDbConnection();
@@ -74,6 +79,7 @@ namespace SwapClassLibrary.Service
             return false;
         }
 
+        //Not in used
         public static bool DeleteAdmin(string client_id)
         {
             SwapDbConnection db = new SwapDbConnection();
@@ -88,6 +94,9 @@ namespace SwapClassLibrary.Service
             return false;
         }
 
+        //Change user role
+        //Input: userId, currentRole, newRole
+        //Output: List of clientInfoDTO
         public static bool ChangeRole(string id, string currentRole, string newRole)
         {
             SwapDbConnection db = new SwapDbConnection();
@@ -115,6 +124,10 @@ namespace SwapClassLibrary.Service
             return success;
         }
 
+
+        //Delete user
+        //Input: userId
+        //Output: boolean result if the operation is successful
         public static bool DeleteUser(string id)
         {
             SwapDbConnection db = new SwapDbConnection();
@@ -126,6 +139,9 @@ namespace SwapClassLibrary.Service
             return true;
         }
 
+        //Change role to admin
+        //Input: client, currentRole
+        //Output: boolean result if the operation is successful
         private static bool ChangeRoleToAdmin(string currentRole, client user)
         {
             if (currentRole == "client")
@@ -154,6 +170,9 @@ namespace SwapClassLibrary.Service
             return false;
         }
 
+        //Change role to business owner
+        //Input: client, currentRole, db
+        //Output: boolean result if the operation is successful
         private static bool ChangeRoleToBussinesOwner(string currentRole, client user, SwapDbConnection db)
         {
             if (currentRole == "client")
@@ -165,6 +184,7 @@ namespace SwapClassLibrary.Service
                 };
                 return true;
             }
+
 
             if (currentRole == "admin")
             {
@@ -180,6 +200,9 @@ namespace SwapClassLibrary.Service
             return false;
         }
 
+        //Change role to client
+        //Input: id, currentRole, db
+        //Output: boolean result if the operation is successful
         private static bool ChangeRoleToClient(string currentRole, string id, SwapDbConnection db)
         {
             BusinessOwner bOwner;
@@ -197,6 +220,9 @@ namespace SwapClassLibrary.Service
             return false;
         }
 
+        //Generate new password
+        //Input: id, password
+        //Output: string result
         public static string NewPassword(string id, string password)
         {
             SwapDbConnection db = new SwapDbConnection();
@@ -213,6 +239,9 @@ namespace SwapClassLibrary.Service
             return "ok";
         }
 
+        //Get all not approved businesses
+        //Input: void
+        //Output: List of BusinessInfoDTO
         public static List<BusinessInfoDTO> GetNotApprovedBusinesses()
         {
             return new SwapDbConnection().businesses.Where(b => !b.approve_by_admin)
@@ -244,6 +273,9 @@ namespace SwapClassLibrary.Service
                 }).ToList();
         }
 
+        //Approve businesses
+        //Input: List ids of businesses
+        //Output: boolean result if the operation is successful
         public static bool ApproveBusinesses(List<string> ids)
         {
             SwapDbConnection db = new SwapDbConnection();
@@ -261,6 +293,9 @@ namespace SwapClassLibrary.Service
             return true;
         }
 
+        //Get all events
+        //Input: void
+        //Output: boolean result if the operation is successful
         public static List<EventDTO> GetEvents()
         {
             SwapDbConnection db = new SwapDbConnection();
@@ -282,6 +317,9 @@ namespace SwapClassLibrary.Service
             }).ToList();
         }
 
+        //Delete event
+        //Input: eventId
+        //Output: list of EventDTO
         public static bool DeleteEvent(string id)
         {
             SwapDbConnection db = new SwapDbConnection();
@@ -293,6 +331,9 @@ namespace SwapClassLibrary.Service
             return true;
         }
 
+        //Edit event
+        //Input: EditEventDTO
+        //Output: boolean result if the operation is successful
         public static bool EditEvent(EditEventDTO eventToEdit)
         {
             SwapDbConnection db = new SwapDbConnection();
@@ -305,6 +346,9 @@ namespace SwapClassLibrary.Service
             return true;
         }
 
+        //Edit event description
+        //Input: DescriptionEventDTO
+        //Output: boolean result if the operation is successful
         public static bool EditDescriptionEvent(DescriptionEventDTO eventToEdit)
         {
             SwapDbConnection db = new SwapDbConnection();
@@ -317,6 +361,10 @@ namespace SwapClassLibrary.Service
             return true;
         }
 
+
+        //Add new event
+        //Input: NewEventDTO
+        //Output: EventDTO
         static public EventDTO AddEvent(NewEventDTO eventToAdd)
         {
             SwapDbConnection db = new SwapDbConnection();

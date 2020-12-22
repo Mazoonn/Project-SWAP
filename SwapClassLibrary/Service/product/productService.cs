@@ -12,6 +12,9 @@ namespace SwapClassLibrary.Service
 
     public class ProductService
     {
+        //Get all products from business
+        //Input: businness_id, clientId
+        //Output: List of productDTO
         public static List<productDTO> GetAllProducts(string businness_id, string clientId)
         {
             SwapDbConnection db = new SwapDbConnection();
@@ -30,7 +33,7 @@ namespace SwapClassLibrary.Service
             }).ToList();
         }
 
-        //get product by id
+        //Not in used
         public static productDTO GetProductByid(string product_id)
         {
             SwapDbConnection db = new SwapDbConnection();
@@ -52,7 +55,9 @@ namespace SwapClassLibrary.Service
             return product_obj;
         }
 
-        //add product
+        //Add new product
+        //Input: productDTO, ClientId
+        //Output: productDTO
         public static productDTO AddProduct(productDTO req, string ClientId)
         {
             SwapDbConnection db = new SwapDbConnection();
@@ -102,6 +107,10 @@ namespace SwapClassLibrary.Service
             return true;
         }
 
+
+        //Update product
+        //Input: productDTO, clientId
+        //Output: result in string
         public static string updateProduct(productDTO product_req, string clientId)
         {
             SwapDbConnection db = new SwapDbConnection();

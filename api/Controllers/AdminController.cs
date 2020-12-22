@@ -16,6 +16,8 @@ namespace api.Controllers.admin
     public class AdminController : ApiController
     {
 
+        //Get all admins
+        //Output: List of clientInfoDTO
         [Route("GetAllAdmins")]
         [HttpGet]
         public HttpResponseMessage GetAllAdmins(bool test = false)
@@ -33,6 +35,8 @@ namespace api.Controllers.admin
             }
         }
 
+        //Get all users
+        //Output: List of clientInfoDTO
         [Route("GetAllUsers")]
         [HttpGet]
         public HttpResponseMessage GetAllUsers(bool test = false)
@@ -50,6 +54,9 @@ namespace api.Controllers.admin
             }
         }
 
+
+        //Change user role
+        //Input: RoleDTO
         [Route("ChangeRole")]
         [HttpPost]
         public HttpResponseMessage ChangeRole(RoleDTO req)
@@ -69,6 +76,8 @@ namespace api.Controllers.admin
             }
         }
 
+        //Delete user
+        //Input: userId
         [Route("DeleteUser/{id}")]
         [HttpDelete]
         public HttpResponseMessage DeleteUser(string id)
@@ -87,6 +96,8 @@ namespace api.Controllers.admin
         }
 
 
+        //Change password
+        //Input: PasswordDTO, userId
         [Route("newPassword/{id}")]
         [HttpPut]
         public HttpResponseMessage NewPassword(PasswordDTO password, string id)
@@ -106,6 +117,8 @@ namespace api.Controllers.admin
             }
         }
 
+        //Get all not approved businesses
+        //Output: List of BusinessInfoDTO
         [Route("GetNotApprovedBusinesses")]
         [HttpGet]
         public HttpResponseMessage GetNotApprovedBusinesses()
@@ -121,6 +134,8 @@ namespace api.Controllers.admin
             }
         }
 
+        //Approve business
+        //Input: List of businessesIds
         [Route("ApproveBusinesses")]
         [HttpPut]
         public HttpResponseMessage ApproveBusinesses(List<string> businessesIds)
@@ -138,6 +153,8 @@ namespace api.Controllers.admin
             }
         }
 
+        //Get all events
+        //Output: List of EventDTO
         [Route("GetEvents")]
         [HttpGet]
         public HttpResponseMessage GetEvents()
@@ -153,6 +170,8 @@ namespace api.Controllers.admin
             }
         }
 
+        //Delete event
+        //Input: eventId
         [Route("DeleteEvent/{id}")]
         [HttpDelete]
         public HttpResponseMessage DeleteEvent(string id)
@@ -169,6 +188,8 @@ namespace api.Controllers.admin
             }
         }
 
+        //Edit event
+        //Input: EditEventDTO
         [Route("EditEvent")]
         [HttpPost]
         public HttpResponseMessage EditEvent(EditEventDTO eventToEdit)
@@ -186,6 +207,8 @@ namespace api.Controllers.admin
             }
         }
 
+        //Edit event description
+        //Input: DescriptionEventDTO
         [Route("EditEventDescription")]
         [HttpPost]
         public HttpResponseMessage EditEventDescription(DescriptionEventDTO eventToEdit)
@@ -203,6 +226,8 @@ namespace api.Controllers.admin
             }
         }
 
+        //Add new event
+        //Input: NewEventDTO
         [Route("AddEvent")]
         [HttpPut]
         public HttpResponseMessage AddEvent(NewEventDTO eventToAdd)

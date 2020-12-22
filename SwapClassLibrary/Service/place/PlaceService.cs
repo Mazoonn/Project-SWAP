@@ -12,6 +12,9 @@ namespace SwapClassLibrary.Service
 
     public class PlaceService
     {
+        //Get distance in meteres from two geolocation points
+        //Input: PointDTO startPosition, PointDTO endPosition
+        //Output: distance in meters
         public static double GetDistance(PointDTO startPosition, PointDTO endPosition)
         {
             int R = 6378137; // Earth’s mean radius in meter
@@ -25,6 +28,7 @@ namespace SwapClassLibrary.Service
             return d; // returns the distance in meter
         }
 
+        //Not in used
         public static placeDTO GetPlaceInfoByid(string id)
         {
             SwapDbConnection db = new SwapDbConnection();
@@ -47,6 +51,7 @@ namespace SwapClassLibrary.Service
             return place_obj;
         }
 
+        //Not in used
         public static string AddPlace(placeDTO place)
         {
             SwapDbConnection db = new SwapDbConnection();
@@ -72,6 +77,7 @@ namespace SwapClassLibrary.Service
             return place.place_id;
         }
 
+        //Not in used
         public static bool DeletePlace(string place_id)
         {
             SwapDbConnection db = new SwapDbConnection();
@@ -83,6 +89,8 @@ namespace SwapClassLibrary.Service
             return true;
         }
 
+
+        //Not in used
         public static bool Editplace(placeDTO place)
         {
             SwapDbConnection db = new SwapDbConnection();
@@ -102,6 +110,7 @@ namespace SwapClassLibrary.Service
             return true;
         }
 
+        //Not in used
          public static bool addOrEditPlaceToCategory(placeToCategoryDTO place)
         {
             SwapDbConnection db = new SwapDbConnection();

@@ -8,8 +8,12 @@ using SwapClassLibrary.Models;
 
 namespace SwapClassLibrary.Service
 {
+    //Create new JWT
     public class JWTGetToken
     {
+        //Get token
+        //Input: user_id, email, role
+        //Output: JWT
         public static string getToken(string user_id, string email, string role)
         {
             IAuthModel model = GetJWTModel(user_id, email, role);
@@ -19,6 +23,9 @@ namespace SwapClassLibrary.Service
                 return "false";
             return token;
         }
+        //Create claims
+        //Input: user_id, email, role
+        //Output: JWTModel
         private static JWTModel GetJWTModel(string user_id, string email, string role)
         {
             return

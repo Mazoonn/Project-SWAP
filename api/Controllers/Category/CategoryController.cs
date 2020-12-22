@@ -14,11 +14,9 @@ namespace api.Controllers
     [RoutePrefix("api/Category")]
     public class CategoryController : ApiController
     {
-        //main and sub category relationship
-        /******************************************************************************************/
-
-
-        // GET: api/Category/GetMainAndSubRelationship/{main_id}
+        //Get all activity subcategories of main category
+        //Input: main category id
+        //Output: list of MainAndSubRelationshipDTO
         [Route("GetMainAndSubRelationship/{main_id}")]
         [MyAuthorize("admin", "business", "client")]
         [HttpGet]
@@ -37,7 +35,8 @@ namespace api.Controllers
             }
         }
 
-        //POST: api/MainCategory/AddMainAndSubRelationship
+        //Add new subcategory of main category
+        //Input: MainAndSubRelationshipDTO
         [MyAuthorize("admin")]
         [Route("AddMainAndSubRelationship")]
         [HttpPost]
@@ -51,7 +50,7 @@ namespace api.Controllers
                 object_add = CategoryService.AddMainAndSubRelationship(req.main_id, req.sub_name, req.google_value, req.descrition);
                 return Request.CreateResponse(HttpStatusCode.OK, object_add);
             }
-            //handle of errors in exeptinos
+            //handle of errors in exceptions
             catch (Exception error)
             {
                 if (typeof(InvalidOperationException) == error.GetType())
@@ -60,7 +59,8 @@ namespace api.Controllers
             }
         }
 
-        // Delete:api/googleValue/DeleteGoogleValue/{type}/{req}
+        //delete subcategory of main category
+        //Input: main_id, sub_id
         [MyAuthorize("admin")]
         [Route("RemoveMainAndSubRelationship/{main_id}/{sub_id}")]
         [HttpDelete]
@@ -81,7 +81,8 @@ namespace api.Controllers
         }
 
 
-        // PUT:api/category/UpdateSubCategoryOfMainCategory
+        //Update subcatgory of main category
+        //Input: MainAndSubRelationshipDTO
         [Route("UpdateSubCategoryOfMainCategory")]
         [MyAuthorize("admin")]
         [HttpPut]

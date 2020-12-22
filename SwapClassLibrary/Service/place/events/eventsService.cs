@@ -11,18 +11,22 @@ namespace SwapClassLibrary.Service
 {
     public class EventsService
     {
+
+        //Get events nearby
+        //Input: PointDTO, radius
+        //Output: List of MapEventDTO
         public static List<MapEventDTO> GetEvents(PointDTO position, double radius)
         {
             SwapDbConnection db = new SwapDbConnection();
             PointDTO point = new PointDTO();
             List<Event> Allevents = db.Events.Where(e=> e.end_date > DateTime.Now).ToList();
-            List<MapEventDTO> FiltredEvetns = new List<MapEventDTO>();
+            List<MapEventDTO> FilteredEvents = new List<MapEventDTO>();
 
             foreach (Event e in Allevents)
             {
                 point.lat = (double) e.place.latitude;
                 point.lng = (double) e.place.longitude;
-                if (PlaceService.GetDistance(point, position) <= radius) FiltredEvetns.Add(new MapEventDTO
+                if (PlaceService.GetDistance(point, position) <= radius) FilteredEvents.Add(new MapEventDTO
                 {
                     description = e.place.description ?? "",
                     end_date = e.end_date,
@@ -38,7 +42,7 @@ namespace SwapClassLibrary.Service
                 }); 
             }
 
-            return FiltredEvetns;        
+            return FilteredEvents;        
         }
     }
 }

@@ -12,6 +12,9 @@ namespace api.Controllers.quest
 {
     [RoutePrefix("api/quest")]
 
+
+    //Add new quest
+    //Input: QuestDTO
     public class QuestController : ApiController
     {
         [Route("addQuest")]

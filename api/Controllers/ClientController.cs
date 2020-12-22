@@ -14,6 +14,9 @@ namespace api.Controllers
     [RoutePrefix("api/client")]
     public class ClientController : ApiController
     {
+        //Login to the system
+        //Input: loginDTO
+        //Output: JWTToken for successful login
         [Route("login")]
         [HttpPost]
         public HttpResponseMessage login([FromBody]loginDTO body)
@@ -51,6 +54,9 @@ namespace api.Controllers
 
 
 
+        //Register to the system
+        //Input: registerDTO
+        //Output: JWTToken for successful registration
         [Route("register")]
         [HttpPost]
         public HttpResponseMessage register([FromBody]registerDTO body)
@@ -69,6 +75,9 @@ namespace api.Controllers
 
         }
         
+        //Get user information
+        //Input: userId
+        //Output: clientInfoDTO
         [Route("getInfo/{userId}")]
         [HttpGet]
         [SelfAuthorization()]
@@ -87,6 +96,8 @@ namespace api.Controllers
         }
 
 
+        //Change user password
+        //Input: userId, object with password key
         [Route("changePassword/{userId}")]
         [HttpPost]
         [SelfAuthorization()]
@@ -104,6 +115,8 @@ namespace api.Controllers
             }
         }
 
+        //Request to become a business owner
+        //Input: userId
         [Route("requestBusinessOwner/{userId}")]
         [HttpPost]
         [SelfAuthorization()]
@@ -121,6 +134,8 @@ namespace api.Controllers
             }
         }
 
+        //Update user information
+        //Input: userId, ClientDatePhoneSexDTO
         [Route("updateInformation/{userId}")]
         [HttpPost]
         [SelfAuthorization()]

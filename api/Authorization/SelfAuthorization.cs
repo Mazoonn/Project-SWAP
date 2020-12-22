@@ -6,6 +6,7 @@ using System.Web.Http;
 using System.Web.Http.Controllers;
 using SwapClassLibrary.Models;
 using SwapClassLibrary.Service;
+
 namespace api.Authorization
 {
     public class SelfAuthorization : AuthorizeAttribute
@@ -15,7 +16,7 @@ namespace api.Authorization
             JWTModel model = new JWTModel();
             JWTService jwtService = new JWTService(model.PrivateKey, model.PublicKey);
             IEnumerable<Claim> claims;
-            string cliendId;
+            string clientId;
 
             try
             {
@@ -24,9 +25,9 @@ namespace api.Authorization
                 string userId = actionContext.Request.RequestUri.Segments[length - 1];
 
                 claims = jwtService.GetTokenClaims(authToken);
-                cliendId = claims.First(c => c.Type == "user-id").Value;
+                clientId = claims.First(c => c.Type == "user-id").Value;
 
-                return (cliendId == userId);
+                return (clientId == userId);
             }
             catch (Exception)
             {

@@ -12,6 +12,9 @@ namespace SwapClassLibrary.Service
 {
     public class clientService
     {
+        //Local register
+        //Input: registerDTO
+        //Output: clientId
         public static string registerClientLocal(registerDTO body)
         {
             SwapDbConnection db = new SwapDbConnection();
@@ -45,6 +48,9 @@ namespace SwapClassLibrary.Service
             return id;
         }
 
+        //Set user role, email, userId
+        //Input: loginDTO, role, id, email
+        //Output: void
         private static void SetUser(loginDTO user,string role, string id, string email)
         {
             user.role = role;
@@ -52,6 +58,9 @@ namespace SwapClassLibrary.Service
             user.user_id = id;
         }
 
+        //Google register
+        //Input: loginDTO
+        //Output: client
         public static client registerClientgoogle(loginDTO body)
         {
             SwapDbConnection db = new SwapDbConnection();
@@ -80,6 +89,9 @@ namespace SwapClassLibrary.Service
             return client;
         }
 
+        //Authentication
+        //Input: loginDTO
+        //Output: client
         public static client checkUserLogin(loginDTO body)
         {
             SwapDbConnection db = new SwapDbConnection();
@@ -93,6 +105,9 @@ namespace SwapClassLibrary.Service
             return user;
         }
 
+        //Get user role
+        //Input: client
+        //Output: role string
         public static string GetRole(client user)
         {
             if (user.BusinessOwner != null)
@@ -103,6 +118,9 @@ namespace SwapClassLibrary.Service
             return "client";
         }
 
+        //Get client information
+        //Input: clientId
+        //Output: clientInfoDTO
         public static clientInfoDTO GetClientInfo(string clientId)
         {
             SwapDbConnection db = new SwapDbConnection();
@@ -122,6 +140,9 @@ namespace SwapClassLibrary.Service
             }).FirstOrDefault(c => c.client_id == clientId);
         }
 
+        //Change user password
+        //Input: clientId,password
+        //Output: boolean result if the operation is successful
         public static bool ChangePassword(string clientId, string password)
         {
             SwapDbConnection db = new SwapDbConnection();
@@ -139,6 +160,9 @@ namespace SwapClassLibrary.Service
             return true;
         }
 
+        //Request to be a business owner
+        //Input: clientId
+        //Output: boolean result if the operation is successful
         public static bool RequestBusinessOwner(string clientId)
         {
             SwapDbConnection db = new SwapDbConnection();
@@ -152,6 +176,9 @@ namespace SwapClassLibrary.Service
             return true;
         }
 
+        //Update user information
+        //Input: ClientDatePhoneSexDTO, clientId
+        //Output: boolean result if the operation is successful
         public static bool UpdateInformation(ClientDatePhoneSexDTO client, string clientId)
         {
             SwapDbConnection db = new SwapDbConnection();

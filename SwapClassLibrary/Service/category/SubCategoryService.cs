@@ -32,6 +32,9 @@ namespace SwapClassLibrary.Service
             return sub_object;
         }
 
+        //Update subcategory
+        //Input: sub_id, google_value, name
+        //Output: boolean if succeed or not
         public static bool updateSubCategory(string id, string google_value, string name)
         {
             SwapDbConnection db = new SwapDbConnection();

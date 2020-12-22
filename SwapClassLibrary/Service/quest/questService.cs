@@ -10,6 +10,9 @@ namespace SwapClassLibrary.Service
 {
     public class QuestService
     {
+        //Add new quest
+        //Input: QuestDTO
+        //Output: void
         public static void AddNewQuest(QuestDTO quest)
         {
             SwapDbConnection db = new SwapDbConnection();
@@ -24,6 +27,7 @@ namespace SwapClassLibrary.Service
                 places = new List<place>()
             };
 
+            //Update categories of places
             foreach (GooglePlaceDTO googlePlace in quest.googlePlaces)
             {
                 place = db.places.FirstOrDefault(p => p.place_id == googlePlace.googlePlace.place_id);
@@ -39,6 +43,7 @@ namespace SwapClassLibrary.Service
                         sub_id = googlePlace.sub_id
                     });
                 }
+                //Add new place to db
                 else
                 {
                     place = new place

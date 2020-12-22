@@ -12,6 +12,9 @@ namespace SwapClassLibrary.Service
 {
     public class BusinessService
     {
+        //Get all businesses of business owner
+        //Input: business_owner_id
+        //Output: List of bussinessDTO
         public static List<bussinessDTO> GetAllBusinesses(string business_owner_id)
         {
             SwapDbConnection db = new SwapDbConnection();
@@ -38,25 +41,27 @@ namespace SwapClassLibrary.Service
             }
             ).ToList();
         }
-
+        //Get businesses nearby and filtered by categories 
+        //Input: PointDTO, CategoriesIdsDTO, radius
+        //Output: List of MapBusinessDTO
         public static List<MapBusinessDTO> GetFilteredBusinessesAround(PointDTO position, CategoriesIdsDTO ids, double radius)
         {
             SwapDbConnection db = new SwapDbConnection();
             PointDTO point;
-            List<business> businesees;
+            List<business> businesses;
             List<MapBusinessDTO> filteredBusinesses = new List<MapBusinessDTO>();
             main_category mainCategory = db.main_category.FirstOrDefault(category => category.main_id == ids.mainId);
             string iconCategory;
 
             if (mainCategory == null) return filteredBusinesses;
             point = new PointDTO();
-            businesees = db.businesses.Include(b => b.products).Where(b => b.is_active &&
+            businesses = db.businesses.Include(b => b.products).Where(b => b.is_active &&
             b.approve_by_admin &&
             b.place.r_place_sub_and_main_category.Any(r => r.main_id == ids.mainId &&
             ids.subIds.Any(id => r.sub_id == id))).ToList();
             iconCategory = mainCategory.google_value;
 
-            foreach (business b in businesees)
+            foreach (business b in businesses)
             {
                 point.lat = (double)b.place.latitude;
                 point.lng = (double)b.place.longitude;
@@ -94,6 +99,9 @@ namespace SwapClassLibrary.Service
             return filteredBusinesses;
         }
 
+        //Add businesses
+        //Input: NewBusinessDTO, NewPlaceDTO, CategoriesIdsDTO
+        //Output: boolean if succeed or not
         public static bool AddBusiness(NewBusinessDTO business, NewPlaceDTO place, CategoriesIdsDTO categories)
         {
             SwapDbConnection db = new SwapDbConnection();
@@ -171,6 +179,9 @@ namespace SwapClassLibrary.Service
             return true;
         }
 
+        //Edit businesses
+        //Input: bussinessDTO
+        //Output: boolean if succeed or not
         public static bool EditBusiness(bussinessDTO business)
         {
             SwapDbConnection  db = new SwapDbConnection();
@@ -186,6 +197,9 @@ namespace SwapClassLibrary.Service
             return true;
         }
 
+        //Edit activity of businesses
+        //Input: placeId, userId, isActive
+        //Output: boolean if succeed or not
         public static bool ChangeActiveBusiness(string placeId, string userId, bool isActive)
         {
             SwapDbConnection db = new SwapDbConnection();
@@ -197,6 +211,9 @@ namespace SwapClassLibrary.Service
             return true;
         }
 
+        //Delete businesses
+        //Input: business_owner_id, place_id
+        //Output: boolean if succeed or not
         public static bool DeleteBusiness(string business_owner_id, string place_id)
         {
             SwapDbConnection db = new SwapDbConnection();
