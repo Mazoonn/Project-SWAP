@@ -1,5 +1,6 @@
 import React from 'react';
 
+//Info window of event
 const InfoWindowEvent = ({
     event,
     dateString,

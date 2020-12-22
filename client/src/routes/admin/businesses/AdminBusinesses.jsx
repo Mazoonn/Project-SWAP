@@ -6,6 +6,7 @@ import UserModal from "./AdminUserModal";
 import BusinessModal from "./AdminBusinessModal";
 import DescriptionModal from "./AdminDescriptionModal";
 
+//Filter array of businessDTO by name, email, country and approves
 const filterBusinesses = (businesses, name, email, country, approves) => {
   return businesses.filter(
     (business) =>
@@ -16,6 +17,7 @@ const filterBusinesses = (businesses, name, email, country, approves) => {
   );
 };
 
+//Admin Business page component
 class AdminBusinesses extends Component {
   state = {
     businesses: [],
@@ -38,21 +40,25 @@ class AdminBusinesses extends Component {
     currentPage: 1,
   };
 
+  //Get all not approved businesses
   componentDidMount() {
     document.title = "Businesses";
     this.getBusinesses();
   }
 
+  //Change page
   handlePageChange = (page) => {
     this.setState({ currentPage: page });
   };
 
+  //Close modal
   handleExitUserModal = () => {
     const modal = { ...this.state.modal };
     modal["user"] = {};
     this.setState({ modal });
   };
 
+  //Get all not approved businesses
   getBusinesses = async () => {
     this.setState({ loading: true });
     try {
@@ -64,12 +70,14 @@ class AdminBusinesses extends Component {
     }
   };
 
+  //Click on approve button filter
   handleOnClickApproveFilter = () => {
     const filter = { ...this.state.filter };
     filter["approves"] = !filter["approves"];
     this.setState({ filter, currentPage: 1 });
   };
 
+  //Handle On Change Approve
   handleOnChangeApprove = (business) => {
     const businesses = [...this.state.businesses];
     const index = businesses.indexOf(business);
@@ -77,30 +85,35 @@ class AdminBusinesses extends Component {
     this.setState({ businesses });
   };
 
+  //Handle On Change Filter
   handleOnChangeFilter = (name, value) => {
     const filter = { ...this.state.filter };
     filter[name] = value;
     this.setState({ filter, currentPage: 1 });
   };
 
+  //Open user information modal
   handleOnClickUser = (user) => {
     const modal = { ...this.state.modal };
     modal["user"] = user;
     this.setState({ modal });
   };
 
+  //Open business information modal
   handleOnClickBusiness = (business) => {
     const modal = { ...this.state.modal };
     modal["business"] = business;
     this.setState({ modal });
   };
 
+  //Close business information modal
   handleExitBusinessModal = () => {
     const modal = { ...this.state.modal };
     modal["business"] = {};
     this.setState({ modal });
   };
 
+  //Open description modal
   handleOnClickDescriptionModal = (value) => {
     const modal = { ...this.state.modal };
     modal["description"]["value"] = value;
@@ -108,6 +121,7 @@ class AdminBusinesses extends Component {
     this.setState({ modal });
   };
 
+  //Close description modal
   handleExitDescriptionModal = () => {
     const modal = { ...this.state.modal };
     modal["description"]["value"] = "";
@@ -115,6 +129,7 @@ class AdminBusinesses extends Component {
     this.setState({ modal });
   };
 
+  //Handle click on save
   handleClickOnSave = async () => {
     this.setState({ loading: true });
     const request = [];
@@ -131,6 +146,7 @@ class AdminBusinesses extends Component {
     }
   };
 
+  //Check if any of approve radio buttons changes
   areChanges = () => {
     return this.state.businesses.some((business) => business["approve"]);
   };

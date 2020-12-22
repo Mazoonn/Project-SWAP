@@ -12,16 +12,19 @@ name: ["Categories", "Sub Categories", "Manage Users", "Businesses", "Events" ],
 component: [<AdminCategories />, <AdminSubCategories />, <UsersManager />,<AdminBusinesses />, <AdminEvents/> ]
 } 
 
+//Admin main page
 class AdminPage extends Component {
   state = {
     selected: 0
   };
 
+  //Click on the list of button
   handleClick = index => 
   {
     if(this.state.selected !== index) this.setState({ selected: index });
   };
 
+  //Set title
   componentDidMount()
   {
     document.title = "Admin";

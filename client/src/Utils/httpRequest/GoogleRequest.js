@@ -3,6 +3,10 @@ import {  radius } from "../../config.json";
 import Logger from "../loggerServices";
 import getAddress from './../../services/Address';
 
+
+//Google places nearby request
+// input -> places: categories places array, location, openNow
+// return array of places and id's categories
 export const getPlaces = async function (places, location, openNow) {
   const requests = [];
   const ids = [];
@@ -36,7 +40,7 @@ export const getPlaces = async function (places, location, openNow) {
             }
             if (status === google.maps.places.PlacesServiceStatus.ZERO_RESULTS) 
             {
-              resolve(({places: [], ids: [] }));
+              resolve(({ places: [], ids: [] }));
             }
           });
         });
@@ -45,6 +49,9 @@ export const getPlaces = async function (places, location, openNow) {
   return results;
 };
 
+//Google address request
+// input google placeId
+// return Address Object
 export const getPlaceAddress = async function (placeId) {
   const service = new window.google.maps.places.PlacesService(document.createElement("div"));
   const request = 
@@ -62,12 +69,14 @@ export const getPlaceAddress = async function (placeId) {
 };
 
 
+//Get current location 
 function getCurrentPosition(options = {}) {
   return new Promise((resolve, reject) => {
     navigator.geolocation.getCurrentPosition(resolve, reject, options);
   });
 }
 
+//fetchCoordinates
 export const fetchCoordinates = async () => {
   try {
     const { coords } = await getCurrentPosition();

@@ -1,6 +1,7 @@
 import React from 'react';
 import "../admin/users/UserModal.css";
 
+//Close product modal
 const ExistsProductModal = ({ name, isActive, handleClose }) =>
 {
   const modal = React.useRef(null);

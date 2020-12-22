@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 
+
+//Get time and distance object
 const getTimeAndDistance = (legs) => {
   let hours, minutes;
   let timeString = "";
@@ -24,6 +26,7 @@ const getTimeAndDistance = (legs) => {
   return { timeString, distanceString };
 };
 
+//time distance and type route component
 class DropDown extends Component {
   state = { toggle: false };
   handleToggle = () => {

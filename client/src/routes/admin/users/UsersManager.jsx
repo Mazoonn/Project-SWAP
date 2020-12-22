@@ -5,6 +5,7 @@ import Pagination from "../AdminPagination";
 import UserModal from "./UserModal";
 import UserRaw from "./UserRaw";
 
+//Users filter
 const filterUsers = (users, name, email, request) => {
   const filteredUsers =
     name !== "" || email !== ""
@@ -20,6 +21,7 @@ const filterUsers = (users, name, email, request) => {
   return filteredUsers;
 };
 
+//User manger page
 class UsersManager extends Component {
   state = {
     users: [],
@@ -34,15 +36,18 @@ class UsersManager extends Component {
     password: "",
   };
 
+  //set title and set users to state
   componentDidMount() {
     document.title = "Users";
     this.getUsers();
   }
 
+  //change page
   handlePageChange = (page) => {
     this.setState({ currentPage: page });
   };
 
+  //get users from api
   getUsers = async () => {
     this.setState({ loading: true });
     try {
@@ -56,6 +61,7 @@ class UsersManager extends Component {
     }
   };
 
+  //save role button
   handleOnSaveChangeRole = async (user) => {
     this.setState({ loading: true });
     try {
@@ -71,6 +77,7 @@ class UsersManager extends Component {
     }
   };
 
+  //change role
   handelSelectOnChange = (event, user) => {
     const users = [...this.state.users];
     const index = users.indexOf(user);
@@ -78,6 +85,7 @@ class UsersManager extends Component {
     this.setState(users);
   };
 
+  //check if user role changed
   isRoleChanged = (user) => {
     const role = user["actor"];
     const newRole = (user["actor_new"] && user["actor_new"]) || role;
@@ -85,6 +93,7 @@ class UsersManager extends Component {
     return role !== newRole;
   };
 
+  //Filter event
   handleFilterOnChange = (event) => {
     const { value, name } = event.target;
     const obj = {};
@@ -92,6 +101,7 @@ class UsersManager extends Component {
     obj.currentPage = 1;
     this.setState(obj);
   };
+
 
   handleRequestOnChange = () => {
     let { request } = this.state;
@@ -111,18 +121,22 @@ class UsersManager extends Component {
     }
   };
 
+  //Open user information modal
   handleClickOnInfo = (user) => {
     this.setState({ user });
   };
 
+  //Close user information modal
   handleExitModal = () => {
     this.setState({ user: {}, password: "" });
   };
 
+  //Save password value to state
   handlePasswordOnChange = (event) => {
     this.setState({ password: event.target.value });
   };
 
+  //Save password button
   handleSaveNewPassword = async () => {
     this.setState({ loadingSavePassword: true, password: "" });
     try {

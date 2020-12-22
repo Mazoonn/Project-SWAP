@@ -1,3 +1,5 @@
+//client info class for dto
+
 export class clientInfo {
   client_id: string;
   first_name: string;

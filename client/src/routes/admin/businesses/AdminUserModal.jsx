@@ -1,8 +1,9 @@
 import React from 'react';
 import "../users/UserModal.css"
 
+
 const role = {
-    admin:"Admin",
+    admin: "Admin",
     business: "Business Owner",
     client: "Client"
 };
@@ -14,6 +15,7 @@ const platform =
     local: "Local",
 };
 
+//if date valid return age from date else rerun empty string 
 function getAge(date){
     if(!date || date === "") return "";
     const now = new Date();
@@ -22,6 +24,7 @@ function getAge(date){
     return Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
 }
 
+//User information modal
 const UserModal = ({user, handleExitModal})=>
 {
     const values = Object.values(user)

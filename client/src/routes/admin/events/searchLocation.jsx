@@ -1,7 +1,10 @@
 import React, { useEffect, useRef } from "react";
 
+//Search location input
+
 let autoComplete;
 
+//When google maps script loaded then create input element with google maps places autocomplete 
 function handleScriptLoad(updateAddress, autoCompleteRef) {
   autoComplete = new window.google.maps.places.Autocomplete(
     autoCompleteRef.current,
@@ -13,11 +16,13 @@ function handleScriptLoad(updateAddress, autoCompleteRef) {
   );
 }
 
+//Set place address to state
 async function handlePlaceSelect(updateAddress) {
   const addressObject = autoComplete.getPlace();
   updateAddress(addressObject);
 }
 
+//Input element with google autocomplete
 function SearchLocationInput({ setAddress, error, disabled, id, reset }) 
 {
   const autoCompleteRef = useRef(null);

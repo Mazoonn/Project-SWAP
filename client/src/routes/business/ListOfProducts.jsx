@@ -6,6 +6,7 @@ import ProductRaw from './ProductRaw';
 import NewProductRaw from './newProductRaw';
 import ExistProductModal from './ExistsProductModal';
 
+//set new values to product
 const copyNewValues = product =>
 {
   const values = [ "name", "is_active", "description", "discount_start_date", "discount_end_date", "discount", "price" ];
@@ -16,6 +17,7 @@ const copyNewValues = product =>
 };
 
 
+//Products page
 class ListOfProducts extends Component {
   state = {
     products: [],
@@ -27,17 +29,20 @@ class ListOfProducts extends Component {
     error: { productExists :false, name: "" }
   };
 
+  //set title and get businesses
   componentDidMount() {
     this.mounted = true;
     document.title = "Products"
     if(this.mounted) this.getState();
   }
 
+  //Stop all asynchouries calls
   componentWillUnmount()
   {
     this.mounted = false;
   }
 
+  //set user id and all his businesses to state
   getState = async () => {
     const user = getCurrentUser();
     this.setState({ loading: true, businessOwnerId: user[`user-id`] })
@@ -56,6 +61,7 @@ class ListOfProducts extends Component {
     }
   };
 
+  //Set values of product to state
   handleOnChangeProduct = (event, index) => {
     const { name, value } = event.target;
     if(name === "price" && value < 0) return;
@@ -74,6 +80,7 @@ class ListOfProducts extends Component {
     }
   };
 
+  //delete button
   handleDeleteProduct = async (indexProduct) => {
     const { businessOwnerId: client_id } = this.state;
     const product = this.state.products[indexProduct];
@@ -94,6 +101,7 @@ class ListOfProducts extends Component {
     }
   };
 
+  //add new values to product
   addNewValuesToProduct = product =>
   {
     const values = [
@@ -120,6 +128,7 @@ class ListOfProducts extends Component {
       });
   };
 
+  //add new values to all products
   addNewValuesToProducts = products => {
     products.forEach(product => 
       {
@@ -127,6 +136,7 @@ class ListOfProducts extends Component {
       });
   };
 
+  //add new product button
   handleAddNewProduct = async () => {
     const { productToAdd, indexBusinessId, businessOwnerId } = this.state;
     const business_selected_id = this.state.businesses[indexBusinessId].place_id;
@@ -155,6 +165,7 @@ class ListOfProducts extends Component {
     }
   };
 
+  //save button handler
   handleOnClickSaveProduct = async (index) => {
     const { businessOwnerId } = this.state;
     const products = [...this.state.products];
@@ -202,6 +213,8 @@ class ListOfProducts extends Component {
     }
   };
 
+
+  //on change select handler
   handleOnChangeSelect = async event => {
     const indexBusinessId = event.target.value;
     if (indexBusinessId !== "default") 
@@ -229,6 +242,7 @@ class ListOfProducts extends Component {
     this.setState({ indexBusinessId, productToAdd: {} })
   };
 
+  //check if product values changed
   isProductChanged = index => {
     const product = this.state.products[index];
     const values = [
@@ -244,6 +258,7 @@ class ListOfProducts extends Component {
     !values.some(value => !product[`${value}_new`]));
   };
 
+  //on change Is Active handler
   handleOnChangeIsActiveProducts = index => {
     const products = [...this.state.products];
     const product = products[index];
@@ -251,6 +266,7 @@ class ListOfProducts extends Component {
     this.setState({ products });
   };
 
+  //check if product values are not empty
   isNotValidProduct = () => 
   {
     const { productToAdd } = this.state;
@@ -266,6 +282,7 @@ class ListOfProducts extends Component {
     return values.some(value => !productToAdd[value]);
   };
 
+  //close error modal
   handleCloseErrorModal = () =>
   {
     this.setState({ error: { productExists: false, name: "" } });

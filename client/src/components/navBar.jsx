@@ -13,9 +13,11 @@ import AdminRoute from "./../Utils/AdminRoute";
 import BusinessRoute from "../Utils/BusinessRoute";
 import { getCurrentUser } from './../services/authService';
 
+//Upper navbar
 class NavBar extends Component {
   state = { user: null };
 
+  //get current user and set him to state if digital signature is valid
   componentDidMount()
   {
     const user = getCurrentUser();

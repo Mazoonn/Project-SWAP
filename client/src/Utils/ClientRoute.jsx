@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import { getCurrentUser } from './../services/authService';
 
-// handle the private routes
+// client routes
 export default function ClientRoute({
   path,
   component: Component,

@@ -8,6 +8,7 @@ import { getCurrentUser } from "../../services/authService";
 import Select from 'react-select';
 import AddedBusinessModal from './addedBusinessModal';
 
+//Check if the address if full address
 const addressValidate = (address) => {
   const schema = ["country", "settlement", "street"];
 
@@ -15,6 +16,7 @@ const addressValidate = (address) => {
   return "";
 };
 
+//Check the values are not legal
 const isDisable = (formDataInfo) => {
   const values = ["name", "description", "opening_hours", "address", "closing_hours", "main_id"];
   const b1 = values.some(value => !formDataInfo[value]);
@@ -37,6 +39,8 @@ class BusinessForm extends Component {
     loadingSubcategories: false
   };
 
+
+  //Set main categories to state
   async componentDidMount() 
   {
     this.mounted = true;
@@ -61,10 +65,12 @@ class BusinessForm extends Component {
   }
   };
 
+  //Stop all asynchronous calls
   componentWillUnmount(){
     this.mounted = false;
   };
 
+  //Set place address to state
   setAddress = (place) => {
     const formData = { ...this.state.formData };
     formData.address = {};
@@ -77,6 +83,7 @@ class BusinessForm extends Component {
     this.setState({ formData });
   };
 
+  //Add business button
   handleAddBusiness = async event => {
     event.preventDefault();
     const { formData } = this.state;
@@ -131,6 +138,7 @@ class BusinessForm extends Component {
     }
   };
 
+  //Set values to state
   handelOnChangeForm = (event) => {
     const formData = { ...this.state.formData };
     const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
@@ -139,6 +147,7 @@ class BusinessForm extends Component {
     this.setState({ formData });
   };
 
+  //Change main category select and load subcategories from api
   handleOnChangeSelectMain = async event => {
     const mainCategorySelectedIndex = event.target.value;
     const formData = { ...this.state.formData };
@@ -172,6 +181,7 @@ class BusinessForm extends Component {
     this.setState({ formData });
   };
 
+  //set subcategories ids to sate
   handleOnChangeSelectSub = selectedOption  => 
   { 
     const formData = { ...this.state.formData };
@@ -179,6 +189,7 @@ class BusinessForm extends Component {
     this.setState({ formData });
   };
 
+  //close business added modal
   handleCloseBusinessAddedModal = () =>
   {
     this.setState({ saved: false, formData: {sub_ids: null}, mainCategorySelectedIndex: "default" });

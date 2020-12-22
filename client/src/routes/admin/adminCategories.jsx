@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
 import { getAllMainCategoriesAdmin, putCategories } from "../../services/Categories";
 
+//Admin Main categories page
 const AdminCategories = (props) => {
   const [categories, setCategories] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [loadingPage, setLoadingPage] = React.useState(false);
 
+  //Set all main categories
   useEffect(() => {
     let isMounted = true;
 
@@ -24,12 +26,14 @@ const AdminCategories = (props) => {
     };
   }, []);
 
+  //Check if any active radio button changed
   const AreChanged = () => {
     let result = false;
     result = categories.some((category) => (category.is_changed === undefined ? false : category.is_changed));
     return result;
   };
 
+  //Active radio button
   const handleOnChangeIsActive = (index) => {
     const changedCategories = [...categories];
     const category = changedCategories[index];
@@ -38,6 +42,7 @@ const AdminCategories = (props) => {
     setCategories(changedCategories);
   };
 
+  //Save changes button
   const handlePutCategories = async () => {
     setLoading(true);
     const request = [];

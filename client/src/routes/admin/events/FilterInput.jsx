@@ -1,5 +1,6 @@
 import React from 'react';
 
+//Input text
 const FilterInput = ({ placeholder, name, onChange, value }) =>
 {
     return (

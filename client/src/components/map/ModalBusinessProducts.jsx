@@ -4,13 +4,16 @@ import "../../routes/admin/users/UserModal.css"
 import ProductRaw from './ProductRaw';
 import { paginate } from "../../services/AdminServices";
 
+//Modal products of business
 const ModalBusinessProducts = ({ business, closeModal }) =>
 {
+    //close modal
     const closeModalFromOutSite = event =>
     {
         if(event.target === modal.current) closeModal();
     };
 
+    //change page
     const handlePaginationOnChange = page =>
     {
         const paginate = {...pagination};

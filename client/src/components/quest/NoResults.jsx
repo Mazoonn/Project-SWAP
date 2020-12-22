@@ -1,6 +1,7 @@
 import React from 'react';
 import "../../routes/admin/users/UserModal.css"
 
+//No result modal
 const NoResults = ({ noResults, handleClose }) =>
 {
   if(!noResults) return null;

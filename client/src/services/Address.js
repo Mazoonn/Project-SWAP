@@ -1,3 +1,6 @@
+//Get address object from google place (Google Maps Places API)
+//Return: formated address object
+
 const getAddress = place =>
 {
     const componentForm = {

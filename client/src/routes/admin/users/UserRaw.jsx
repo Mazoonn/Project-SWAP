@@ -1,5 +1,6 @@
 import React from 'react';
 
+//User raw
 const UserRaw = 
 ({
   user,

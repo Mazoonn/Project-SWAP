@@ -2,6 +2,7 @@ import React from 'react';
 import "../admin/users/UserModal.css";
 
 
+//User birthday modal
 const UserBirthdayModal = ({ allowModal, handleClose, birthday, onChange, isDateChanges, isUpdating, handleSaveDate })=>
 {
 

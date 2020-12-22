@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import { getCurrentUser } from "../services/authService";
 
-// handle the private routes
+// business owner routes
 export default function BusinessRoute({ path, component: Component, render, ...rest }) {
   const user = getCurrentUser();
   let role;

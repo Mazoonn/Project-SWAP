@@ -35,6 +35,8 @@ export class Product_is_active {
     this.product_id = business.product_id ? business.product_id : "";
     this.is_active = business.is_active ? business.is_active : false;
   }
+//product class for dto
+
 }
 export class Product_business_ids {
   business_id: string;

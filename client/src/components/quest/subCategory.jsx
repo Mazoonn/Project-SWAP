@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 
+//Subcategory component
 class SubCategory extends Component {
   render() {
     return (

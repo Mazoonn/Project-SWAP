@@ -4,11 +4,13 @@ import Map from "../components/map/map";
 class HomePage extends Component {
   state = {};
 
+  //set title
   componentDidMount()
   {
     document.title = "Swap";
   };
 
+  //Home page
   render() {
     return (
       <React.Fragment>

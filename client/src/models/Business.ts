@@ -1,5 +1,6 @@
 import { Place } from "./Place";
 
+//Business owner class for dto
 export class Business {
   business_owner_id: string;
   business_id: string;

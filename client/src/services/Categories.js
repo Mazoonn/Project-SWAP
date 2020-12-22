@@ -1,6 +1,9 @@
 import http from "../Utils/httpRequest/httpRequest";
 import { API_URL_Dev } from "../config.json";
 
+
+//Get all main categories
+//Input: registerDTO object
 export async function getAllMainCategories() {
     return await http.get(`${API_URL_Dev}/MainCategory/GetAllMainCategories`,
     {
@@ -8,7 +11,8 @@ export async function getAllMainCategories() {
       'Authorization': `Bearer ${localStorage.getItem("token")}`
     }});
 }
-
+//Add new subcategory to main category
+//Input: subcategoryDTO
 export async function postSubCategory(req) {
   try {
     const main_list = await http.post(

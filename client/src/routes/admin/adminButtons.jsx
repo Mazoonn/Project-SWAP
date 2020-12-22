@@ -1,5 +1,7 @@
 import React from "react";
 
+
+//Admin buttons list
 const AdminButtons = (props) => {
   return (
     <div className="list-group">     

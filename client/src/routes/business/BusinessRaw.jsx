@@ -1,5 +1,7 @@
 import React from 'react';
 
+
+//Business information raw
 const BusinessRaw = (
     { 
         handleOnChangeBusiness,

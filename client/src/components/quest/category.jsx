@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 
+//main category button
 class Category extends Component {
   render() {
     return (

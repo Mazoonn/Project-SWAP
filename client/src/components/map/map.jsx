@@ -19,6 +19,7 @@ import {
 } from "@react-google-maps/api";
 import { getPlaceAddress } from "../../Utils/httpRequest/GoogleRequest";
 
+//get google place dto from google maps places api
 const getGooglePlaceDTO = async place =>
 {
   const date = new Date();
@@ -42,12 +43,14 @@ const getGooglePlaceDTO = async place =>
   return googlePlaceDTO;
 };
 
+//add zero prefix
 const zeroPrefixNumber = number =>
 {
     if(number < 10 && number >= 0) return `0${number}`;
     return number;
 };
 
+//date formated string
 const dateString = date =>
 {
     const d = new Date(date);
@@ -55,11 +58,13 @@ const dateString = date =>
     return string;
 };
 
+//get address string
 const addressString = ({settlement, street, street_number}) =>
 {
   return `${street} ${street_number}, ${settlement}`;
 };
 
+//set chosen places
 const setPlacesFromChosenPlaces = (places, setGooglePlaces, setEventsPlaces, setBusinesses) =>
 {
   const google = [];
@@ -88,18 +93,20 @@ const setPlacesFromChosenPlaces = (places, setGooglePlaces, setEventsPlaces, set
     setBusinesses(businesses);
 };
 
-
+//map sizes
 const mapContainerStyle = {
   height: "80vh",
   width: "96vw",
 };
 
+//map options
 const options = {
   styles: [{featureType: "transit" , stylers: [{ visibility: "off" }]} ,{ featureType: "poi", stylers: [{ visibility: "off" }] }],
   disableDefaultUI: true,
   zoomControl: true,
 };
 
+//set chosen indexes to places
 const setIndexes = (places) => {
   const newPlaces = [...places];
   newPlaces.forEach((place, index) => {
@@ -110,6 +117,7 @@ const setIndexes = (places) => {
 
 const Map = (props) => {
 
+  //state
   const [route, setRoute] = React.useState(undefined);
 
   const [chosenPlaces, setChosenPlaces] = React.useState([]);
@@ -128,12 +136,15 @@ const Map = (props) => {
 
   const [businessModal, setBusinessModal] = React.useState({});
 
+  //map reference
   const mapRef = React.useRef();
 
+  //set map reference when the google map loaded
   const onMapLoad = React.useCallback((map) => {
     mapRef.current = map;
   }, []);
 
+  //save the route and add quest to db
   const handleFinish = async () => {
     const storage = window.localStorage;
     const user = getCurrentUser();
@@ -171,12 +182,14 @@ const Map = (props) => {
     }
   };
 
+  //route type radio button handler
   const handleRadioOnChange = (changeEvent) => {
     setRadioValue(changeEvent.target.value);
     if (chosenPlaces.length !== 0)
       getRoute(chosenPlaces, changeEvent.target.value);
   };
 
+  //set current route
   const getRoute = (cplaces, rmode) => {
     const DirectionsService = new window.google.maps.DirectionsService();
     const waypoints = [];
@@ -218,12 +231,14 @@ const Map = (props) => {
     );
   };
 
+  //handler drag place in Route box
   const dragPlace = (oldIndex, newIndex) => {
     const newArr = setIndexes(arrayMove(chosenPlaces, oldIndex, newIndex));
     setChosenPlaces(setIndexes(arrayMove(chosenPlaces, oldIndex, newIndex)));
     getRoute(newArr, radioValue);
   };
 
+  //handle remove chosen place in map
   const removeChosenPlace = (indexChosenPlace) => {
     if(typeof indexChosenPlace !== "undefined")
     {
@@ -241,6 +256,7 @@ const Map = (props) => {
     setChosenPlaces(cPlaces);
   };
 
+  //open google place info window
   const onClickGoogleMarker = index =>
   {
     const allPlaces = [...places];
@@ -248,6 +264,7 @@ const Map = (props) => {
     setPlaces(allPlaces);
   };
 
+  //get all google places markers
   const getMarkers = () => {
     const markers = [];
 
@@ -297,6 +314,7 @@ const Map = (props) => {
     return markers;
   };
 
+  //get all events markers
   const getEventsMarkers = () => 
   {
     const markers = [];
@@ -340,6 +358,7 @@ const Map = (props) => {
     return markers;
   }
 
+  //get businesses markers
   const getBusinessesMarkers = () => 
   {
     let markers = [];
@@ -383,12 +402,14 @@ const Map = (props) => {
     return markers;
   }
 
+  //get current location
   const getLocation = () => {
     navigator.geolocation.getCurrentPosition((pos) => {
       setPosition({ lat: pos.coords.latitude, lng: pos.coords.longitude });
     });
   };
 
+  //current location button component
   const Locate = () => {
     return (
       <button onClick={getLocation} className="locate m-2" title="Current Location">
@@ -397,6 +418,7 @@ const Map = (props) => {
     );
   };
 
+  //load saved route if user finished
   React.useEffect(() => {
     let finished = window.localStorage.getItem("isFinished");
     if (finished === null) finished = false;
@@ -413,6 +435,7 @@ const Map = (props) => {
   }, []);
 
 
+  //handle select event
   const handleSelectEvent = index =>
   {
     const arrEvents = [...events];
@@ -431,6 +454,7 @@ const Map = (props) => {
       getRoute(arrChosenPlaces, radioValue, "events");
   };
 
+  //handle close info window of google place
   const handleClosePlace = index =>
   {
     const allPlaces = [...places];
@@ -438,6 +462,7 @@ const Map = (props) => {
     setPlaces(allPlaces);
   };
 
+  //handle close info window of event
   const handleCloseEvent = index =>
   {
     const allEvents = [...events];
@@ -445,6 +470,7 @@ const Map = (props) => {
     setEvents(allEvents);
   };
 
+  //handle close info window of business
   const handleCloseBusiness = index =>
   {
     const allBusinesses = [...businesses];
@@ -452,6 +478,7 @@ const Map = (props) => {
     setBusinesses(allBusinesses);
   };
 
+  //handle select google place
   const handleSelectPlace = index =>
   {
     const arrPlaces = [...places];
@@ -470,6 +497,7 @@ const Map = (props) => {
     getRoute(arrChosenPlaces, radioValue);
   };
 
+  //handle select business
   const handleSelectBusiness = index =>
   {
     const arrBusinesses = [...businesses];
@@ -488,6 +516,7 @@ const Map = (props) => {
     getRoute(arrChosenPlaces, radioValue);
   };
 
+  //handle open info window of event
   const onClickEventMarker = index =>
   {
     const allEvents = [...events];
@@ -495,6 +524,7 @@ const Map = (props) => {
     setEvents(allEvents);
   };
 
+  //handle open info window of business
   const onClickBusinessMarker = index =>
   {
     const allBusiness = [...businesses];
@@ -502,6 +532,7 @@ const Map = (props) => {
     setBusinesses(allBusiness);
   };
 
+  //handle open info window of google places
   const getInfoWindows = () => {
     const arrInfoWindows = [];
     if(places)
@@ -577,6 +608,7 @@ const Map = (props) => {
     return arrInfoWindows;
   };
 
+  //handle UnChoose Events
   const handleUnChooseEvents = index =>
   {
     const newEvents = [...events];
@@ -585,6 +617,7 @@ const Map = (props) => {
     setEvents(newEvents);
   };
 
+  //handle UnChoose Businesses
   const handleUnChooseBusinesses = index =>
   {
     const newBusinesses = [...businesses];
@@ -593,6 +626,7 @@ const Map = (props) => {
     setBusinesses(newBusinesses);
   };
 
+  //handle UnChoose google places
   const handleUnChooseGoogle = index =>
   {
     const newPlaces = [...places];
@@ -601,11 +635,13 @@ const Map = (props) => {
     setPlaces(newPlaces);
   };
 
+  //open business products modal
   const handleOpenModal = business => 
   {
     setBusinessModal(business);
   };
 
+  //close business products modal
   const handleCloseModal = () =>
   {
     setBusinessModal({});

@@ -7,6 +7,7 @@ import {
 } from "../../services/Categories";
 import { getSubCategoriesId } from "../../services/SubCategory";
 
+//Add new values to subcategories
 const addNewValuesToSubCategories = (subCategories) => {
   const values = ["descrition", "google_value", "sub_name"];
   subCategories.forEach((subCategory) => {
@@ -19,6 +20,7 @@ const addNewValuesToSubCategories = (subCategories) => {
   });
 };
 
+//Admin subcategories page
 const AdminSubCategories = () => {
   const [categories, setCategories] = React.useState([]);
   const [subCategories, setSubCategories] = React.useState([]);
@@ -28,6 +30,7 @@ const AdminSubCategories = () => {
   const [loading, setLoading] = React.useState(false);
   const [selectValue, setSelectValue] = React.useState("default");
 
+  //set title and set subcategories
   useEffect(() => {
     document.title = "Subcategories";
     let isMounted = true;
@@ -46,6 +49,7 @@ const AdminSubCategories = () => {
     };
   }, []);
 
+  //Select handle
   const handleOnChangeSelect = async (event) => {
     const index = event.target.value;
     setSubCategory({});
@@ -71,6 +75,7 @@ const AdminSubCategories = () => {
     }
   };
 
+  //Set values to state
   const handleOnChangeSubCategory = (event, index) => {
     const { value, name } = event.target;
     if (index !== -1) {
@@ -85,6 +90,7 @@ const AdminSubCategories = () => {
     }
   };
 
+  //save button
   const handleOnClickSaveSubCategory = async (index) => {
     setLoading(true);
     const newSubCategories = [...subCategories];
@@ -105,6 +111,7 @@ const AdminSubCategories = () => {
     setLoading(false);
   };
 
+  //check if any values changed and all values are not empty
   const isSubCategoryChanged = (index) => {
     let b1 = true,
       b2 = false;
@@ -117,6 +124,7 @@ const AdminSubCategories = () => {
     return b1 && b2;
   };
 
+  //check if new subcategory values are valid
   const isValidSubCategory = () => {
     const sCategory = { ...subCategory };
     return (
@@ -128,6 +136,7 @@ const AdminSubCategories = () => {
     );
   };
 
+  //delete button
   const handleDeleteSubCategory = async (indexOfSubCategory) => {
     setLoading(true);
     const main_id = categories[indexCategory].id;
@@ -138,6 +147,7 @@ const AdminSubCategories = () => {
     setLoading(false);
   };
 
+  //add new subcategory button
   const handleAddNewSubCategory = async () => {
     setLoading(true);
     const main_id = categories[indexCategory].id;

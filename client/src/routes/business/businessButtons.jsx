@@ -1,5 +1,6 @@
 import React from "react";
 
+//Business list of buttons
 const BusinessButtons = (props) => {
   return (
     <div className="list-group">

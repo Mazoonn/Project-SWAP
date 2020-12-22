@@ -4,9 +4,12 @@ import { clientLogin } from "../services/client.ts";
 import { setUserSession } from "../Utils/Common";
 import { googleConfig } from "../config.json";
 
+
+//Login with google
 class LoginGoF extends Component {
   render() {
 
+    //Login with google handler
     const responseGoogle = async (response) => {
       const { email, givenName, familyName, googleId } = response.profileObj;
       this.props.loading(true);

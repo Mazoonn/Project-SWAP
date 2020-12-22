@@ -6,6 +6,8 @@ import Joi from "joi-browser";
 import { getCurrentUser } from "../services/authService";
 import "./profile/widthFit.css"
 
+
+//Login page
 function Login(props) {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({ email: "", password: "" });
@@ -15,11 +17,14 @@ function Login(props) {
     password: Joi.string().required().min(6).label("Password"),
   };
 
+
+  //Set title
   React.useEffect(() => 
   {
     document.title = "Login";
   }, []);
 
+  //validate email and password
   const validate = () => {
     const { error } = Joi.validate(user, schema, { abortEarly: false });
     if (!error) return null;
@@ -29,18 +34,20 @@ function Login(props) {
     return errorsState;
   };
 
+  //on fail google authentication set error message
   const failureGoogle = () =>
   {
     setErrors({ server: "Sorry google authentication failed" });
   };
 
+  //set user email, password to state
   const handleOnChange = (e) => {
     const userDetails = { ...user };
     userDetails[e.target.name] = e.target.value;
     setUser(userDetails);
   };
 
-  // handle button click of login form
+  //handle button click of login form
   const handleLogin = async (e) => {
     e.preventDefault();
     const errorsState = validate();

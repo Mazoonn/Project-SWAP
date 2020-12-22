@@ -1,6 +1,7 @@
 import React from 'react';
 import "../users/UserModal.css"
 
+//Get days from date
 function getDays(date){
     if(!date || date === "") return "";
     const now = new Date();
@@ -10,6 +11,7 @@ function getDays(date){
 }
 
 
+//Business information modal
 const BusinessModal = ({business, handleExitModal})=>
 {
     const values = Object.values(business)

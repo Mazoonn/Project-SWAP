@@ -1,5 +1,6 @@
 import React from 'react';
 
+//Business raw
 const AdminBusinessRaw = ({ business, handleOnChangeApprove, handleOnClickUser, handleOnClickBusiness, handleOnClickDescriptionModal }) =>
 {
     return (<tr>

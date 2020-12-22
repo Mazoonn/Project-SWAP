@@ -1,5 +1,7 @@
 import React from 'react';
 
+
+//product raw
 const ProductRaw = (
     {
         product,

@@ -5,6 +5,7 @@ import ListOfProducts from "./ListOfProducts";
 import ListOfBusiness from "./ListOfBusiness";
 import { getCurrentUser } from "../../services/authService";
 
+//Business owner main page
 class BusinessPage extends Component {
   state = {
     selected: -1,
@@ -25,6 +26,7 @@ class BusinessPage extends Component {
     ],
   };
 
+  //Set title and set user id to state
   componentDidMount() {
     document.title = "Business Page"
     const user = getCurrentUser();
@@ -33,6 +35,7 @@ class BusinessPage extends Component {
     }
   }
 
+  //click on button
   handleClick = (index) => {
     const selected = this.state.selected !== index ? index : -1;
     this.setState({ selected });

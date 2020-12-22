@@ -10,6 +10,7 @@ import { fetchCoordinates } from "../../Utils/httpRequest/GoogleRequest";
 import { getBusinessesByCategories } from "../../services/BusinessService";
 import NoResults from "./NoResults";
 
+//merge places
 const removeGooglePlaces = (google, businesses, events) => {
   const obj = {};
 
@@ -29,6 +30,7 @@ const removeGooglePlaces = (google, businesses, events) => {
   return Object.values(obj);
 };
 
+//check if any sub category checked
 const isNotHidden = (categories) => {
   let result = false;
   categories.some((category) => {
@@ -48,6 +50,7 @@ class Quest extends Component {
     noResults: false,
   };
 
+  //get places form google maps places api and local api
   getPlaces = async () => {
     this.setState({ isLoading: true });
     const keysToRemove = ["isFinished", "route", "radioValue", "places"];
@@ -95,10 +98,12 @@ class Quest extends Component {
     this.props.history.push("/");
   };
 
+  //Close no results modal
   handleCloseNoResults = () => {
     this.setState({ noResults: false });
   };
 
+  //Set main categories to state
   handleGetCategories = async () => {
     this.setState({ loadingPage: true });
     try {
@@ -117,6 +122,7 @@ class Quest extends Component {
     }
   };
 
+  //set subcategories to state
   handleOnClickCategory = async (key) => {
     const categories = [...this.state.categoryList];
     const indexCategories = categories.findIndex((category) => category.id === key);
@@ -137,6 +143,7 @@ class Quest extends Component {
     this.setState({ categoryList: categories });
   };
 
+  //toggle selected in subcategory
   handleOnClickSubCategory = (keyCategory, keySubCategory) => {
     const categoryList = [...this.state.categoryList];
 
@@ -149,6 +156,7 @@ class Quest extends Component {
     this.setState({ categoryList });
   };
 
+  //set subcategories to state
   handleGetSubCategories = async (id) => 
   {
     try
@@ -166,6 +174,7 @@ class Quest extends Component {
     }
   };
 
+  //load selected subcategories if any subcategory is selected or load default page
   handleDivideSubCategories = () => {
     const categories = this.state.categoryList.filter((category) => category.isCurrentlySelected);
     if(categories.length == 0)
@@ -209,12 +218,13 @@ class Quest extends Component {
     );
   };
 
+  //set title
   componentDidMount() {
     this.mounted = true;
     document.title = "Quest";
     if(this.mounted) this.handleGetCategories();
   }
-
+  //Stop all asynchronous calls
   componentWillUnmount()
   {
     this.mounted = false;

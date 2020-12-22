@@ -11,6 +11,7 @@ const roles = {
   admin: "Admin",
 };
 
+//Get full name string
 const getFullName = (firstName, LastName) => {
   const First_Name = firstName.charAt(0).toUpperCase() + firstName.slice(1);
   const Last_Name = LastName.charAt(0).toUpperCase() + LastName.slice(1);
@@ -18,6 +19,7 @@ const getFullName = (firstName, LastName) => {
   return `${First_Name} ${Last_Name}`;
 };
 
+//Get age
 const getAge = (userDateString) => {
   if (userDateString) {
     const date = new Date(userDateString);
@@ -29,7 +31,7 @@ const getAge = (userDateString) => {
   return "";
 };
 
-
+//get date string
 const getFormatedDate = date =>
 {
     
@@ -38,6 +40,7 @@ const getFormatedDate = date =>
     return dateValue;
 };
 
+//get user information from api
 const getClientInfo = async () => {
   const currentUser = getCurrentUser();
   if (currentUser) {
@@ -52,6 +55,7 @@ const getClientInfo = async () => {
   return null;
 };
 
+//Profile page
 class Profile extends Component {
   state = {
     user: {},
@@ -66,17 +70,20 @@ class Profile extends Component {
     savingBirthday: false
   };
 
+  //set title and user information
   componentDidMount() {
     this.mounted = true;
     document.title = "Profile";
     if(this.mounted) this.handleGetUser();
   };
 
+  //stop waiting to api call when this page closed
   componentWillUnmount()
   {
     this.mounted = false;
   }
 
+  //get user information from the api and set is
   handleGetUser = async () => {
     this.setState({ loadingPage: true });
     const newValues = { ...this.state.newValues };
@@ -96,12 +103,14 @@ class Profile extends Component {
     this.setState({ loadingPage: false });
   };
 
+  //Set password value to state
   handlePasswordOnChange = (event) => {
     const newValues = { ...this.state.newValues };
     newValues.password = event.target.value;
     this.setState({ newValues });
   };
 
+  //Changed password button
   handleChangePassword = async () => {
     this.setState({ loadingPage: true });
     try {
@@ -117,6 +126,7 @@ class Profile extends Component {
     }
   };
 
+  //Request to business owner button
   handleRequestBusinessOwner = async () => {
     this.setState({ loadingPage: true });
     try {
@@ -131,12 +141,14 @@ class Profile extends Component {
     }
   };
 
+  //Set birthday date to state
   handleDateOnChange = (event) => {
     const newValues = { ...this.state.newValues };
     newValues.birthday_date = event.target.value;
     this.setState({ newValues });
   };
 
+  //Set new values to state
   handleOnChangeNewValues = (event) => {
     const newValues = { ...this.state.newValues };
     const { name, value } = event.target;
@@ -145,16 +157,19 @@ class Profile extends Component {
     this.setState({ newValues });
   };
 
+  //Check if any phone number or sex changed
   areChanges = () => {
     const names = ["phone", "sex"];
     const { newValues, user } = this.state;
     return names.some((name) => newValues[name] !== user[name]) && !names.some((name) => !newValues[name]);
   };
 
+  //Open birthday modal
   handleAllowModal = () => {
     this.setState({ allowBirthdayModal: true });
   };
 
+  //Close birthday modal
   handleCloseModal = () => {
     const newValues = { ...this.state.newValues };
     const { birthday_date } = this.state.user;
@@ -162,6 +177,7 @@ class Profile extends Component {
     this.setState({ newValues, allowBirthdayModal: false });
   };
 
+  //Save changes button
   handleSaveChanges = async () =>
   {
     this.setState({ loadingPage: true });
@@ -183,6 +199,7 @@ class Profile extends Component {
     }
   };
 
+  //Save birthday button
   handleSaveBirthday = async () =>
   {
     this.setState({ savingBirthday: true });
@@ -204,12 +221,14 @@ class Profile extends Component {
 
   };
 
+  //Check if birthday changed
   isDateChanges = () => {
     const { birthday_date: originalDate } = this.state.user;
     const { birthday_date: newDate } = this.state.newValues;
     return originalDate !== newDate && newDate;
   };
 
+  //Profile page
   render() {
     const noUser = Object.keys(this.state.user).length === 0;
     const { loadingPage, allowBirthdayModal, savingBirthday } = this.state;

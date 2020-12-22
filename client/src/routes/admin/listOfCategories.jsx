@@ -1,5 +1,6 @@
 class listOfCategories extends Component {
   state = {};
+  //List of categories
   render() {
     return (
       <div>

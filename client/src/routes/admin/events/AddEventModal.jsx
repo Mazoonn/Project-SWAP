@@ -3,6 +3,7 @@ import "../users/UserModal.css"
 import SearchLocationInput from './searchLocation';
 import "./pacContainer.css"
 
+//Check if the values of event are not valid
 const isAddButtonDisabled = event =>
 {
   const { name, description, start_date, end_date, price, place } = event;
@@ -13,6 +14,7 @@ const isAddButtonDisabled = event =>
   price === "" || (price == 0) || Object.keys(place).length === 0);
 };
 
+//New event modal
 const AddEventModal = ({ event, handleExitModal, setAddress, handleOnChange, clickOnSave, loading })=>
 {
 

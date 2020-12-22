@@ -1,6 +1,9 @@
 import http from "../Utils/httpRequest/httpRequest";
 import { API_URL_Dev } from "../config.json";
 
+//Get nearby businesses
+//Input: businessesDTO
+//Output: array of businesses
 export async function getBusinessesByCategories(req) 
 {
     try
@@ -21,6 +24,8 @@ export async function getBusinessesByCategories(req)
     }
 }
 
+//Add new business
+//Input: businessRequestDTO
 export async function addBusiness(req) 
 {
     return await http.post(`${API_URL_Dev}/business/AddBusiness`, req, 

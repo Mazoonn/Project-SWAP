@@ -1,3 +1,5 @@
+//place class for dto
+
 export class Place {
   place_id: string;
   name: string;

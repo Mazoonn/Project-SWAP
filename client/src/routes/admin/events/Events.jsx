@@ -7,6 +7,8 @@ import Pagination from "../AdminPagination";
 import AddEventModal from "./AddEventModal";
 import getAddress from "../../../services/Address";
 
+
+//Filter array of event by name, country, settlement and street
 const filterEvents = (events, name, country, settlement, street) => {
   return events.filter(
     (event) =>
@@ -17,6 +19,7 @@ const filterEvents = (events, name, country, settlement, street) => {
   );
 };
 
+//add new values to array of event
 const addNewValues = (events) => {
   const values = ["name", "price"];
 
@@ -27,6 +30,8 @@ const addNewValues = (events) => {
   });
 };
 
+//Check if the address is a full address
+//if not return error message else return empty string
 const addressValidate = (address) => {
   const schema = ["country", "settlement", "street"];
 
@@ -34,6 +39,7 @@ const addressValidate = (address) => {
   return "";
 };
 
+//Get place object
 const getPlace = (address) => {
   if (!address.address_components) return {};
   const place = getAddress(address);
@@ -44,6 +50,7 @@ const getPlace = (address) => {
   return place;
 };
 
+//Admin events page
 class AdminEvents extends Component {
   state = {
     events: [],
@@ -73,6 +80,7 @@ class AdminEvents extends Component {
     },
   };
 
+  //set to default parameters when page reloaded
   handleReloadPage = (events) => {
     const pagination = { ...this.state.pagination };
     pagination.currentPage = 1;
@@ -99,6 +107,7 @@ class AdminEvents extends Component {
     });
   };
 
+  //Add new event if the values are legal else set error
   handleClickOnSaveNewEvent = async () => {
     const newEvent = { ...this.state.newEvent };
     const { place } = newEvent;
@@ -132,6 +141,7 @@ class AdminEvents extends Component {
     }
   };
 
+  //Save address to state
   handleSetAddress = (address) => {
     const newEvent = { ...this.state.newEvent };
     const place = getPlace(address);
@@ -139,11 +149,13 @@ class AdminEvents extends Component {
     this.setState({ newEvent });
   };
 
+  //Set title and set events from api
   componentDidMount() {
     document.title = "Events";
     this.getEvents();
   }
 
+  //Get events from the api and set them
   getEvents = async () => {
     this.setState({ loading: true });
     try {
@@ -156,6 +168,7 @@ class AdminEvents extends Component {
     }
   };
 
+  //Set values to state when they changed
   handleValuesOnChange = (event, e) => {
     const events = [...this.state.events];
     const index = events.indexOf(event);
@@ -168,10 +181,12 @@ class AdminEvents extends Component {
     this.setState({ events });
   };
 
+  //Close event description modal
   handleExitDescriptionModal = () => {
     this.setState({ modal: {} });
   };
 
+  //Open description modal
   handleClickOnDescription = (event) => {
     this.setState({
       modal: {
@@ -182,12 +197,14 @@ class AdminEvents extends Component {
     });
   };
 
+  //Set description to the state
   handleOnChangeModal = (e) => {
     const modal = { ...this.state.modal };
     modal.description_new = e.target.value;
     this.setState({ modal });
   };
 
+  //Filter events
   handleFilterOnChange = (e) => {
     const filter = { ...this.state.filter };
     const pagination = { ...this.state.pagination };
@@ -197,12 +214,14 @@ class AdminEvents extends Component {
     this.setState({ filter, pagination });
   };
 
+  //Change page
   handlePageChange = (page) => {
     const pagination = { ...this.state.pagination };
     pagination.currentPage = page;
     this.setState({ pagination });
   };
 
+  //Delete event button
   handleDeleteEvent = async (event) => {
     this.setState({ loading: true });
     try {
@@ -217,6 +236,7 @@ class AdminEvents extends Component {
     }
   };
 
+  //add event button
   handleSaveEvent = async (event) => {
     this.setState({ loading: true });
     try {
@@ -238,6 +258,7 @@ class AdminEvents extends Component {
     }
   };
 
+  //Edit description button
   handleEditDescription = async (event) => {
     this.setState({ loadingDescription: true });
     try {
@@ -259,6 +280,7 @@ class AdminEvents extends Component {
     }
   };
 
+  //Set default values to state
   handleExitAddEvent = () => {
     this.setState({
       newEvent: {
@@ -274,12 +296,14 @@ class AdminEvents extends Component {
     });
   };
 
+  //Open new event modal
   handleClickOnAddEvent = () => {
     const newEvent = { ...this.state.newEvent };
     newEvent.isActive = true;
     this.setState({ newEvent });
   };
 
+  //Set new event values to sate
   handleNewPlaceOnChange = (e) => {
     const newEvent = { ...this.state.newEvent };
     const { name, value } = e.target;

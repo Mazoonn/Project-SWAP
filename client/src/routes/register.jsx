@@ -4,6 +4,8 @@ import { setUserSession } from "../Utils/Common";
 import Joi from "joi-browser";
 import { getCurrentUser } from "../services/authService";
 
+
+//Register page
 class RegisterForm extends Component {
   state = {
     user: {
@@ -20,6 +22,7 @@ class RegisterForm extends Component {
     loading: false,
   };
 
+  //validation schema
   schema = {
     first_name: Joi.string().required().label("First Name"),
     last_name: Joi.string().required().label("Last Name"),
@@ -28,17 +31,20 @@ class RegisterForm extends Component {
     phone: Joi.number().label("Phone"),
   };
 
+  //set titles
   componentDidMount()
   {
     document.title = "Register";
   };
 
+  //set user information values to state
   handleChange = (event) => {
     const user = { ...this.state.user };
     user[event.target.id] = event.target.value;
     this.setState({ user });
   };
 
+  //validate user information
   validate = (user) => {
     const newUser = { ...user };
     const valuesToDelete = ["confirm_password", "sex", "birthday"];
@@ -59,6 +65,7 @@ class RegisterForm extends Component {
     return errorsState;
   };
 
+  //handle register button
   handleSubmit = async (event) => {
     event.preventDefault();
     const user = { ...this.state.user };

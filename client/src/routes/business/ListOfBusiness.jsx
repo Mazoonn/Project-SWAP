@@ -4,6 +4,8 @@ import { getCurrentUser } from "../../services/authService";
 import { getAllBusinesses } from "../../services/Business";
 import BusinessRaw from "./BusinessRaw";
 import BusinessAddressModal from './businessAddressModal';
+
+//My businesses page
 class ListOfBusiness extends Component {
   state = {
     businesses: [],
@@ -12,6 +14,7 @@ class ListOfBusiness extends Component {
     loading: false
   };
 
+  //set title and set user businesses to state
   componentDidMount() {
     this.mounted = true;
     document.title = "My businesses";
@@ -20,11 +23,13 @@ class ListOfBusiness extends Component {
     if(this.mounted) this.handleGetBusinesses(user[`user-id`]);
   }
 
+  //Stop all asynchronous calls
   componentWillUnmount()
   {
     this.mounted = false;
   }
 
+  //set business values to state
   handleOnChangeBusiness = (event, index) => {
     const { name, value } = event.target;
     const businesses = [ ...this.state.businesses ];
@@ -37,6 +42,8 @@ class ListOfBusiness extends Component {
     this.setState({ businesses });
   };
 
+
+  //Get all user businesses from api
   handleGetBusinesses = async business_owner_id => {
     this.setState({ loading: true });
     try
@@ -55,6 +62,7 @@ class ListOfBusiness extends Component {
     }
   };
 
+  //Delete button
   handleDeleteBusiness = async (indexBusiness) => {
     const stateBusinesses = this.state.businesses;
     this.setState({ loading: true });
@@ -77,6 +85,7 @@ class ListOfBusiness extends Component {
     }
   };
 
+  //Set new values to businesses
   addNewValuesToBusiness = (businesses) => {
     const values = ["name", "description", "opening_hours", "closing_hours", "approve_by_admin", "is_active"];
     businesses &&
@@ -93,6 +102,7 @@ class ListOfBusiness extends Component {
       });
   };
 
+  //Save button handler
   handleOnClickSaveBusiness = async (index) => {
     const business = this.state.businesses[index];
     const { place_id, is_active_new: is_active, closing_hours_new: closing_hours, opening_hours_new: opening_hours } = business;
@@ -137,6 +147,7 @@ class ListOfBusiness extends Component {
     }
   };
 
+  //Check if values are not changed
   isBusinessDisabled = index => {
     let flag1 = true;
     let flag2 = false;
@@ -160,11 +171,13 @@ class ListOfBusiness extends Component {
     return flag1 || flag2;
   };
 
+  //Open location modal
   handleOpenLocation = address =>
   {
     this.setState({ address });
   };
 
+  //close location modal
   handleCloseLocationModal = ()=>
   {
     this.setState({ address: {} });

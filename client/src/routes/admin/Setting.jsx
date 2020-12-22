@@ -1,4 +1,9 @@
+//Not in used
+//Can delete it
+
 import React, { useState } from "react";
+
+
 class Setting extends React.Component {
   constructor(props) {
     super(props);

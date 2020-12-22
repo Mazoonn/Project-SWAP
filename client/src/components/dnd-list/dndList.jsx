@@ -1,6 +1,7 @@
 import React from "react";
 import { List } from "react-movable";
 
+//Remove icon element
 const RemovableIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -31,6 +32,7 @@ const buttonStyles = {
   background: "transparent",
 };
 
+//Removable item
 export default function Removable(props) {
   const items = [...props.list];
   const removeFunction = props.removeItem;

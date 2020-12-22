@@ -1,6 +1,7 @@
 import React from 'react';
 import "../admin/users/UserModal.css"
 
+//Added business modal
 const AddedBusinessModal = ({ isOpen, handleClose, error }) =>
 {
     const modal = React.useRef(null);

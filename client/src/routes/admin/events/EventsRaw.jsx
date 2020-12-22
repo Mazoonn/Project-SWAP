@@ -3,6 +3,7 @@ import { dateString } from "../../../services/date";
 
 const values = ["name", "price"];
 
+//Check if date argument less than now
 const dateExpired = date =>
 {
     const timeNow = new Date().getTime();
@@ -11,6 +12,7 @@ const dateExpired = date =>
     return timeDate < timeNow; 
 };
 
+//Check if some event value changed and all values are no empty
 const areChanged = event =>
 {
     let b1 = true, b2 = false;
@@ -25,7 +27,7 @@ const areChanged = event =>
 };
 
 
-
+//Event raw
 const EventRaw = ({ event, handleSaveEvent, handleDeleteEvent, handleValuesOnChange, handleClickOnDescription })=>
 {
     const { start_date, end_date } = event;

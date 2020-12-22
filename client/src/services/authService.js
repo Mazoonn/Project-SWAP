@@ -1,7 +1,6 @@
-// import jwt from 'jsonwebtoken';
-//import key from '../key/key.json'
-import jwtDecode from "jwt-decode"
+import jwtDecode from "jwt-decode";
 
+//Get user from JWT
 export function getCurrentUser() 
 {
     const token = localStorage.getItem("token");
@@ -9,8 +8,8 @@ export function getCurrentUser()
 
     try 
     {
-        decoded = jwtDecode(token);
-        return decoded;
+     decoded = jwtDecode(token);
+     return decoded;
     } 
     catch(err) 
     {
@@ -18,6 +17,7 @@ export function getCurrentUser()
     }
 }
 
+//Check if is admin
 export function isAdmin() 
 {
     const user = getCurrentUser();

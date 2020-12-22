@@ -1,6 +1,7 @@
 import React from 'react';
 import "../users/UserModal.css"
 
+//Event description modal
 const EventDescriptionModal = ({ event, handleExitModal, handleOnChange, handleEditDescription, loading })=>
 {
     if(Object.keys(event).length === 0) return null; 

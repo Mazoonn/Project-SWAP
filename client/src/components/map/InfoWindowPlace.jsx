@@ -1,5 +1,6 @@
 import React from 'react';
 
+//Info window of google place
 const InfoWindowPlace = (
     {
     place, 

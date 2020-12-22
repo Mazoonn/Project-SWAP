@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import { isAdmin } from "../services/authService";
 
-// handle the private routes
+// admin routes
 export default function AdminRoute({
   path,
   component: Component,

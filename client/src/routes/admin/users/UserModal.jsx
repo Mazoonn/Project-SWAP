@@ -14,6 +14,7 @@ const platform =
     local: "Local",
 };
 
+//Return age
 function getAge(date){
     if(!date || date === "") return "";
     const now = new Date();
@@ -22,6 +23,7 @@ function getAge(date){
     return Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
 }
 
+//User information modal
 const UserModal = ({user, loading, handleExitModal, password, handlePasswordOnChange, handleSaveNewPassword})=>
 {
     const values = Object.values(user);

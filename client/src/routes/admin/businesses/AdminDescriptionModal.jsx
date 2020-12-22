@@ -1,6 +1,7 @@
 import React from 'react';
 import "../users/UserModal.css"
 
+//Business description modal
 const DescriptionModal = ({description, handleExitModal})=>
 {
     const { isActive, value } = description;
