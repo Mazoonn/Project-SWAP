@@ -136,7 +136,8 @@ class AdminEvents extends Component {
       events.push(event);
       this.handleReloadPage(events);
     } catch (err) {
-      this.setState({ loadingNewEvent: true });
+      newEvent.errors.server = "There is event or business in this address";
+      this.setState({ loadingNewEvent: false, newEvent });
       console.log(err);
     }
   };
