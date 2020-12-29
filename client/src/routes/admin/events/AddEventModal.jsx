@@ -130,7 +130,7 @@ const AddEventModal = ({ event, handleExitModal, setAddress, handleOnChange, cli
             </tr>
             </tbody>                   
           </table>
-          {event.errors && event.errors.server && <div classNames="alert alert-danger">
+          {event.errors && event.errors.server && <div className="alert alert-danger">
             {event.errors.server}
           </div>}
         </div>
